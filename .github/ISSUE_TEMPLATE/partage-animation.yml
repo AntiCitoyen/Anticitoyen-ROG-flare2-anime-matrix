@@ -1,0 +1,39 @@
+name: "Share an animation / Partager une animation"
+description: "Propose a GIF for the community library / Proposer un GIF pour la bibliothèque"
+title: "[Library / Bibliothèque] "
+labels: ["bibliotheque"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        🇬🇧 Thanks! Best results: 19 × 24 GIF, grey, 3 levels (0, 64, 255), drawn with the launcher's animation editor (faithful geometry). Drag and drop the GIF into the field below.
+        🇫🇷 Merci ! Le mieux : GIF 19 × 24, gris, 3 niveaux (0, 64, 255), dessiné avec l'éditeur d'animation du lanceur (géométrie fidèle). Glissez le GIF dans le champ ci-dessous.
+  - type: input
+    id: name
+    attributes:
+      label: "Name / Nom"
+    validations:
+      required: true
+  - type: textarea
+    id: gif
+    attributes:
+      label: "GIF file / Fichier GIF"
+      description: "Drag and drop the file here / Glissez le fichier ici"
+    validations:
+      required: true
+  - type: dropdown
+    id: license
+    attributes:
+      label: "License / Licence"
+      options:
+        - "CC0-1.0 (public domain / domaine public)"
+        - "CC-BY-4.0 (credit me / me citer)"
+    validations:
+      required: true
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: "Rights / Droits"
+      options:
+        - label: "I made this animation or have the right to share it under this license / J'ai créé cette animation ou j'ai le droit de la partager sous cette licence"
+          required: true

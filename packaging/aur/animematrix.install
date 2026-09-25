@@ -1,0 +1,9 @@
+post_install() {
+    udevadm control --reload-rules >/dev/null 2>&1 || true
+    systemctl --global enable animematrixd.service >/dev/null 2>&1 || true
+    echo "Replug the keyboard, then start AniMe Matrix from the menu."
+}
+post_upgrade() { post_install; }
+pre_remove() {
+    systemctl --global disable animematrixd.service >/dev/null 2>&1 || true
+}

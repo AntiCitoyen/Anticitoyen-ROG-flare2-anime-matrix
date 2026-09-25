@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-if [ "$1" = remove ]; then
-    systemctl --global disable animematrixd.service >/dev/null 2>&1 || true
-fi
-exit 0

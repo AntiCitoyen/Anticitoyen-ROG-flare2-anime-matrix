@@ -1,0 +1,165 @@
+{
+ "version": 1,
+ "animations": [
+  {
+   "id": "coeur",
+   "noms": {
+    "fr": "Cœur qui bat",
+    "en": "Heartbeat"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/coeur.gif",
+   "fidele": true,
+   "etiquettes": [
+    "amour",
+    "love"
+   ],
+   "sha256": "c7ac805bfad5d7985dd0250a570a7c2fae2f4bba3e4ff02f985a54ce8d1a90d3"
+  },
+  {
+   "id": "pluie",
+   "noms": {
+    "fr": "Pluie",
+    "en": "Rain"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/pluie.gif",
+   "fidele": true,
+   "etiquettes": [
+    "météo",
+    "weather"
+   ],
+   "sha256": "9f143aa3a1b8ea73db15f643eee31f76603213ea04617a47fc28985b41f00b9d"
+  },
+  {
+   "id": "vague",
+   "noms": {
+    "fr": "Vague",
+    "en": "Wave"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/vague.gif",
+   "fidele": true,
+   "etiquettes": [
+    "mer",
+    "sea"
+   ],
+   "sha256": "70b37bdd5720e0f4a0efa5aa519333d16a0192e6f9fcc285e4637c7a703856b3"
+  },
+  {
+   "id": "chargement",
+   "noms": {
+    "fr": "Chargement",
+    "en": "Loading"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/chargement.gif",
+   "fidele": true,
+   "etiquettes": [
+    "attente",
+    "loading"
+   ],
+   "sha256": "d446ba034d6fb1ea8d9705187aa81b55a4d3db405d5a8d938bf2a8b64651282e"
+  },
+  {
+   "id": "egaliseur",
+   "noms": {
+    "fr": "Égaliseur",
+    "en": "Equalizer"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/egaliseur.gif",
+   "fidele": true,
+   "etiquettes": [
+    "musique",
+    "music"
+   ],
+   "sha256": "8571b6ffcf1cbd49b499e770ee5f7e38872570b1616443e16385478ebc6dc925"
+  },
+  {
+   "id": "neige",
+   "noms": {
+    "fr": "Neige",
+    "en": "Snow"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/neige.gif",
+   "fidele": true,
+   "etiquettes": [
+    "hiver",
+    "winter"
+   ],
+   "sha256": "35c7196942acb3cf8e5087017389cbe01bb5fd80d2593332991fa0e2ca06a32b"
+  },
+  {
+   "id": "etoiles",
+   "noms": {
+    "fr": "Étoiles",
+    "en": "Stars"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/etoiles.gif",
+   "fidele": true,
+   "etiquettes": [
+    "nuit",
+    "night"
+   ],
+   "sha256": "b06e5bb2c45bfe46a41dfe684b41542c6af09087716ff723f40f2edc427c19e0"
+  },
+  {
+   "id": "chevrons",
+   "noms": {
+    "fr": "Chevrons",
+    "en": "Chevrons"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/chevrons.gif",
+   "fidele": true,
+   "etiquettes": [
+    "défilement",
+    "scroll"
+   ],
+   "sha256": "8ee7f206a05934d76060b0ecbdff35159891e420b7dea7380ce60e9116c085eb"
+  },
+  {
+   "id": "oeil",
+   "noms": {
+    "fr": "Œil",
+    "en": "Eye"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/oeil.gif",
+   "fidele": true,
+   "etiquettes": [
+    "visage",
+    "face"
+   ],
+   "sha256": "91dfccad45445c2006235cdb99d1b1cd5be5299aa2d3b268ce746b9db8a45c02"
+  },
+  {
+   "id": "onde",
+   "noms": {
+    "fr": "Onde",
+    "en": "Ripple"
+   },
+   "auteur": "AntiCitoyen",
+   "licence": "CC0-1.0",
+   "fichier": "gif/onde.gif",
+   "fidele": true,
+   "etiquettes": [
+    "cercle",
+    "ring"
+   ],
+   "sha256": "c12cc8267a0a2ca01538203540445e41d54dc59b1464e06720efcf797d5eb756"
+  }
+ ]
+}

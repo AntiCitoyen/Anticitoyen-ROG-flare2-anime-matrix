@@ -32,6 +32,7 @@ import rog_flare2_ctl as ctl
 import rog_flare2_maj as maj
 import rog_flare2_notifs as notifs
 import rog_flare2_openrgb as openrgb
+import rog_flare2_tray as tray
 from rog_flare2_demon import START_FILE
 from rog_flare2_matrix_paint import FB_OFFSET
 import rog_flare2_themes as themes
@@ -198,6 +199,8 @@ class LauncherApp(tk.Tk):
         self.play_btn = ttk.Button(tab, text=_("▶ Lancer les GIF"), command=self.start_playback, state="disabled")
         self.play_btn.pack(fill="x", pady=(8, 4))
         ttk.Button(tab, text=_("👁 Aperçu fidèle (avant envoi)"), command=self.open_preview).pack(fill="x", pady=(0, 4))
+        ttk.Button(tab, text=_("🎞 Créer une animation (éditeur)"), command=self.open_animation).pack(fill="x", pady=(0, 4))
+        ttk.Button(tab, text=_("📚 Bibliothèque d'animations"), command=self.open_library).pack(fill="x", pady=(0, 4))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
         ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
@@ -344,6 +347,9 @@ class LauncherApp(tk.Tk):
         ttk.Button(tab, text=_("Dossier des extensions (effets)"),
                    command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Programmation…"), command=self.open_schedule).pack(fill="x", pady=(4, 0))
+        self.tray_var = tk.BooleanVar(value=tray.AUTOSTART.exists())
+        ttk.Checkbutton(tab, text=_("Icône dans la barre système"), variable=self.tray_var,
+                        command=self._toggle_tray).pack(anchor="w", pady=(4, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
@@ -673,9 +679,29 @@ class LauncherApp(tk.Tk):
         except ImportError as exc:  # PIL.ImageTk absent
             self.set_status(_("Erreur : {err}").format(err=exc))
 
+    def _toggle_tray(self):
+        """Icône de barre système (python3 du système, PyGObject), lancée aussi au démarrage de session."""
+        here = Path(__file__).resolve().parent
+        command = "animematrix-tray" if maj.packaged() else f"/usr/bin/python3 {here / 'rog_flare2_tray.py'}"
+        tray.set_autostart(self.tray_var.get(), command)
+        if self.tray_var.get():
+            if not tray.running():
+                subprocess.Popen(command.split(), start_new_session=True, stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL)
+        else:
+            tray.stop_running()
+
     def open_schedule(self):
         from rog_flare2_ui_programme import ScheduleWindow
         ScheduleWindow(self, lambda: self._send("config"))
+
+    def open_library(self):
+        from rog_flare2_bibliotheque import LibraryWindow
+        LibraryWindow(self, lambda show: self._play(show, _("Bibliothèque d'animations")))
+
+    def open_animation(self):
+        from rog_flare2_animation import AnimationEditor
+        AnimationEditor(self)
 
     def open_plugin_dir(self):
         """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""

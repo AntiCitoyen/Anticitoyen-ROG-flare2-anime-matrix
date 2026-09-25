@@ -1,0 +1,26 @@
+# Maintainer: AntiCitoyen <anticitoyen@users.noreply.gitlab.com>
+pkgname=anticitoyen-rog-flare2-anime-matrix
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc="AniMe Matrix display tools for the ASUS ROG Strix Flare II Animate keyboard"
+arch=('any')
+url="https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
+license=('MIT')
+depends=('python' 'python-hidapi' 'python-pillow' 'python-numpy' 'tk')
+optdepends=('python-xlib: round windows (X11 SHAPE)'
+            'python-gobject: system tray icon'
+            'libayatana-appindicator: system tray icon'
+            'imagemagick: classic GIF conversion'
+            'libpulse: desktop audio capture (parec)'
+            'zenity: file pickers'
+            'python-pynput: Keyboard React effect'
+            'openrgb: keyboard colour sync')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+install=animematrix.install
+
+package() {
+    cd "Anticitoyen-ROG-flare2-anime-matrix-$pkgver"
+    packaging/install.sh "$pkgdir" /usr /usr/bin/python3
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

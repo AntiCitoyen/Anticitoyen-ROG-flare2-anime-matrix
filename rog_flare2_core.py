@@ -138,9 +138,22 @@ def media_files(folder: Path) -> list[Path]:
     return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in MEDIA_EXTENSIONS)
 
 
+FAITHFUL_TAG = b"animematrix:fidele"  # commentaire GIF : dessiné pour la géométrie fidèle
+
+
+def is_faithful(path: Path) -> bool:
+    """GIF marqué « géométrie fidèle » (éditeur d'animation, bibliothèque)."""
+    try:
+        with Image.open(path) as im:
+            return FAITHFUL_TAG in (im.info.get("comment") or b"")
+    except (OSError, AttributeError):
+        return False
+
+
 def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event, brightness,
               fidele: bool = False) -> None:
     """Joue une fois un GIF/image en flux ; brightness() est relue à chaque frame."""
+    fidele = fidele or is_faithful(path)
     n = 0
     for img, delay in iter_gif_frames(path):
         if stop_event.is_set():

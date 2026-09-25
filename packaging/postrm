@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
+if [ "$1" = purge ] && command -v deb-systemd-helper >/dev/null 2>&1; then
+    deb-systemd-helper --user purge animematrixd.service >/dev/null 2>&1 || true
+fi
 if [ "$1" = remove ] || [ "$1" = purge ]; then
     command -v udevadm >/dev/null 2>&1 && udevadm control --reload-rules || true
 fi
