@@ -16,7 +16,11 @@ from pathlib import Path
 
 import numpy as np
 
-from effects import _CLOCK_FONT, COLS, ROWS, BaseEffect
+import sys as _sys
+from pathlib import Path as _Path
+
+_sys.path.insert(0, str(_Path(__file__).parent / "polywollywin"))  # moteur d'effets
+from effects import _CLOCK_FONT, COLS, ROWS, BaseEffect  # noqa: E402
 
 TEXT_COL = 12  # première colonne où les 7 rangées du texte existent (rangée 6 : colonnes 12 à 36)
 GAUGE = (9, 22, 15)  # rangée de départ, colonne, longueur : rangées 9-11 ont toutes les colonnes 22-36

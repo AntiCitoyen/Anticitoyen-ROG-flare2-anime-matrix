@@ -19,7 +19,7 @@ jobs:
       - name: System dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb xdotool imagemagick lintian libusb-1.0-0 libudev1
+          sudo apt-get install -y xvfb xdotool imagemagick lintian libusb-1.0-0 libudev1 dbus python3-gi libglib2.0-bin
 
       - name: Python dependencies
         run: pip install pillow numpy hidapi pynput python-xlib pytest ruff
@@ -28,7 +28,7 @@ jobs:
         run: ruff check --select F,E9 --exclude polywollywin,rog_flare2_matrix_paint.py,parse_usbpcap.py .
 
       - name: Tests (virtual display, fake keyboard)
-        run: xvfb-run -a -s "-screen 0 1920x1080x24" python -m pytest -q tests
+        run: dbus-run-session -- xvfb-run -a -s "-screen 0 1920x1080x24" python -m pytest -q tests
 
       - name: Debian package
         run: |

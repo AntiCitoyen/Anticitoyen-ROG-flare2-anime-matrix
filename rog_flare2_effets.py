@@ -111,6 +111,8 @@ AUDIO_EFFECTS: dict[str, type[pww.BaseEffect]] = dict(pww.AUDIO_VISUALIZERS)
 
 from rog_flare2_infos import SystemMonitorEffect  # noqa: E402  (écran d'infos système)
 EFFECTS[SystemMonitorEffect.name] = SystemMonitorEffect
+from rog_flare2_mpris import NowPlayingEffect  # noqa: E402  (morceau en cours, MPRIS)
+AUDIO_EFFECTS[NowPlayingEffect.name] = NowPlayingEffect
 
 # Extensions : tout fichier .py de ce dossier peut définir des effets (sous-classes de BaseEffect
 # avec un attribut name). Voir docs/EXTENSIONS.md et examples/effets/.
