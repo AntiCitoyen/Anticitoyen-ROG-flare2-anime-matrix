@@ -375,5 +375,9 @@
  "Essayer": "Спробувати",
  "💾 Enregistrer dans le clavier": "💾 Записати в клавіатуру",
  "Couleurs :": "Кольори:",
- "Clavier injoignable": "Клавіатура недоступна"
+ "Clavier injoignable": "Клавіатура недоступна",
+ "animation trop volumineuse : paquet rejeté": "анімація завелика: пакет відхилено",
+ "entrée de catalogue invalide : {name}": "неприпустимий запис каталогу: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "немає контрольної суми SHA-256: пакет відхилено",
+ "nom de paquet inattendu : paquet rejeté": "неочікувана назва пакета: пакет відхилено"
 }

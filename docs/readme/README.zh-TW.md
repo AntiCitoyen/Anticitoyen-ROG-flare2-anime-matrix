@@ -185,7 +185,7 @@ animematrix-ctl stop
 | 指令 | 作用 |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | 切換模式(也能在選單圖示的右鍵選單中操作);所選模式也會成為工作階段啟動模式 |
-| `animematrixd --http 8765` | 具備本機 HTTP API 的守護程式(`POST http://127.0.0.1:8765/api`,JSON 格式與 Socket 相同) |
+| `animematrixd --http 8765` | 具備本機 HTTP API 的守護程式(`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`,JSON 格式與 Socket 相同) |
 | `animematrix-animation [fichier.gif]` | 動畫編輯器 |
 | `animematrix-apercu fichier.gif -o apercu.gif` | 產生某個 GIF 檔案的真實預覽 |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | 將 GIF 轉換為適合矩陣螢幕的格式(輸出至 `dossier/matrix/`) |

@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Komut | Rol |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | geçiş yapar (menü simgesinin sağ tıkında da bulunur); seçilen mod aynı zamanda oturum başlangıcı modudur |
-| `animematrixd --http 8765` | yerel HTTP API'li arka plan servisi (`POST http://127.0.0.1:8765/api`, soket ile aynı JSON) |
+| `animematrixd --http 8765` | yerel HTTP API'li arka plan servisi (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, soket ile aynı JSON) |
 | `animematrix-animation [fichier.gif]` | animasyon düzenleyici |
 | `animematrix-apercu fichier.gif -o apercu.gif` | bir GIF'in (dosya) gerçekçi önizlemesi |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | GIF'leri matris için dönüştürür (`dossier/matrix/` içine) |

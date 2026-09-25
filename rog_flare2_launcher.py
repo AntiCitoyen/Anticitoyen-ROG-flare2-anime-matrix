@@ -526,7 +526,7 @@ class LauncherApp(tk.Tk):
                 self._pending_install = (False, str(exc))
                 return
             self.set_status(_("Installation (mot de passe administrateur)…"))
-            self._pending_install = maj.install(deb)
+            self._pending_install = maj.install(deb, info["sha256"])
 
         threading.Thread(target=worker, daemon=True).start()
 
@@ -906,7 +906,7 @@ class LauncherApp(tk.Tk):
         subprocess.Popen(["xdg-open", str(PLUGIN_DIR)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def open_paint_editor(self):
-        self._send("release")  # l'éditeur écrit lui-même ; il rend la main au démon en fermant
+        # l'éditeur écrit lui-même : il demande la main au démon et la rend en fermant (ou en mourant)
         script = Path(__file__).parent / "rog_flare2_matrix_paint.py"
         subprocess.Popen([sys.executable, str(script)])
         self.destroy()

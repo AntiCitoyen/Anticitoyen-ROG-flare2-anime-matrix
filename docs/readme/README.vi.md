@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Lệnh | Vai trò |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | chuyển đổi (cũng có trong menu chuột phải của biểu tượng); chế độ được chọn cũng là chế độ khi khởi động phiên |
-| `animematrixd --http 8765` | dịch vụ nền có API HTTP nội bộ (`POST http://127.0.0.1:8765/api`, cùng định dạng JSON như socket) |
+| `animematrixd --http 8765` | dịch vụ nền có API HTTP nội bộ (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, cùng định dạng JSON như socket) |
 | `animematrix-animation [fichier.gif]` | trình chỉnh sửa hoạt ảnh |
 | `animematrix-apercu fichier.gif -o apercu.gif` | xem trước chân thực của một GIF (tệp) |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | chuyển đổi GIF cho ma trận (trong `dossier/matrix/`) |

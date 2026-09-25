@@ -38,4 +38,21 @@ def test_bash_hook_reports_long_commands(tmp_path):
     import time
     time.sleep(0.5)
     lines = [line.split() for line in calls.read_text().splitlines()]  # fin CODE SECONDES COMMANDE…
-    assert [(c[1], c[3:]) for c in lines] == [("0", ["sleep", "1.2"]), ("1", ["sleep", "1.2"])]
+    assert [(c[1], c[3:]) for c in lines] == [("0", ["sleep"]), ("1", ["sleep"])]  # jamais les arguments
+
+
+def test_bash_hook_keeps_an_existing_debug_trap(tmp_path):
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    calls, seen = tmp_path / "appels", tmp_path / "piege"
+    (bin_dir / "animematrix-ctl").write_text(f'#!/bin/sh\necho "$@" >> {calls}\n')
+    (bin_dir / "animematrix-ctl").chmod(0o755)
+    rc = tmp_path / "rc"
+    rc.write_text(f"trap 'echo \"$BASH_COMMAND\" >> {seen}' DEBUG\n. {fin.script_path()}\nANIMEMATRIX_FIN_SECONDES=1\n")
+    env = {**os.environ, "PATH": f"{bin_dir}:{os.environ['PATH']}", "HOME": str(tmp_path)}
+    subprocess.run(["bash", "--rcfile", str(rc), "-i"], input="JETON=abc sleep 1.2\nexit\n", text=True, env=env,
+                   capture_output=True, timeout=30)
+    import time
+    time.sleep(0.5)
+    assert "JETON=abc sleep 1.2" in seen.read_text()  # l'ancien piège voit toujours les commandes
+    assert calls.read_text().split()[3:] == ["sleep"]  # ni l'affectation ni les arguments

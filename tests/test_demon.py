@@ -170,3 +170,34 @@ def test_old_daemon_is_replaced_after_an_update(monkeypatch):
         d.stop()
         server.server_close()
         D.SOCKET_PATH.unlink(missing_ok=True)
+
+
+def test_http_api_refuses_browser_requests():
+    ok = D.local_request_allowed
+    json_ct = {"Host": "127.0.0.1:8765", "Content-Type": "application/json"}
+    assert ok(json_ct) and ok({**json_ct, "Host": "localhost:8765"}) and ok({**json_ct, "Host": "[::1]:8765"})
+    assert not ok({**json_ct, "Origin": "https://exemple.org"})  # page web (CSRF)
+    assert not ok({**json_ct, "Content-Type": "text/plain"})  # formulaire sans pré-vol CORS
+    assert not ok({**json_ct, "Host": "attaquant.exemple:8765"})  # DNS rebinding
+    assert not ok({"Host": "127.0.0.1"})
+
+
+def test_runtime_dir_must_be_private(tmp_path, monkeypatch):
+    d = tmp_path / "run"
+    d.mkdir(mode=0o755)
+    d.chmod(0o755)
+    monkeypatch.setattr(D, "RUNTIME", d)
+    with pytest.raises(SystemExit):
+        D.check_runtime_dir()
+    d.chmod(0o700)
+    D.check_runtime_dir()
+
+
+def test_release_resumes_when_the_editor_dies(daemon):
+    import subprocess
+    proc = subprocess.Popen(["sleep", "0.5"])
+    daemon.handle({"cmd": "release", "pid": proc.pid})
+    assert daemon.screen.released
+    proc.wait()
+    time.sleep(1.5)
+    assert not daemon.screen.released  # l'éditeur a disparu sans « resume » : l'écran est rendu

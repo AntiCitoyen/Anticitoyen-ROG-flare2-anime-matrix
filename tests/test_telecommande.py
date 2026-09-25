@@ -73,3 +73,18 @@ def test_token_file_is_private_and_url_has_token():
     assert R.url(cfg).endswith("#" + cfg["jeton"])
     old = cfg["jeton"]
     assert R.new_token() != old
+
+
+def test_remote_only_allows_safe_commands(monkeypatch):
+    import rog_flare2_listes as L
+    fav = {"type": "gif", "files": ["/home/x/a.gif"], "loop": True}
+    monkeypatch.setattr(L, "load_favorites", lambda: [{"label": "a", "show": fav}])
+    ok = R.remote_allowed
+    assert ok({"cmd": "play", "show": {"type": "horloge"}}) and ok({"cmd": "brightness", "value": 3})
+    assert ok({"cmd": "play", "show": dict(fav)})  # un favori : oui
+    for bad in ({"cmd": "memoire", "file": "/etc/shadow"}, {"cmd": "quit"}, {"cmd": "config"},
+                {"cmd": "rgb", "config": {}}, {"cmd": "release"}, {"cmd": "hold", "on": True},
+                {"cmd": "play", "show": {"type": "gif", "files": ["/home/x/.ssh/id_ed25519"]}},
+                {"cmd": "play", "show": {"type": "webcam"}}, {"cmd": "play", "show": {"type": "ecran"}},
+                {"cmd": "play", "show": "horloge"}, ["play"]):
+        assert not ok(bad), bad

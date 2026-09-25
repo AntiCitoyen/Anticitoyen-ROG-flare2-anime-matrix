@@ -185,7 +185,7 @@ animematrix-ctl stop
 | 명령어 | 역할 |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | 전환(메뉴 아이콘 오른쪽 클릭에도 있음) ; 선택한 모드는 세션 시작 시의 모드도 됩니다 |
-| `animematrixd --http 8765` | 로컬 HTTP API를 갖춘 데몬(`POST http://127.0.0.1:8765/api`, 소켓과 동일한 JSON) |
+| `animematrixd --http 8765` | 로컬 HTTP API를 갖춘 데몬(`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, 소켓과 동일한 JSON) |
 | `animematrix-animation [fichier.gif]` | 애니메이션 편집기 |
 | `animematrix-apercu fichier.gif -o apercu.gif` | GIF 파일의 실제와 같은 미리 보기 |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | 매트릭스용으로 GIF 변환(`dossier/matrix/`에 저장) |

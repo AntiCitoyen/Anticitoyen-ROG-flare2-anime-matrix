@@ -375,5 +375,9 @@
  "Essayer": "試用",
  "💾 Enregistrer dans le clavier": "💾 儲存到鍵盤",
  "Couleurs :": "顏色：",
- "Clavier injoignable": "無法連線鍵盤"
+ "Clavier injoignable": "無法連線鍵盤",
+ "animation trop volumineuse : paquet rejeté": "動畫過大：已拒絕該套件",
+ "entrée de catalogue invalide : {name}": "目錄項目無效：{name}",
+ "empreinte SHA-256 absente : paquet rejeté": "缺少 SHA-256 校驗值：已拒絕該套件",
+ "nom de paquet inattendu : paquet rejeté": "套件名稱異常：已拒絕該套件"
 }

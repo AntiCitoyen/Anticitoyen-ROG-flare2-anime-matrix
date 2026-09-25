@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Comando | Ruolo |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | interruttore (anche nel clic destro dell'icona del menu); la modalità scelta è anche quella di avvio della sessione |
-| `animematrixd --http 8765` | demone con API HTTP locale (`POST http://127.0.0.1:8765/api`, stesso JSON del socket) |
+| `animematrixd --http 8765` | demone con API HTTP locale (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, stesso JSON del socket) |
 | `animematrix-animation [file.gif]` | editor di animazioni |
 | `animematrix-apercu file.gif -o anteprima.gif` | anteprima fedele di una GIF (file) |
 | `animematrix-convertir cartella/ [--fidele] [--classique]` | converte le GIF per la matrice (in `cartella/matrix/`) |

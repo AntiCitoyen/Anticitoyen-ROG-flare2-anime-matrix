@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Comando | Função |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | alternador (também no clique direito do ícone do menu); o modo escolhido é também o do início da sessão |
-| `animematrixd --http 8765` | daemon com API HTTP local (`POST http://127.0.0.1:8765/api`, mesmo JSON do socket) |
+| `animematrixd --http 8765` | daemon com API HTTP local (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, mesmo JSON do socket) |
 | `animematrix-animation [arquivo.gif]` | editor de animação |
 | `animematrix-apercu arquivo.gif -o previa.gif` | prévia fiel de um GIF (arquivo) |
 | `animematrix-convertir pasta/ [--fidele] [--classique]` | converte GIFs para a matriz (em `pasta/matrix/`) |

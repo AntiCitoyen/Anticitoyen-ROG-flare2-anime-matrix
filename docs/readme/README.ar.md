@@ -187,7 +187,7 @@ animematrix-ctl stop
 | الأمر | الدور |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | تبديل (متاح أيضًا في النقر بزر الماوس الأيمن على أيقونة القائمة)؛ الوضع المختار هو أيضًا وضع بدء الجلسة |
-| `animematrixd --http 8765` | خدمة خلفية بواجهة HTTP محلية (`POST http://127.0.0.1:8765/api`، بنفس صيغة JSON الخاصة بالمقبس) |
+| `animematrixd --http 8765` | خدمة خلفية بواجهة HTTP محلية (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`، بنفس صيغة JSON الخاصة بالمقبس) |
 | `animematrix-animation [fichier.gif]` | محرر الرسوم المتحركة |
 | `animematrix-apercu fichier.gif -o apercu.gif` | معاينة مطابقة لملف GIF |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | يحوّل ملفات GIF لتناسب المصفوفة (في `dossier/matrix/`) |

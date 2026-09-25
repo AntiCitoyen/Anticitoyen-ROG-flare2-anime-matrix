@@ -375,5 +375,9 @@
  "Essayer": "Ausprobieren",
  "💾 Enregistrer dans le clavier": "💾 In der Tastatur speichern",
  "Couleurs :": "Farben:",
- "Clavier injoignable": "Tastatur nicht erreichbar"
+ "Clavier injoignable": "Tastatur nicht erreichbar",
+ "animation trop volumineuse : paquet rejeté": "Animation zu groß: Paket abgelehnt",
+ "entrée de catalogue invalide : {name}": "ungültiger Katalogeintrag: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "SHA-256-Prüfsumme fehlt: Paket abgelehnt",
+ "nom de paquet inattendu : paquet rejeté": "unerwarteter Paketname: Paket abgelehnt"
 }

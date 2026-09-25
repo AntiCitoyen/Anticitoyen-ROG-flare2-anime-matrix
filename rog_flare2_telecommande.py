@@ -84,7 +84,29 @@ def page() -> bytes:
              "noToken": _("Jeton absent ou refusé : ouvrez l'adresse complète affichée dans le lanceur "
                           "(Réglages → Télécommande web)."),
              "playing": _("En cours :"), "nothing": _("Rien")}
-    return PAGE.replace("__TEXTS__", json.dumps(texts, ensure_ascii=False)).encode()
+    # « </ » échappé : un texte traduit ne peut pas refermer la balise <script>
+    return PAGE.replace("__TEXTS__", json.dumps(texts, ensure_ascii=False).replace("</", "<\\/")).encode()
+
+
+REMOTE_COMMANDS = {"ping", "status", "frame", "catalogue", "play", "galerie", "stop", "brightness", "speed",
+                   "params", "notify", "key"}
+REMOTE_SHOWS = {"horloge", "effet", "liste", "clavier"}
+
+
+def remote_allowed(req) -> bool:
+    """Ce que le téléphone peut demander : pas de fichiers arbitraires (GIF, mémoire du clavier), pas de
+    webcam ni de miroir d'écran, pas d'arrêt du démon ni de réglages ; un GIF seulement s'il est en favori."""
+    if not isinstance(req, dict) or req.get("cmd") not in REMOTE_COMMANDS:
+        return False
+    if req["cmd"] != "play":
+        return True
+    show = req.get("show")
+    if not isinstance(show, dict):
+        return False
+    if show.get("type") in REMOTE_SHOWS:
+        return True
+    from rog_flare2_listes import load_favorites
+    return any(f.get("show") == show for f in load_favorites())
 
 
 class RemoteServer:
@@ -109,6 +131,8 @@ class RemoteServer:
                 self.send_header("Content-Length", str(len(body)))
                 self.send_header("Cache-Control", "no-store")
                 self.send_header("X-Content-Type-Options", "nosniff")
+                self.send_header("X-Frame-Options", "DENY")
+                self.send_header("Referrer-Policy", "no-referrer")
                 self.end_headers()
                 self.wfile.write(body)
 
@@ -125,15 +149,15 @@ class RemoteServer:
                 if not hmac.compare_digest(self.headers.get("X-Jeton", ""), server.token):
                     self._send(403, b'{"ok": false, "error": "jeton"}', "application/json")
                     return
-                size = int(self.headers.get("Content-Length", 0))
-                if size > MAX_BODY:
+                size = int(self.headers.get("Content-Length") or 0)
+                if not 0 <= size <= MAX_BODY:
                     self.send_error(413)
                     return
                 try:
                     req = json.loads(self.rfile.read(size))
-                    resp = server.handle(req)
-                except Exception as exc:
-                    resp = {"ok": False, "error": str(exc)}
+                    resp = server.handle(req) if remote_allowed(req) else {"ok": False, "error": "refusé"}
+                except Exception:
+                    resp = {"ok": False, "error": "requête invalide"}
                 self._send(200, json.dumps(resp, ensure_ascii=False).encode(), "application/json")
 
             def log_message(self, *_a):

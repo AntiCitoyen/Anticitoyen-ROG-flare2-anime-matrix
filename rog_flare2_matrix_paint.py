@@ -21,6 +21,7 @@ or:
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -544,16 +545,16 @@ class MatrixPaintApp(tk.Tk):
         self.destroy()
 
 
-def daemon(cmd: str) -> None:
+def daemon(cmd: str, **kw) -> None:
     """Prévient le démon animematrixd (s'il tourne) : release avant d'écrire, resume à la fermeture."""
     try:
         from rog_flare2_ctl import request
-        request(cmd, timeout=2)
+        request(cmd, timeout=2, **kw)
     except Exception:
         pass
 
 
 if __name__ == "__main__":
-    daemon("release")
+    daemon("release", pid=os.getpid())  # si l'éditeur meurt sans resume, le démon reprend seul
     app = MatrixPaintApp()
     app.mainloop()

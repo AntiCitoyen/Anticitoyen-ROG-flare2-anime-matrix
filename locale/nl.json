@@ -375,5 +375,9 @@
  "Essayer": "Proberen",
  "💾 Enregistrer dans le clavier": "💾 Opslaan in het toetsenbord",
  "Couleurs :": "Kleuren:",
- "Clavier injoignable": "Toetsenbord onbereikbaar"
+ "Clavier injoignable": "Toetsenbord onbereikbaar",
+ "animation trop volumineuse : paquet rejeté": "animatie te groot: pakket geweigerd",
+ "entrée de catalogue invalide : {name}": "ongeldige catalogusvermelding: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "SHA-256-controlesom ontbreekt: pakket geweigerd",
+ "nom de paquet inattendu : paquet rejeté": "onverwachte pakketnaam: pakket geweigerd"
 }

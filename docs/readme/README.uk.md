@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Команда | Призначення |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | перемикач (також через клік правою кнопкою на значку в меню); обраний режим також використовується на початку сесії |
-| `animematrixd --http 8765` | демон із локальним HTTP API (`POST http://127.0.0.1:8765/api`, той самий JSON, що й сокет) |
+| `animematrixd --http 8765` | демон із локальним HTTP API (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, той самий JSON, що й сокет) |
 | `animematrix-animation [файл.gif]` | редактор анімації |
 | `animematrix-apercu файл.gif -o apercu.gif` | точний попередній перегляд GIF (файл) |
 | `animematrix-convertir тека/ [--fidele] [--classique]` | конвертує GIF під матрицю (у `тека/matrix/`) |

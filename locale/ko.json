@@ -375,5 +375,9 @@
  "Essayer": "시험",
  "💾 Enregistrer dans le clavier": "💾 키보드에 저장",
  "Couleurs :": "색상:",
- "Clavier injoignable": "키보드에 연결할 수 없음"
+ "Clavier injoignable": "키보드에 연결할 수 없음",
+ "animation trop volumineuse : paquet rejeté": "애니메이션이 너무 큼: 패키지 거부됨",
+ "entrée de catalogue invalide : {name}": "잘못된 카탈로그 항목: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "SHA-256 체크섬 없음: 패키지 거부됨",
+ "nom de paquet inattendu : paquet rejeté": "예상치 못한 패키지 이름: 패키지 거부됨"
 }

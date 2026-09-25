@@ -375,5 +375,9 @@
  "Essayer": "Testar",
  "💾 Enregistrer dans le clavier": "💾 Salvar no teclado",
  "Couleurs :": "Cores:",
- "Clavier injoignable": "Teclado inacessível"
+ "Clavier injoignable": "Teclado inacessível",
+ "animation trop volumineuse : paquet rejeté": "animação grande demais: pacote rejeitado",
+ "entrée de catalogue invalide : {name}": "entrada de catálogo inválida: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "soma SHA-256 ausente: pacote rejeitado",
+ "nom de paquet inattendu : paquet rejeté": "nome de pacote inesperado: pacote rejeitado"
 }

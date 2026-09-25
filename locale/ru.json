@@ -375,5 +375,9 @@
  "Essayer": "Попробовать",
  "💾 Enregistrer dans le clavier": "💾 Записать в клавиатуру",
  "Couleurs :": "Цвета:",
- "Clavier injoignable": "Клавиатура недоступна"
+ "Clavier injoignable": "Клавиатура недоступна",
+ "animation trop volumineuse : paquet rejeté": "анимация слишком большая: пакет отклонён",
+ "entrée de catalogue invalide : {name}": "недопустимая запись каталога: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "нет контрольной суммы SHA-256: пакет отклонён",
+ "nom de paquet inattendu : paquet rejeté": "неожиданное имя пакета: пакет отклонён"
 }

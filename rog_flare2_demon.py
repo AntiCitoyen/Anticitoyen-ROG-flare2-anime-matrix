@@ -359,6 +359,17 @@ class Daemon:
         finally:
             screen.hardware = False
 
+    def _resume_when_gone(self, pid: int):
+        while self.screen.released:
+            try:
+                os.kill(pid, 0)
+            except ProcessLookupError:
+                self.screen.resume()
+                return
+            except PermissionError:
+                pass  # vivant, mais pas à nous
+            time.sleep(1)
+
     def write_memory(self, req: dict) -> dict:
         """Enregistre un GIF, une image ou un .bin dans la mémoire du clavier, puis l'affiche."""
         from rog_flare2_memoire import block_frames, encode_bin, frames_from_file, write_memory
@@ -542,8 +553,11 @@ class Daemon:
         if cmd == "frame":
             leds = self.screen.last[FB_OFFSET:FB_OFFSET + LED_COUNT]
             return {"ok": True, "frame": base64.b64encode(leds).decode()}
-        if cmd == "release":
+        if cmd == "release":  # pid : reprise automatique quand ce processus disparaît
             self.screen.release()
+            pid = req.get("pid")
+            if isinstance(pid, int) and pid > 0:
+                threading.Thread(target=self._resume_when_gone, args=(pid,), daemon=True).start()
             return {"ok": True}
         if cmd == "resume":
             self.screen.resume()
@@ -610,6 +624,17 @@ class UnixServer(socketserver.ThreadingMixIn, socketserver.UnixStreamServer):
     daemon_threads = True
 
 
+def local_request_allowed(headers) -> bool:
+    """API HTTP locale : refuse ce qu'un navigateur envoie pour une page web (CSRF, DNS rebinding).
+
+    Une page ne peut pas poster du JSON sans pré-vol CORS (jamais accordé ici) ; elle peut poster en
+    text/plain, mais son navigateur ajoute alors Origin. Le nom d'hôte doit être local.
+    """
+    host = (headers.get("Host") or "").rsplit(":", 1)[0].strip("[]").lower()
+    return (host in ("127.0.0.1", "localhost", "::1") and headers.get("Origin") is None
+            and (headers.get("Content-Type") or "").split(";")[0].strip().lower() == "application/json")
+
+
 def serve_http(daemon: Daemon, port: int):
     """API HTTP locale (127.0.0.1 seulement) : POST /api avec le même JSON que le socket."""
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -619,8 +644,15 @@ def serve_http(daemon: Daemon, port: int):
             if self.path != "/api":
                 self.send_error(404)
                 return
+            if not local_request_allowed(self.headers):
+                self.send_error(403)
+                return
+            size = int(self.headers.get("Content-Length") or 0)
+            if not 0 <= size <= 1 << 20:
+                self.send_error(413)
+                return
             try:
-                body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+                body = json.loads(self.rfile.read(size))
                 resp = daemon.handle(body)
             except Exception as exc:
                 resp = {"ok": False, "error": str(exc)}
@@ -638,11 +670,20 @@ def serve_http(daemon: Daemon, port: int):
     threading.Thread(target=srv.serve_forever, daemon=True).start()
 
 
+def check_runtime_dir() -> None:
+    """Dossier du socket à nous seul : sans XDG_RUNTIME_DIR, /tmp/animematrix-<uid> pourrait avoir été
+    créé à l'avance par un autre compte pour y substituer un faux socket."""
+    RUNTIME.mkdir(mode=0o700, parents=True, exist_ok=True)
+    st = RUNTIME.stat()
+    if st.st_uid != os.getuid() or st.st_mode & 0o077:
+        sys.exit(f"animematrixd : {RUNTIME} n'appartient pas à cet utilisateur ou est accessible à d'autres")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--http", type=int, default=0, help="port de l'API HTTP locale (0 = désactivée)")
     args = ap.parse_args()
-    RUNTIME.mkdir(parents=True, exist_ok=True)
+    check_runtime_dir()
     # Un seul démon : si le socket répond, on s'arrête.
     if SOCKET_PATH.exists():
         try:

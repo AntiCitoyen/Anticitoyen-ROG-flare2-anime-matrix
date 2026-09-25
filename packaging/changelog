@@ -1,5 +1,10 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Sécurité : API HTTP locale protégée des pages web, télécommande limitée
+    aux commandes sûres, mises à jour vérifiées par root avant installation,
+    entrées de la bibliothèque contrôlées, dossier du socket vérifié.
+  * Fin des commandes longues : seul le nom du programme est transmis ; un
+    piège DEBUG existant (bash-preexec) est respecté.
   * Après une mise à jour, le démon encore lancé est relancé avec la nouvelle
     version (les couleurs du clavier le disaient injoignable).
   * Couleurs et effets des touches sans OpenRGB : arc-en-ciel, statique,

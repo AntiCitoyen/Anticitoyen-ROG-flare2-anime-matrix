@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Perintah | Fungsi |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | sakelar (juga tersedia lewat klik kanan ikon menu); mode yang dipilih juga menjadi mode saat sesi dimulai |
-| `animematrixd --http 8765` | daemon dengan API HTTP lokal (`POST http://127.0.0.1:8765/api`, JSON yang sama seperti soket) |
+| `animematrixd --http 8765` | daemon dengan API HTTP lokal (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, JSON yang sama seperti soket) |
 | `animematrix-animation [fichier.gif]` | editor animasi |
 | `animematrix-apercu fichier.gif -o apercu.gif` | pratinjau akurat sebuah GIF (berkas) |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | mengonversi GIF untuk matriks (di `dossier/matrix/`) |

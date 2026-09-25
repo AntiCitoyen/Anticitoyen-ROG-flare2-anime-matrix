@@ -185,7 +185,7 @@ animematrix-ctl stop
 | Commando | Functie |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | schakelaar (ook via de rechtermuisknop op het menupictogram); de gekozen modus is ook die van het opstarten van de sessie |
-| `animematrixd --http 8765` | daemon met lokale HTTP-API (`POST http://127.0.0.1:8765/api`, dezelfde JSON als de socket) |
+| `animematrixd --http 8765` | daemon met lokale HTTP-API (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, dezelfde JSON als de socket) |
 | `animematrix-animation [bestand.gif]` | animatie-editor |
 | `animematrix-apercu bestand.gif -o voorvertoning.gif` | getrouwe voorvertoning van een GIF (bestand) |
 | `animematrix-convertir map/ [--fidele] [--classique]` | converteert GIF's voor de matrix (in `map/matrix/`) |

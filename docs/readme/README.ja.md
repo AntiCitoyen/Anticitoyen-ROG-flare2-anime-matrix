@@ -185,7 +185,7 @@ animematrix-ctl stop
 | コマンド | 役割 |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | モードを切り替え(メニューアイコンの右クリックメニューからも可能);選んだモードはセッション開始時のモードにもなります |
-| `animematrixd --http 8765` | ローカル HTTP API を備えたデーモン(`POST http://127.0.0.1:8765/api`、ソケットと同じ JSON) |
+| `animematrixd --http 8765` | ローカル HTTP API を備えたデーモン(`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`、ソケットと同じ JSON) |
 | `animematrix-animation [fichier.gif]` | アニメーションエディター |
 | `animematrix-apercu fichier.gif -o apercu.gif` | GIF ファイルの忠実なプレビューを生成 |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | GIF をマトリクス用に変換(`dossier/matrix/` に出力) |

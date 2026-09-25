@@ -375,5 +375,9 @@
  "Essayer": "Dene",
  "💾 Enregistrer dans le clavier": "💾 Klavyeye kaydet",
  "Couleurs :": "Renkler:",
- "Clavier injoignable": "Klavyeye ulaşılamıyor"
+ "Clavier injoignable": "Klavyeye ulaşılamıyor",
+ "animation trop volumineuse : paquet rejeté": "animasyon çok büyük: paket reddedildi",
+ "entrée de catalogue invalide : {name}": "geçersiz katalog girdisi: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "SHA-256 özeti yok: paket reddedildi",
+ "nom de paquet inattendu : paquet rejeté": "beklenmeyen paket adı: paket reddedildi"
 }

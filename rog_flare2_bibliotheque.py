@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 import threading
 import urllib.request
@@ -35,16 +36,33 @@ def display_name(entry: dict) -> str:
     return noms.get(LANG) or noms.get("en") or entry.get("id", "?")
 
 
+MAX_ANIMATION = 16 * 1024 * 1024
+SAFE_ID = re.compile(r"[a-z0-9][a-z0-9_-]{0,63}")
+SAFE_FILE = re.compile(r"[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*\.gif")
+
+
+def check_entry(entry: dict) -> str:
+    """Identifiant sûr comme nom de fichier ; lève OSError pour une entrée de catalogue douteuse."""
+    ident, fichier = str(entry.get("id", "")), str(entry.get("fichier", ""))
+    if not SAFE_ID.fullmatch(ident) or not SAFE_FILE.fullmatch(fichier) \
+            or not re.fullmatch(r"[0-9a-f]{64}", str(entry.get("sha256", ""))):
+        raise OSError(_("entrée de catalogue invalide : {name}").format(name=ident[:40] or "?"))
+    return ident
+
+
 def fetch_animation(entry: dict, base_url: str | None = None, timeout: float = 15) -> Path:
     """GIF de l'animation dans le cache (téléchargé une fois, empreinte SHA-256 vérifiée)."""
+    ident = check_entry(entry)
     LIB_CACHE.mkdir(parents=True, exist_ok=True)
-    dest = LIB_CACHE / f"{entry['id']}.gif"
+    dest = LIB_CACHE / f"{ident}.gif"
     if dest.exists() and hashlib.sha256(dest.read_bytes()).hexdigest() == entry.get("sha256"):
         return dest
     req = urllib.request.Request((base_url or BASE_URL) + entry["fichier"], headers={"User-Agent": f"animematrix/{VERSION}"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        data = r.read()
-    if entry.get("sha256") and hashlib.sha256(data).hexdigest() != entry["sha256"]:
+        data = r.read(MAX_ANIMATION + 1)
+    if len(data) > MAX_ANIMATION:
+        raise OSError(_("animation trop volumineuse : paquet rejeté"))
+    if hashlib.sha256(data).hexdigest() != entry["sha256"]:
         raise OSError(_("empreinte SHA-256 différente de celle publiée : paquet rejeté"))
     dest.write_bytes(data)
     return dest
@@ -53,7 +71,7 @@ def fetch_animation(entry: dict, base_url: str | None = None, timeout: float = 1
 def add_to_gallery(path: Path, entry: dict) -> Path:
     folder = gallery_dir()
     folder.mkdir(parents=True, exist_ok=True)
-    dest = folder / f"{entry['id']}.gif"
+    dest = folder / f"{check_entry(entry)}.gif"
     shutil.copyfile(path, dest)
     return dest
 

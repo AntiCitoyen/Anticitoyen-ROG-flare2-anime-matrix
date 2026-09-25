@@ -375,5 +375,9 @@
  "Essayer": "Coba",
  "💾 Enregistrer dans le clavier": "💾 Simpan ke keyboard",
  "Couleurs :": "Warna:",
- "Clavier injoignable": "Keyboard tidak terjangkau"
+ "Clavier injoignable": "Keyboard tidak terjangkau",
+ "animation trop volumineuse : paquet rejeté": "animasi terlalu besar: paket ditolak",
+ "entrée de catalogue invalide : {name}": "entri katalog tidak valid: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "checksum SHA-256 tidak ada: paket ditolak",
+ "nom de paquet inattendu : paquet rejeté": "nama paket tidak terduga: paket ditolak"
 }

@@ -375,5 +375,9 @@
  "Essayer": "تجربة",
  "💾 Enregistrer dans le clavier": "💾 حفظ في لوحة المفاتيح",
  "Couleurs :": "الألوان:",
- "Clavier injoignable": "تعذّر الوصول إلى لوحة المفاتيح"
+ "Clavier injoignable": "تعذّر الوصول إلى لوحة المفاتيح",
+ "animation trop volumineuse : paquet rejeté": "الرسوم المتحركة كبيرة جدًا: رُفضت الحزمة",
+ "entrée de catalogue invalide : {name}": "إدخال فهرس غير صالح: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "بصمة SHA-256 مفقودة: رُفضت الحزمة",
+ "nom de paquet inattendu : paquet rejeté": "اسم حزمة غير متوقع: رُفضت الحزمة"
 }

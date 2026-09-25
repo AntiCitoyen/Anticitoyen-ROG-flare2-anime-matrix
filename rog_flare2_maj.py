@@ -81,8 +81,13 @@ def download(info: dict, progress=None) -> Path:
     """Télécharge le .deb dans ~/.cache/animematrix ; progress(pourcent) ; vérifie le SHA-256."""
     if not info.get("deb_url"):
         raise OSError(_("pas de paquet .deb dans cette release"))
+    if not re.fullmatch(r"[0-9a-f]{64}", info.get("sha256") or ""):
+        raise OSError(_("empreinte SHA-256 absente : paquet rejeté"))
+    name = info.get("deb_name") or ""
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+~-]*_all\.deb", name):
+        raise OSError(_("nom de paquet inattendu : paquet rejeté"))
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    dest = CACHE_DIR / info["deb_name"]
+    dest = CACHE_DIR / name
     part = dest.with_suffix(".part")
     h = hashlib.sha256()
     req = urllib.request.Request(info["deb_url"], headers={"User-Agent": "animematrix"})
@@ -95,22 +100,36 @@ def download(info: dict, progress=None) -> Path:
             done += len(chunk)
             if progress and total:
                 progress(round(100 * done / total))
-    if info.get("sha256") and h.hexdigest() != info["sha256"]:
+    if h.hexdigest() != info["sha256"]:
         part.unlink(missing_ok=True)
         raise OSError(_("empreinte SHA-256 différente de celle publiée : paquet rejeté"))
     part.replace(dest)
     return dest
 
 
-def install(deb: Path) -> tuple[bool, str]:
-    """Installe avec pkexec (fenêtre de mot de passe) : apt-get (dépendances), sinon dpkg -i."""
-    for cmd in (["pkexec", "apt-get", "install", "-y", str(deb)], ["pkexec", "dpkg", "-i", str(deb)]):
-        r = subprocess.run(cmd, capture_output=True, text=True)
-        if r.returncode == 0:
-            return True, ""
-        if r.returncode in (126, 127):  # authentification refusée ou annulée
-            return False, "annulé"
-        err = (r.stderr or r.stdout).strip().splitlines()
+# Exécuté en root : le paquet est d'abord copié dans un dossier à root puis revérifié, pour qu'un
+# autre programme de la session ne puisse pas le remplacer entre la vérification et l'installation.
+ROOT_INSTALL = r"""set -e
+d=$(mktemp -d)
+trap 'rm -rf "$d"' EXIT
+cp -- "$1" "$d/paquet.deb"
+echo "$2  $d/paquet.deb" | sha256sum -c --quiet -
+chmod 755 "$d"; chmod 644 "$d/paquet.deb"
+apt-get install -y "$d/paquet.deb" || dpkg -i "$d/paquet.deb"
+"""
+
+
+def install(deb: Path, sha256: str) -> tuple[bool, str]:
+    """Installe avec pkexec (une fenêtre de mot de passe) : apt-get (dépendances), sinon dpkg -i."""
+    if not re.fullmatch(r"[0-9a-f]{64}", sha256 or ""):
+        return False, "empreinte SHA-256 absente"
+    r = subprocess.run(["pkexec", "/bin/sh", "-c", ROOT_INSTALL, "animematrix-maj", str(deb), sha256],
+                       capture_output=True, text=True)
+    if r.returncode == 0:
+        return True, ""
+    if r.returncode in (126, 127):  # authentification refusée ou annulée
+        return False, "annulé"
+    err = (r.stderr or r.stdout).strip().splitlines()
     return False, err[-1] if err else "erreur inconnue"
 
 

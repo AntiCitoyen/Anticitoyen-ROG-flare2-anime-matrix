@@ -185,7 +185,7 @@ animematrix-ctl stop
 | कमांड | भूमिका |
 |---|---|
 | `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | टॉगल (मेनू आइकन के राइट-क्लिक में भी); चुना गया मोड सत्र शुरुआत का मोड भी होता है |
-| `animematrixd --http 8765` | लोकल HTTP API वाली बैकग्राउंड सर्विस (`POST http://127.0.0.1:8765/api`, सॉकेट जैसा ही JSON) |
+| `animematrixd --http 8765` | लोकल HTTP API वाली बैकग्राउंड सर्विस (`POST http://127.0.0.1:8765/api`, `Content-Type: application/json`, सॉकेट जैसा ही JSON) |
 | `animematrix-animation [fichier.gif]` | एनिमेशन एडिटर |
 | `animematrix-apercu fichier.gif -o apercu.gif` | किसी GIF (फ़ाइल) का सटीक पूर्वावलोकन |
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | मैट्रिक्स के लिए GIF रूपांतरित करता है (`dossier/matrix/` में) |

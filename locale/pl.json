@@ -375,5 +375,9 @@
  "Essayer": "Wypróbuj",
  "💾 Enregistrer dans le clavier": "💾 Zapisz w klawiaturze",
  "Couleurs :": "Kolory:",
- "Clavier injoignable": "Klawiatura nieosiągalna"
+ "Clavier injoignable": "Klawiatura nieosiągalna",
+ "animation trop volumineuse : paquet rejeté": "animacja zbyt duża: pakiet odrzucony",
+ "entrée de catalogue invalide : {name}": "nieprawidłowy wpis katalogu: {name}",
+ "empreinte SHA-256 absente : paquet rejeté": "brak sumy SHA-256: pakiet odrzucony",
+ "nom de paquet inattendu : paquet rejeté": "nieoczekiwana nazwa pakietu: pakiet odrzucony"
 }

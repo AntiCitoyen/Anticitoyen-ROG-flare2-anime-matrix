@@ -73,3 +73,13 @@ def test_library_window(served):
     w.on_play()
     assert played and played[0]["fidele"] is True
     root.destroy()
+
+
+def test_catalogue_entries_are_checked():
+    import pytest
+    good = {"id": "coeur", "fichier": "gif/coeur.gif", "sha256": "a" * 64}
+    assert B.check_entry(good) == "coeur"
+    for bad in ({**good, "id": "../../.bashrc"}, {**good, "fichier": "../secret.gif"},
+                {**good, "sha256": ""}, {**good, "id": "A B"}):
+        with pytest.raises(OSError):
+            B.check_entry(bad)

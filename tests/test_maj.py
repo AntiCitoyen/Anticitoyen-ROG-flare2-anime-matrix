@@ -75,3 +75,29 @@ def test_state_and_due():
     assert maj.due()
     maj.save_state({"auto": False, "last": 0})
     assert not maj.due()
+
+
+def test_download_needs_checksum_and_clean_name(deb_server):
+    url, digest = deb_server
+    with pytest.raises(OSError):
+        maj.download({"deb_url": url, "deb_name": "x_all.deb", "sha256": None})
+    with pytest.raises(OSError):
+        maj.download({"deb_url": url, "deb_name": "../../.bashrc_all.deb", "sha256": digest})
+
+
+def test_root_install_script_checks_its_own_copy(tmp_path):
+    """Le script root (ici lancé sans pkexec, apt-get factice) refuse un paquet d'une autre empreinte."""
+    import subprocess
+    deb = tmp_path / "p_all.deb"
+    deb.write_bytes(b"paquet")
+    good = hashlib.sha256(b"paquet").hexdigest()
+    fake = tmp_path / "bin"
+    fake.mkdir()
+    (fake / "apt-get").write_text(f'#!/bin/sh\necho "$@" > {tmp_path / "apt"}\n')
+    (fake / "apt-get").chmod(0o755)
+    env = {"PATH": f"{fake}:/usr/bin:/bin"}
+    run = lambda sha: subprocess.run(["/bin/sh", "-c", maj.ROOT_INSTALL, "x", str(deb), sha], env=env,
+                                     capture_output=True, text=True)
+    assert run("0" * 64).returncode != 0 and not (tmp_path / "apt").exists()
+    assert run(good).returncode == 0 and "paquet.deb" in (tmp_path / "apt").read_text()
+    assert maj.install(deb, "pas-une-empreinte") == (False, "empreinte SHA-256 absente")
