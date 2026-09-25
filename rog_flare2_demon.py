@@ -199,7 +199,8 @@ class Daemon:
                         if stop.is_set():
                             return
                         try:
-                            play_file(pick_version(f) if converted else f, layer, stop, self.brightness)
+                            play_file(pick_version(f) if converted else f, layer, stop, self.brightness,
+                                      bool(show.get("fidele")))
                         except OSError:
                             pass
                     if not show.get("loop", True):

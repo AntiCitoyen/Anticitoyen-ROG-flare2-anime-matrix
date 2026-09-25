@@ -90,6 +90,7 @@ def main(argv=None):
     g.add_argument("chemins", nargs="*")
     g.add_argument("--originaux", action="store_true")
     g.add_argument("--une-fois", action="store_true")
+    g.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
     e = sub.add_parser("effet")
     e.add_argument("nom")
     e.add_argument("--param", action="append", default=[], metavar="clé=valeur")
@@ -119,7 +120,7 @@ def main(argv=None):
         for p in paths:
             files += media_files(p) if p.is_dir() else [p] if p.suffix.lower() in MEDIA_EXTENSIONS else []
         show = {"type": "gif", "files": [str(f) for f in files], "loop": not args.une_fois,
-                "converted": not args.originaux}
+                "converted": not args.originaux, "fidele": args.fidele}
     elif args.cmd == "effet":
         params = dict(kv.split("=", 1) for kv in args.param)
         show = {"type": "effet", "name": args.nom, "params": {k: _value(v) for k, v in params.items()},

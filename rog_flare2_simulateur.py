@@ -87,14 +87,14 @@ def main():
 class PreviewWindow:
     """Fenêtre d'aperçu fidèle d'une liste de GIF/images (lanceur, onglet GIF)."""
 
-    def __init__(self, parent, files: list[Path], brightness, title: str, pick=lambda f: f):
+    def __init__(self, parent, files: list[Path], brightness, title: str, pick=lambda f: f, fidele: bool = False):
         import tkinter as tk
         from tkinter import ttk
 
         from PIL import ImageTk
         from rog_flare2_core import image_to_frame, iter_gif_frames
         self._tk, self._imagetk = ImageTk, None
-        self.files, self.brightness, self.pick = files, brightness, pick
+        self.files, self.brightness, self.pick, self.fidele = files, brightness, pick, fidele
         self.image_to_frame, self.iter_gif_frames = image_to_frame, iter_gif_frames
         self.index = 0
         self.win = tk.Toplevel(parent)
@@ -120,7 +120,8 @@ class PreviewWindow:
         src = self.pick(self.files[self.index])
         self.name.config(text=f"{src.name}  ({self.index + 1}/{len(self.files)})")
         try:
-            self.frames = [(self.image_to_frame(img, self.brightness()), d) for img, d in self.iter_gif_frames(src)]
+            self.frames = [(self.image_to_frame(img, self.brightness(), self.fidele), d)
+                           for img, d in self.iter_gif_frames(src)]
         except OSError as exc:
             self.name.config(text=f"{src.name} : {exc}")
             self.frames = []

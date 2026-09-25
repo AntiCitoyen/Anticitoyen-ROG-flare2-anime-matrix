@@ -58,7 +58,10 @@ def save_gallery_dir(folder: Path) -> None:
     GALLERY_FILE.write_text(f"{folder}\n")
 
 
-def image_to_frame(img: "Image.Image", brightness: int = 100) -> bytes:
+FAITHFUL_COLS = 19  # gabarit en coin : la rangée r couvre les colonnes (r+1)//2 à 18 (bord droit vertical)
+
+
+def image_to_frame(img: "Image.Image", brightness: int = 100, fidele: bool = False) -> bytes:
     """Convertit une image PIL en trame 1024 octets pour la matrice.
 
     Le panneau physique est un triangle/coin (19 LED de large en haut,
@@ -66,8 +69,19 @@ def image_to_frame(img: "Image.Image", brightness: int = 100) -> bytes:
     une fenêtre fixe qui coupe la partie gauche des lignes étroites), on
     échantillonne chaque ligne sur toute la largeur de l'image source,
     proportionnellement au nombre réel de LED de cette ligne.
+
+    fidele : l'image est posée sur le gabarit en coin (19 × 24) sans étirer les
+    rangées : les formes gardent leurs proportions, ce qui dépasse du coin est perdu.
     """
     scale = brightness / 100.0
+    if fidele:
+        pixels = img.convert("L").resize((FAITHFUL_COLS, NUM_ROWS), Image.LANCZOS).load()
+        frame = bytearray(FRAME_SIZE)
+        frame[0:2] = PREFIX
+        for raw_idx, (row, col) in enumerate(PHYSICAL_CALIBRATED_ORDER):
+            x = min(FAITHFUL_COLS - 1, (row + 1) // 2 + col)
+            frame[FB_OFFSET + raw_idx] = max(0, min(255, int(pixels[x, row] * scale)))
+        return bytes(frame)
     # Hauteur fixée au nombre de lignes physiques ; largeur gardée haute
     # résolution pour un échantillonnage précis par ligne.
     src_w, src_h = img.size
@@ -124,13 +138,14 @@ def media_files(folder: Path) -> list[Path]:
     return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in MEDIA_EXTENSIONS)
 
 
-def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event, brightness) -> None:
+def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event, brightness,
+              fidele: bool = False) -> None:
     """Joue une fois un GIF/image en flux ; brightness() est relue à chaque frame."""
     n = 0
     for img, delay in iter_gif_frames(path):
         if stop_event.is_set():
             return
-        transport.write(image_to_frame(img, brightness()))
+        transport.write(image_to_frame(img, brightness(), fidele))
         n += 1
         stop_event.wait(delay)
     if n == 1:

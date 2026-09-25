@@ -192,6 +192,9 @@ class LauncherApp(tk.Tk):
         self.converted_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(tab, text=_("Préférer les versions converties (matrix/)"),
                         variable=self.converted_var).pack(anchor="w")
+        self.faithful_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(tab, text=_("Géométrie fidèle (les formes gardent leurs proportions)"),
+                        variable=self.faithful_var).pack(anchor="w")
         self.play_btn = ttk.Button(tab, text=_("▶ Lancer les GIF"), command=self.start_playback, state="disabled")
         self.play_btn.pack(fill="x", pady=(8, 4))
         ttk.Button(tab, text=_("👁 Aperçu fidèle (avant envoi)"), command=self.open_preview).pack(fill="x", pady=(0, 4))
@@ -199,6 +202,9 @@ class LauncherApp(tk.Tk):
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
         ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
                   wraplength=self.wrap, justify="center").pack()
+        self.smart_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(tab, text=_("Conversion intelligente (recadrage sur le sujet, contours)"),
+                        variable=self.smart_var).pack(anchor="w", pady=(4, 0))
         conv = ttk.Frame(tab)
         conv.pack(fill="x", pady=(4, 0))
         ttk.Button(conv, text=_("Convertir des GIF…"), command=self.convert_files).pack(
@@ -514,7 +520,7 @@ class LauncherApp(tk.Tk):
         if not self.gif_files or Image is None:
             return
         show = {"type": "gif", "files": [str(f) for f in self.gif_files], "loop": bool(self.loop_var.get()),
-                "converted": bool(self.converted_var.get())}
+                "converted": bool(self.converted_var.get()), "fidele": bool(self.faithful_var.get())}
         self._play(show, _("Lecture : {name}").format(name=self.status_label_for_files()))
 
     def status_label_for_files(self) -> str:
@@ -599,13 +605,15 @@ class LauncherApp(tk.Tk):
 
     def _convert(self, chemins: list[Path]):
         """Conversion dans un fil ; sortie dans <dossier>/matrix/ ; propose ensuite de charger le résultat."""
+        smart, faithful = bool(self.smart_var.get()), bool(self.faithful_var.get())
+
         def rappel(i, n, src, etat):
             etat = {"ok": _("converti"), "saute": _("déjà à jour")}.get(etat, etat.replace("erreur", _("erreur"), 1))
             self.after(0, lambda: self.status.config(text=_("Conversion {i}/{n} : {name} — {state}").format(
                 i=i, n=n, name=src.name, state=etat)))
 
         def worker():
-            produits = convertir_tout(chemins, None, False, rappel)
+            produits = convertir_tout(chemins, None, False, rappel, intelligente=smart, fidele=faithful)
 
             def fin():
                 if not produits:
@@ -660,7 +668,8 @@ class LauncherApp(tk.Tk):
         try:
             from rog_flare2_simulateur import PreviewWindow
             PreviewWindow(self, self.gif_files, self.brightness.get, _("Aperçu fidèle (avant envoi)"),
-                          pick=pick_version if self.converted_var.get() else (lambda f: f))
+                          pick=pick_version if self.converted_var.get() else (lambda f: f),
+                          fidele=bool(self.faithful_var.get()))
         except ImportError as exc:  # PIL.ImageTk absent
             self.set_status(_("Erreur : {err}").format(err=exc))
 

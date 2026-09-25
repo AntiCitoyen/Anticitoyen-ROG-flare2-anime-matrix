@@ -20,13 +20,17 @@
 | Mouvement | lent, translation d'une LED par image au plus ; pas de vidéo réaliste | une LED = 4 mm, tout mouvement rapide devient un flou |
 | Format | GIF gris, palette ≤ 4 couleurs, sans transparence, boucle infinie, image complète à chaque trame (pas de trames partielles) | `load_gif_frames` recompose sur une toile : les trames partielles s'empilent |
 
-## Chaîne de préparation (ImageMagick, à partir de n'importe quel GIF)
+## Conversion
+
+Le lanceur (*Convertir des GIF…*) et `animematrix-convertir` utilisent par défaut la **conversion intelligente** : recadrage sur le sujet, sujet clair sur fond noir (un dessin sur fond blanc est inversé), traits fins épaissis, contours renforcés pour les photos (sans nappe claire), 3 niveaux, images quasi identiques fusionnées, durées ≥ 80 ms. `--classique` garde la chaîne ImageMagick d'origine ci-dessous.
+
+## Chaîne de préparation classique (ImageMagick, à partir de n'importe quel GIF)
 ```
 convert entree.gif -coalesce -colorspace Gray -resize 19x24! -filter Lanczos \
         -contrast-stretch 2%x2% -posterize 3 -dither None -loop 0 sortie.gif
 ```
 - `-resize 19x24!` force la toile ; remplacer `-filter Lanczos` par `-filter Point` pour un pixel-art déjà à cette taille.
-- Pour garder la géométrie (un carré reste un carré), dessiner l'image dans un gabarit en coin : 31 colonnes × 24 lignes, la rangée r commence à la colonne (r+1)//2 et compte `PHYSICAL_ROW_COUNTS[r]` LED ; le reste en noir. Ce mode « fenêtre fidèle » n'est pas celui du lanceur actuel (qui étire chaque rangée) : à ajouter comme option si besoin.
+- Pour garder la géométrie (un carré reste un carré) : option *Géométrie fidèle* du lanceur (ou `animematrix-ctl gif --fidele`). L'image 19 × 24 est posée sur le coin réel : la rangée r couvre les colonnes (r+1)//2 à 18, le bord droit est vertical et le bord gauche en diagonale ; ce qui dépasse à gauche en bas est perdu au lieu d'être étiré. L'écran est à peu près carré (19 pas de LED de large, 24 rangées espacées de 0,77 pas).
 - Vérifier une image fixe avant d'animer : `rog_flare2_matrix_paint.py` montre le rendu LED par LED.
 - Lecture : `rog_flare2_folder_player.py dossier --brightness 60`.
 
