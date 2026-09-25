@@ -127,7 +127,7 @@ Dla usług w tle uruchamianych ze źródeł: skopiuj `systemd/*.service` do `~/.
 `animematrix` (lub wpis **AniMe Matrix** w menu).
 
 - **GIF / obrazy**: *GIF/obrazy…* dla wyboru pojedynczych plików, *Folder (galeria)…* dla całego folderu. Wybrany folder staje się też folderem galerii tła. *Preferuj wersje przekonwertowane* odczytuje `folder/matrix/nazwa.gif`, jeśli istnieje (powstały w wyniku konwersji).
-- **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Szybkość* przyspiesza lub spowalnia animację.
+- **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia animację.
 - **Jasność**, **🕒 Zegar**, **■ Zatrzymaj** (co czyści ekran) są wspólne dla wszystkich zakładek.
 - **Ustawienia**: *Przy starcie sesji* = Galeria GIF, Zegar lub Nic; *Język:* zmienia język interfejsu (launcher uruchamia się ponownie).
 
