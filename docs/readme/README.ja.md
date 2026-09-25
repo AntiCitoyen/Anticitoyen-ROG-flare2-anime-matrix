@@ -93,8 +93,8 @@ Ubuntu 26.04(X11、PipeWire)で動作確認済み。Python ≥ 3.10、hidapi、T
 | 項目 | 場所 |
 |---|---|
 | プログラム | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| コマンド | `animematrix`、`animematrix-bascule`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-convertir`、`animematrix-dessin` |
-| ユーザーサービス | `/usr/lib/systemd/user/animematrix-galerie.service`、`animematrix-horloge.service`(デフォルトでは無効) |
+| コマンド | `animematrix`、`animematrix-bascule`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-convertir`、`animematrix-dessin`、`animematrix-lecture` |
+| ユーザーサービス | `/usr/lib/systemd/user/animematrix-galerie.service`、`animematrix-horloge.service`、`animematrix-lecture.service`(デフォルトでは無効) |
 | udev ルール | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | メニューとアイコン | `animematrix.desktop`、アイコン `animematrix` |
 
@@ -129,9 +129,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 画像**:*GIF/画像…*で個別選択、*フォルダー（ギャラリー）…*でフォルダー全体を選択。選んだフォルダーは背景ギャラリーのフォルダーにもなります。*変換済みバージョンを優先*は、`dossier/matrix/nom.gif`(変換機能で生成)が存在する場合にそちらを読み込みます。
 - **エフェクト**と **オーディオ**:選択・調整して *▶ エフェクトを開始*。スライダーはリアルタイムに反映され、*テンポ*でアニメーションを速く/遅くできます。
 - **輝度**、**🕒 時計**、**■ 停止**(画面を消去)はすべてのタブに共通です。
-- **設定**:*セッション開始時*を GIF ギャラリー、時計、なしから選択。
+- **設定**:*セッション開始時*を GIF ギャラリー、時計、前回の再生、なしから選択。
 
-ランチャーが何かを表示している間はバックグラウンドサービスを一時停止し(キーボードへの書き込みは同時に 1 つのプログラムしかできません)、終了時に再開します。
+**ランチャーを閉じても、表示していた内容はそのまま続きます**(GIF、そのときの設定のエフェクト、オーディオビジュアライザー、または時計):ランチャーはそれをバックグラウンドサービス `animematrix-lecture.service` に引き継ぎます。次回起動時は、他の何かを起動した時点で制御を取り戻します(キーボードへの書き込みは同時に1つのプログラムしかできません)。閉じる前に *■ 停止* を押すと、画面は消灯したままになります。
 
 ### 切り替えとバックグラウンドサービス
 
@@ -139,6 +139,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # オン → オフ、オフ → 直前のモード
 animematrix-bascule gif        # 背景ギャラリー、セッション開始時にも自動起動
 animematrix-bascule horloge    # バックグラウンド時計、セッション開始時にも自動起動
+animematrix-bascule lecture    # ランチャーの前回の再生、セッション開始時にも自動起動
 animematrix-bascule off        # オフ、セッション開始時は何も起動しない
 animematrix-bascule etat       # 現在のモードを表示
 ```
@@ -152,6 +153,7 @@ animematrix-bascule etat       # 現在のモードを表示
 | `animematrix-effet --liste` | エフェクトとビジュアライザーの一覧を表示 |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | エフェクトを起動(Ctrl+C で停止) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | フォルダーをループ再生(デフォルトはランチャーで最後に選択したフォルダー、なければ `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | ランチャーの前回の再生を再生し直す(`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | 時計を表示。`--clear` で画面を消去、`--once --text 12:34` で指定文字を表示 |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | GIF をマトリクス用に変換(`dossier/matrix/` に出力) |
 | `animematrix-dessin` | 描画エディター |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # 現在のモードを表示
 | `rog_flare2_effets.py` | エフェクトとオーディオビジュアライザー(PolyWollyWin のエンジンを Linux 用に移植) |
 | `polywollywin/` | PolyWollyWin のエフェクトエンジン、無改変でコピー(MIT) |
 | `rog_flare2_folder_player.py` | 背景ギャラリー(サービス) |
+| `rog_flare2_lecture.py` | バックグラウンド再生:ランチャーが終了時に表示していた内容を引き継ぐ(サービス) |
 | `rog_flare2_clock_v3.py` | 時計(サービス) |
 | `rog_flare2_bascule.sh` | ギャラリー/時計/オフの切り替え |
 | `rog_flare2_convertir.py` | GIF 変換(ImageMagick) |

@@ -93,8 +93,8 @@ Pakiet instaluje:
 | Element | Lokalizacja |
 |---|---|
 | Programy | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Polecenia | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Usługi użytkownika | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (domyślnie nieaktywne) |
+| Polecenia | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Usługi użytkownika | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (domyślnie nieaktywne) |
 | Reguła udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu i ikona | `animematrix.desktop`, ikona `animematrix` |
 
@@ -129,9 +129,9 @@ Dla usług w tle uruchamianych ze źródeł: skopiuj `systemd/*.service` do `~/.
 - **GIF / obrazy**: *GIF/obrazy…* dla wyboru pojedynczych plików, *Folder (galeria)…* dla całego folderu. Wybrany folder staje się też folderem galerii tła. *Preferuj wersje przekonwertowane* odczytuje `folder/matrix/nazwa.gif`, jeśli istnieje (powstały w wyniku konwersji).
 - **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia animację.
 - **Jasność**, **🕒 Zegar**, **■ Zatrzymaj** (co czyści ekran) są wspólne dla wszystkich zakładek.
-- **Ustawienia**: *Przy starcie sesji* = Galeria GIF, Zegar lub Nic; *Język:* zmienia język interfejsu (launcher uruchamia się ponownie).
+- **Ustawienia**: *Przy starcie sesji* = Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic; *Język:* zmienia język interfejsu (launcher uruchamia się ponownie).
 
-Gdy launcher coś wyświetla, wstrzymuje usługę tła (tylko jeden program może zapisywać do klawiatury) i wznawia ją po zamknięciu.
+**Po zamknięciu launchera to, co jest wyświetlane, gra dalej** (GIF, efekt z bieżącymi ustawieniami, wizualizator audio lub zegar): launcher przekazuje go usłudze w tle `animematrix-lecture.service`. Przy następnym uruchomieniu przejmuje kontrolę z powrotem, gdy tylko uruchomi się coś innego (tylko jeden program może zapisywać do klawiatury). *■ Zatrzymaj* przed zamknięciem zostawia ekran wyłączony.
 
 ### Przełącznik i usługi w tle
 
@@ -139,6 +139,7 @@ Gdy launcher coś wyświetla, wstrzymuje usługę tła (tylko jeden program moż
 animematrix-bascule            # włączone → wyłączone ; wyłączone → ostatni tryb
 animematrix-bascule gif        # galeria tła, także przy starcie sesji
 animematrix-bascule horloge    # zegar w tle, także przy starcie sesji
+animematrix-bascule lecture    # ostatnie odtwarzanie launchera, także przy starcie sesji
 animematrix-bascule off        # wyłączone, nic przy starcie
 animematrix-bascule etat       # bieżący tryb
 ```
@@ -152,6 +153,7 @@ Te same opcje znajdują się w menu pod prawym przyciskiem ikony. Pod spodem: `s
 | `animematrix-effet --liste` | wyświetla listę efektów i wizualizatorów |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | uruchamia efekt (Ctrl+C zatrzymuje) |
 | `animematrix-galerie [folder] --brightness 60 [--originaux]` | przewija folder (domyślnie ostatnio wybrany w launcherze, w przeciwnym razie `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | odtwarza ponownie ostatnie odtwarzanie launchera (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | zegar; `--clear` czyści ekran, `--once --text 12:34` wyświetla tekst |
 | `animematrix-convertir folder/ [--sortie D] [--force]` | konwertuje GIF-y pod matrycę (do `folder/matrix/`) |
 | `animematrix-dessin` | edytor rysunku |
@@ -210,6 +212,7 @@ Oryginalne notatki z inżynierii wstecznej (przechwyty USBPcap, kolejność diod
 | `rog_flare2_effets.py` | efekty i wizualizatory audio (silnik PolyWollyWin dostosowany do Linuksa) |
 | `polywollywin/` | silnik efektów PolyWollyWin, skopiowany bez zmian (MIT) |
 | `rog_flare2_folder_player.py` | galeria tła (usługa) |
+| `rog_flare2_lecture.py` | odtwarzanie w tle: wznawia to, co launcher wyświetlał przy zamknięciu (usługa) |
 | `rog_flare2_clock_v3.py` | zegar (usługa) |
 | `rog_flare2_bascule.sh` | przełącznik galeria / zegar / wyłączony |
 | `rog_flare2_convertir.py` | konwersja GIF-ów (ImageMagick) |

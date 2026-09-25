@@ -14,6 +14,7 @@ implémenté).
 from __future__ import annotations
 
 import datetime
+import json
 import os
 import subprocess
 import webbrowser
@@ -50,15 +51,19 @@ MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
 MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
 SUPPORT_URL = "https://buymeacoffee.com/anticitoyen"
 # Services de fond (rog_flare2_bascule.sh) ; un seul peut tenir le HID.
-SERVICES = {"gif": "animematrix-galerie.service", "horloge": "animematrix-horloge.service"}
-BOOT_MODES = {"Galerie GIF": SERVICES["gif"], "Horloge": SERVICES["horloge"], "Rien": None}
+SERVICES = {"gif": "animematrix-galerie.service", "horloge": "animematrix-horloge.service",
+            "lecture": "animematrix-lecture.service"}
+BOOT_MODES = {"Galerie GIF": SERVICES["gif"], "Horloge": SERVICES["horloge"],
+              "Dernière lecture": SERVICES["lecture"], "Rien": None}
 CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2"
 MODE_FILE = CONFIG_DIR / "mode"
 GALLERY_FILE = CONFIG_DIR / "galerie"  # dossier lu par la galerie (lanceur et service)
+SHOW_FILE = CONFIG_DIR / "lecture.json"  # ce que la lecture de fond rejoue (rog_flare2_lecture.py)
+SHOW_PID = CONFIG_DIR / "lecture.pid"  # lecture de fond lancée sans systemd
 
 
 def gallery_dir() -> Path:
@@ -178,7 +183,28 @@ def stop_services() -> list[str]:
     active = [s for s in SERVICES.values() if systemctl("is-active", "--quiet", s) == 0]
     if active:
         systemctl("stop", *active)
+    try:  # lecture de fond détachée (sans systemd)
+        pid = int(SHOW_PID.read_text())
+        if "rog_flare2_lecture.py" in Path(f"/proc/{pid}/cmdline").read_text():
+            os.kill(pid, 15)
+            active.append(f"pid {pid}")
+        SHOW_PID.unlink()
+    except (OSError, ValueError):
+        pass
     return active
+
+
+def hand_off(show: dict) -> None:
+    """Confie l'affichage en cours à la lecture de fond, qui survit au lanceur."""
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    SHOW_FILE.write_text(json.dumps(show, ensure_ascii=False, indent=1), encoding="utf-8")
+    MODE_FILE.write_text("lecture\n")
+    if systemctl("restart", SERVICES["lecture"]) == 0:
+        return
+    proc = subprocess.Popen([sys.executable, str(Path(__file__).with_name("rog_flare2_lecture.py"))],
+                            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            start_new_session=True)
+    SHOW_PID.write_text(f"{proc.pid}\n")
 
 
 class LauncherApp(tk.Tk):
@@ -192,7 +218,9 @@ class LauncherApp(tk.Tk):
         self.play_thread: threading.Thread | None = None
         self.stop_event = threading.Event()
         self.gif_files: list[Path] = []
-        self.suspended: list[str] = []
+        self.show: dict | None = None  # ce qui est affiché, pour la lecture de fond à la fermeture
+        self.show_panel: dict | None = None
+        self.live_params: dict = {}
         self._pending_status: str | None = None
         self.running_effect = None
 
@@ -318,6 +346,7 @@ class LauncherApp(tk.Tk):
         if effect is not None and attr in type(effect).PARAMS:
             try:
                 setattr(effect, attr, param_value(spec, var.get()))
+                self.live_params[attr] = var.get()
             except (tk.TclError, ValueError):
                 pass
 
@@ -418,9 +447,7 @@ class LauncherApp(tk.Tk):
             # stop_playback a echoue a arreter l'ancien thread : ne pas en
             # lancer un second par-dessus.
             return
-        for s in stop_services():
-            if s not in self.suspended:
-                self.suspended.append(s)
+        stop_services()
         self.stop_event = threading.Event()
         stop = self.stop_event
 
@@ -457,6 +484,7 @@ class LauncherApp(tk.Tk):
                 if not loop():
                     break
 
+        self.show = {"type": "gif", "files": [str(f) for f in files], "converted": converted}
         self._start(job)
 
     def start_clock(self):
@@ -464,6 +492,7 @@ class LauncherApp(tk.Tk):
             self.set_status(_("Horloge"))
             play_clock(self.transport, stop, self.brightness.get)
 
+        self.show = {"type": "horloge"}
         self._start(job)
 
     def start_effect(self, panel: dict):
@@ -480,6 +509,8 @@ class LauncherApp(tk.Tk):
             finally:
                 self.running_effect = None
 
+        self.show = {"type": "effet", "name": name}
+        self.show_panel, self.live_params = panel, dict(raw)
         self._start(job)
 
     def stop_playback(self):
@@ -494,7 +525,20 @@ class LauncherApp(tk.Tk):
                 return
         self.play_thread = None
 
+    def current_show(self) -> dict | None:
+        """Description JSON de ce qui s'affiche, avec les réglages du moment ; None si rien."""
+        if self.show is None or self.play_thread is None or not self.play_thread.is_alive():
+            return None
+        show = dict(self.show, brightness=int(self.brightness.get()))
+        if show["type"] == "gif":
+            show["loop"] = bool(self.loop_var.get())
+        elif show["type"] == "effet":
+            show["params"] = dict(self.live_params)
+            show["speed"] = float(self.show_panel["speed"].get())
+        return show
+
     def stop_and_clear(self):
+        self.show = None
         self.stop_playback()
         if self.play_thread is None:
             try:
@@ -587,13 +631,6 @@ class LauncherApp(tk.Tk):
         self.transport.close()
         os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
 
-    def resume_services(self):
-        """Rend l'écran au service du démarrage de session s'il a été arrêté par le lanceur."""
-        wanted = BOOT_MODES[self.boot_mode()]
-        if self.suspended and wanted:
-            systemctl("start", wanted)
-        self.suspended = []
-
     def open_paint_editor(self):
         self.stop_playback()
         self.transport.close()
@@ -603,9 +640,12 @@ class LauncherApp(tk.Tk):
         self.destroy()
 
     def on_close(self):
+        """Ce qui est affiché continue après la fermeture, par la lecture de fond."""
+        show = self.current_show()
         self.stop_playback()
         self.transport.close()
-        self.resume_services()
+        if show is not None:
+            hand_off(show)
         self.destroy()
 
 

@@ -93,8 +93,8 @@ The package installs:
 | Item | Location |
 |---|---|
 | Programs | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Commands | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| User services | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (not enabled by default) |
+| Commands | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| User services | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (not enabled by default) |
 | udev rule | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu and icon | `animematrix.desktop`, `animematrix` icon |
 
@@ -129,18 +129,19 @@ For the background services when running from source, copy `systemd/*.service` i
 - **GIF / images**: *GIF/images…* for a selection, *Folder (gallery)…* for a whole folder. The chosen folder also becomes the background gallery's folder. *Prefer converted versions* reads `dossier/matrix/nom.gif` when it exists (produced by the conversion).
 - **Effects** and **Audio**: choose, adjust, *▶ Run effect*. The sliders act live; *Tempo* speeds up or slows down the animation.
 - **Brightness**, **🕒 Clock**, **■ Stop** (which clears the screen) are common to all tabs.
-- **Settings**: *At session start* = GIF gallery, Clock or None.
+- **Settings**: *At session start* = GIF gallery, Clock, Last playback or None.
 
-While it is displaying something, the launcher pauses the background service (only one program can write to the keyboard) and restarts it when closed.
+**When you close the launcher, whatever is displayed keeps playing** (GIF, effect with its current settings, audio visualizer or clock): the launcher hands it off to the background service `animematrix-lecture.service`. On the next launch, it takes back control as soon as something else starts (only one program can write to the keyboard). *■ Stop* before closing leaves the screen off.
 
 ### Toggle and background services
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # on → off; off → last mode
+animematrix-bascule gif        # background gallery, also at session start
+animematrix-bascule horloge    # background clock, also at session start
+animematrix-bascule lecture    # last launcher playback, also at session start
+animematrix-bascule off        # off, nothing at session start
+animematrix-bascule etat       # current mode
 ```
 
 The same choices are in the tray icon's right-click menu. Under the hood: `systemctl --user enable --now animematrix-galerie.service` (or `animematrix-horloge.service`).
@@ -152,6 +153,7 @@ The same choices are in the tray icon's right-click menu. Under the hood: `syste
 | `animematrix-effet --liste` | lists the effects and visualizers |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | launches an effect (Ctrl+C to stop) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | cycles through a folder (defaults to the last one chosen in the launcher, otherwise `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | replays the launcher's last playback (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | clock; `--clear` clears the screen, `--once --text 12:34` displays text |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | converts GIFs for the matrix (into `dossier/matrix/`) |
 | `animematrix-dessin` | drawing editor |
@@ -210,6 +212,7 @@ The original reverse-engineering notes (USBPcap captures, LED order, calibration
 | `rog_flare2_effets.py` | effects and audio visualizers (PolyWollyWin engine adapted for Linux) |
 | `polywollywin/` | PolyWollyWin's effects engine, copied unmodified (MIT) |
 | `rog_flare2_folder_player.py` | background gallery (service) |
+| `rog_flare2_lecture.py` | background playback: resumes what the launcher was displaying when closed (service) |
 | `rog_flare2_clock_v3.py` | clock (service) |
 | `rog_flare2_bascule.sh` | gallery / clock / off toggle |
 | `rog_flare2_convertir.py` | GIF conversion (ImageMagick) |

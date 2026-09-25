@@ -95,8 +95,8 @@
 | العنصر | الموقع |
 |---|---|
 | البرامج | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| الأوامر | `animematrix`، `animematrix-bascule`، `animematrix-effet`، `animematrix-galerie`، `animematrix-horloge`، `animematrix-convertir`، `animematrix-dessin` |
-| خدمات المستخدم | `/usr/lib/systemd/user/animematrix-galerie.service`، `animematrix-horloge.service` (غير مُفعَّلة افتراضيًا) |
+| الأوامر | `animematrix`، `animematrix-bascule`، `animematrix-effet`، `animematrix-galerie`، `animematrix-horloge`، `animematrix-convertir`، `animematrix-dessin`، `animematrix-lecture` |
+| خدمات المستخدم | `/usr/lib/systemd/user/animematrix-galerie.service`، `animematrix-horloge.service`، `animematrix-lecture.service` (غير مُفعَّلة افتراضيًا) |
 | قاعدة udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | القائمة والأيقونة | `animematrix.desktop`، أيقونة `animematrix` |
 
@@ -131,9 +131,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / صور**: *GIF/صور…* للاختيار، *مجلد (معرض)…* لمجلد كامل. يصبح المجلد المختار أيضًا مجلد معرض الخلفية. *تفضيل النسخ المحوّلة (matrix/)* يقرأ `dossier/matrix/nom.gif` إن وُجد (ينتجه التحويل).
 - **التأثيرات** و**الصوت**: اختر، اضبط، *▶ تشغيل التأثير*. تعمل أشرطة التمرير مباشرة؛ *الإيقاع* تُسرّع الحركة أو تُبطئها.
 - **السطوع**، **🕒 الساعة**، **■ إيقاف** (يمسح الشاشة) مشتركة بين جميع التبويبات.
-- **الإعدادات**: *عند بدء الجلسة* = **معرض GIF**، أو **الساعة**، أو **لا شيء**.
+- **الإعدادات**: *عند بدء الجلسة* = **معرض GIF**، أو **الساعة**، أو **آخر تشغيل**، أو **لا شيء**.
 
-أثناء عرض المُشغِّل لشيء ما، يوقف مؤقتًا خدمة الخلفية (لا يمكن إلا لبرنامج واحد أن يكتب على لوحة المفاتيح) ثم يعيد تشغيلها عند إغلاقه.
+**عند إغلاق المُشغِّل، ما يُعرض يستمر** (GIF، تأثير بإعداداته الحالية، مصوّر صوتي، أو ساعة): يُسلِّمه المُشغِّل إلى خدمة الخلفية `animematrix-lecture.service`. عند التشغيل التالي، يستعيد المُشغِّل زمام الأمر بمجرد تشغيل شيء آخر (لا يمكن إلا لبرنامج واحد أن يكتب على لوحة المفاتيح). *■ إيقاف* قبل الإغلاق يترك الشاشة مطفأة.
 
 ### التبديل وخدمات الخلفية
 
@@ -141,6 +141,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # مُشغَّل ← مُطفَأ ؛ مُطفَأ ← آخر وضع
 animematrix-bascule gif        # معرض الخلفية، وأيضًا عند فتح الجلسة
 animematrix-bascule horloge    # ساعة الخلفية، وأيضًا عند فتح الجلسة
+animematrix-bascule lecture    # آخر تشغيل من المُشغِّل، وأيضًا عند فتح الجلسة
 animematrix-bascule off        # مُطفَأ، لا شيء عند البدء
 animematrix-bascule etat       # الوضع الحالي
 ```
@@ -154,6 +155,7 @@ animematrix-bascule etat       # الوضع الحالي
 | `animematrix-effet --liste` | يسرد التأثيرات وأدوات التصور |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | يشغّل تأثيرًا (Ctrl+C للإيقاف) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | يعرض محتوى مجلد بالتناوب (افتراضيًا آخر مجلد مختار في المُشغِّل، وإلا `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | يعيد تشغيل آخر تشغيل من المُشغِّل (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | ساعة؛ `--clear` يمسح الشاشة، `--once --text 12:34` يعرض نصًا |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | يحوّل ملفات GIF لتناسب المصفوفة (داخل `dossier/matrix/`) |
 | `animematrix-dessin` | محرر الرسم |
@@ -212,6 +214,7 @@ animematrix-bascule etat       # الوضع الحالي
 | `rog_flare2_effets.py` | التأثيرات وأدوات تصور الصوت (محرك PolyWollyWin مُكيَّف لِلينكس) |
 | `polywollywin/` | محرك تأثيرات PolyWollyWin، منسوخ دون تعديل (MIT) |
 | `rog_flare2_folder_player.py` | معرض الخلفية (خدمة) |
+| `rog_flare2_lecture.py` | تشغيل الخلفية: يواصل ما كان المُشغِّل يعرضه عند إغلاقه (خدمة) |
 | `rog_flare2_clock_v3.py` | الساعة (خدمة) |
 | `rog_flare2_bascule.sh` | التبديل بين المعرض / الساعة / الإطفاء |
 | `rog_flare2_convertir.py` | تحويل ملفات GIF (ImageMagick) |

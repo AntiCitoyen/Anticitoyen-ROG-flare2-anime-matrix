@@ -93,8 +93,8 @@ Het pakket installeert:
 | Onderdeel | Locatie |
 |---|---|
 | Programma's | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Commando's | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Gebruikersservices | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (standaard niet ingeschakeld) |
+| Commando's | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Gebruikersservices | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (standaard niet ingeschakeld) |
 | udev-regel | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu en pictogram | `animematrix.desktop`, pictogram `animematrix` |
 
@@ -129,9 +129,9 @@ Voor de achtergrondservices vanuit de broncode kopieer je `systemd/*.service` na
 - **GIF / afbeeldingen**: *GIF's/afbeeldingen…* voor een selectie, *Map (galerij)…* voor een hele map. De gekozen map wordt ook die van de achtergrondgalerij. *Geconverteerde versies verkiezen* leest `dossier/matrix/nom.gif` indien aanwezig (geproduceerd door de conversie).
 - **Effecten** en **Audio**: kiezen, instellen, *▶ Effect starten*. De schuifregelaars werken live; *Tempo* versnelt of vertraagt de animatie.
 - **Helderheid**, **🕒 Klok**, **■ Stoppen** (wat het scherm wist) zijn gemeenschappelijk voor alle tabbladen.
-- **Instellingen**: *Bij het opstarten van de sessie:* = GIF-galerij, Klok of Niets.
+- **Instellingen**: *Bij het opstarten van de sessie:* = GIF-galerij, Klok, Laatste weergave of Niets.
 
-Terwijl er iets wordt weergegeven, pauzeert de launcher de achtergrondservice (slechts één programma kan naar het toetsenbord schrijven) en herstart deze bij het afsluiten.
+**Wanneer je de launcher sluit, blijft wat wordt weergegeven doorspelen** (GIF, effect met de huidige instellingen, audiovisualisatie of klok): de launcher draagt het over aan de achtergrondservice `animematrix-lecture.service`. Bij de volgende start neemt hij het weer over zodra er iets anders wordt gestart (slechts één programma kan naar het toetsenbord schrijven). *■ Stoppen* voor het sluiten laat het scherm uit.
 
 ### Schakelaar en achtergrondservices
 
@@ -139,6 +139,7 @@ Terwijl er iets wordt weergegeven, pauzeert de launcher de achtergrondservice (s
 animematrix-bascule            # aan → uit ; uit → laatste modus
 animematrix-bascule gif        # achtergrondgalerij, ook bij het openen van de sessie
 animematrix-bascule horloge    # achtergrondklok, ook bij het openen van de sessie
+animematrix-bascule lecture    # laatste weergave van de launcher, ook bij het openen van de sessie
 animematrix-bascule off        # uit, niets bij het opstarten
 animematrix-bascule etat       # huidige modus
 ```
@@ -152,6 +153,7 @@ Dezelfde keuzes staan in het rechtermuisknopmenu van het menupictogram. Onder de
 | `animematrix-effet --liste` | toont de lijst met effecten en visualisaties |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | start een effect (Ctrl+C om te stoppen) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | doorloopt een map (standaard de laatst gekozen map in de launcher, anders `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | speelt de laatste weergave van de launcher opnieuw af (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | klok; `--clear` wist het scherm, `--once --text 12:34` toont een tekst |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | converteert GIF's voor de matrix (in `dossier/matrix/`) |
 | `animematrix-dessin` | tekeneditor |
@@ -210,6 +212,7 @@ De oorspronkelijke reverse-engineeringnotities (USBPcap-captures, ledvolgorde, k
 | `rog_flare2_effets.py` | effecten en audiovisualisaties (PolyWollyWin-engine aangepast voor Linux) |
 | `polywollywin/` | effectenengine van PolyWollyWin, ongewijzigd overgenomen (MIT) |
 | `rog_flare2_folder_player.py` | achtergrondgalerij (service) |
+| `rog_flare2_lecture.py` | achtergrondweergave: hervat wat de launcher weergaf bij het sluiten (service) |
 | `rog_flare2_clock_v3.py` | klok (service) |
 | `rog_flare2_bascule.sh` | schakelaar galerij / klok / uit |
 | `rog_flare2_convertir.py` | GIF-conversie (ImageMagick) |

@@ -93,8 +93,8 @@ Gói này cài đặt:
 | Thành phần | Vị trí |
 |---|---|
 | Chương trình | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Lệnh | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Dịch vụ người dùng | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (không tự kích hoạt) |
+| Lệnh | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Dịch vụ người dùng | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (không tự kích hoạt) |
 | Quy tắc udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu và biểu tượng | `animematrix.desktop`, biểu tượng `animematrix` |
 
@@ -129,18 +129,19 @@ Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi), `pulse
 - **GIF / hình ảnh**: *GIF/hình ảnh…* để chọn tệp, *Thư mục (thư viện)…* để chọn cả một thư mục. Thư mục đã chọn cũng trở thành thư mục của thư viện ảnh nền. *Ưu tiên bản đã chuyển đổi* sẽ đọc `dossier/matrix/nom.gif` nếu tệp này tồn tại (được tạo ra bởi bước chuyển đổi).
 - **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, rồi nhấn *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm hoạt ảnh nhanh hơn hoặc chậm hơn.
 - **Độ sáng**, **🕒 Đồng hồ**, **■ Dừng** (xóa màn hình) có ở mọi tab.
-- **Cài đặt**: *Khi khởi động phiên* = Thư viện GIF, Đồng hồ hoặc Không có.
+- **Cài đặt**: *Khi khởi động phiên* = Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có.
 
-Trong lúc đang hiển thị nội dung, trình khởi chạy sẽ tạm dừng dịch vụ nền (chỉ một chương trình được ghi vào bàn phím tại một thời điểm) và khởi động lại dịch vụ đó khi đóng.
+**Khi đóng trình khởi chạy, nội dung đang hiển thị vẫn tiếp tục** (GIF, hiệu ứng với các thiết lập hiện tại, trình hiển thị âm thanh hoặc đồng hồ): trình khởi chạy giao nó lại cho dịch vụ nền `animematrix-lecture.service`. Ở lần khởi chạy tiếp theo, nó giành lại quyền điều khiển ngay khi có thứ khác được khởi động (chỉ một chương trình được ghi vào bàn phím tại một thời điểm). Nhấn *■ Dừng* trước khi đóng sẽ để màn hình tắt.
 
 ### Chuyển đổi và dịch vụ nền
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # bật → tắt; tắt → chế độ gần nhất
+animematrix-bascule gif        # thư viện nền, cả khi khởi động phiên
+animematrix-bascule horloge    # đồng hồ nền, cả khi khởi động phiên
+animematrix-bascule lecture    # lần phát gần nhất của trình khởi chạy, cũng áp dụng khi khởi động phiên
+animematrix-bascule off        # tắt, không chạy gì khi khởi động phiên
+animematrix-bascule etat       # chế độ hiện tại
 ```
 
 Các lựa chọn tương tự cũng có trong menu chuột phải của biểu tượng. Phía sau: `systemctl --user enable --now animematrix-galerie.service` (hoặc `animematrix-horloge.service`).
@@ -152,6 +153,7 @@ Các lựa chọn tương tự cũng có trong menu chuột phải của biểu 
 | `animematrix-effet --liste` | liệt kê các hiệu ứng và bộ hiển thị |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | chạy một hiệu ứng (Ctrl+C để dừng) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | phát các GIF trong một thư mục (mặc định là thư mục được chọn gần nhất trong trình khởi chạy, nếu không thì `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | phát lại lần phát gần nhất của trình khởi chạy (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | đồng hồ; `--clear` xóa màn hình, `--once --text 12:34` hiển thị một đoạn văn bản |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | chuyển đổi GIF cho ma trận LED (lưu trong `dossier/matrix/`) |
 | `animematrix-dessin` | trình chỉnh sửa hình vẽ |
@@ -210,6 +212,7 @@ Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, c�
 | `rog_flare2_effets.py` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin được chuyển sang Linux) |
 | `polywollywin/` | engine hiệu ứng của PolyWollyWin, sao chép nguyên bản không chỉnh sửa (MIT) |
 | `rog_flare2_folder_player.py` | thư viện ảnh nền (dịch vụ) |
+| `rog_flare2_lecture.py` | phát nền: tiếp tục nội dung trình khởi chạy đang hiển thị khi đóng (dịch vụ) |
 | `rog_flare2_clock_v3.py` | đồng hồ (dịch vụ) |
 | `rog_flare2_bascule.sh` | chuyển đổi thư viện / đồng hồ / tắt |
 | `rog_flare2_convertir.py` | chuyển đổi GIF (ImageMagick) |

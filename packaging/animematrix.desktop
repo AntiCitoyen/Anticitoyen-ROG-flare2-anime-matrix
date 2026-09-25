@@ -45,7 +45,7 @@ Terminal=false
 Categories=Utility;
 Keywords=rog;asus;clavier;keyboard;matrix;anime;gif;led;
 StartupNotify=true
-Actions=gif;horloge;off;
+Actions=gif;horloge;lecture;off;
 
 [Desktop Action gif]
 Name=GIF gallery
@@ -90,6 +90,28 @@ Name[vi]=Đồng hồ
 Name[zh_CN]=时钟
 Name[zh_TW]=時鐘
 Exec=animematrix-bascule horloge
+
+[Desktop Action lecture]
+Name=Last playback
+Name[ar]=آخر تشغيل
+Name[de]=Letzte Wiedergabe
+Name[es]=Última reproducción
+Name[fr]=Dernière lecture
+Name[hi]=पिछला प्लेबैक
+Name[id]=Putar terakhir
+Name[it]=Ultima riproduzione
+Name[ja]=前回の再生
+Name[ko]=마지막 재생
+Name[nl]=Laatste weergave
+Name[pl]=Ostatnie odtwarzanie
+Name[pt_BR]=Última reprodução
+Name[ru]=Последнее воспроизведение
+Name[tr]=Son oynatma
+Name[uk]=Останнє відтворення
+Name[vi]=Lần phát gần nhất
+Name[zh_CN]=上次播放
+Name[zh_TW]=上次播放
+Exec=animematrix-bascule lecture
 
 [Desktop Action off]
 Name=Turn off the screen

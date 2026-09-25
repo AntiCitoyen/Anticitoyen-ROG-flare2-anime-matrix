@@ -93,8 +93,8 @@ El paquete instala:
 | Elemento | Ubicación |
 |---|---|
 | Programas | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Comandos | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Servicios de usuario | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (no activados por defecto) |
+| Comandos | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Servicios de usuario | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (no activados por defecto) |
 | Regla udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menú e icono | `animematrix.desktop`, icono `animematrix` |
 
@@ -129,18 +129,19 @@ Para los servicios en segundo plano ejecutando desde las fuentes, copiar `system
 - **GIF / imágenes**: *GIF/imágenes…* para una selección, *Carpeta (galería)…* para una carpeta entera. La carpeta elegida también se convierte en la de la galería de fondo. *Preferir versiones convertidas* lee `dossier/matrix/nom.gif` cuando existe (generado por la conversión).
 - **Efectos** y **Audio**: elegir, ajustar, *▶ Iniciar efecto*. Los deslizadores actúan en vivo; *Ritmo* acelera o ralentiza la animación.
 - **Brillo**, **🕒 Reloj**, **■ Detener** (que borra la pantalla) son comunes a todas las pestañas.
-- **Ajustes**: *Al iniciar sesión* = Galería GIF, Reloj o Ninguno.
+- **Ajustes**: *Al iniciar sesión* = Galería GIF, Reloj, Última reproducción o Ninguno.
 
-Mientras muestra algo, el lanzador pausa el servicio en segundo plano (solo un programa puede escribir en el teclado) y lo reinicia al cerrarse.
+**Al cerrar el lanzador, lo que se muestra sigue reproduciéndose** (GIF, efecto con sus ajustes del momento, visualizador de audio o reloj): el lanzador lo confía al servicio en segundo plano `animematrix-lecture.service`. En el siguiente inicio, recupera el control en cuanto se inicia otra cosa (solo un programa puede escribir en el teclado). *■ Detener* antes de cerrar deja la pantalla apagada.
 
 ### Alternador y servicios en segundo plano
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # encendido → apagado; apagado → último modo
+animematrix-bascule gif        # galería de fondo, también al iniciar sesión
+animematrix-bascule horloge    # reloj de fondo, también al iniciar sesión
+animematrix-bascule lecture    # última reproducción del lanzador, también al iniciar sesión
+animematrix-bascule off        # apagado, nada al iniciar sesión
+animematrix-bascule etat       # modo actual
 ```
 
 Las mismas opciones están en el clic derecho del icono de la bandeja. Por debajo: `systemctl --user enable --now animematrix-galerie.service` (o `animematrix-horloge.service`).
@@ -152,6 +153,7 @@ Las mismas opciones están en el clic derecho del icono de la bandeja. Por debaj
 | `animematrix-effet --liste` | lista los efectos y visualizadores |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | lanza un efecto (Ctrl+C para detener) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | recorre una carpeta (por defecto la última elegida en el lanzador, si no `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | reproduce de nuevo la última reproducción del lanzador (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | reloj; `--clear` borra la pantalla, `--once --text 12:34` muestra un texto |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | convierte GIF para la matriz (en `dossier/matrix/`) |
 | `animematrix-dessin` | editor de dibujo |
@@ -210,6 +212,7 @@ Las notas originales de ingeniería inversa (capturas USBPcap, orden de las LED,
 | `rog_flare2_effets.py` | efectos y visualizadores de audio (motor de PolyWollyWin adaptado a Linux) |
 | `polywollywin/` | motor de efectos de PolyWollyWin, copiado sin modificar (MIT) |
 | `rog_flare2_folder_player.py` | galería de fondo (servicio) |
+| `rog_flare2_lecture.py` | reproducción en segundo plano: retoma lo que el lanzador mostraba al cerrarse (servicio) |
 | `rog_flare2_clock_v3.py` | reloj (servicio) |
 | `rog_flare2_bascule.sh` | alternador galería / reloj / apagado |
 | `rog_flare2_convertir.py` | conversión de GIF (ImageMagick) |

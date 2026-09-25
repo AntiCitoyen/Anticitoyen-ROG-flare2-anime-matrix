@@ -93,8 +93,8 @@ Il pacchetto installa:
 | Elemento | Posizione |
 |---|---|
 | Programmi | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Comandi | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Servizi utente | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (non attivati di default) |
+| Comandi | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Servizi utente | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (non attivati di default) |
 | Regola udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu e icona | `animematrix.desktop`, icona `animematrix` |
 
@@ -129,9 +129,9 @@ Per i servizi in background dai sorgenti, copiare `systemd/*.service` in `~/.con
 - **GIF / immagini**: *GIF/immagini…* per una selezione, *Cartella (galleria)…* per un'intera cartella. La cartella scelta diventa anche quella della galleria di sfondo. *Preferisci le versioni convertite* legge `dossier/matrix/nom.gif` quando esiste (prodotto dalla conversione).
 - **Effetti** e **Audio**: scegliere, regolare, *▶ Avvia l'effetto*. I cursori agiscono in tempo reale; *Ritmo* accelera o rallenta l'animazione.
 - **Luminosità**, **🕒 Orologio**, **■ Ferma** (che cancella lo schermo) sono comuni a tutte le schede.
-- **Impostazioni**: *All'avvio della sessione:* = Galleria GIF, Orologio o Niente.
+- **Impostazioni**: *All'avvio della sessione:* = Galleria GIF, Orologio, Ultima riproduzione o Niente.
 
-Mentre mostra qualcosa, il lanciatore mette in pausa il servizio in background (un solo programma può scrivere sulla tastiera) e lo riavvia alla chiusura.
+**Quando si chiude il lanciatore, ciò che è visualizzato continua** (GIF, effetto con le sue impostazioni del momento, visualizzatore audio o orologio): il lanciatore lo affida al servizio in background `animematrix-lecture.service`. Al prossimo avvio, riprende il controllo non appena si avvia qualcos'altro (un solo programma può scrivere sulla tastiera). *■ Ferma* prima di chiudere lascia lo schermo spento.
 
 ### Interruttore e servizi in background
 
@@ -139,6 +139,7 @@ Mentre mostra qualcosa, il lanciatore mette in pausa il servizio in background (
 animematrix-bascule            # acceso → spento ; spento → ultima modalità
 animematrix-bascule gif        # galleria di sfondo, anche all'apertura di sessione
 animematrix-bascule horloge    # orologio di sfondo, anche all'apertura di sessione
+animematrix-bascule lecture    # ultima riproduzione del lanciatore, anche all'apertura di sessione
 animematrix-bascule off        # spento, niente all'apertura
 animematrix-bascule etat       # modalità corrente
 ```
@@ -152,6 +153,7 @@ Le stesse scelte sono nel clic destro dell'icona nel menu. Dietro le quinte: `sy
 | `animematrix-effet --liste` | elenca gli effetti e i visualizzatori |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | avvia un effetto (Ctrl+C per fermare) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | scorre una cartella (per default l'ultima scelta nel lanciatore, altrimenti `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | riproduce di nuovo l'ultima riproduzione del lanciatore (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | orologio; `--clear` cancella lo schermo, `--once --text 12:34` mostra un testo |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | converte GIF per la matrice (in `dossier/matrix/`) |
 | `animematrix-dessin` | editor di disegno |
@@ -210,6 +212,7 @@ Le note originali di reverse engineering (catture USBPcap, ordine dei LED, punti
 | `rog_flare2_effets.py` | effetti e visualizzatori audio (motore PolyWollyWin adattato a Linux) |
 | `polywollywin/` | motore di effetti di PolyWollyWin, copiato senza modifiche (MIT) |
 | `rog_flare2_folder_player.py` | galleria di sfondo (servizio) |
+| `rog_flare2_lecture.py` | riproduzione in background: riprende ciò che il lanciatore mostrava alla chiusura (servizio) |
 | `rog_flare2_clock_v3.py` | orologio (servizio) |
 | `rog_flare2_bascule.sh` | interruttore galleria / orologio / spento |
 | `rog_flare2_convertir.py` | conversione GIF (ImageMagick) |

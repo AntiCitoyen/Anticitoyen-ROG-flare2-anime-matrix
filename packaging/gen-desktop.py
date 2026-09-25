@@ -23,7 +23,8 @@ out += entry("GenericName", "Écran AniMe Matrix du clavier ROG")
 out += entry("Comment", "GIF, horloge, effets et visualiseurs audio sur l'écran du ROG Strix Flare II Animate")
 out += ["Exec=animematrix", "Icon=animematrix", "Terminal=false", "Categories=Utility;",
         "Keywords=rog;asus;clavier;keyboard;matrix;anime;gif;led;", "StartupNotify=true",
-        "Actions=gif;horloge;off;"]
-for action, label in (("gif", "Galerie GIF"), ("horloge", "Horloge"), ("off", "Éteindre l'écran")):
+        "Actions=gif;horloge;lecture;off;"]
+for action, label in (("gif", "Galerie GIF"), ("horloge", "Horloge"), ("lecture", "Dernière lecture"),
+                      ("off", "Éteindre l'écran")):
     out += ["", f"[Desktop Action {action}]"] + entry("Name", label) + [f"Exec=animematrix-bascule {action}"]
 (DEPOT / "packaging" / "animematrix.desktop").write_text("\n".join(out) + "\n", encoding="utf-8")

@@ -93,8 +93,8 @@ Paket şunları kurar:
 | Öğe | Konum |
 |---|---|
 | Programlar | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Komutlar | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Kullanıcı servisleri | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (varsayılan olarak etkin değil) |
+| Komutlar | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Kullanıcı servisleri | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (varsayılan olarak etkin değil) |
 | udev kuralı | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menü ve simge | `animematrix.desktop`, `animematrix` simgesi |
 
@@ -129,9 +129,9 @@ Kaynak koddan arka plan servisleri için, `systemd/*.service` dosyalarını `~/.
 - **GIF / görüntüler**: seçim için *GIF/görüntüler…*, tüm bir klasör için *Klasör (galeri)…*. Seçilen klasör aynı zamanda arka plan galerisinin klasörü olur. *Dönüştürülmüş sürümleri tercih et (matrix/)*, varsa `dossier/matrix/nom.gif` dosyasını okur (dönüştürme tarafından üretilir).
 - **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anlık etki eder; *Tempo* animasyonu hızlandırır veya yavaşlatır.
 - **Parlaklık**, **🕒 Saat**, **■ Durdur** (ekranı temizler) tüm sekmelerde ortaktır.
-- **Ayarlar**: *Oturum başlangıcında* = **GIF galerisi**, **Saat** veya **Hiçbiri**.
+- **Ayarlar**: *Oturum başlangıcında* = **GIF galerisi**, **Saat**, **Son oynatma** veya **Hiçbiri**.
 
-Başlatıcı bir şey gösterirken arka plan servisini duraklatır (klavyeye yalnızca tek bir program yazabilir) ve kapandığında yeniden başlatır.
+**Başlatıcı kapatıldığında, o an gösterilen şey görüntülenmeye devam eder** (GIF, o anki ayarlarıyla bir efekt, ses görselleştirici veya saat): başlatıcı bunu arka plan servisi olan `animematrix-lecture.service`'e devreder. Bir sonraki başlatmada, başka bir şey başlatılır başlatılmaz kontrolü geri alır (klavyeye yalnızca tek bir program yazabilir). Kapatmadan önce *■ Durdur* ekranı kapalı bırakır.
 
 ### Geçiş ve arka plan servisleri
 
@@ -139,6 +139,7 @@ Başlatıcı bir şey gösterirken arka plan servisini duraklatır (klavyeye yal
 animematrix-bascule            # açık → kapalı ; kapalı → son mod
 animematrix-bascule gif        # arka plan galerisi, oturum açılışında da
 animematrix-bascule horloge    # arka plan saati, oturum açılışında da
+animematrix-bascule lecture    # başlatıcının son oynatması, oturum açılışında da
 animematrix-bascule off        # kapalı, açılışta hiçbir şey yok
 animematrix-bascule etat       # geçerli mod
 ```
@@ -152,6 +153,7 @@ Aynı seçimler menü simgesinin sağ tıkında da bulunur. Perde arkasında: `s
 | `animematrix-effet --liste` | efektleri ve görselleştiricileri listeler |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | bir efekt başlatır (durdurmak için Ctrl+C) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | bir klasörde gezinir (varsayılan olarak başlatıcıda seçilen son klasör, yoksa `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | başlatıcının son oynatmasını yeniden oynatır (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | saat; `--clear` ekranı temizler, `--once --text 12:34` bir metin gösterir |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | matris için GIF dönüştürür (`dossier/matrix/` içine) |
 | `animematrix-dessin` | çizim düzenleyici |
@@ -210,6 +212,7 @@ Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalib
 | `rog_flare2_effets.py` | efektler ve ses görselleştiricileri (Linux'a uyarlanmış PolyWollyWin motoru) |
 | `polywollywin/` | PolyWollyWin efekt motoru, değiştirilmeden kopyalanmıştır (MIT) |
 | `rog_flare2_folder_player.py` | arka plan galerisi (servis) |
+| `rog_flare2_lecture.py` | arka plan oynatma: başlatıcının kapanışında gösterdiğini devralır (servis) |
 | `rog_flare2_clock_v3.py` | saat (servis) |
 | `rog_flare2_bascule.sh` | galeri / saat / kapalı geçişi |
 | `rog_flare2_convertir.py` | GIF dönüştürme (ImageMagick) |

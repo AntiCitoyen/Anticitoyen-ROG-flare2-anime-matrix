@@ -93,8 +93,8 @@ Paket ini menginstal:
 | Elemen | Lokasi |
 |---|---|
 | Program | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Perintah | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Layanan pengguna | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (tidak diaktifkan secara default) |
+| Perintah | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Layanan pengguna | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (tidak diaktifkan secara default) |
 | Aturan udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu dan ikon | `animematrix.desktop`, ikon `animematrix` |
 
@@ -129,18 +129,19 @@ Untuk layanan latar belakang dari sumber, salin `systemd/*.service` ke `~/.confi
 - **GIF / gambar**: *GIF/gambar…* untuk memilih berkas, *Folder (galeri)…* untuk memilih seluruh folder. Folder yang dipilih juga menjadi folder galeri latar belakang. *Utamakan versi hasil konversi* akan membaca `dossier/matrix/nom.gif` jika berkas tersebut ada (dihasilkan oleh proses konversi).
 - **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser (slider) bekerja secara langsung; *Tempo* mempercepat atau memperlambat animasi.
 - **Kecerahan**, **🕒 Jam**, **■ Berhenti** (menghapus layar) tersedia di semua tab.
-- **Pengaturan**: *Saat sesi dimulai* = Galeri GIF, Jam, atau Tidak ada.
+- **Pengaturan**: *Saat sesi dimulai* = Galeri GIF, Jam, Putar terakhir, atau Tidak ada.
 
-Selama menampilkan sesuatu, peluncur menjeda layanan latar belakang (hanya satu program yang dapat menulis ke keyboard) dan menjalankannya kembali saat ditutup.
+**Saat peluncur ditutup, apa yang sedang ditampilkan tetap berjalan** (GIF, efek dengan pengaturannya saat itu, visualizer audio, atau jam): peluncur menyerahkannya ke layanan latar belakang `animematrix-lecture.service`. Pada peluncuran berikutnya, ia mengambil alih kendali begitu ada program lain yang dijalankan (hanya satu program yang dapat menulis ke keyboard). Menekan *■ Berhenti* sebelum menutup akan membuat layar tetap padam.
 
 ### Sakelar dan layanan latar belakang
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # nyala → mati; mati → mode terakhir
+animematrix-bascule gif        # galeri latar, juga saat sesi dimulai
+animematrix-bascule horloge    # jam latar, juga saat sesi dimulai
+animematrix-bascule lecture    # putar terakhir dari peluncur, juga saat sesi dimulai
+animematrix-bascule off        # mati, tidak ada saat sesi dimulai
+animematrix-bascule etat       # mode saat ini
 ```
 
 Pilihan yang sama juga tersedia melalui klik kanan pada ikon menu. Di baliknya: `systemctl --user enable --now animematrix-galerie.service` (atau `animematrix-horloge.service`).
@@ -152,6 +153,7 @@ Pilihan yang sama juga tersedia melalui klik kanan pada ikon menu. Di baliknya: 
 | `animematrix-effet --liste` | menampilkan daftar efek dan visualizer |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | menjalankan sebuah efek (Ctrl+C untuk menghentikan) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | memutar isi sebuah folder (secara default folder terakhir yang dipilih di peluncur, atau `~/Images/AniMe-Matrix` jika tidak ada) |
+| `animematrix-lecture` | memutar ulang putar terakhir dari peluncur (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | jam; `--clear` menghapus layar, `--once --text 12:34` menampilkan teks |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | mengonversi GIF untuk matriks LED (hasil di `dossier/matrix/`) |
 | `animematrix-dessin` | editor gambar |
@@ -210,6 +212,7 @@ Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibr
 | `rog_flare2_effets.py` | efek dan visualizer audio (engine PolyWollyWin yang disesuaikan untuk Linux) |
 | `polywollywin/` | engine efek dari PolyWollyWin, disalin tanpa modifikasi (MIT) |
 | `rog_flare2_folder_player.py` | galeri latar belakang (layanan) |
+| `rog_flare2_lecture.py` | pemutaran latar belakang: melanjutkan apa yang ditampilkan peluncur saat ditutup (layanan) |
 | `rog_flare2_clock_v3.py` | jam (layanan) |
 | `rog_flare2_bascule.sh` | sakelar galeri / jam / mati |
 | `rog_flare2_convertir.py` | konversi GIF (ImageMagick) |

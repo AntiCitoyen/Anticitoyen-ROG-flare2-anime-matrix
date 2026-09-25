@@ -93,8 +93,8 @@ Ubuntu 26.04(X11, PipeWire)에서 테스트되었습니다. Python ≥ 3.10, hid
 | 항목 | 위치 |
 |---|---|
 | 프로그램 | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| 명령어 | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| 사용자 서비스 | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (기본적으로 비활성화) |
+| 명령어 | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| 사용자 서비스 | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (기본적으로 비활성화) |
 | udev 규칙 | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | 메뉴 및 아이콘 | `animematrix.desktop`, 아이콘 `animematrix` |
 
@@ -129,18 +129,19 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 이미지** : *GIF/이미지…*로 파일을 선택하거나, *폴더 (갤러리)…*로 폴더 전체를 선택합니다. 선택한 폴더는 배경 갤러리의 폴더로도 사용됩니다. *변환된 버전 우선 사용*을 켜면 변환 작업으로 생성된 `dossier/matrix/nom.gif`가 있을 경우 그것을 읽습니다.
 - **효과**와 **오디오** : 선택하고, 조정한 뒤 *▶ 효과 실행*을 누릅니다. 슬라이더는 실시간으로 작동하며, *템포*는 애니메이션을 빠르거나 느리게 만듭니다.
 - **밝기**, **🕒 시계**, **■ 정지** (화면을 지웁니다)는 모든 탭에 공통입니다.
-- **설정** : *세션 시작 시*의 값은 GIF 갤러리, 시계, 또는 없음입니다.
+- **설정** : *세션 시작 시*의 값은 GIF 갤러리, 시계, 마지막 재생, 또는 없음입니다.
 
-무언가를 표시하는 동안 런처는 백그라운드 서비스를 일시 중지합니다(한 번에 하나의 프로그램만 키보드에 쓸 수 있습니다). 런처를 닫으면 서비스가 다시 시작됩니다.
+**런처를 닫아도, 표시되던 내용은 계속 재생됩니다** (GIF, 그 순간의 설정을 유지한 효과, 오디오 비주얼라이저 또는 시계): 런처는 이를 백그라운드 서비스인 `animematrix-lecture.service`에 넘깁니다. 다음 실행 시, 다른 무언가를 시작하는 즉시 다시 제어권을 가져옵니다(한 번에 하나의 프로그램만 키보드에 쓸 수 있습니다). 닫기 전에 *■ 정지*를 누르면 화면이 꺼진 채로 남습니다.
 
 ### 토글 및 백그라운드 서비스
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # 켜짐 → 꺼짐, 꺼짐 → 마지막 모드
+animematrix-bascule gif        # 백그라운드 갤러리, 세션 시작 시에도
+animematrix-bascule horloge    # 백그라운드 시계, 세션 시작 시에도
+animematrix-bascule lecture    # 런처의 마지막 재생, 세션 시작 시에도
+animematrix-bascule off        # 꺼짐, 세션 시작 시 아무것도 안 함
+animematrix-bascule etat       # 현재 모드
 ```
 
 동일한 선택 항목은 메뉴 아이콘의 오른쪽 클릭에도 있습니다. 내부적으로는 `systemctl --user enable --now animematrix-galerie.service`(또는 `animematrix-horloge.service`)가 사용됩니다.
@@ -152,6 +153,7 @@ animematrix-bascule etat       # mode courant
 | `animematrix-effet --liste` | 효과와 비주얼라이저 목록 표시 |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | 효과 실행 (중지하려면 Ctrl+C) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | 폴더를 슬라이드쇼로 재생 (기본값은 런처에서 마지막으로 선택한 폴더, 없으면 `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | 런처의 마지막 재생을 다시 재생 (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | 시계 ; `--clear`는 화면을 지우고, `--once --text 12:34`는 텍스트를 표시 |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | 매트릭스용 GIF 변환 (`dossier/matrix/`에 저장) |
 | `animematrix-dessin` | 드로잉 편집기 |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # mode courant
 | `rog_flare2_effets.py` | 효과 및 오디오 비주얼라이저 (리눅스에 맞춘 PolyWollyWin 엔진) |
 | `polywollywin/` | PolyWollyWin의 효과 엔진, 수정 없이 그대로 복사 (MIT) |
 | `rog_flare2_folder_player.py` | 배경 갤러리 (서비스) |
+| `rog_flare2_lecture.py` | 백그라운드 재생 : 런처가 종료될 때 표시하던 내용을 이어받습니다 (서비스) |
 | `rog_flare2_clock_v3.py` | 시계 (서비스) |
 | `rog_flare2_bascule.sh` | 갤러리 / 시계 / 끄기 토글 |
 | `rog_flare2_convertir.py` | GIF 변환 (ImageMagick) |

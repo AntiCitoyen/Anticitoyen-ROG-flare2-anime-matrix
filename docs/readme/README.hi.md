@@ -93,8 +93,8 @@ Ubuntu 26.04 (X11, PipeWire) पर परीक्षण किया गया
 | तत्व | स्थान |
 |---|---|
 | प्रोग्राम | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| कमांड | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| यूज़र सर्विसेज़ | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (डिफ़ॉल्ट रूप से सक्रिय नहीं) |
+| कमांड | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| यूज़र सर्विसेज़ | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (डिफ़ॉल्ट रूप से सक्रिय नहीं) |
 | udev रूल | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | मेनू और आइकन | `animematrix.desktop`, आइकन `animematrix` |
 
@@ -129,9 +129,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / छवियाँ**: चयन के लिए *GIF/छवियाँ…*, पूरे फ़ोल्डर के लिए *फ़ोल्डर (गैलरी)…*। चुना गया फ़ोल्डर बैकग्राउंड गैलरी का फ़ोल्डर भी बन जाता है। *रूपांतरित संस्करण प्राथमिकता दें (matrix/)* मौजूद होने पर `dossier/matrix/nom.gif` पढ़ता है (जो रूपांतरण से बनता है)।
 - **इफ़ेक्ट्स** और **ऑडियो**: चुनें, समायोजित करें, *▶ इफ़ेक्ट चलाएँ*। स्लाइडर तुरंत असर करते हैं; *लय* एनिमेशन को तेज़ या धीमा करती है।
 - **चमक**, **🕒 घड़ी**, **■ रोकें** (जो स्क्रीन साफ़ करता है) सभी टैब में समान रूप से उपलब्ध हैं।
-- **सेटिंग्स**: *सत्र शुरू होने पर* = **GIF गैलरी**, **घड़ी** या **कुछ नहीं**।
+- **सेटिंग्स**: *सत्र शुरू होने पर* = **GIF गैलरी**, **घड़ी**, **पिछला प्लेबैक** या **कुछ नहीं**।
 
-जब लॉन्चर कुछ दिखा रहा होता है, तो वह बैकग्राउंड सर्विस को रोक देता है (कीबोर्ड पर केवल एक ही प्रोग्राम लिख सकता है) और बंद होने पर उसे फिर से शुरू कर देता है।
+**लॉन्चर बंद करने पर, जो दिखाया जा रहा था वह चलता रहता है** (GIF, उस समय की सेटिंग्स वाला इफ़ेक्ट, ऑडियो विज़ुअलाइज़र या घड़ी): लॉन्चर उसे बैकग्राउंड सर्विस `animematrix-lecture.service` को सौंप देता है। अगली बार लॉन्च करने पर, जैसे ही कुछ और शुरू किया जाता है (क्योंकि कीबोर्ड पर केवल एक ही प्रोग्राम लिख सकता है), वह फिर से नियंत्रण ले लेता है। बंद करने से पहले *■ रोकें* स्क्रीन को बंद छोड़ देता है।
 
 ### टॉगल और बैकग्राउंड सर्विसेज़
 
@@ -139,6 +139,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # चालू → बंद ; बंद → आख़िरी मोड
 animematrix-bascule gif        # बैकग्राउंड गैलरी, सेशन शुरू होने पर भी
 animematrix-bascule horloge    # बैकग्राउंड घड़ी, सेशन शुरू होने पर भी
+animematrix-bascule lecture    # लॉन्चर की पिछली प्लेबैक, सेशन शुरू होने पर भी
 animematrix-bascule off        # बंद, शुरुआत में कुछ नहीं
 animematrix-bascule etat       # मौजूदा मोड
 ```
@@ -152,6 +153,7 @@ animematrix-bascule etat       # मौजूदा मोड
 | `animematrix-effet --liste` | इफ़ेक्ट्स और विज़ुअलाइज़र की सूची दिखाता है |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | एक इफ़ेक्ट शुरू करता है (रोकने के लिए Ctrl+C) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | किसी फ़ोल्डर को क्रमवार दिखाता है (डिफ़ॉल्ट रूप से लॉन्चर में चुना गया आख़िरी फ़ोल्डर, अन्यथा `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | लॉन्चर की पिछली प्लेबैक को फिर से चलाता है (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | घड़ी; `--clear` स्क्रीन साफ़ करता है, `--once --text 12:34` एक टेक्स्ट दिखाता है |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | मैट्रिक्स के लिए GIF रूपांतरित करता है (`dossier/matrix/` में) |
 | `animematrix-dessin` | ड्रॉइंग एडिटर |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # मौजूदा मोड
 | `rog_flare2_effets.py` | इफ़ेक्ट्स और ऑडियो विज़ुअलाइज़र (Linux के लिए अनुकूलित PolyWollyWin इंजन) |
 | `polywollywin/` | PolyWollyWin का इफ़ेक्ट इंजन, बिना बदलाव के कॉपी किया गया (MIT) |
 | `rog_flare2_folder_player.py` | बैकग्राउंड गैलरी (सर्विस) |
+| `rog_flare2_lecture.py` | बैकग्राउंड प्लेबैक: लॉन्चर बंद होने के समय जो दिखा रहा था उसे आगे जारी रखता है (सर्विस) |
 | `rog_flare2_clock_v3.py` | घड़ी (सर्विस) |
 | `rog_flare2_bascule.sh` | गैलरी / घड़ी / बंद के बीच टॉगल |
 | `rog_flare2_convertir.py` | GIF रूपांतरण (ImageMagick) |

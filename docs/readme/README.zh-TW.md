@@ -93,8 +93,8 @@ ROG **筆記型電腦**(如 Zephyrus G14 等)上的 AniMe Matrix 螢幕使用不
 | 項目 | 位置 |
 |---|---|
 | 程式檔案 | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| 指令 | `animematrix`、`animematrix-bascule`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-convertir`、`animematrix-dessin` |
-| 使用者服務 | `/usr/lib/systemd/user/animematrix-galerie.service`、`animematrix-horloge.service`(預設未啟用) |
+| 指令 | `animematrix`、`animematrix-bascule`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-convertir`、`animematrix-dessin`、`animematrix-lecture` |
+| 使用者服務 | `/usr/lib/systemd/user/animematrix-galerie.service`、`animematrix-horloge.service`、`animematrix-lecture.service`(預設未啟用) |
 | udev 規則 | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | 選單與圖示 | `animematrix.desktop`,圖示 `animematrix` |
 
@@ -129,9 +129,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 圖片**:*GIF/圖片…*用於選取單一或多個檔案,*資料夾（圖庫）…*用於選取整個資料夾。所選的資料夾同時會成為背景圖庫使用的資料夾。*優先使用已轉換版本*會在存在 `dossier/matrix/nom.gif`(由轉換功能產生)時優先讀取該檔案。
 - **效果**與 **音訊**:選擇、調整參數,再按下 *▶ 啟動效果*。滑桿參數會即時生效;*節奏*用來加快或放慢動畫播放。
 - **亮度**、**🕒 時鐘**、**■ 停止**(會清空螢幕)在所有分頁中都是共通的。
-- **設定**:*工作階段啟動時*可設定為 GIF 圖庫、時鐘或無。
+- **設定**:*工作階段啟動時*可設定為 GIF 圖庫、時鐘、上次播放或無。
 
-啟動器在顯示內容期間會暫停背景服務(同一時間只能有一個程式寫入鍵盤螢幕),並在關閉時重新啟動該服務。
+**關閉啟動器後,目前顯示的內容會繼續播放**(GIF、帶目前參數的效果、音訊視覺化或時鐘):啟動器會將其交給背景服務 `animematrix-lecture.service`。下次啟動時,只要開始執行其他內容(同一時間只能有一個程式寫入鍵盤),它就會重新接管。關閉前按下 *■ 停止* 會讓螢幕保持熄滅。
 
 ### 切換與背景服務
 
@@ -139,6 +139,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # 開啟 → 關閉;關閉 → 恢復上一次的模式
 animematrix-bascule gif        # 背景圖庫,同時設為工作階段開始時自動啟動
 animematrix-bascule horloge    # 背景時鐘,同時設為工作階段開始時自動啟動
+animematrix-bascule lecture    # 啟動器的上次播放,同時設為工作階段開始時自動啟動
 animematrix-bascule off        # 關閉,工作階段開始時不啟動任何內容
 animematrix-bascule etat       # 顯示目前模式
 ```
@@ -152,6 +153,7 @@ animematrix-bascule etat       # 顯示目前模式
 | `animematrix-effet --liste` | 列出所有特效與視覺化效果 |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | 啟動某個特效(Ctrl+C 停止) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | 循環播放某個資料夾(預設使用啟動器中最近選取的資料夾,否則為 `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | 重新播放啟動器的上次播放內容(`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | 顯示時鐘;`--clear` 清空螢幕,`--once --text 12:34` 顯示指定文字 |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | 將 GIF 轉換為適合矩陣螢幕的格式(輸出至 `dossier/matrix/`) |
 | `animematrix-dessin` | 繪圖編輯器 |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # 顯示目前模式
 | `rog_flare2_effets.py` | 特效與音訊視覺化效果(移植自 PolyWollyWin 的引擎) |
 | `polywollywin/` | PolyWollyWin 的特效引擎,原樣複製(MIT 授權) |
 | `rog_flare2_folder_player.py` | 背景圖庫(服務) |
+| `rog_flare2_lecture.py` | 背景播放:接續啟動器關閉時正在顯示的內容(服務) |
 | `rog_flare2_clock_v3.py` | 時鐘(服務) |
 | `rog_flare2_bascule.sh` | 圖庫 / 時鐘 / 關閉之間的切換 |
 | `rog_flare2_convertir.py` | GIF 轉換(ImageMagick) |

@@ -93,8 +93,8 @@ ASUS предоставляет доступ к экрану AniMe Matrix это
 | Элемент | Расположение |
 |---|---|
 | Программы | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Команды | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Пользовательские службы | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (по умолчанию не активированы) |
+| Команды | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Пользовательские службы | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (по умолчанию не активированы) |
 | Правило udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Меню и значок | `animematrix.desktop`, значок `animematrix` |
 
@@ -129,9 +129,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / изображения**: *GIF/изображения…* для выбора файлов, *Папка (галерея)…* для целой папки. Выбранная папка также становится папкой фоновой галереи. *Предпочитать конвертированные версии* читает `папка/matrix/имя.gif`, если он существует (создаётся конвертацией).
 - **Эффекты** и **Аудио**: выбрать, настроить, *▶ Запустить эффект*. Ползунки действуют в реальном времени; *Темп* ускоряет или замедляет анимацию.
 - **Яркость**, **🕒 Часы**, **■ Остановить** (очищает экран) — общие для всех вкладок.
-- **Настройки**: *При входе в сессию* = Галерея GIF, Часы или Ничего; *Язык:* меняет язык интерфейса (лаунчер перезапускается).
+- **Настройки**: *При входе в сессию* = Галерея GIF, Часы, Последнее воспроизведение или Ничего; *Язык:* меняет язык интерфейса (лаунчер перезапускается).
 
-Пока лаунчер что-то отображает, он приостанавливает фоновую службу (записывать в клавиатуру может только одна программа) и возобновляет её при закрытии.
+**При закрытии лаунчера то, что отображается, продолжает воспроизводиться** (GIF, эффект с текущими настройками, аудиовизуализатор или часы): лаунчер передаёт это фоновой службе `animematrix-lecture.service`. При следующем запуске он снова берёт управление, как только запускается что-то ещё (записывать в клавиатуру может только одна программа). *■ Остановить* перед закрытием оставляет экран выключенным.
 
 ### Переключатель и фоновые службы
 
@@ -139,6 +139,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # включено → выключено ; выключено → последний режим
 animematrix-bascule gif        # фоновая галерея, также при входе в сессию
 animematrix-bascule horloge    # фоновые часы, также при входе в сессию
+animematrix-bascule lecture    # последнее воспроизведение лаунчера, также при входе в сессию
 animematrix-bascule off        # выключено, ничего при входе
 animematrix-bascule etat       # текущий режим
 ```
@@ -152,6 +153,7 @@ animematrix-bascule etat       # текущий режим
 | `animematrix-effet --liste` | список эффектов и визуализаторов |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | запускает эффект (Ctrl+C для остановки) |
 | `animematrix-galerie [папка] --brightness 60 [--originaux]` | прокручивает папку (по умолчанию последняя выбранная в лаунчере, иначе `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | заново воспроизводит последнее воспроизведение лаунчера (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | часы; `--clear` очищает экран, `--once --text 12:34` отображает текст |
 | `animematrix-convertir папка/ [--sortie D] [--force]` | конвертирует GIF под матрицу (в `папка/matrix/`) |
 | `animematrix-dessin` | редактор рисунка |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # текущий режим
 | `rog_flare2_effets.py` | эффекты и аудиовизуализаторы (движок PolyWollyWin, адаптированный под Linux) |
 | `polywollywin/` | движок эффектов PolyWollyWin, скопирован без изменений (MIT) |
 | `rog_flare2_folder_player.py` | фоновая галерея (служба) |
+| `rog_flare2_lecture.py` | фоновое воспроизведение: возобновляет то, что лаунчер отображал при закрытии (служба) |
 | `rog_flare2_clock_v3.py` | часы (служба) |
 | `rog_flare2_bascule.sh` | переключатель галерея / часы / выключено |
 | `rog_flare2_convertir.py` | конвертация GIF (ImageMagick) |

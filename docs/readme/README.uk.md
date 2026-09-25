@@ -93,8 +93,8 @@ ASUS надає доступ до екрана AniMe Matrix цієї клаві�
 | Елемент | Розташування |
 |---|---|
 | Програми | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Команди | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Користувацькі служби | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (за замовчуванням не активовані) |
+| Команди | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Користувацькі служби | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (за замовчуванням не активовані) |
 | Правило udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Меню та значок | `animematrix.desktop`, значок `animematrix` |
 
@@ -129,9 +129,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / зображення**: *GIF/зображення…* для вибору файлів, *Тека (галерея)…* для цілої теки. Обрана тека також стає текою фонової галереї. *Надавати перевагу конвертованим версіям* читає `тека/matrix/назва.gif`, якщо він існує (створений конвертацією).
 - **Ефекти** та **Аудіо**: обрати, налаштувати, *▶ Запустити ефект*. Повзунки діють у реальному часі; *Темп* прискорює або сповільнює анімацію.
 - **Яскравість**, **🕒 Годинник**, **■ Зупинити** (очищає екран) — спільні для всіх вкладок.
-- **Налаштування**: *На початку сесії* = Галерея GIF, Годинник або Нічого; *Мова:* змінює мову інтерфейсу (лаунчер перезапускається).
+- **Налаштування**: *На початку сесії* = Галерея GIF, Годинник, Останнє відтворення або Нічого; *Мова:* змінює мову інтерфейсу (лаунчер перезапускається).
 
-Поки лаунчер щось показує, він призупиняє фонову службу (записувати в клавіатуру може лише одна програма) і відновлює її після закриття.
+**Коли лаунчер закривається, те, що відображається, продовжує відтворюватися** (GIF, ефект з поточними налаштуваннями, аудіовізуалізатор або годинник): лаунчер передає це фоновій службі `animematrix-lecture.service`. При наступному запуску він знову бере керування, щойно запускається щось інше (записувати в клавіатуру може лише одна програма). *■ Зупинити* перед закриттям залишає екран вимкненим.
 
 ### Перемикач і фонові служби
 
@@ -139,6 +139,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 animematrix-bascule            # увімкнено → вимкнено ; вимкнено → останній режим
 animematrix-bascule gif        # фонова галерея, також на початку сесії
 animematrix-bascule horloge    # фоновий годинник, також на початку сесії
+animematrix-bascule lecture    # останнє відтворення лаунчера, також на початку сесії
 animematrix-bascule off        # вимкнено, нічого на початку
 animematrix-bascule etat       # поточний режим
 ```
@@ -152,6 +153,7 @@ animematrix-bascule etat       # поточний режим
 | `animematrix-effet --liste` | список ефектів і візуалізаторів |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | запускає ефект (Ctrl+C для зупинки) |
 | `animematrix-galerie [тека] --brightness 60 [--originaux]` | прокручує теку (за замовчуванням остання обрана в лаунчері, інакше `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | знову відтворює останнє відтворення лаунчера (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | годинник; `--clear` очищає екран, `--once --text 12:34` показує текст |
 | `animematrix-convertir тека/ [--sortie D] [--force]` | конвертує GIF під матрицю (у `тека/matrix/`) |
 | `animematrix-dessin` | редактор малюнка |
@@ -210,6 +212,7 @@ animematrix-bascule etat       # поточний режим
 | `rog_flare2_effets.py` | ефекти та аудіовізуалізатори (рушій PolyWollyWin, адаптований під Linux) |
 | `polywollywin/` | рушій ефектів PolyWollyWin, скопійований без змін (MIT) |
 | `rog_flare2_folder_player.py` | фонова галерея (служба) |
+| `rog_flare2_lecture.py` | фонове відтворення: відновлює те, що лаунчер відображав під час закриття (служба) |
 | `rog_flare2_clock_v3.py` | годинник (служба) |
 | `rog_flare2_bascule.sh` | перемикач галерея / годинник / вимкнено |
 | `rog_flare2_convertir.py` | конвертація GIF (ImageMagick) |

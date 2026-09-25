@@ -1,12 +1,21 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Fermer le lanceur n'arrête plus l'affichage : GIF, effet (avec ses
+    réglages du moment), visualiseur audio ou horloge continuent via le
+    nouveau service animematrix-lecture (commande animematrix-lecture).
+  * Démarrage de session et bascule : nouveau choix « Dernière lecture ».
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.1.0) stable; urgency=medium
+
   * Interface traduite en 19 langues (langue du système, ou choix dans
     Réglages) ; éditeur de dessin et entrée de menu traduits aussi.
   * 11 thèmes : 5 inspirés de ROG, 5 roses, et celui du système.
   * Curseur « Cadence » distinct du réglage de vitesse propre à l'effet.
   * README en 19 langues avec menu, captures d'écran par langue.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 10:05:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.0.0) stable; urgency=medium
 

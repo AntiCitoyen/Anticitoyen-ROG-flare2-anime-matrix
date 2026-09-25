@@ -93,8 +93,8 @@ Das Paket installiert:
 | Element | Ort |
 |---|---|
 | Programme | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Befehle | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
-| Benutzerdienste | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (standardmäßig nicht aktiviert) |
+| Befehle | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
+| Benutzerdienste | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (standardmäßig nicht aktiviert) |
 | udev-Regel | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menü und Symbol | `animematrix.desktop`, Symbol `animematrix` |
 
@@ -129,18 +129,19 @@ Für die Hintergrunddienste bei Ausführung aus den Quellen `systemd/*.service` 
 - **GIF / Bilder**: *GIF/Bilder…* für eine Auswahl, *Ordner (Galerie)…* für einen ganzen Ordner. Der gewählte Ordner wird auch zum Ordner der Hintergrundgalerie. *Konvertierte Versionen bevorzugen* liest `dossier/matrix/nom.gif`, wenn vorhanden (durch die Konvertierung erzeugt).
 - **Effekte** und **Audio**: auswählen, einstellen, *▶ Effekt starten*. Die Regler wirken live; *Tempo* beschleunigt oder verlangsamt die Animation.
 - **Helligkeit**, **🕒 Uhr**, **■ Stopp** (löscht das Display) sind allen Reitern gemeinsam.
-- **Einstellungen**: *Beim Sitzungsstart* = GIF-Galerie, Uhr oder Nichts.
+- **Einstellungen**: *Beim Sitzungsstart* = GIF-Galerie, Uhr, Letzte Wiedergabe oder Nichts.
 
-Solange etwas angezeigt wird, pausiert der Starter den Hintergrunddienst (nur ein Programm kann auf die Tastatur schreiben) und startet ihn beim Schließen neu.
+**Beim Schließen des Starters läuft die Anzeige weiter** (GIF, Effekt mit seinen aktuellen Einstellungen, Audio-Visualizer oder Uhr): Der Starter übergibt sie an den Hintergrunddienst `animematrix-lecture.service`. Beim nächsten Start übernimmt er wieder, sobald etwas anderes gestartet wird (nur ein Programm kann auf die Tastatur schreiben). *■ Stopp* vor dem Schließen lässt das Display aus.
 
 ### Umschalter und Hintergrunddienste
 
 ```bash
-animematrix-bascule            # allumé → éteint ; éteint → dernier mode
-animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
-animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
-animematrix-bascule off        # éteint, rien au démarrage
-animematrix-bascule etat       # mode courant
+animematrix-bascule            # an → aus; aus → letzter Modus
+animematrix-bascule gif        # Hintergrund-Galerie, auch beim Sitzungsstart
+animematrix-bascule horloge    # Hintergrund-Uhr, auch beim Sitzungsstart
+animematrix-bascule lecture    # letzte Wiedergabe des Starters, auch beim Sitzungsstart
+animematrix-bascule off        # aus, nichts beim Sitzungsstart
+animematrix-bascule etat       # aktueller Modus
 ```
 
 Dieselben Optionen finden sich im Rechtsklickmenü des Menüsymbols. Dahinter: `systemctl --user enable --now animematrix-galerie.service` (oder `animematrix-horloge.service`).
@@ -152,6 +153,7 @@ Dieselben Optionen finden sich im Rechtsklickmenü des Menüsymbols. Dahinter: `
 | `animematrix-effet --liste` | listet die Effekte und Visualizer auf |
 | `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | startet einen Effekt (Strg+C zum Beenden) |
 | `animematrix-galerie [dossier] --brightness 60 [--originaux]` | durchläuft einen Ordner (standardmäßig der zuletzt im Starter gewählte, sonst `~/Images/AniMe-Matrix`) |
+| `animematrix-lecture` | spielt die letzte Wiedergabe des Starters erneut ab (`~/.config/rog-flare2/lecture.json`) |
 | `animematrix-horloge -b 25` | Uhr; `--clear` löscht das Display, `--once --text 12:34` zeigt einen Text an |
 | `animematrix-convertir dossier/ [--sortie D] [--force]` | konvertiert GIFs für die Matrix (nach `dossier/matrix/`) |
 | `animematrix-dessin` | Zeicheneditor |
@@ -210,6 +212,7 @@ Die ursprünglichen Reverse-Engineering-Notizen (USBPcap-Mitschnitte, LED-Reihen
 | `rog_flare2_effets.py` | Effekte und Audio-Visualizer (PolyWollyWin-Engine für Linux angepasst) |
 | `polywollywin/` | Effekt-Engine von PolyWollyWin, unverändert kopiert (MIT) |
 | `rog_flare2_folder_player.py` | Hintergrundgalerie (Dienst) |
+| `rog_flare2_lecture.py` | Hintergrundwiedergabe: setzt fort, was der Starter beim Schließen angezeigt hat (Dienst) |
 | `rog_flare2_clock_v3.py` | Uhr (Dienst) |
 | `rog_flare2_bascule.sh` | Umschalter Galerie / Uhr / Aus |
 | `rog_flare2_convertir.py` | GIF-Konvertierung (ImageMagick) |

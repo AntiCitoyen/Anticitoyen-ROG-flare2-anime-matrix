@@ -16,7 +16,8 @@ install -d "$ROOT/DEBIAN" "$ROOT/usr/bin" "$ROOT$SHARE/polywollywin" "$ROOT/usr/
     "$ROOT/usr/share/icons/hicolor/scalable/apps" "$ROOT/usr/share/doc/$PKG"
 
 for f in rog_flare2_launcher.py rog_flare2_matrix_paint.py rog_flare2_clock_v3.py rog_flare2_convertir.py \
-         rog_flare2_folder_player.py rog_flare2_effets.py rog_flare2_i18n.py rog_flare2_themes.py; do
+         rog_flare2_folder_player.py rog_flare2_effets.py rog_flare2_i18n.py rog_flare2_themes.py \
+         rog_flare2_lecture.py; do
     install -m 644 "$DEPOT/$f" "$ROOT$SHARE/$f"
 done
 install -m 755 "$DEPOT/rog_flare2_bascule.sh" "$ROOT$SHARE/rog_flare2_bascule.sh"
@@ -34,6 +35,7 @@ commande animematrix-galerie   rog_flare2_folder_player.py
 commande animematrix-horloge   rog_flare2_clock_v3.py
 commande animematrix-convertir rog_flare2_convertir.py
 commande animematrix-dessin    rog_flare2_matrix_paint.py
+commande animematrix-lecture   rog_flare2_lecture.py
 ln -s "../share/$PKG/rog_flare2_bascule.sh" "$ROOT/usr/bin/animematrix-bascule"
 
 install -m 644 "$DEPOT"/systemd/*.service "$ROOT/usr/lib/systemd/user/"
