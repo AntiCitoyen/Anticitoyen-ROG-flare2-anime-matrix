@@ -5,12 +5,11 @@
 # AniMe Matrix untuk Linux — ROG Strix Flare II Animate
 
 [![Rilis](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![CI](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml)
 [![Lisensi MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](../../LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-Mengendalikan layar **AniMe Matrix** (312 mini-LED) pada keyboard **ASUS ROG Strix Flare II Animate** di Linux, tanpa Armoury Crate maupun Windows: GIF dan gambar, galeri latar belakang, jam, 19 efek animasi, 7 visualizer audio, menggambar LED demi LED.
-
-Antarmuka aplikasi tersedia dalam 19 bahasa, mengikuti bahasa sistem secara otomatis, dan dapat diubah di tab *Pengaturan* → *Bahasa:*.
+Mengendalikan layar **AniMe Matrix** (312 mini-LED) pada keyboard **ASUS ROG Strix Flare II Animate** di Linux, tanpa Armoury Crate maupun Windows: GIF dan galeri, jam, efek dan visualizer audio, permainan, monitor sistem, notifikasi desktop, penjadwalan waktu, editor animasi, pustaka bersama, warna keyboard yang tersinkron.
 
 <div align="center">
 
@@ -38,7 +37,7 @@ Antarmuka aplikasi tersedia dalam 19 bahasa, mengikuti bahasa sistem secara otom
 - [Cara kerja](#fonctionnement)
 - [Pemecahan masalah](#depannage)
 - [Struktur repositori](#depot)
-- [Membangun paket .deb](#deb)
+- [Membangun paket](#deb)
 - [Kredit](#credits)
 - [Lisensi](#licence)
 - [Mendukung proyek](#soutien)
@@ -51,57 +50,77 @@ Antarmuka aplikasi tersedia dalam 19 bahasa, mengikuti bahasa sistem secara otom
 
 ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armoury Crate). Proyek ini berkomunikasi langsung dengan keyboard melalui USB HID dan menghadirkan:
 
-- **Peluncur grafis** (`animematrix`), dapat memilih di antara **4 antarmuka**: *Dial + laci* (jendela bulat dan panel pengaturan yang keluar dari kanan, bawaan), *Dial* (semuanya di dalam lingkaran), *Membulat* (sudut sangat membulat, roda kecerahan) dan *Klasik* (tab). Antarmuka bulat menampilkan **312 LED secara langsung**, persis seperti yang dikirim ke keyboard. Empat blok kendali:
-  - **GIF / gambar**: memutar satu atau beberapa berkas, atau seluruh folder sebagai galeri, secara berulang (loop); mengonversi GIF untuk matriks LED.
-  - **Efek**: 19 animasi (Hujan Matriks V2, Plasma, Api, bintang, Kembang Api, Petir, Metaball, Gelombang, Ular, Teks Bergulir, Jam Bergaya, Reaksi Keyboard…), dapat diatur saat sedang berjalan.
-  - **Audio**: 7 visualizer yang bereaksi terhadap suara yang diputar oleh PC (Batang Spektrum, KITT / KARR, Ledakan Bintang Tengah, Osiloskop, Api Audio…).
-  - **Pengaturan**: apa yang ditampilkan saat sesi dibuka, bahasa, tema dan antarmuka, editor gambar, tautan proyek.
-- **Jam** HH:MM, dari peluncur atau sebagai layanan latar belakang.
-- **Galeri latar belakang**: layanan `systemd --user` yang memutar folder GIF secara otomatis begitu sesi dibuka.
-- **Sakelar sekali klik** (`animematrix-bascule`): ikon di menu menyalakan atau mematikan layar; klik kanan untuk memilih Galeri GIF, Jam, atau Matikan.
-- **Konversi GIF yang disesuaikan untuk matriks** (`animematrix-convertir`): 19×24, abu-abu, 3 tingkat, tanpa dithering — lihat [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
-- **Editor gambar** LED demi LED (`animematrix-dessin`).
-- **11 tema**: 5 terinspirasi ROG (Classic, Strix, Glitch, Gold, Carbon), 5 tema merah muda (Sakura, Permen karet, Emas mawar, Lavender merah muda, Malam merah muda) dan tema sistem, dipilih di *Pengaturan* → *Tema:*.
-- **Pembaruan bawaan**: *Pengaturan* → *Periksa pembaruan*; pemeriksaan otomatis sekali sehari (dapat dimatikan). Peluncur mengunduh `.deb` dari rilis GitHub terbaru, memverifikasi checksum SHA-256-nya, lalu memasangnya setelah meminta kata sandi administrator (`pkexec`).
-- **Konsumsi sumber daya rendah**: GIF didekode per bingkai; galeri berisi 400 GIF berjalan dengan memori sekitar 25 MB.
+**Menampilkan**
+- **GIF dan gambar**: satu berkas, beberapa berkas terpilih, atau seluruh folder sebagai galeri; diputar secara streaming (galeri berisi 400 GIF hanya memakai memori sekitar 25 MB).
+- **Jam** HH:MM.
+- **19 efek animasi** (hujan gaya Matrix, plasma, api, bintang, kembang api, petir, metaball, gelombang, teks bergulir…) dan **7 visualizer audio** yang bereaksi terhadap suara yang diputar oleh PC.
+- **Monitor sistem**: CPU, RAM, GPU, suhu, kecepatan jaringan, dan jam, dalam bentuk pengukur.
+- **Lagu yang sedang diputar**: saat lagu berganti, "ARTIS - JUDUL" bergulir sekali, lalu muncul visualizer (Spotify, VLC, Rhythmbox, peramban… melalui MPRIS).
+- **Notifikasi desktop**: "APLIKASI : JUDUL" ditampilkan menimpa layar lalu tampilan sebelumnya kembali (dinonaktifkan secara default, dengan daftar aplikasi yang diizinkan).
+- **Permainan yang bisa dimainkan** dengan keyboard: Ular, Pong, Tetris, pemecah bata, dengan rekor tersimpan.
+
+**Membuat**
+- **Editor animasi** per bingkai, sesuai geometri asli layar: 3 tingkat, filmstrip, onion skin, geser, salin-tempel, pratinjau, kirim ke keyboard, ekspor GIF.
+- **Pustaka animasi** bersama: menelusuri, memutar, menambahkan ke galeri sendiri, mengusulkan animasi buatan sendiri.
+- **Konversi pintar** untuk GIF: memotong sesuai subjek, subjek terang di atas latar hitam, penguatan kontur, 3 tingkat.
+- **Pratinjau akurat** sebelum dikirim: rendering simulasi layar (tata letak sebenarnya, halo di antara LED).
+- **Efek berupa tambahan (ekstensi)**: berkas Python yang diletakkan dalam sebuah folder menambahkan efek baru (lihat [docs/EXTENSIONS.md](../EXTENSIONS.md)).
+
+**Otomatisasi**
+- **Daemon `animematrixd`**: satu-satunya pemilik layar, tetap menampilkan konten meski peluncur ditutup; perintah `animematrix-ctl` dan API HTTP lokal opsional.
+- **Penjadwalan waktu**: rentang waktu (termasuk malam hari) dengan jam, galeri, monitor, lagu yang sedang diputar, atau layar mati; layar otomatis mati saat sesi terkunci, saat tidur, atau saat sebuah aplikasi dalam mode layar penuh.
+- **Warna keyboard melalui OpenRGB**: warna tema pada tombol, atau berdenyut mengikuti layar.
+- **Ikon baki sistem**: menu cepat (mode, kecerahan).
+
+**Kenyamanan**
+- **4 antarmuka** (*Dial + laci* bawaan, *Dial*, *Membulat*, *Klasik*) dengan **pratinjau langsung 312 LED**, **11 tema** (5 ROG, 5 merah muda, sistem) dan **19 bahasa**.
+- **Pembaruan bawaan**: peluncur mengunduh rilis terbaru, memverifikasi sidik jari SHA-256, lalu memasangnya (perlu kata sandi administrator); atau `apt upgrade` dengan repositori APT.
 
 <a id="materiel"></a>
 
 ## Perangkat keras yang didukung
 
-| Keyboard | USB | Antarmuka |
+| Perangkat | USB | Status |
 |---|---|---|
-| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, interface 4 (usage page `0xFF02`) |
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | didukung (HID, interface 4, usage page `0xFF02`) |
+| Layar AniMe Matrix pada laptop ROG (G14, G16…) | beragam | **eksperimental** melalui `asusctl`, belum diuji pada perangkat asli (lihat [Penggunaan](#utilisation)) |
 
-Layar AniMe Matrix pada **laptop** ROG (Zephyrus G14, dll.) menggunakan protokol yang berbeda: perangkat tersebut **tidak** didukung di sini (gunakan `asusctl` sebagai gantinya).
-
-Telah diuji pada Ubuntu 26.04 (X11, PipeWire). Distribusi apa pun dengan Python ≥ 3.10, hidapi, Tk, dan systemd seharusnya dapat digunakan.
+Telah diuji pada Ubuntu 26.04 (X11, PipeWire, Cinnamon). Distribusi apa pun dengan Python ≥ 3.10, hidapi, Tk, dan systemd seharusnya cocok.
 
 <a id="installation"></a>
 
 ## Instalasi
 
-### Paket .deb (Debian, Ubuntu, Mint, Pop!_OS…)
+### Repositori APT (Debian, Ubuntu, Mint, Pop!_OS…) — pembaruan dengan `apt upgrade`
 
-1. Unduh `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` dari halaman [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest).
-2. Instal (apt akan mengambil dependensinya):
-   ```bash
-   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
-   ```
-3. **Cabut lalu pasang kembali keyboard** (aturan udev memberikan akses kepada pengguna yang sedang login).
-4. Jalankan **AniMe Matrix** dari menu aplikasi, atau `animematrix` di terminal.
+```bash
+curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
+```
+
+Kemudian **cabut lalu pasang kembali keyboard** (aturan udev memberikan akses kepada pengguna yang sedang login) dan jalankan **AniMe Matrix** dari menu.
+
+### Format lain (halaman [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest))
+
+| Sistem | Berkas | Instalasi |
+|---|---|---|
+| Debian, Ubuntu… | `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` | `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb` |
+| Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
+| Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
+| Semua distribusi (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (pasang juga aturan udev di bawah ; tanpa visualizer audio) |
 
 Paket ini menginstal:
 
 | Elemen | Lokasi |
 |---|---|
 | Program | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Perintah | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
-| Layanan pengguna | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (tidak diaktifkan secara default) |
+| Perintah | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Layanan pengguna | `/usr/lib/systemd/user/animematrixd.service` (diaktifkan untuk semua sesi) |
 | Aturan udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu dan ikon | `animematrix.desktop`, ikon `animematrix` |
-
-Uninstal: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 
 ### Dari sumber
 
@@ -117,9 +136,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Alat sistem yang berguna: `imagemagick` (konversi), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi sakelar).
-
-Untuk layanan latar belakang dari sumber, salin `systemd/*.service` ke `~/.config/systemd/user/`, ganti baris `ExecStart=` dengan path ke `.venv/bin/python` dan skrip terkait (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`), lalu jalankan `systemctl --user daemon-reload`.
+Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi), `python3-gi` dan `gir1.2-ayatanaappindicator3-0.1` (ikon baki sistem), `openrgb` (warna tombol).
 
 <a id="utilisation"></a>
 
@@ -129,67 +146,73 @@ Untuk layanan latar belakang dari sumber, salin `systemd/*.service` ke `~/.confi
 
 `animematrix` (atau entri **AniMe Matrix** pada menu).
 
-Pada antarmuka bulat, tombol bulat membuka blok *GIF / gambar*, *Efek*, *Audio*, dan *Pengaturan* (di laci atau di dalam lingkaran); *Jam* dan *Berhenti* langsung bereaksi; busur di bagian bawah mengatur kecerahan; jendela dipindahkan dengan menarik bagian latarnya; tombol-tombol kecil di bagian atas untuk meminimalkan atau menutup. Bentuk bulat menggunakan ekstensi X11 SHAPE (paket `python3-xlib`); tanpanya, antarmuka yang sama ditampilkan dalam jendela persegi panjang.
+Pada antarmuka bulat, tombol bulat membuka blok *GIF*, *Efek*, *Audio*, dan *Pengaturan* (di laci atau di dalam lingkaran); *Jam* dan *Berhenti* langsung bereaksi; busur di bagian bawah mengatur kecerahan; jendela dipindahkan dengan menarik bagian latarnya; tombol-tombol kecil di bagian atas untuk meminimalkan atau menutup. Bentuk bulat menggunakan ekstensi X11 SHAPE (paket `python3-xlib`); tanpanya, antarmuka yang sama ditampilkan dalam jendela persegi panjang.
 
-- **GIF / gambar**: *GIF/gambar…* untuk memilih berkas, *Folder (galeri)…* untuk memilih seluruh folder. Folder yang dipilih juga menjadi folder galeri latar belakang. *Utamakan versi hasil konversi* akan membaca `dossier/matrix/nom.gif` jika berkas tersebut ada (dihasilkan oleh proses konversi).
-- **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser (slider) bekerja secara langsung; *Tempo* mempercepat atau memperlambat animasi.
+- **GIF / gambar**: *GIF/gambar…* atau *Folder (galeri)…*; *Geometri akurat* mempertahankan proporsi (sudut gambar terpotong, bukan gambar yang diregangkan); *👁 Pratinjau akurat (sebelum dikirim)* menampilkan hasilnya tanpa mengirim apa pun; *🎞 Buat animasi (editor)*; *📚 Pustaka animasi*; *Konversi pintar* untuk mengonversi GIF.
+- **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser bekerja secara langsung; *Tempo* mempercepat atau memperlambat seluruh animasi. Permainan dimainkan dengan tombol panah, Spasi, dan Enter, dengan jendela peluncur di posisi terdepan.
 - **Kecerahan**, **🕒 Jam**, **■ Berhenti** (menghapus layar) tersedia di semua tab.
-- **Pengaturan**: *Saat sesi dimulai* = Galeri GIF, Jam, Putar terakhir, atau Tidak ada; *Antarmuka:* memilih salah satu dari 4 antarmuka (peluncur akan mulai ulang, apa yang sedang ditampilkan tetap berjalan).
+- **Pengaturan**: saat sesi dimulai (Galeri GIF, Jam, Putar terakhir, atau Tidak ada), bahasa, tema, antarmuka, notifikasi desktop, warna keyboard (OpenRGB), *Jadwal…*, ikon baki sistem, folder ekstensi, pembaruan.
 
-**Saat peluncur ditutup, apa yang sedang ditampilkan tetap berjalan** (GIF, efek dengan pengaturannya saat itu, visualizer audio, atau jam): peluncur menyerahkannya ke layanan latar belakang `animematrix-lecture.service`. Pada peluncuran berikutnya, ia mengambil alih kendali begitu ada program lain yang dijalankan (hanya satu program yang dapat menulis ke keyboard). Menekan *■ Berhenti* sebelum menutup akan membuat layar tetap padam.
+**Menutup peluncur tidak menghentikan apa pun**: daemon `animematrixd` terus menampilkan konten. *■ Berhenti* akan mematikan layar.
 
-### Sakelar dan layanan latar belakang
+### Daemon dan baris perintah
 
 ```bash
-animematrix-bascule            # nyala → mati; mati → mode terakhir
-animematrix-bascule gif        # galeri latar, juga saat sesi dimulai
-animematrix-bascule horloge    # jam latar, juga saat sesi dimulai
-animematrix-bascule lecture    # putar terakhir dari peluncur, juga saat sesi dimulai
-animematrix-bascule off        # mati, tidak ada saat sesi dimulai
-animematrix-bascule etat       # mode saat ini
+animematrix-ctl etat                               # apa yang sedang ditampilkan
+animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galeri (folder atau berkas)
+animematrix-ctl effet "Plasma" --param speed=250   # efek dan pengaturannya
+animematrix-ctl horloge
+animematrix-ctl texte "Bonjour"
+animematrix-ctl notifier "Café prêt" --duree 5     # tampil menimpa lalu kembali
+animematrix-ctl luminosite 60
+animematrix-ctl stop
 ```
-
-Pilihan yang sama juga tersedia melalui klik kanan pada ikon menu. Di baliknya: `systemctl --user enable --now animematrix-galerie.service` (atau `animematrix-horloge.service`).
-
-### Baris perintah
 
 | Perintah | Fungsi |
 |---|---|
+| `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | sakelar (juga tersedia lewat klik kanan ikon menu); mode yang dipilih juga menjadi mode saat sesi dimulai |
+| `animematrixd --http 8765` | daemon dengan API HTTP lokal (`POST http://127.0.0.1:8765/api`, JSON yang sama seperti soket) |
+| `animematrix-animation [fichier.gif]` | editor animasi |
+| `animematrix-apercu fichier.gif -o apercu.gif` | pratinjau akurat sebuah GIF (berkas) |
+| `animematrix-convertir dossier/ [--fidele] [--classique]` | mengonversi GIF untuk matriks (di `dossier/matrix/`) |
 | `animematrix-effet --liste` | menampilkan daftar efek dan visualizer |
-| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | menjalankan sebuah efek (Ctrl+C untuk menghentikan) |
-| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | memutar isi sebuah folder (secara default folder terakhir yang dipilih di peluncur, atau `~/Images/AniMe-Matrix` jika tidak ada) |
-| `animematrix-lecture` | memutar ulang putar terakhir dari peluncur (`~/.config/rog-flare2/lecture.json`) |
-| `animematrix-horloge -b 25` | jam; `--clear` menghapus layar, `--once --text 12:34` menampilkan teks |
-| `animematrix-convertir dossier/ [--sortie D] [--force]` | mengonversi GIF untuk matriks LED (hasil di `dossier/matrix/`) |
-| `animematrix-dessin` | editor gambar |
+| `animematrix-dessin` | editor per LED (mengembalikan kendali ke daemon saat ditutup) |
 
 ### Audio
 
-Visualizer mendengarkan **monitor dari output suara default** melalui `parec` (PipeWire atau PulseAudio): visualizer bereaksi terhadap apa yang diputar oleh PC, bukan mikrofon. Untuk mengganti output, ubah output default sistem.
+Visualizer mendengarkan **monitor dari output suara default** melalui `parec` (PipeWire atau PulseAudio): visualizer bereaksi terhadap suara yang diputar PC, bukan mikrofon.
 
 ### Efek "Keyboard React"
 
 Efek ini menyalakan layar mengikuti ritme ketikan berkat `pynput`, yang membaca tombol dari seluruh sesi selama efek berjalan. Efek ini berfungsi di X11; di Wayland, efek ini tidak menerima input tombol.
 
+### Warna keyboard (OpenRGB)
+
+*Pengaturan* → *Warna keyboard (OpenRGB)*: warna tema atau berdenyut mengikuti layar. Daemon akan menjalankan `openrgb --server` bila diperlukan. OpenRGB tidak mengetahui pencahayaan keyboard sebelumnya: untuk mendapatkan kembali efek yang tersimpan di keyboard, cabut lalu pasang kembali.
+
+### Laptop ROG (eksperimental)
+
+Tuliskan `portable-asusctl` di `~/.config/rog-flare2/materiel` lalu jalankan ulang daemon: data akan dikirim melalui `asusctl anime image` (maksimum 5 gambar per detik). Belum diuji pada laptop asli: masukan sangat diterima lewat tiket.
+
 <a id="gif"></a>
 
 ## Menyiapkan GIF yang baik
 
-Layar ini bukan berbentuk persegi panjang: 24 baris yang bergeser, dari 19 LED di bagian atas hingga 7 LED di bagian bawah, 3 tingkat abu-abu yang benar-benar berbeda, dan ada efek halo di antara LED yang berdekatan. Siluet, piktogram, teks pendek, dan gerakan lambat tampil baik; foto dan video tidak.
+Layar ini bukan berbentuk persegi panjang: 24 baris yang bergeser, dari 19 LED di bagian atas hingga 7 LED di bagian bawah (tepi kanan vertikal, tepi kiri diagonal), 3 tingkat abu-abu yang benar-benar berbeda, dan ada efek halo di antara LED yang berdekatan. Siluet, piktogram, teks pendek, dan gerakan lambat tampil baik; foto dan video tidak.
 
-Panduan lengkap (ukuran kanvas, tingkat abu-abu, kecepatan bingkai, kecerahan, perintah ImageMagick): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
+Panduan lengkap (kanvas, tingkat, kecepatan bingkai, konversi, geometri akurat): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
 
 <a id="fonctionnement"></a>
 
 ## Cara kerja
 
-- **Transport**: hidapi membuka interface HID nomor 4 pada keyboard dan menulis bingkai data (frame) berukuran **1024 byte**.
+- **Transport**: hidapi membuka interface HID nomor 4 pada keyboard dan menulis bingkai data (frame) berukuran **1024 byte**; keyboard mengirim balik setiap bingkai.
 - **Bingkai data**: `60 81 00 00` + **312 byte** (satu nilai kecerahan 0–255 per LED, sesuai urutan perangkat keras) + byte nol hingga mencapai 1024.
-- **Geometri**: 24 baris yang bergeser secara diagonal (19 → 7 LED), atau secara setara 12 baris logis dari 37 → 15 kolom (model milik PolyWollyWin); kedua pemetaan tersebut telah diverifikasi identik pada seluruh 312 LED.
-- **GIF**: setiap bingkai direkonstruksi ulang (GIF yang dioptimalkan hanya menyimpan perbedaannya), diubah ke skala abu-abu, disesuaikan menjadi 24 baris, dan disampel baris demi baris.
-- **Animasi**: tidak ada memori internal yang digunakan; animasi dihasilkan dengan cara host mengirimkan bingkai satu demi satu (~30 fps untuk efek).
+- **Geometri**: 24 baris yang bergeser (baris r mencakup kolom (r+1)//2 hingga 18), atau secara setara 12 baris logis dari 37 → 15 kolom (model milik PolyWollyWin); kedua pemetaan tersebut telah diverifikasi identik pada seluruh 312 LED.
+- **Daemon**: `animematrixd` satu-satunya yang memegang keyboard; pemutaran dasar dan tampilan menimpa (notifikasi); soket JSON `$XDG_RUNTIME_DIR/animematrix.sock`; sambungan ulang keyboard otomatis.
+- **Animasi**: host mengirimkan bingkai satu demi satu (~30 fps untuk efek); memori internal keyboard tidak digunakan (riset: [docs/RECHERCHE-MEMOIRE.md](../RECHERCHE-MEMOIRE.md)).
 
-Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibrasi) ada di **[docs/PROTOCOL.md](../PROTOCOL.md)**; berkas tangkapan `*.cap` serta alat `parse_usbpcap.py` / `rog_flare2_replay_capture.py` tetap berada di repositori bagi yang ingin menelusuri lebih jauh.
+Catatan reverse engineering aslinya ada di **[docs/PROTOCOL.md](../PROTOCOL.md)**; berkas tangkapan `*.cap` serta alat `parse_usbpcap.py` / `rog_flare2_replay_capture.py` tetap berada di repositori.
 
 ⚠️ Jangan kirim paket data AniMe Matrix milik laptop (`0x5E …`, `0xEC …`) ke keyboard ini: itu bukan protokol yang tepat dan dapat membuat keyboard macet (cabut lalu pasang kembali, atau tahan **Fn + Esc** selama 10–15 detik).
 
@@ -200,13 +223,14 @@ Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibr
 | Gejala | Kemungkinan penyebab | Solusi |
 |---|---|---|
 | `interface 4 not found` | keyboard tidak terdeteksi atau tidak ada izin | `lsusb \| grep 0b05:19fc`; aturan udev sudah terpasang? cabut lalu pasang kembali |
-| `Permission denied` / `open failed` | aturan udev belum diterapkan | jalankan `sudo udevadm control --reload-rules && sudo udevadm trigger`, lalu pasang kembali |
-| Layar tidak berubah | program lain sudah menulis ke layar | `animematrix-bascule off`, tutup peluncur atau skrip lain |
+| `Permission denied` / `open failed` | aturan udev belum diterapkan | `sudo udevadm control --reload-rules && sudo udevadm trigger`, lalu pasang kembali |
+| "Layanan animematrixd tidak dapat dijangkau" | daemon berhenti | `systemctl --user restart animematrixd.service` atau `animematrixd &` |
+| Layar tidak berubah | program lain sedang menulis ke keyboard | tutup skrip lama; `animematrix-ctl etat` |
 | Visualizer tetap dalam mode demo | tidak ada `parec` atau tidak ada suara | instal `pulseaudio-utils`, putar suara |
 | "Keyboard React" tidak bereaksi | sesi Wayland atau `pynput` tidak ada | gunakan sesi X11, `sudo apt install python3-pynput` |
-| Galeri latar belakang tidak berjalan | folder kosong atau tidak ada | pilih folder di peluncur (tab GIF) |
 | Jendela bulat ditampilkan sebagai persegi panjang | ekstensi SHAPE atau `python3-xlib` tidak ada | `sudo apt install python3-xlib`, atau *Pengaturan* → *Antarmuka:* → *Klasik* |
-| Log sebuah layanan | — | `journalctl --user -u animematrix-galerie.service -f` |
+| Tombol tetap satu warna setelah OpenRGB | OpenRGB tidak menampilkan efek aslinya | cabut lalu pasang kembali keyboard |
+| Log daemon | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
 
@@ -215,32 +239,34 @@ Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibr
 | Berkas | Fungsi |
 |---|---|
 | `rog_flare2_launcher.py` | peluncur grafis (Tk) |
-| `rog_flare2_i18n.py`, `locale/` | terjemahan antarmuka (19 bahasa, satu katalog JSON per bahasa) |
-| `rog_flare2_themes.py` | tema antarmuka (ROG dan merah muda) |
-| `rog_flare2_ui_ronde.py` | antarmuka bulat (dial + laci, dial, membulat): menggambar, bentuk jendela, pratinjau LED |
-| `rog_flare2_effets.py` | efek dan visualizer audio (engine PolyWollyWin yang disesuaikan untuk Linux) |
-| `polywollywin/` | engine efek dari PolyWollyWin, disalin tanpa modifikasi (MIT) |
-| `rog_flare2_folder_player.py` | galeri latar belakang (layanan) |
-| `rog_flare2_lecture.py` | pemutaran latar belakang: melanjutkan apa yang ditampilkan peluncur saat ditutup (layanan) |
-| `rog_flare2_clock_v3.py` | jam (layanan) |
-| `rog_flare2_bascule.sh` | sakelar galeri / jam / mati |
-| `rog_flare2_convertir.py` | konversi GIF (ImageMagick) |
-| `rog_flare2_matrix_paint.py` | transport HID, urutan LED, editor gambar |
-| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | alat dan tangkapan reverse engineering |
-| `systemd/` | layanan pengguna |
-| `packaging/` | aturan udev, entri menu, ikon, berkas dan skrip paket .deb |
-| `docs/` | panduan GIF, catatan protokol, tangkapan layar |
+| `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | antarmuka bulat, tema |
+| `rog_flare2_i18n.py`, `locale/` | terjemahan (19 bahasa ; `locale/_cles.json` = teks yang perlu diterjemahkan) |
+| `rog_flare2_demon.py`, `rog_flare2_ctl.py` | daemon `animematrixd`, klien dan perintah `animematrix-ctl` |
+| `rog_flare2_core.py` | pemutaran GIF secara streaming, jam, geometri |
+| `rog_flare2_effets.py`, `polywollywin/` | efek dan visualizer (engine PolyWollyWin, MIT), ekstensi |
+| `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor sistem, lagu yang sedang diputar, permainan |
+| `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifikasi, penjadwalan waktu dan pemicunya |
+| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | warna melalui OpenRGB, ikon baki sistem, laptop (eksperimental) |
+| `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | editor animasi, simulator, konversi |
+| `rog_flare2_bibliotheque.py`, `bibliotheque/` | pustaka animasi (katalog, GIF CC0) |
+| `rog_flare2_maj.py` | pembaruan dari rilis |
+| `rog_flare2_matrix_paint.py`, `rog_flare2_clock_v3.py`, `rog_flare2_folder_player.py` | transport HID dan editor LED, jam, galeri (alat asli) |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | reverse engineering |
+| `examples/effets/` | contoh ekstensi |
+| `tests/` | pengujian (termasuk antarmuka dengan klik nyata) |
+| `systemd/`, `packaging/` | layanan pengguna ; .deb, RPM, Arch, Flatpak, repositori APT |
+| `docs/` | panduan GIF, ekstensi, protokol, riset, tangkapan layar, README terjemahan |
 
 <a id="deb"></a>
 
-## Membangun paket .deb
+## Membangun paket
 
 ```bash
 packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-Hanya `dpkg-deb` dan `bash` yang diperlukan; nomor versi dibaca dari `rog_flare2_launcher.py` (`VERSION`).
+`packaging/install.sh` memasang proyek ini ke struktur direktori mana pun; skrip ini digunakan untuk .deb, RPM (`packaging/rpm/`), paket Arch (`packaging/aur/`), dan Flatpak (`packaging/flatpak/`). Setiap kali rilis baru diterbitkan, GitHub membangun RPM, paket Arch, dan Flatpak, lalu memperbarui repositori APT yang ditandatangani. Nomor versi dibaca dari `rog_flare2_core.py` (`VERSION`). Pengujian: `python -m pytest tests`.
 
 <a id="credits"></a>
 
@@ -249,6 +275,7 @@ Hanya `dpkg-deb` dan `bash` yang diperlukan; nomor versi dibaca dari `rog_flare2
 - **NicRoss512** — reverse engineering protokol, jam dan editor aslinya: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Repositori ini bermula dari sana; riwayat commit-nya dipertahankan.
 - **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), pengontrol Windows yang engine efek dan visualizer audionya digunakan kembali di sini.
 - **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), untuk perilaku LED (halo, tingkat kecerahan yang dipersepsikan, kecepatan bingkai).
+- **asus-linux** — [asusctl](https://gitlab.com/asus-linux/asusctl), digunakan untuk layar pada laptop.
 
 Proyek independen, tidak berafiliasi dengan ASUS. "ROG", "AniMe Matrix", dan "Armoury Crate" adalah merek dagang milik ASUSTeK.
 
@@ -256,7 +283,7 @@ Proyek independen, tidak berafiliasi dengan ASUS. "ROG", "AniMe Matrix", dan "Ar
 
 ## Lisensi
 
-[MIT](../../LICENSE) untuk kode dalam repositori ini. `polywollywin/` tetap menggunakan lisensi MIT dari penulis aslinya ([polywollywin/LICENSE](../../polywollywin/LICENSE)). Berkas asli dari NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, tangkapan) dipublikasikan tanpa lisensi eksplisit dan tetap menjadi hak penulis aslinya; berkas-berkas ini didistribusikan ulang dengan atribusi.
+[MIT](../../LICENSE) untuk kode dalam repositori ini ; animasi dalam `bibliotheque/` berlisensi CC0. `polywollywin/` tetap menggunakan lisensi MIT dari penulis aslinya ([polywollywin/LICENSE](../../polywollywin/LICENSE)). Berkas asli dari NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, tangkapan) dipublikasikan tanpa lisensi eksplisit dan tetap menjadi hak penulis aslinya; berkas-berkas ini didistribusikan ulang dengan atribusi.
 
 <a id="soutien"></a>
 
@@ -268,4 +295,4 @@ Jika proyek ini bermanfaat bagi Anda, secangkir kopi akan membantu perawatannya:
 
 **https://buymeacoffee.com/anticitoyen** — tautan ini juga tersedia di tab *Pengaturan* pada peluncur.
 
-Laporan bug dan ide: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Laporan bug, ide, dan animasi yang ingin dibagikan: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).

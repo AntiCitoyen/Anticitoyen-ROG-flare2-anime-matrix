@@ -5,18 +5,17 @@
 # Linux için AniMe Matrix — ROG Strix Flare II Animate
 
 [![Sürüm](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![CI](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml)
 [![MIT Lisansı](https://img.shields.io/badge/licence-MIT-blue.svg)](../../LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-**ASUS ROG Strix Flare II Animate** klavyesinin **AniMe Matrix** ekranını (312 mini-LED) Armoury Crate veya Windows olmadan Linux üzerinden yönetin: GIF ve görseller, arka plan galerisi, saat, 19 animasyonlu efekt, 7 ses görselleştirici, LED LED çizim.
+**ASUS ROG Strix Flare II Animate** klavyesinin **AniMe Matrix** ekranını (312 mini-LED) Linux üzerinden, Armoury Crate veya Windows olmadan yönetin: GIF ve galeri, saat, efektler ve ses görselleştiricileri, oyunlar, sistem monitörü, masaüstü bildirimleri, zaman programlama, animasyon düzenleyici, paylaşılan kütüphane, senkronize klavye renkleri.
 
 <div align="center">
 
 [🇫🇷 Français](../../README.md) · [🇬🇧 English](README.en.md) · [🇪🇸 Español](README.es.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇧🇷 Português](README.pt-BR.md) · [🇳🇱 Nederlands](README.nl.md) · [🇵🇱 Polski](README.pl.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · **🇹🇷 Türkçe** · [🇸🇦 العربية](README.ar.md) · [🇮🇳 हिन्दी](README.hi.md) · [🇨🇳 简体中文](README.zh-CN.md) · [🇹🇼 繁體中文](README.zh-TW.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇻🇳 Tiếng Việt](README.vi.md) · [🇮🇩 Bahasa Indonesia](README.id.md)
 
 </div>
-
-*Not: Arayüz 19 dilde mevcuttur, sistem dilini otomatik olarak izler ve **Ayarlar** sekmesindeki **Dil:** ile değiştirilebilir.*
 
 <p align="center"><img src="../captures/tr/interface-drawer.png" alt="Kadran + çekmece" width="760"><br><em>Kadran + çekmece (varsayılan arayüz)</em></p>
 
@@ -38,7 +37,7 @@
 - [Nasıl çalışır](#fonctionnement)
 - [Sorun giderme](#depannage)
 - [Depo düzeni](#depot)
-- [.deb paketini oluşturma](#deb)
+- [Paketleri oluşturma](#deb)
 - [Emeği geçenler](#credits)
 - [Lisans](#licence)
 - [Projeyi destekleyin](#soutien)
@@ -49,59 +48,79 @@
 
 ## Projenin yaptıkları
 
-ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows altında (Armoury Crate) sunar. Bu proje klavyeyle doğrudan USB HID üzerinden konuşur ve şunları sağlar:
+ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) altında sunar. Bu proje klavyeyle doğrudan USB HID üzerinden konuşur ve şunları sunar:
 
-- **Bir grafik başlatıcı** (`animematrix`), **4 arayüz** arasından seçilebilir: *Kadran + çekmece* (yuvarlak pencere ve sağdan açılan ayarlar paneli, varsayılan), *Kadran* (her şey çemberin içinde), *Yuvarlatılmış* (çok yuvarlak köşeler, parlaklık çarkı) ve *Klasik* (sekmeler). Yuvarlak arayüzler, klavyeye gönderilen **312 LED'i canlı olarak** gösterir. Dört komut bloğu:
-  - **GIF / görüntüler**: bir veya birden fazla dosyayı, ya da tüm bir klasörü galeri olarak döngüde oynatma; matris için GIF dönüştürme.
-  - **Efektler**: 19 animasyon (Matrix tarzı yağmur, plazma, ateş, yıldızlar, havai fişekler, şimşekler, metaball'lar, dalga, yılan, kayan yazı, stilize saat, klavyeye tepki…), çalışırken ayarlanabilir.
-  - **Ses**: PC'de çalan sese tepki veren 7 görselleştirici (spektrum, KITT/KARR, starburst, osiloskop, ses ateşi…).
-  - **Ayarlar**: oturum açılışında görüntülenecek olan, dil, tema ve arayüz, çizim düzenleyici, proje bağlantıları.
-- HH:MM biçiminde **bir saat**, başlatıcıdan veya arka plan servisi olarak.
-- **Bir arka plan galerisi**: oturum açılır açılmaz bir GIF klasöründe gezinen bir `systemd --user` servisi.
-- **Tek tıkla geçiş** (`animematrix-bascule`): menü simgesi ekranı açar veya kapatır; sağ tık **GIF galerisi**, **Saat** veya **Kapat** seçeneklerini sunar.
-- **Matrise uygun GIF dönüştürme** (`animematrix-convertir`): 19×24, gri, 3 seviye, tramasız — bkz. [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
-- LED LED **bir çizim düzenleyici** (`animematrix-dessin`).
-- **11 tema**: ROG'dan esinlenen 5 tema (Classic, Strix, Glitch, Gold, Carbon), 5 pembe tema (Sakura, Sakız, Pembe altın, Lavanta pembe, Pembe gece) ve sistem teması; *Ayarlar* → *Tema:* üzerinden seçilir.
-- **Yerleşik güncellemeler**: *Ayarlar* → *Güncellemeleri denetle*; günde bir kez otomatik denetim (kapatılabilir). Başlatıcı son GitHub sürümünün `.deb` dosyasını indirir, SHA-256 özetini doğrular ve yönetici parolasını sorduktan sonra kurar (`pkexec`).
-- **Düşük tüketim**: GIF'ler kare kare çözülür; 400 GIF'lik bir galeri ~25 MB bellekte çalışır.
+**Görüntüleme**
+- **GIF ve görüntüler**: tek bir dosya, bir seçim ya da tüm bir klasör galeri olarak; akışlı oynatma (400 GIF'lik bir galeri yaklaşık 25 MB bellekte çalışır).
+- HH:MM biçiminde **Saat**.
+- **19 animasyonlu efekt** (Matrix tarzı yağmur, plazma, ateş, yıldızlar, havai fişekler, şimşekler, metaball'lar, dalga, kayan yazı…) ve bilgisayarda çalan sese tepki veren **7 ses görselleştirici**.
+- **Sistem monitörü**: CPU, RAM, GPU, sıcaklık, ağ hızı ve saat, gösterge şeklinde.
+- **Çalan parça**: parça değiştiğinde bir kez « SANATÇI - BAŞLIK » kayan yazı olarak geçer, ardından bir görselleştirici gösterilir (Spotify, VLC, Rhythmbox, tarayıcılar… MPRIS üzerinden).
+- **Masaüstü bildirimleri**: « UYGULAMA: BAŞLIK » ekranın üzerinde belirir, ardından oynatma kaldığı yerden devam eder (varsayılan olarak kapalı, izin verilen uygulamalar listesiyle).
+- Klavyeyle **oynanabilir oyunlar**: Snake, Pong, Tetris, kırma oyunu, en yüksek skorlarla.
+
+**Oluşturma**
+- Ekranın gerçek geometrisi üzerinde kare kare çalışan **animasyon düzenleyici**: 3 seviye, zaman çizelgesi, hayalet katman, kaydırma, kopyala-yapıştır, önizleme, klavyeye gönderme, GIF olarak dışa aktarma.
+- Paylaşılan **animasyon kitaplığı**: göz atma, oynatma, kendi galerine ekleme, kendi animasyonlarını önerme.
+- GIF'ler için **akıllı dönüştürme**: konuya göre kırpma, siyah zemin üzerinde açık renkli konu, güçlendirilmiş kenarlar, 3 seviye.
+- Göndermeden önce **gerçekçi önizleme**: ekranın simüle edilmiş görüntüsü (gerçek yerleşim, LED'ler arası halo).
+- **Eklenti olarak efektler**: bir klasöre bırakılan bir Python dosyası yeni bir efekt ekler (bkz. [docs/EXTENSIONS.md](../EXTENSIONS.md)).
+
+**Otomasyon**
+- **`animematrixd` arka plan servisi**: ekranın tek sahibi olarak, başlatıcı kapatıldığında da göstermeye devam eder; `animematrix-ctl` komutu ve isteğe bağlı yerel HTTP API'si.
+- **Zaman programlama**: saat, galeri, monitör, çalan parça veya kapalı ekran ile (gece dahil) zaman aralıkları; oturum kilitliyken, uyku modundayken veya bir uygulama tam ekrandayken ekran siyah kalır.
+- **OpenRGB üzerinden klavye renkleri**: tuşlarda tema rengi, ya da ekranla birlikte nabız gibi atma.
+- **Sistem tepsisi simgesi**: hızlı menü (modlar, parlaklık).
+
+**Kullanım kolaylığı**
+- **4 arayüz** (varsayılan olarak *Kadran + çekmece*, *Kadran*, *Yuvarlatılmış*, *Klasik*) ile **312 LED'in canlı önizlemesi**, **11 tema** (5 ROG, 5 pembe, sistem) ve **19 dil**.
+- **Yerleşik güncellemeler**: başlatıcı en son sürümü indirir, SHA-256 özetini doğrular ve kurar (yönetici parolası); ya da APT deposuyla `apt upgrade`.
 
 <a id="materiel"></a>
 
 ## Desteklenen donanım
 
-| Klavye | USB | Arayüz |
+| Cihaz | USB | Durum |
 |---|---|---|
-| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, arayüz 4 (kullanım sayfası `0xFF02`) |
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | destekleniyor (HID, arayüz 4, kullanım sayfası `0xFF02`) |
+| ROG dizüstü bilgisayarlarının AniMe Matrix ekranları (G14, G16…) | çeşitli | `asusctl` üzerinden **deneysel**, donanımda test edilmedi (bkz. [Kullanım](#utilisation)) |
 
-ROG **dizüstü bilgisayarlarının** (Zephyrus G14 vb.) AniMe Matrix ekranları farklı bir protokol kullanır: burada **desteklenmezler** (bunun yerine `asusctl`'a bakın).
-
-Ubuntu 26.04 (X11, PipeWire) üzerinde test edildi. Python ≥ 3.10, hidapi, Tk ve systemd içeren her dağıtım uygun olmalıdır.
+Ubuntu 26.04 (X11, PipeWire, Cinnamon) üzerinde test edildi. Python ≥ 3.10, hidapi, Tk ve systemd içeren her dağıtım uygun olmalıdır.
 
 <a id="installation"></a>
 
 ## Kurulum
 
-### .deb paketi (Debian, Ubuntu, Mint, Pop!_OS…)
+### APT deposu (Debian, Ubuntu, Mint, Pop!_OS…) — `apt upgrade` ile güncellemeler
 
-1. [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest) sayfasından `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` dosyasını indirin.
-2. Kurun (apt bağımlılıkları otomatik alır):
-   ```bash
-   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
-   ```
-3. **Klavyeyi çıkarıp yeniden takın** (udev kuralı, oturum açmış kullanıcıya erişim verir).
-4. Uygulamalar menüsünden **AniMe Matrix**'i başlatın, veya bir terminalde `animematrix` yazın.
+```bash
+curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
+```
+
+Ardından **klavyeyi çıkarıp yeniden takın** (udev kuralı, oturum açmış kullanıcıya erişim verir) ve menüden **AniMe Matrix**'i başlatın.
+
+### Diğer biçimler ([Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest) sayfası)
+
+| Sistem | Dosya | Kurulum |
+|---|---|---|
+| Debian, Ubuntu… | `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` | `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb` |
+| Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
+| Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
+| Hepsi (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (aşağıdaki udev kuralını da kurun; ses görselleştiricileri yok) |
 
 Paket şunları kurar:
 
 | Öğe | Konum |
 |---|---|
 | Programlar | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Komutlar | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
-| Kullanıcı servisleri | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (varsayılan olarak etkin değil) |
+| Komutlar | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Kullanıcı servisi | `/usr/lib/systemd/user/animematrixd.service` (tüm oturumlar için etkin) |
 | udev kuralı | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menü ve simge | `animematrix.desktop`, `animematrix` simgesi |
-
-Kaldırma: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 
 ### Kaynak koddan
 
@@ -117,9 +136,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Faydalı sistem araçları: `imagemagick` (dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (geçiş bildirimleri).
-
-Kaynak koddan arka plan servisleri için, `systemd/*.service` dosyalarını `~/.config/systemd/user/` içine kopyalayıp `ExecStart=` satırlarını `.venv/bin/python` yolu ve betik (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`) ile değiştirin, ardından `systemctl --user daemon-reload` çalıştırın.
+Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (bildirimler), `python3-gi` ve `gir1.2-ayatanaappindicator3-0.1` (sistem tepsisi simgesi), `openrgb` (tuş renkleri).
 
 <a id="utilisation"></a>
 
@@ -129,69 +146,75 @@ Kaynak koddan arka plan servisleri için, `systemd/*.service` dosyalarını `~/.
 
 `animematrix` (veya menüdeki **AniMe Matrix** girişi).
 
-Yuvarlak arayüzlerde, yuvarlak düğmeler *GIF / görüntüler*, *Efektler*, *Ses* ve *Ayarlar* bloklarını açar (çekmecede veya çemberin içinde); *Saat* ve *Durdur* hemen etkili olur; alttaki yay parlaklığı ayarlar; pencere, arka planından tutularak taşınır; üstteki küçük düğmeler küçültür veya kapatır. Yuvarlak biçim X11 SHAPE uzantısını kullanır (`python3-xlib` paketi); bu uzantı yoksa, aynı arayüz dikdörtgen bir pencerede görüntülenir.
+Yuvarlak arayüzlerde, yuvarlak düğmeler *GIF*, *Efektler*, *Ses* ve *Ayarlar* bloklarını açar (çekmecede veya çemberin içinde); *Saat* ve *Durdur* hemen etkili olur; alttaki yay parlaklığı ayarlar; pencere, arka planından tutularak taşınır; üstteki küçük düğmeler küçültür veya kapatır. Yuvarlak biçim X11 SHAPE uzantısını kullanır (`python3-xlib` paketi); bu uzantı yoksa, aynı arayüz dikdörtgen bir pencerede görüntülenir.
 
-- **GIF / görüntüler**: seçim için *GIF/görüntüler…*, tüm bir klasör için *Klasör (galeri)…*. Seçilen klasör aynı zamanda arka plan galerisinin klasörü olur. *Dönüştürülmüş sürümleri tercih et (matrix/)*, varsa `dossier/matrix/nom.gif` dosyasını okur (dönüştürme tarafından üretilir).
-- **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anlık etki eder; *Tempo* animasyonu hızlandırır veya yavaşlatır.
+- **GIF / görüntüler**: seçim için *GIF/görüntüler…* veya tüm klasör için *Klasör (galeri)…*; *Gerçek geometri* oranları korur (köşe, görüntüyü uzatmak yerine keser); *👁 Gerçekçi önizleme (göndermeden önce)* hiçbir şey göndermeden görüntüyü gösterir; *🎞 Animasyon oluştur (düzenleyici)*; *📚 Animasyon kitaplığı*; GIF'leri dönüştürmek için *Akıllı dönüştürme*.
+- **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anında etki eder; *Tempo* tüm animasyonu hızlandırır veya yavaşlatır. Oyunlar ok tuşları, Boşluk ve Enter ile oynanır, başlatıcı penceresi önde olmalıdır.
 - **Parlaklık**, **🕒 Saat**, **■ Durdur** (ekranı temizler) tüm sekmelerde ortaktır.
-- **Ayarlar**: *Oturum başlangıcında* = **GIF galerisi**, **Saat**, **Son oynatma** veya **Hiçbiri**; *Arayüz:* 4 arayüzden birini seçer (başlatıcı yeniden başlar, o anda gösterilen içerik oynamaya devam eder).
+- **Ayarlar**: oturum başlangıcı (GIF galerisi, Saat, Son oynatma veya Hiçbiri), dil, tema, arayüz, masaüstü bildirimleri, klavye renkleri (OpenRGB), *Zamanlama…*, sistem tepsisi simgesi, eklentiler klasörü, güncellemeler.
 
-**Başlatıcı kapatıldığında, o an gösterilen şey görüntülenmeye devam eder** (GIF, o anki ayarlarıyla bir efekt, ses görselleştirici veya saat): başlatıcı bunu arka plan servisi olan `animematrix-lecture.service`'e devreder. Bir sonraki başlatmada, başka bir şey başlatılır başlatılmaz kontrolü geri alır (klavyeye yalnızca tek bir program yazabilir). Kapatmadan önce *■ Durdur* ekranı kapalı bırakır.
+**Başlatıcıyı kapatmak hiçbir şeyi durdurmaz**: `animematrixd` arka plan servisi göstermeye devam eder. *■ Durdur*, ekranı kapatır.
 
-### Geçiş ve arka plan servisleri
+### Arka plan servisi ve komut satırı
 
 ```bash
-animematrix-bascule            # açık → kapalı ; kapalı → son mod
-animematrix-bascule gif        # arka plan galerisi, oturum açılışında da
-animematrix-bascule horloge    # arka plan saati, oturum açılışında da
-animematrix-bascule lecture    # başlatıcının son oynatması, oturum açılışında da
-animematrix-bascule off        # kapalı, açılışta hiçbir şey yok
-animematrix-bascule etat       # geçerli mod
+animematrix-ctl etat                               # şu anda ne gösteriliyor
+animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galeri (klasör veya dosyalar)
+animematrix-ctl effet "Plasma" --param speed=250   # efekt ve ayarlar
+animematrix-ctl horloge
+animematrix-ctl texte "Bonjour"
+animematrix-ctl notifier "Café prêt" --duree 5     # üstte gösterilir sonra geri döner
+animematrix-ctl luminosite 60
+animematrix-ctl stop
 ```
 
-Aynı seçimler menü simgesinin sağ tıkında da bulunur. Perde arkasında: `systemctl --user enable --now animematrix-galerie.service` (veya `animematrix-horloge.service`).
-
-### Komut satırından
-
-| Komut | İşlev |
+| Komut | Rol |
 |---|---|
+| `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | geçiş yapar (menü simgesinin sağ tıkında da bulunur); seçilen mod aynı zamanda oturum başlangıcı modudur |
+| `animematrixd --http 8765` | yerel HTTP API'li arka plan servisi (`POST http://127.0.0.1:8765/api`, soket ile aynı JSON) |
+| `animematrix-animation [fichier.gif]` | animasyon düzenleyici |
+| `animematrix-apercu fichier.gif -o apercu.gif` | bir GIF'in (dosya) gerçekçi önizlemesi |
+| `animematrix-convertir dossier/ [--fidele] [--classique]` | GIF'leri matris için dönüştürür (`dossier/matrix/` içine) |
 | `animematrix-effet --liste` | efektleri ve görselleştiricileri listeler |
-| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | bir efekt başlatır (durdurmak için Ctrl+C) |
-| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | bir klasörde gezinir (varsayılan olarak başlatıcıda seçilen son klasör, yoksa `~/Images/AniMe-Matrix`) |
-| `animematrix-lecture` | başlatıcının son oynatmasını yeniden oynatır (`~/.config/rog-flare2/lecture.json`) |
-| `animematrix-horloge -b 25` | saat; `--clear` ekranı temizler, `--once --text 12:34` bir metin gösterir |
-| `animematrix-convertir dossier/ [--sortie D] [--force]` | matris için GIF dönüştürür (`dossier/matrix/` içine) |
-| `animematrix-dessin` | çizim düzenleyici |
+| `animematrix-dessin` | LED LED çizim düzenleyici (kapanınca kontrolü arka plan servisine bırakır) |
 
 ### Ses
 
-Görselleştiriciler, `parec` (PipeWire veya PulseAudio) ile **varsayılan ses çıkışının monitörünü** dinler: mikrofona değil, PC'nin çaldığı sese tepki verirler. Çıkışı değiştirmek için sistemin varsayılan çıkışını değiştirin.
+Görselleştiriciler, `parec` (PipeWire veya PulseAudio) ile **varsayılan ses çıkışının monitörünü** dinler: mikrofona değil, bilgisayarın çaldığı sese tepki verirler.
 
 ### « Keyboard React » efekti
 
-`pynput` sayesinde yazma ritmine göre ekranı yakar; bu, efekt çalıştığı sürece tüm oturumun tuşlarını okur. X11 altında çalışır; Wayland altında tuşları almaz.
+`pynput` sayesinde yazma ritmine göre ekranı yakar; bu, efekt çalıştığı sürece tüm oturumun tuş vuruşlarını okur. X11 altında çalışır; Wayland altında tuş vuruşlarını almaz.
+
+### Klavye renkleri (OpenRGB)
+
+*Ayarlar* → *Klavye renkleri (OpenRGB)*: tema rengi veya ekranla birlikte nabız gibi atma. Arka plan servisi gerektiğinde `openrgb --server`'ı başlatır. OpenRGB, klavyenin önceki aydınlatmasını bilmez: klavyenin belleğindeki kayıtlı efekti geri almak için klavyeyi çıkarıp yeniden takın.
+
+### ROG dizüstü bilgisayarlar (deneysel)
+
+`~/.config/rog-flare2/materiel` dosyasına `portable-asusctl` yazın, ardından arka plan servisini yeniden başlatın: kareler `asusctl anime image` üzerinden gönderilir (saniyede en fazla 5 kare). Gerçek bir dizüstü bilgisayarda test edilmedi: geri bildirimler ticketlerde memnuniyetle karşılanır.
 
 <a id="gif"></a>
 
 ## İyi GIF'ler hazırlama
 
-Ekran bir dikdörtgen değildir: üstte 19, altta 7 LED olacak şekilde kayan 24 satır, gerçekten ayrık 3 gri seviyesi, komşu LED'ler arasında bir halo. Silüetler, piktogramlar, kısa metinler ve yavaş hareketler iyi görünür; fotoğraflar ve videolar görünmez.
+Ekran bir dikdörtgen değildir: üstte 19'dan alta 7 LED'e kadar kayan 24 satır (sağ kenar dikey, sol kenar köşegen), gerçekten ayrık 3 gri seviyesi, komşu LED'ler arasında bir halo. Silüetler, piktogramlar, kısa metinler ve yavaş hareketler iyi görünür; fotoğraflar ve videolar ise pek görünmez.
 
-Tam kılavuz (tuval boyutu, seviyeler, hız, parlaklık, ImageMagick komutu): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
+Tam kılavuz (tuval, seviyeler, hız, dönüştürme, gerçek geometri): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
 
 <a id="fonctionnement"></a>
 
 ## Nasıl çalışır
 
-- **Aktarım**: hidapi, klavyenin 4 numaralı HID arayüzünü açar ve buraya **1024 baytlık** çerçeveler yazar.
+- **Aktarım**: hidapi, klavyenin 4 numaralı HID arayüzünü açar ve buraya **1024 baytlık** çerçeveler yazar; klavye her çerçeveyi geri gönderir.
 - **Çerçeve**: `60 81 00 00` + **312 bayt** (donanım sırasına göre LED başına 0-255 parlaklık) + 1024'e kadar sıfırlar.
-- **Geometri**: köşegen olarak kayan 24 satır (19 → 7 LED), ya da eşdeğer olarak 37 → 15 sütunlu 12 mantıksal satır (PolyWollyWin modeli); iki eşleme de 312 LED üzerinde aynı olduğu doğrulanmıştır.
-- **GIF**: her kare yeniden birleştirilir (optimize edilmiş GIF'ler yalnızca farkları saklar), griye çevrilir, 24 satıra indirgenir ve satır satır örneklenir.
-- **Animasyon**: gömülü bellek kullanılmaz; animasyon, ana bilgisayarın çerçeveleri art arda göndermesiyle oluşur (efektler için ~30 kare/sn).
+- **Geometri**: 24 kayan satır (r satırı (r+1)//2 ile 18 arasındaki sütunları kapsar), ya da eşdeğer olarak 37 → 15 sütunlu 12 mantıksal satır (PolyWollyWin modeli); iki eşlemenin de 312 LED üzerinde aynı olduğu doğrulanmıştır.
+- **Arka plan servisi**: `animematrixd` klavyeyi tek başına elinde tutar; temel oynatma ve üst katman (bildirimler); `$XDG_RUNTIME_DIR/animematrix.sock` JSON soketi; klavyenin otomatik yeniden bağlanması.
+- **Animasyon**: ana bilgisayar çerçeveleri art arda gönderir (efektler için ~30 kare/sn); klavyenin dahili belleği kullanılmaz (araştırma: [docs/RECHERCHE-MEMOIRE.md](../RECHERCHE-MEMOIRE.md)).
 
-Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalibrasyon noktaları) **[docs/PROTOCOL.md](../PROTOCOL.md)** içindedir; `*.cap` kayıtları ve `parse_usbpcap.py` / `rog_flare2_replay_capture.py` araçları daha ileri gitmek isteyenler için depoda kalır.
+Orijinal tersine mühendislik notları **[docs/PROTOCOL.md](../PROTOCOL.md)** içindedir; `*.cap` kayıtları ve `parse_usbpcap.py` / `rog_flare2_replay_capture.py` araçları depoda kalmaya devam eder.
 
-⚠️ Dizüstü bilgisayarların AniMe Matrix paketlerini (`0x5E …`, `0xEC …`) klavyeye göndermeyin: bu doğru protokol değildir ve klavyeyi kilitleyebilir (çıkarıp yeniden takın, veya **Fn + Esc** tuşlarını 10-15 saniye basılı tutun).
+⚠️ Dizüstü bilgisayarların AniMe Matrix paketlerini (`0x5E …`, `0xEC …`) klavyeye göndermeyin: bu doğru protokol değildir ve klavyeyi kilitleyebilir (çıkarıp yeniden takın, veya **Fn + Esc**'i 10-15 saniye basılı tutun).
 
 <a id="depannage"></a>
 
@@ -201,12 +224,13 @@ Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalib
 |---|---|---|
 | `interface 4 not found` | klavye görülmüyor veya izin yok | `lsusb \| grep 0b05:19fc`; udev kuralı kurulu mu? çıkarıp yeniden takın |
 | `Permission denied` / `open failed` | udev kuralı uygulanmamış | `sudo udevadm control --reload-rules && sudo udevadm trigger`, ardından yeniden takın |
-| Ekran değişmiyor | başka bir program zaten yazıyor | `animematrix-bascule off`, diğer başlatıcıları veya betikleri kapatın |
+| « animematrixd servisine ulaşılamıyor » | arka plan servisi durmuş | `systemctl --user restart animematrixd.service` veya `animematrixd &` |
+| Ekran değişmiyor | başka bir program klavyeye yazıyor | eski betikleri kapatın; `animematrix-ctl etat` |
 | Görselleştiriciler demo modunda kalıyor | `parec` yok veya ses yok | `pulseaudio-utils` kurun, ses çalın |
 | « Keyboard React » tepki vermiyor | Wayland oturumu veya `pynput` eksik | X11 oturumu, `sudo apt install python3-pynput` |
-| Arka plan galerisi başlamıyor | klasör boş veya yok | başlatıcıda (GIF sekmesi) bir klasör seçin |
 | Yuvarlak pencere dikdörtgen görünüyor | SHAPE uzantısı veya `python3-xlib` eksik | `sudo apt install python3-xlib`, veya *Ayarlar* → *Arayüz:* → *Klasik* |
-| Bir servisin günlüğü | — | `journalctl --user -u animematrix-galerie.service -f` |
+| OpenRGB'den sonra tuşlar tek renkte kalıyor | OpenRGB, orijinal efekti yeniden oluşturamıyor | klavyeyi çıkarıp yeniden takın |
+| Arka plan servisinin günlüğü | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
 
@@ -215,32 +239,34 @@ Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalib
 | Dosya | İşlev |
 |---|---|
 | `rog_flare2_launcher.py` | grafik başlatıcı (Tk) |
-| `rog_flare2_i18n.py`, `locale/` | arayüz çevirisi (19 dil, her dil için bir JSON kataloğu) |
-| `rog_flare2_themes.py` | arayüz temaları (ROG ve pembe) |
-| `rog_flare2_ui_ronde.py` | yuvarlak arayüzler (kadran + çekmece, kadran, yuvarlatılmış): çizim, pencere biçimi, LED önizlemesi |
-| `rog_flare2_effets.py` | efektler ve ses görselleştiricileri (Linux'a uyarlanmış PolyWollyWin motoru) |
-| `polywollywin/` | PolyWollyWin efekt motoru, değiştirilmeden kopyalanmıştır (MIT) |
-| `rog_flare2_folder_player.py` | arka plan galerisi (servis) |
-| `rog_flare2_lecture.py` | arka plan oynatma: başlatıcının kapanışında gösterdiğini devralır (servis) |
-| `rog_flare2_clock_v3.py` | saat (servis) |
-| `rog_flare2_bascule.sh` | galeri / saat / kapalı geçişi |
-| `rog_flare2_convertir.py` | GIF dönüştürme (ImageMagick) |
-| `rog_flare2_matrix_paint.py` | HID aktarımı, LED sırası, çizim düzenleyici |
-| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | tersine mühendislik araçları ve kayıtları |
-| `systemd/` | kullanıcı servisleri |
-| `packaging/` | udev kuralı, menü girişi, simge, .deb paketinin dosyaları ve betiği |
-| `docs/` | GIF kılavuzu, protokol notları, ekran görüntüleri |
+| `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | yuvarlak arayüzler, temalar |
+| `rog_flare2_i18n.py`, `locale/` | çeviri (19 dil; `locale/_cles.json` = çevrilecek metinler) |
+| `rog_flare2_demon.py`, `rog_flare2_ctl.py` | `animematrixd` arka plan servisi, istemci ve `animematrix-ctl` komutu |
+| `rog_flare2_core.py` | GIF akışlı oynatma, saat, geometri |
+| `rog_flare2_effets.py`, `polywollywin/` | efektler ve görselleştiriciler (PolyWollyWin motoru, MIT), eklentiler |
+| `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | sistem monitörü, çalan parça, oyunlar |
+| `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | bildirimler, zaman programlama ve tetikleyiciler |
+| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | OpenRGB üzerinden renkler, sistem tepsisi simgesi, dizüstü bilgisayarlar (deneysel) |
+| `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | animasyon düzenleyici, simülatör, dönüştürme |
+| `rog_flare2_bibliotheque.py`, `bibliotheque/` | animasyon kitaplığı (katalog, CC0 GIF'ler) |
+| `rog_flare2_maj.py` | sürümlerden güncellemeler |
+| `rog_flare2_matrix_paint.py`, `rog_flare2_clock_v3.py`, `rog_flare2_folder_player.py` | HID aktarımı ve LED düzenleyici, saat, galeri (orijinal araçlar) |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | tersine mühendislik |
+| `examples/effets/` | eklenti örneği |
+| `tests/` | testler (gerçek tıklamalarla arayüz testleri dahil) |
+| `systemd/`, `packaging/` | kullanıcı servisi; .deb, RPM, Arch, Flatpak, APT deposu |
+| `docs/` | GIF kılavuzu, eklentiler, protokol, araştırma, ekran görüntüleri, çevrilmiş README'ler |
 
 <a id="deb"></a>
 
-## .deb paketini oluşturma
+## Paketleri oluşturma
 
 ```bash
 packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-Yalnızca `dpkg-deb` ve `bash` gereklidir; sürüm `rog_flare2_launcher.py` (`VERSION`) içinden okunur.
+`packaging/install.sh`, projeyi herhangi bir dizin ağacına kurar; .deb, RPM (`packaging/rpm/`), Arch paketi (`packaging/aur/`) ve Flatpak (`packaging/flatpak/`) için kullanılır. Her yayımlanan sürümde GitHub, RPM'i, Arch paketini ve Flatpak'ı oluşturur ve imzalı APT deposunu günceller. Sürüm numarası `rog_flare2_core.py` (`VERSION`) içinden okunur. Testler: `python -m pytest tests`.
 
 <a id="credits"></a>
 
@@ -249,6 +275,7 @@ Yalnızca `dpkg-deb` ve `bash` gereklidir; sürüm `rog_flare2_launcher.py` (`VE
 - **NicRoss512** — protokolün tersine mühendisliği, orijinal saat ve düzenleyici: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Bu depo buradan yola çıkar; geçmişi korunmuştur.
 - **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), efekt ve ses görselleştirici motoru buradan alınan Windows denetleyicisi.
 - **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), LED davranışı için (halo, algılanan seviyeler, hız).
+- **asus-linux** — [asusctl](https://gitlab.com/asus-linux/asusctl), dizüstü bilgisayar ekranları için kullanılmıştır.
 
 Bağımsız bir proje, ASUS ile bağlantılı değildir. "ROG", "AniMe Matrix" ve "Armoury Crate" ASUSTeK'in ticari markalarıdır.
 
@@ -256,7 +283,7 @@ Bağımsız bir proje, ASUS ile bağlantılı değildir. "ROG", "AniMe Matrix" v
 
 ## Lisans
 
-Bu deponun kodu için [MIT](../../LICENSE). `polywollywin/`, yazarının MIT lisansı altında kalır ([polywollywin/LICENSE](../../polywollywin/LICENSE)). NicRoss512'nin orijinal dosyaları (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, kayıtlar) açık bir lisans olmadan yayımlanmıştır ve yazarına aittir; atıfla birlikte yeniden dağıtılmaktadır.
+Bu deponun kodu için [MIT](../../LICENSE); `bibliotheque/` içindeki animasyonlar CC0 altındadır. `polywollywin/`, yazarının MIT lisansı altında kalır ([polywollywin/LICENSE](../../polywollywin/LICENSE)). NicRoss512'nin orijinal dosyaları (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, kayıtlar) açık bir lisans olmadan yayımlanmıştır ve yazarına aittir; atıfla birlikte yeniden dağıtılmaktadır.
 
 <a id="soutien"></a>
 
@@ -268,4 +295,4 @@ Bu proje işinize yarıyorsa, bir kahve onu sürdürmeye yardımcı olur:
 
 **https://buymeacoffee.com/anticitoyen** — bağlantı, başlatıcının *Ayarlar* sekmesinde de bulunur.
 
-Hata raporları ve fikirler: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Hata bildirimleri, fikirler ve paylaşılacak animasyonlar: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).

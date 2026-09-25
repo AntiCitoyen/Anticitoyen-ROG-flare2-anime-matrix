@@ -125,3 +125,14 @@ def test_config_command_without_notifications(daemon):
     import rog_flare2_notifs as N
     N.save_config({"actif": False, "applis": []})
     assert daemon.handle({"cmd": "config"}) == {"ok": True, "notifications": False}
+
+
+def test_migration_from_legacy_dangling_link(tmp_path, monkeypatch):
+    """Paquet ≤ 1.3 → 1.4 : l'unité a disparu mais le lien d'activation reste ; le mode est repris."""
+    wants = D.CONFIG_DIR.parent / "systemd" / "user" / "default.target.wants"
+    wants.mkdir(parents=True, exist_ok=True)
+    (wants / "animematrix-horloge.service").symlink_to("/usr/lib/systemd/user/animematrix-horloge.service")
+    D.START_FILE.unlink(missing_ok=True)
+    assert D.migrate_legacy() == "horloge"
+    assert D.START_FILE.read_text().strip() == "horloge"
+    assert not (wants / "animematrix-horloge.service").is_symlink()

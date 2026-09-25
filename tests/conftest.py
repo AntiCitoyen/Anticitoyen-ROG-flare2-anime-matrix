@@ -16,3 +16,11 @@ os.environ["XDG_RUNTIME_DIR"] = str(_TMP / "run")
 os.environ["ANIMEMATRIX_LANG"] = "fr"
 os.environ["ANIMEMATRIX_FAUX_CLAVIER"] = "1"  # jamais le vrai clavier pendant les tests
 (_TMP / "run").mkdir(parents=True, exist_ok=True)
+
+# systemctl factice en tête du PATH : les tests ne touchent jamais aux services de la vraie session
+# (« disable --now » arrêterait un vrai service). Il répond « non actif / non activé ».
+_BIN = _TMP / "bin"
+_BIN.mkdir()
+(_BIN / "systemctl").write_text(f'#!/bin/sh\necho "$@" >> {_TMP / "systemctl.log"}\nexit 1\n')
+(_BIN / "systemctl").chmod(0o755)
+os.environ["PATH"] = f"{_BIN}:{os.environ['PATH']}"

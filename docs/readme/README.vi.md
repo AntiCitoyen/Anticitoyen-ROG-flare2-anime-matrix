@@ -5,12 +5,11 @@
 # AniMe Matrix cho Linux — ROG Strix Flare II Animate
 
 [![Phát hành](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![CI](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml)
 [![Giấy phép MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](../../LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-Điều khiển màn hình **AniMe Matrix** (312 mini-LED) của bàn phím **ASUS ROG Strix Flare II Animate** trên Linux, không cần Armoury Crate hay Windows: GIF và hình ảnh, thư viện ảnh nền, đồng hồ, 19 hiệu ứng hoạt hình, 7 bộ hiển thị âm thanh (visualizer), vẽ từng LED.
-
-Giao diện ứng dụng có sẵn bằng 19 ngôn ngữ, tự động theo ngôn ngữ hệ thống và có thể thay đổi trong tab *Cài đặt* → *Ngôn ngữ:*.
+Điều khiển màn hình **AniMe Matrix** (312 mini-LED) của bàn phím **ASUS ROG Strix Flare II Animate** trên Linux, không cần Armoury Crate hay Windows: GIF và thư viện ảnh, đồng hồ, hiệu ứng và trình hiển thị âm thanh, trò chơi, giám sát hệ thống, thông báo màn hình nền, lên lịch theo khung giờ, trình chỉnh sửa hoạt ảnh, thư viện dùng chung, màu bàn phím đồng bộ.
 
 <div align="center">
 
@@ -38,7 +37,7 @@ Giao diện ứng dụng có sẵn bằng 19 ngôn ngữ, tự động theo ngô
 - [Cách hoạt động](#fonctionnement)
 - [Khắc phục sự cố](#depannage)
 - [Cấu trúc kho mã nguồn](#depot)
-- [Xây dựng gói .deb](#deb)
+- [Xây dựng các gói](#deb)
 - [Ghi nhận](#credits)
 - [Giấy phép](#licence)
 - [Ủng hộ dự án](#soutien)
@@ -51,57 +50,77 @@ Giao diện ứng dụng có sẵn bằng 19 ngôn ngữ, tự động theo ngô
 
 ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Windows (Armoury Crate). Dự án này giao tiếp trực tiếp với bàn phím qua USB HID và mang lại:
 
-- **Một trình khởi chạy đồ họa** (`animematrix`), có thể chọn trong số **4 giao diện**: *Mặt số + ngăn kéo* (cửa sổ tròn và bảng cài đặt trượt ra bên phải, mặc định), *Mặt số* (mọi thứ nằm trong vòng tròn), *Bo tròn* (góc bo rất tròn, bánh xe chỉnh độ sáng) và *Cổ điển* (tab). Các giao diện tròn hiển thị **trực tiếp 312 LED** đúng như dữ liệu gửi tới bàn phím. Bốn khối điều khiển:
-  - **GIF / hình ảnh**: phát một hoặc nhiều tệp, hoặc toàn bộ thư mục dưới dạng thư viện ảnh, theo vòng lặp; chuyển đổi GIF cho ma trận LED.
-  - **Hiệu ứng**: 19 hiệu ứng động (Mưa Ma Trận V2, Plasma, Lửa, sao, Pháo hoa, Sét, Metaball, Sóng, Rắn, Chữ chạy, Đồng hồ cách điệu, Phản ứng bàn phím…), có thể điều chỉnh khi đang chạy.
-  - **Âm thanh**: 7 bộ hiển thị phản ứng theo âm thanh phát ra từ máy tính (Dải phổ, KITT / KARR, Tia sáng trung tâm, Dao động ký, Lửa âm thanh…).
-  - **Cài đặt**: những gì hiển thị khi mở phiên làm việc, ngôn ngữ, chủ đề và giao diện, trình chỉnh sửa hình vẽ, liên kết của dự án.
-- **Đồng hồ** HH:MM, từ trình khởi chạy hoặc chạy như dịch vụ nền.
-- **Thư viện ảnh nền**: một dịch vụ `systemd --user` tự động phát các GIF trong một thư mục ngay khi mở phiên làm việc.
-- **Chuyển đổi bằng một cú nhấp** (`animematrix-bascule`): biểu tượng trên menu bật hoặc tắt màn hình; nhấp chuột phải để chọn Thư viện GIF, Đồng hồ hoặc Tắt.
-- **Chuyển đổi GIF phù hợp với ma trận LED** (`animematrix-convertir`): 19×24, thang xám, 3 mức, không dithering — xem [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
-- **Trình chỉnh sửa hình vẽ** từng LED (`animematrix-dessin`).
-- **11 giao diện**: 5 giao diện lấy cảm hứng từ ROG (Classic, Strix, Glitch, Gold, Carbon), 5 giao diện hồng (Hoa anh đào, Kẹo cao su, Vàng hồng, Hồng oải hương, Đêm hồng) và giao diện hệ thống, chọn trong *Cài đặt* → *Giao diện:*.
-- **Cập nhật tích hợp**: *Cài đặt* → *Kiểm tra cập nhật*; tự động kiểm tra mỗi ngày một lần (có thể tắt). Trình khởi chạy tải `.deb` của bản phát hành GitHub mới nhất, kiểm tra mã SHA-256 và cài đặt sau khi hỏi mật khẩu quản trị (`pkexec`).
-- **Tiêu thụ tài nguyên thấp**: các GIF được giải mã từng khung hình; một thư viện 400 GIF chạy chỉ với khoảng 25 MB bộ nhớ.
+**Hiển thị**
+- **GIF và hình ảnh**: một tệp, một số tệp đã chọn, hoặc cả một thư mục dưới dạng thư viện ảnh; phát theo luồng (một thư viện gồm 400 GIF chỉ chiếm khoảng 25 MB bộ nhớ).
+- **Đồng hồ** HH:MM.
+- **19 hiệu ứng động** (mưa kiểu Ma Trận, plasma, lửa, ngôi sao, pháo hoa, sét, metaball, sóng, chữ chạy…) và **7 bộ hiển thị âm thanh** phản ứng theo âm thanh mà máy tính phát ra.
+- **Giám sát hệ thống**: CPU, RAM, GPU, nhiệt độ, tốc độ mạng và giờ, dưới dạng đồng hồ đo.
+- **Bài hát đang phát**: khi đổi bài, "NGHỆ SĨ - TÊN BÀI" chạy chữ một lần rồi chuyển sang bộ hiển thị (Spotify, VLC, Rhythmbox, trình duyệt… qua MPRIS).
+- **Thông báo màn hình nền**: "ỨNG DỤNG : TIÊU ĐỀ" hiện chồng lên rồi việc phát tiếp tục (mặc định tắt, có danh sách ứng dụng được phép).
+- **Trò chơi** chơi được bằng bàn phím: Rắn, Pong, Tetris, phá gạch, có lưu kỷ lục.
+
+**Tạo**
+- **Trình chỉnh sửa hoạt ảnh** từng khung hình, trên đúng hình học của màn hình: 3 mức, dải khung hình, lớp mờ tham chiếu, dịch chuyển, sao chép-dán, xem trước, gửi tới bàn phím, xuất GIF.
+- **Thư viện hoạt ảnh** dùng chung: duyệt, phát, thêm vào thư viện của mình, chia sẻ hoạt ảnh của riêng mình.
+- **Chuyển đổi thông minh** cho GIF: cắt theo chủ thể, chủ thể sáng trên nền đen, tăng cường đường viền, 3 mức.
+- **Xem trước chân thực** trước khi gửi: mô phỏng hiển thị của màn hình (bố cục thật, quầng sáng giữa các LED).
+- **Hiệu ứng dạng tiện ích mở rộng**: một tệp Python đặt trong thư mục sẽ thêm một hiệu ứng (xem [docs/EXTENSIONS.md](../EXTENSIONS.md)).
+
+**Tự động hóa**
+- **Dịch vụ nền `animematrixd`**: chủ sở hữu duy nhất của màn hình, tiếp tục hiển thị khi đóng trình khởi chạy; lệnh `animematrix-ctl` và API HTTP nội bộ tùy chọn.
+- **Lên lịch theo khung giờ**: các khung giờ (bao gồm cả ban đêm) với đồng hồ, thư viện ảnh, giám sát, bài hát đang phát, hoặc tắt màn hình; màn hình tự tắt khi phiên bị khóa, khi ở chế độ chờ hoặc khi một ứng dụng đang toàn màn hình.
+- **Màu bàn phím qua OpenRGB**: màu của giao diện áp lên phím, hoặc nhấp nháy theo màn hình.
+- **Biểu tượng khay hệ thống**: menu nhanh (chế độ, độ sáng).
+
+**Tiện lợi**
+- **4 giao diện** (*Mặt số + ngăn kéo* mặc định, *Mặt số*, *Bo tròn*, *Cổ điển*) với **xem trước trực tiếp 312 LED**, **11 giao diện màu** (5 kiểu ROG, 5 kiểu hồng, hệ thống) và **19 ngôn ngữ**.
+- **Cập nhật tích hợp**: trình khởi chạy tải bản phát hành mới nhất, kiểm tra vân tay SHA-256 rồi cài đặt (cần mật khẩu quản trị); hoặc `apt upgrade` với kho APT.
 
 <a id="materiel"></a>
 
 ## Phần cứng được hỗ trợ
 
-| Bàn phím | USB | Giao diện |
+| Thiết bị | USB | Trạng thái |
 |---|---|---|
-| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, interface 4 (usage page `0xFF02`) |
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | được hỗ trợ (HID, interface 4, usage page `0xFF02`) |
+| Màn hình AniMe Matrix trên laptop ROG (G14, G16…) | khác nhau | **thử nghiệm** qua `asusctl`, chưa được thử nghiệm trên phần cứng thật (xem [Sử dụng](#utilisation)) |
 
-Màn hình AniMe Matrix trên các **laptop** ROG (Zephyrus G14, v.v.) sử dụng một giao thức khác: chúng **không** được hỗ trợ ở đây (hãy xem `asusctl`).
-
-Đã thử nghiệm trên Ubuntu 26.04 (X11, PipeWire). Bất kỳ bản phân phối nào có Python ≥ 3.10, hidapi, Tk và systemd đều phù hợp.
+Đã thử nghiệm trên Ubuntu 26.04 (X11, PipeWire, Cinnamon). Bất kỳ bản phân phối nào có Python ≥ 3.10, hidapi, Tk và systemd đều phù hợp.
 
 <a id="installation"></a>
 
 ## Cài đặt
 
-### Gói .deb (Debian, Ubuntu, Mint, Pop!_OS…)
+### Kho APT (Debian, Ubuntu, Mint, Pop!_OS…) — cập nhật bằng `apt upgrade`
 
-1. Tải `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` từ trang [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest).
-2. Cài đặt (apt sẽ tự lấy các phụ thuộc):
-   ```bash
-   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
-   ```
-3. **Rút phích cắm rồi cắm lại bàn phím** (quy tắc udev cấp quyền truy cập cho người dùng đang đăng nhập).
-4. Khởi chạy **AniMe Matrix** từ menu ứng dụng, hoặc gõ `animematrix` trong terminal.
+```bash
+curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
+```
+
+Sau đó **rút phích cắm rồi cắm lại bàn phím** (quy tắc udev cấp quyền truy cập cho người dùng đang đăng nhập) và khởi chạy **AniMe Matrix** từ menu.
+
+### Định dạng khác (trang [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest))
+
+| Hệ thống | Tệp | Cài đặt |
+|---|---|---|
+| Debian, Ubuntu… | `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` | `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb` |
+| Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
+| Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
+| Mọi bản phân phối (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (cũng cần cài quy tắc udev bên dưới ; không có bộ hiển thị âm thanh) |
 
 Gói này cài đặt:
 
 | Thành phần | Vị trí |
 |---|---|
 | Chương trình | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Lệnh | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
-| Dịch vụ người dùng | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (không tự kích hoạt) |
+| Lệnh | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Dịch vụ người dùng | `/usr/lib/systemd/user/animematrixd.service` (kích hoạt cho mọi phiên) |
 | Quy tắc udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu và biểu tượng | `animematrix.desktop`, biểu tượng `animematrix` |
-
-Gỡ cài đặt: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 
 ### Từ mã nguồn
 
@@ -117,9 +136,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo khi chuyển đổi).
-
-Đối với dịch vụ nền khi chạy từ mã nguồn, hãy sao chép `systemd/*.service` vào `~/.config/systemd/user/`, thay các dòng `ExecStart=` bằng đường dẫn tới `.venv/bin/python` và script tương ứng (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`), sau đó chạy `systemctl --user daemon-reload`.
+Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bản), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo), `python3-gi` và `gir1.2-ayatanaappindicator3-0.1` (biểu tượng khay hệ thống), `openrgb` (màu phím).
 
 <a id="utilisation"></a>
 
@@ -129,67 +146,73 @@ Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi), `pulse
 
 `animematrix` (hoặc mục **AniMe Matrix** trong menu).
 
-Trong các giao diện tròn, các nút tròn mở khối *GIF / hình ảnh*, *Hiệu ứng*, *Âm thanh* và *Cài đặt* (trong ngăn kéo hoặc trong vòng tròn); *Đồng hồ* và *Dừng* tác động ngay lập tức; cung ở phía dưới điều chỉnh độ sáng; kéo phần nền để di chuyển cửa sổ; các nút nhỏ phía trên để thu nhỏ hoặc đóng. Hình dạng tròn sử dụng tiện ích mở rộng X11 SHAPE (gói `python3-xlib`); nếu không có, cùng một giao diện sẽ hiển thị trong một cửa sổ hình chữ nhật.
+Trong các giao diện tròn, các nút tròn mở khối *GIF*, *Hiệu ứng*, *Âm thanh* và *Cài đặt* (trong ngăn kéo hoặc trong vòng tròn); *Đồng hồ* và *Dừng* tác động ngay lập tức; cung ở phía dưới điều chỉnh độ sáng; kéo phần nền để di chuyển cửa sổ; các nút nhỏ phía trên để thu nhỏ hoặc đóng. Hình dạng tròn sử dụng tiện ích mở rộng X11 SHAPE (gói `python3-xlib`); nếu không có, cùng một giao diện sẽ hiển thị trong một cửa sổ hình chữ nhật.
 
-- **GIF / hình ảnh**: *GIF/hình ảnh…* để chọn tệp, *Thư mục (thư viện)…* để chọn cả một thư mục. Thư mục đã chọn cũng trở thành thư mục của thư viện ảnh nền. *Ưu tiên bản đã chuyển đổi* sẽ đọc `dossier/matrix/nom.gif` nếu tệp này tồn tại (được tạo ra bởi bước chuyển đổi).
-- **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, rồi nhấn *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm hoạt ảnh nhanh hơn hoặc chậm hơn.
+- **GIF / hình ảnh**: *GIF/hình ảnh…* hoặc *Thư mục (thư viện)…*; *Hình học chân thực* giữ nguyên tỉ lệ (góc bị cắt thay vì hình ảnh bị kéo giãn); *👁 Xem trước chân thực (trước khi gửi)* cho xem kết quả mà không gửi gì cả; *🎞 Tạo hoạt ảnh (trình chỉnh sửa)*; *📚 Thư viện hoạt ảnh*; *Chuyển đổi thông minh* để chuyển đổi GIF.
+- **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm toàn bộ hoạt ảnh nhanh hơn hoặc chậm hơn. Trò chơi được chơi bằng phím mũi tên, Space và Enter, với cửa sổ trình khởi chạy ở phía trước.
 - **Độ sáng**, **🕒 Đồng hồ**, **■ Dừng** (xóa màn hình) có ở mọi tab.
-- **Cài đặt**: *Khi khởi động phiên* = Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có; *Giao diện:* chọn một trong 4 giao diện (trình khởi chạy sẽ khởi động lại, nội dung đang hiển thị vẫn tiếp tục phát).
+- **Cài đặt**: khi khởi động phiên (Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có), ngôn ngữ, giao diện màu, giao diện, thông báo màn hình nền, màu bàn phím (OpenRGB), *Lịch hẹn…*, biểu tượng khay hệ thống, thư mục tiện ích mở rộng, cập nhật.
 
-**Khi đóng trình khởi chạy, nội dung đang hiển thị vẫn tiếp tục** (GIF, hiệu ứng với các thiết lập hiện tại, trình hiển thị âm thanh hoặc đồng hồ): trình khởi chạy giao nó lại cho dịch vụ nền `animematrix-lecture.service`. Ở lần khởi chạy tiếp theo, nó giành lại quyền điều khiển ngay khi có thứ khác được khởi động (chỉ một chương trình được ghi vào bàn phím tại một thời điểm). Nhấn *■ Dừng* trước khi đóng sẽ để màn hình tắt.
+**Đóng trình khởi chạy không làm gián đoạn gì cả**: dịch vụ nền `animematrixd` vẫn tiếp tục hiển thị. *■ Dừng* sẽ tắt màn hình.
 
-### Chuyển đổi và dịch vụ nền
+### Dịch vụ nền và dòng lệnh
 
 ```bash
-animematrix-bascule            # bật → tắt; tắt → chế độ gần nhất
-animematrix-bascule gif        # thư viện nền, cả khi khởi động phiên
-animematrix-bascule horloge    # đồng hồ nền, cả khi khởi động phiên
-animematrix-bascule lecture    # lần phát gần nhất của trình khởi chạy, cũng áp dụng khi khởi động phiên
-animematrix-bascule off        # tắt, không chạy gì khi khởi động phiên
-animematrix-bascule etat       # chế độ hiện tại
+animematrix-ctl etat                               # nội dung đang hiển thị
+animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # thư viện (thư mục hoặc tệp)
+animematrix-ctl effet "Plasma" --param speed=250   # hiệu ứng và thiết lập
+animematrix-ctl horloge
+animematrix-ctl texte "Bonjour"
+animematrix-ctl notifier "Café prêt" --duree 5     # hiện chồng rồi quay lại
+animematrix-ctl luminosite 60
+animematrix-ctl stop
 ```
-
-Các lựa chọn tương tự cũng có trong menu chuột phải của biểu tượng. Phía sau: `systemctl --user enable --now animematrix-galerie.service` (hoặc `animematrix-horloge.service`).
-
-### Dòng lệnh
 
 | Lệnh | Vai trò |
 |---|---|
+| `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | chuyển đổi (cũng có trong menu chuột phải của biểu tượng); chế độ được chọn cũng là chế độ khi khởi động phiên |
+| `animematrixd --http 8765` | dịch vụ nền có API HTTP nội bộ (`POST http://127.0.0.1:8765/api`, cùng định dạng JSON như socket) |
+| `animematrix-animation [fichier.gif]` | trình chỉnh sửa hoạt ảnh |
+| `animematrix-apercu fichier.gif -o apercu.gif` | xem trước chân thực của một GIF (tệp) |
+| `animematrix-convertir dossier/ [--fidele] [--classique]` | chuyển đổi GIF cho ma trận (trong `dossier/matrix/`) |
 | `animematrix-effet --liste` | liệt kê các hiệu ứng và bộ hiển thị |
-| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | chạy một hiệu ứng (Ctrl+C để dừng) |
-| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | phát các GIF trong một thư mục (mặc định là thư mục được chọn gần nhất trong trình khởi chạy, nếu không thì `~/Images/AniMe-Matrix`) |
-| `animematrix-lecture` | phát lại lần phát gần nhất của trình khởi chạy (`~/.config/rog-flare2/lecture.json`) |
-| `animematrix-horloge -b 25` | đồng hồ; `--clear` xóa màn hình, `--once --text 12:34` hiển thị một đoạn văn bản |
-| `animematrix-convertir dossier/ [--sortie D] [--force]` | chuyển đổi GIF cho ma trận LED (lưu trong `dossier/matrix/`) |
-| `animematrix-dessin` | trình chỉnh sửa hình vẽ |
+| `animematrix-dessin` | trình chỉnh sửa từng LED (trả quyền điều khiển lại cho dịch vụ nền khi đóng) |
 
 ### Âm thanh
 
-Các bộ hiển thị lắng nghe **bộ giám sát (monitor) của thiết bị âm thanh ra mặc định** thông qua `parec` (PipeWire hoặc PulseAudio): chúng phản ứng với âm thanh mà máy tính đang phát, không phải micro. Để đổi thiết bị ra, hãy đổi thiết bị ra mặc định của hệ thống.
+Các bộ hiển thị lắng nghe **bộ giám sát của thiết bị âm thanh ra mặc định** thông qua `parec` (PipeWire hoặc PulseAudio): chúng phản ứng theo âm thanh mà máy tính đang phát, không phải micro.
 
 ### Hiệu ứng "Keyboard React"
 
 Hiệu ứng này làm màn hình sáng theo nhịp gõ phím nhờ `pynput`, thư viện đọc các phím trong toàn bộ phiên làm việc miễn là hiệu ứng đang chạy. Nó hoạt động trên X11; trên Wayland, nó không nhận được thao tác gõ phím.
 
+### Màu bàn phím (OpenRGB)
+
+*Cài đặt* → *Màu bàn phím (OpenRGB)*: màu của giao diện hoặc nhấp nháy theo màn hình. Dịch vụ nền sẽ khởi động `openrgb --server` khi cần. OpenRGB không biết ánh sáng trước đó của bàn phím: để lấy lại hiệu ứng đã lưu trong bàn phím, hãy rút rồi cắm lại.
+
+### Laptop ROG (thử nghiệm)
+
+Ghi `portable-asusctl` vào `~/.config/rog-flare2/materiel` rồi khởi động lại dịch vụ nền: các khung dữ liệu sẽ đi qua `asusctl anime image` (tối đa 5 khung hình mỗi giây). Chưa được thử nghiệm trên laptop thật: rất hoan nghênh phản hồi qua các ticket.
+
 <a id="gif"></a>
 
 ## Chuẩn bị GIF tốt
 
-Màn hình không phải là một hình chữ nhật: 24 hàng so le, từ 19 LED ở trên xuống 7 LED ở dưới, 3 mức xám thực sự khác biệt, có quầng sáng giữa các LED lân cận. Hình bóng (silhouette), biểu tượng đồ họa, chữ ngắn và chuyển động chậm hiển thị tốt; ảnh chụp và video thì không.
+Màn hình không phải là một hình chữ nhật: 24 hàng so le, từ 19 LED ở trên xuống 7 LED ở dưới (cạnh phải thẳng đứng, cạnh trái theo đường chéo), 3 mức xám thực sự khác biệt, có quầng sáng giữa các LED lân cận. Hình bóng, biểu tượng, chữ ngắn và chuyển động chậm hiển thị tốt; ảnh chụp và video thì không.
 
-Hướng dẫn đầy đủ (kích thước khung vẽ, các mức xám, tốc độ khung hình, độ sáng, lệnh ImageMagick): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
+Hướng dẫn đầy đủ (khung vẽ, các mức, tốc độ khung hình, chuyển đổi, hình học chân thực): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**.
 
 <a id="fonctionnement"></a>
 
 ## Cách hoạt động
 
-- **Truyền dữ liệu**: hidapi mở interface HID số 4 của bàn phím và ghi vào đó các khung dữ liệu **1024 byte**.
+- **Truyền dữ liệu**: hidapi mở interface HID số 4 của bàn phím và ghi vào đó các khung dữ liệu **1024 byte**; bàn phím gửi trả lại từng khung.
 - **Khung dữ liệu**: `60 81 00 00` + **312 byte** (một giá trị độ sáng 0–255 cho mỗi LED, theo thứ tự phần cứng) + các byte 0 cho đến đủ 1024.
-- **Hình học**: 24 hàng so le theo đường chéo (19 → 7 LED), hoặc tương đương là 12 hàng logic từ 37 → 15 cột (mô hình của PolyWollyWin); cả hai cách ánh xạ đã được kiểm chứng là giống hệt nhau trên toàn bộ 312 LED.
-- **GIF**: mỗi khung hình được dựng lại đầy đủ (các GIF được tối ưu hóa chỉ lưu phần khác biệt), chuyển sang thang xám, thu về 24 hàng và lấy mẫu theo từng hàng.
-- **Hoạt ảnh**: không dùng bộ nhớ tích hợp trên bàn phím; hoạt ảnh được tạo ra bằng cách máy chủ gửi lần lượt các khung hình (~30 khung hình/giây đối với hiệu ứng).
+- **Hình học**: 24 hàng so le (hàng r bao phủ các cột (r+1)//2 đến 18), hoặc tương đương là 12 hàng logic từ 37 → 15 cột (mô hình của PolyWollyWin); cả hai cách ánh xạ đã được kiểm chứng là giống hệt nhau trên toàn bộ 312 LED.
+- **Dịch vụ nền**: `animematrixd` là chương trình duy nhất giữ quyền với bàn phím; phát cơ bản và hiện chồng (thông báo); socket JSON `$XDG_RUNTIME_DIR/animematrix.sock`; tự động kết nối lại bàn phím.
+- **Hoạt ảnh**: máy chủ gửi các khung hình lần lượt (~30 khung hình/giây đối với hiệu ứng); bộ nhớ trong của bàn phím không được sử dụng (nghiên cứu: [docs/RECHERCHE-MEMOIRE.md](../RECHERCHE-MEMOIRE.md)).
 
-Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, các điểm hiệu chỉnh) nằm trong **[docs/PROTOCOL.md](../PROTOCOL.md)**; các bản chụp `*.cap` và công cụ `parse_usbpcap.py` / `rog_flare2_replay_capture.py` vẫn còn trong kho mã nguồn cho ai muốn tìm hiểu sâu hơn.
+Các ghi chú reverse engineering gốc nằm trong **[docs/PROTOCOL.md](../PROTOCOL.md)**; các bản chụp `*.cap` và công cụ `parse_usbpcap.py` / `rog_flare2_replay_capture.py` vẫn còn trong kho mã nguồn.
 
 ⚠️ Đừng gửi tới bàn phím các gói tin của AniMe Matrix dành cho laptop (`0x5E …`, `0xEC …`): đó không phải giao thức đúng và có thể làm treo bàn phím (hãy rút rồi cắm lại, hoặc giữ **Fn + Esc** trong 10–15 giây).
 
@@ -199,14 +222,15 @@ Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, c�
 
 | Triệu chứng | Nguyên nhân có thể | Giải pháp |
 |---|---|---|
-| `interface 4 not found` | không nhận diện được bàn phím hoặc thiếu quyền | `lsusb \| grep 0b05:19fc`; đã cài quy tắc udev chưa? rút rồi cắm lại |
+| `interface 4 not found` | không nhận diện được bàn phím hoặc thiếu quyền | `lsusb \| grep 0b05:19fc` ; đã cài quy tắc udev chưa? rút rồi cắm lại |
 | `Permission denied` / `open failed` | quy tắc udev chưa được áp dụng | `sudo udevadm control --reload-rules && sudo udevadm trigger`, sau đó cắm lại |
-| Màn hình không thay đổi | một chương trình khác đang ghi vào | `animematrix-bascule off`, đóng các trình khởi chạy hoặc script khác |
+| "Không kết nối được dịch vụ animematrixd" | dịch vụ nền đã dừng | `systemctl --user restart animematrixd.service` hoặc `animematrixd &` |
+| Màn hình không thay đổi | một chương trình khác đang ghi vào bàn phím | đóng các script cũ ; `animematrix-ctl etat` |
 | Bộ hiển thị vẫn ở chế độ demo | không có `parec` hoặc không có âm thanh | cài `pulseaudio-utils`, phát âm thanh |
 | "Keyboard React" không phản ứng | phiên Wayland hoặc thiếu `pynput` | dùng phiên X11, `sudo apt install python3-pynput` |
-| Thư viện ảnh nền không khởi động | thư mục trống hoặc không tồn tại | chọn một thư mục trong trình khởi chạy (tab GIF) |
 | Cửa sổ tròn hiển thị thành hình chữ nhật | thiếu tiện ích mở rộng SHAPE hoặc `python3-xlib` | `sudo apt install python3-xlib`, hoặc *Cài đặt* → *Giao diện:* → *Cổ điển* |
-| Nhật ký của một dịch vụ | — | `journalctl --user -u animematrix-galerie.service -f` |
+| Các phím vẫn giữ một màu sau OpenRGB | OpenRGB không tái hiện được hiệu ứng gốc | rút rồi cắm lại bàn phím |
+| Nhật ký của dịch vụ nền | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
 
@@ -215,48 +239,51 @@ Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, c�
 | Tệp | Vai trò |
 |---|---|
 | `rog_flare2_launcher.py` | trình khởi chạy đồ họa (Tk) |
-| `rog_flare2_i18n.py`, `locale/` | bản dịch giao diện (19 ngôn ngữ, mỗi ngôn ngữ một danh mục JSON) |
-| `rog_flare2_themes.py` | giao diện màu (ROG và hồng) |
-| `rog_flare2_ui_ronde.py` | các giao diện tròn (mặt số + ngăn kéo, mặt số, bo tròn): vẽ, hình dạng cửa sổ, xem trước LED |
-| `rog_flare2_effets.py` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin được chuyển sang Linux) |
-| `polywollywin/` | engine hiệu ứng của PolyWollyWin, sao chép nguyên bản không chỉnh sửa (MIT) |
-| `rog_flare2_folder_player.py` | thư viện ảnh nền (dịch vụ) |
-| `rog_flare2_lecture.py` | phát nền: tiếp tục nội dung trình khởi chạy đang hiển thị khi đóng (dịch vụ) |
-| `rog_flare2_clock_v3.py` | đồng hồ (dịch vụ) |
-| `rog_flare2_bascule.sh` | chuyển đổi thư viện / đồng hồ / tắt |
-| `rog_flare2_convertir.py` | chuyển đổi GIF (ImageMagick) |
-| `rog_flare2_matrix_paint.py` | truyền dữ liệu HID, thứ tự LED, trình chỉnh sửa hình vẽ |
-| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | công cụ và bản chụp rétro-engineering |
-| `systemd/` | dịch vụ người dùng |
-| `packaging/` | quy tắc udev, mục menu, biểu tượng, các tệp và script của gói .deb |
-| `docs/` | hướng dẫn GIF, ghi chú giao thức, ảnh chụp màn hình |
+| `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | giao diện tròn, giao diện màu |
+| `rog_flare2_i18n.py`, `locale/` | bản dịch (19 ngôn ngữ ; `locale/_cles.json` = văn bản cần dịch) |
+| `rog_flare2_demon.py`, `rog_flare2_ctl.py` | dịch vụ nền `animematrixd`, ứng dụng khách và lệnh `animematrix-ctl` |
+| `rog_flare2_core.py` | phát GIF theo luồng, đồng hồ, hình học |
+| `rog_flare2_effets.py`, `polywollywin/` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin, MIT), tiện ích mở rộng |
+| `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | giám sát hệ thống, bài hát đang phát, trò chơi |
+| `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | thông báo, lên lịch theo khung giờ và các điều kiện kích hoạt |
+| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | màu qua OpenRGB, biểu tượng khay hệ thống, laptop (thử nghiệm) |
+| `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | trình chỉnh sửa hoạt ảnh, trình mô phỏng, chuyển đổi |
+| `rog_flare2_bibliotheque.py`, `bibliotheque/` | thư viện hoạt ảnh (danh mục, GIF CC0) |
+| `rog_flare2_maj.py` | cập nhật từ các bản phát hành |
+| `rog_flare2_matrix_paint.py`, `rog_flare2_clock_v3.py`, `rog_flare2_folder_player.py` | truyền dữ liệu HID và trình chỉnh sửa LED, đồng hồ, thư viện ảnh (công cụ gốc) |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | reverse engineering |
+| `examples/effets/` | ví dụ tiện ích mở rộng |
+| `tests/` | các bài kiểm thử (bao gồm giao diện qua thao tác nhấp chuột thật) |
+| `systemd/`, `packaging/` | dịch vụ người dùng ; .deb, RPM, Arch, Flatpak, kho APT |
+| `docs/` | hướng dẫn GIF, tiện ích mở rộng, giao thức, nghiên cứu, ảnh chụp màn hình, README đã dịch |
 
 <a id="deb"></a>
 
-## Xây dựng gói .deb
+## Xây dựng các gói
 
 ```bash
 packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-Chỉ cần `dpkg-deb` và `bash`; số phiên bản được đọc từ `rog_flare2_launcher.py` (`VERSION`).
+`packaging/install.sh` cài đặt dự án vào bất kỳ cấu trúc thư mục nào; nó được dùng cho .deb, RPM (`packaging/rpm/`), gói Arch (`packaging/aur/`) và Flatpak (`packaging/flatpak/`). Mỗi khi có bản phát hành mới, GitHub sẽ tự động xây dựng RPM, gói Arch và Flatpak, đồng thời cập nhật kho APT đã ký. Số phiên bản được đọc từ `rog_flare2_core.py` (`VERSION`). Kiểm thử: `python -m pytest tests`.
 
 <a id="credits"></a>
 
 ## Ghi nhận
 
-- **NicRoss512** — rétro-engineering giao thức, đồng hồ và trình chỉnh sửa gốc: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Kho mã nguồn này bắt nguồn từ đó; lịch sử commit của nó được giữ nguyên.
-- **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), bộ điều khiển trên Windows mà engine hiệu ứng và bộ hiển thị âm thanh được lấy lại ở đây.
-- **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), về hành vi của các LED (quầng sáng, các mức cảm nhận được, tốc độ khung hình).
+- **NicRoss512** — reverse engineering giao thức, đồng hồ và trình chỉnh sửa gốc: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Kho mã nguồn này bắt nguồn từ đó; lịch sử commit được giữ nguyên.
+- **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), bộ điều khiển Windows mà engine hiệu ứng và bộ hiển thị âm thanh được lấy lại ở đây.
+- **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), về hành vi của LED (quầng sáng, các mức cảm nhận, tốc độ khung hình).
+- **asus-linux** — [asusctl](https://gitlab.com/asus-linux/asusctl), được dùng cho màn hình của laptop.
 
-Đây là dự án độc lập, không liên kết với ASUS. "ROG", "AniMe Matrix" và "Armoury Crate" là thương hiệu của ASUSTeK.
+Dự án độc lập, không liên kết với ASUS. "ROG", "AniMe Matrix" và "Armoury Crate" là thương hiệu của ASUSTeK.
 
 <a id="licence"></a>
 
 ## Giấy phép
 
-[MIT](../../LICENSE) áp dụng cho mã nguồn của kho này. `polywollywin/` vẫn giữ giấy phép MIT của tác giả gốc ([polywollywin/LICENSE](../../polywollywin/LICENSE)). Các tệp gốc của NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, các bản chụp) được công bố mà không có giấy phép rõ ràng và vẫn thuộc về tác giả của chúng; chúng được phân phối lại kèm ghi công.
+[MIT](../../LICENSE) cho mã nguồn trong kho này ; các hoạt ảnh trong `bibliotheque/` theo giấy phép CC0. `polywollywin/` vẫn giữ giấy phép MIT của tác giả gốc ([polywollywin/LICENSE](../../polywollywin/LICENSE)). Các tệp gốc của NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, các bản chụp) được công bố mà không có giấy phép rõ ràng và vẫn thuộc về tác giả của chúng; chúng được phân phối lại kèm ghi công.
 
 <a id="soutien"></a>
 
@@ -268,4 +295,4 @@ Nếu dự án này hữu ích với bạn, một ly cà phê sẽ giúp duy tr�
 
 **https://buymeacoffee.com/anticitoyen** — liên kết này cũng có trong tab *Cài đặt* của trình khởi chạy.
 
-Báo lỗi và ý tưởng: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Báo cáo lỗi, ý tưởng và hoạt ảnh muốn chia sẻ: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).

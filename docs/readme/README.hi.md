@@ -5,18 +5,17 @@
 # Linux के लिए AniMe Matrix — ROG Strix Flare II Animate
 
 [![रिलीज़](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![CI](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml)
 [![MIT लाइसेंस](https://img.shields.io/badge/licence-MIT-blue.svg)](../../LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-बिना Armoury Crate या Windows के, Linux पर **ASUS ROG Strix Flare II Animate** कीबोर्ड की **AniMe Matrix** स्क्रीन (312 मिनी-LED) को नियंत्रित करें: GIF और इमेज, बैकग्राउंड गैलरी, घड़ी, 19 एनिमेटेड इफ़ेक्ट, 7 ऑडियो विज़ुअलाइज़र, LED-दर-LED ड्रॉइंग।
+बिना Armoury Crate या Windows के, Linux पर **ASUS ROG Strix Flare II Animate** कीबोर्ड की **AniMe Matrix** स्क्रीन (312 मिनी-LED) को नियंत्रित करें: GIF और गैलरी, घड़ी, इफ़ेक्ट्स और ऑडियो विज़ुअलाइज़र, गेम्स, सिस्टम मॉनिटर, डेस्कटॉप नोटिफ़िकेशन, समय शेड्यूलिंग, एनिमेशन एडिटर, साझा लाइब्रेरी, सिंक्रोनाइज़्ड कीबोर्ड रंग।
 
 <div align="center">
 
 [🇫🇷 Français](../../README.md) · [🇬🇧 English](README.en.md) · [🇪🇸 Español](README.es.md) · [🇩🇪 Deutsch](README.de.md) · [🇮🇹 Italiano](README.it.md) · [🇧🇷 Português](README.pt-BR.md) · [🇳🇱 Nederlands](README.nl.md) · [🇵🇱 Polski](README.pl.md) · [🇷🇺 Русский](README.ru.md) · [🇺🇦 Українська](README.uk.md) · [🇹🇷 Türkçe](README.tr.md) · [🇸🇦 العربية](README.ar.md) · **🇮🇳 हिन्दी** · [🇨🇳 简体中文](README.zh-CN.md) · [🇹🇼 繁體中文](README.zh-TW.md) · [🇯🇵 日本語](README.ja.md) · [🇰🇷 한국어](README.ko.md) · [🇻🇳 Tiếng Việt](README.vi.md) · [🇮🇩 Bahasa Indonesia](README.id.md)
 
 </div>
-
-*नोट: इंटरफ़ेस 19 भाषाओं में उपलब्ध है, यह सिस्टम की भाषा को अपने आप फ़ॉलो करता है, और इसे **सेटिंग्स** टैब में **भाषा:** से बदला जा सकता है।*
 
 <p align="center"><img src="../captures/hi/interface-drawer.png" alt="डायल + ड्रॉअर" width="760"><br><em>डायल + ड्रॉअर (डिफ़ॉल्ट इंटरफ़ेस)</em></p>
 
@@ -38,7 +37,7 @@
 - [यह कैसे काम करता है](#fonctionnement)
 - [समस्या निवारण](#depannage)
 - [रिपॉज़िटरी संरचना](#depot)
-- [.deb पैकेज बनाना](#deb)
+- [पैकेज बनाना](#deb)
 - [श्रेय](#credits)
 - [लाइसेंस](#licence)
 - [प्रोजेक्ट को समर्थन दें](#soutien)
@@ -51,57 +50,77 @@
 
 ASUS इस कीबोर्ड की AniMe Matrix स्क्रीन केवल Windows (Armoury Crate) के अंतर्गत ही उपलब्ध कराता है। यह प्रोजेक्ट कीबोर्ड से सीधे USB HID के ज़रिए संवाद करता है और उपलब्ध कराता है:
 
-- **एक ग्राफ़िकल लॉन्चर** (`animematrix`), **4 इंटरफ़ेस** में से चुनें: *डायल + ड्रॉअर* (गोल विंडो और दाईं ओर खुलने वाला सेटिंग्स पैनल, डिफ़ॉल्ट), *डायल* (सब कुछ वृत्त के अंदर), *गोलाकार* (बहुत गोल कोने, ब्राइटनेस व्हील) और *क्लासिक* (टैब)। गोल इंटरफ़ेस कीबोर्ड को भेजी जा रही **312 LED को सीधे लाइव** दिखाते हैं। चार कमांड ब्लॉक:
-  - **GIF / छवियाँ**: एक या कई फ़ाइलें, या पूरा फ़ोल्डर गैलरी के रूप में, लूप में चलाना; मैट्रिक्स के लिए GIF रूपांतरण।
-  - **इफ़ेक्ट्स**: 19 एनिमेशन (Matrix जैसी बारिश, प्लाज़्मा, आग, तारे, आतिशबाज़ी, बिजली, मेटाबॉल, लहर, साँप, स्क्रॉलिंग टेक्स्ट, स्टाइलाइज़्ड घड़ी, कीबोर्ड पर प्रतिक्रिया…), चलते समय समायोज्य।
-  - **ऑडियो**: PC पर बज रहे साउंड पर प्रतिक्रिया देने वाले 7 विज़ुअलाइज़र (स्पेक्ट्रम, KITT/KARR, स्टारबर्स्ट, ऑसिलोस्कोप, ऑडियो फ़ायर…)।
-  - **सेटिंग्स**: सेशन खुलने पर क्या दिखेगा, भाषा, थीम और इंटरफ़ेस, ड्रॉइंग एडिटर, प्रोजेक्ट लिंक।
-- HH:MM फ़ॉर्मैट में **एक घड़ी**, लॉन्चर से या बैकग्राउंड सर्विस के रूप में।
-- **एक बैकग्राउंड गैलरी**: एक `systemd --user` सर्विस जो सेशन खुलते ही किसी GIF फ़ोल्डर को क्रमवार दिखाती है।
-- **एक-क्लिक टॉगल** (`animematrix-bascule`): मेनू आइकन स्क्रीन चालू या बंद करता है; राइट-क्लिक से **GIF गैलरी**, **घड़ी** या **बंद करें** चुना जा सकता है।
-- **मैट्रिक्स के अनुकूल GIF रूपांतरण** (`animematrix-convertir`): 19×24, ग्रे, 3 स्तर, बिना डिदरिंग के — देखें [docs/GUIDE-GIF.md](../GUIDE-GIF.md)।
-- LED-दर-LED **एक ड्रॉइंग एडिटर** (`animematrix-dessin`)।
-- **11 थीम**: ROG से प्रेरित 5 (Classic, Strix, Glitch, Gold, Carbon), 5 गुलाबी (साकुरा, बबलगम, रोज़ गोल्ड, लैवेंडर गुलाबी, गुलाबी रात) और सिस्टम थीम, जिन्हें *सेटिंग्स* → *थीम:* में चुना जा सकता है।
-- **अंतर्निहित अपडेट**: *सेटिंग्स* → *अपडेट के लिए जाँचें*; दिन में एक बार स्वचालित जाँच (बंद की जा सकती है)। लॉन्चर नवीनतम GitHub रिलीज़ का `.deb` डाउनलोड करता है, उसका SHA-256 चेकसम जाँचता है और व्यवस्थापक पासवर्ड माँगने के बाद उसे इंस्टॉल करता है (`pkexec`)।
-- **कम बिजली खपत**: GIF फ़्रेम-दर-फ़्रेम डिकोड होते हैं; 400 GIF की गैलरी लगभग 25 MB मेमोरी में चलती है।
+**दिखाना**
+- **GIF और छवियाँ**: एक फ़ाइल, चयनित फ़ाइलें, या पूरा फ़ोल्डर गैलरी के रूप में; स्ट्रीमिंग प्लेबैक (400 GIF की गैलरी लगभग 25 MB मेमोरी में चलती है)।
+- HH:MM फ़ॉर्मैट में **घड़ी**।
+- **19 एनिमेटेड इफ़ेक्ट** (Matrix जैसी बारिश, प्लाज़्मा, आग, तारे, आतिशबाज़ी, बिजली, मेटाबॉल, लहर, स्क्रॉलिंग टेक्स्ट…) और PC पर बज रहे साउंड पर प्रतिक्रिया देने वाले **7 ऑडियो विज़ुअलाइज़र**।
+- **सिस्टम मॉनिटर**: CPU, RAM, GPU, तापमान, नेटवर्क स्पीड और समय, गेज के रूप में।
+- **चल रहा गाना**: ट्रैक बदलने पर, « कलाकार - शीर्षक » एक बार स्क्रॉल होता है, फिर एक विज़ुअलाइज़र दिखता है (Spotify, VLC, Rhythmbox, ब्राउज़र… MPRIS के ज़रिए)।
+- **डेस्कटॉप नोटिफ़िकेशन**: « ऐप: शीर्षक » ओवरले के रूप में दिखता है फिर प्लेबैक फिर से शुरू होता है (डिफ़ॉल्ट रूप से बंद, अनुमति प्राप्त ऐप्स की सूची के साथ)।
+- कीबोर्ड पर **खेले जाने योग्य गेम्स**: Snake, Pong, Tetris, ब्रेकआउट, रिकॉर्ड्स के साथ।
+
+**बनाना**
+- स्क्रीन की वास्तविक ज्यामिति पर, फ़्रेम-दर-फ़्रेम **एनिमेशन एडिटर**: 3 स्तर, टाइमलाइन, घोस्ट लेयर, शिफ़्ट, कॉपी-पेस्ट, पूर्वावलोकन, कीबोर्ड को भेजना, GIF एक्सपोर्ट।
+- साझा **एनिमेशन लाइब्रेरी**: ब्राउज़ करना, चलाना, अपनी गैलरी में जोड़ना, अपने खुद के प्रस्तावित करना।
+- GIF का **स्मार्ट रूपांतरण**: विषय पर क्रॉपिंग, काली पृष्ठभूमि पर स्पष्ट विषय, मज़बूत किनारे, 3 स्तर।
+- भेजने से पहले **सटीक पूर्वावलोकन**: स्क्रीन का सिम्युलेटेड रेंडर (वास्तविक लेआउट, LED के बीच हेलो)।
+- **एक्सटेंशन के रूप में इफ़ेक्ट्स**: किसी फ़ोल्डर में रखी गई एक Python फ़ाइल एक इफ़ेक्ट जोड़ती है (देखें [docs/EXTENSIONS.md](../EXTENSIONS.md))।
+
+**ऑटोमेट करना**
+- **`animematrixd` बैकग्राउंड सर्विस**: स्क्रीन की अकेली मालिक, लॉन्चर बंद होने पर भी दिखाना जारी रखती है; `animematrix-ctl` कमांड और वैकल्पिक लोकल HTTP API।
+- **समय शेड्यूलिंग**: घड़ी, गैलरी, मॉनिटर, चल रहे गाने या बंद स्क्रीन के साथ समय-सीमाएँ (रात सहित); सेशन लॉक होने पर, स्लीप में होने पर, या कोई ऐप फ़ुल-स्क्रीन में होने पर स्क्रीन काली रहती है।
+- **OpenRGB के ज़रिए कीबोर्ड के रंग**: कीज़ पर थीम का रंग, या स्क्रीन के साथ पल्स।
+- **सिस्टम ट्रे आइकन**: क्विक मेनू (मोड, ब्राइटनेस)।
+
+**सुविधा**
+- **4 इंटरफ़ेस** (डिफ़ॉल्ट रूप से *डायल + ड्रॉअर*, फिर *डायल*, *गोलाकार*, *क्लासिक*) **312 LED के लाइव पूर्वावलोकन** के साथ, **11 थीम** (5 ROG, 5 गुलाबी, सिस्टम) और **19 भाषाएँ**।
+- **अंतर्निहित अपडेट**: लॉन्चर नवीनतम रिलीज़ डाउनलोड करता है, उसका SHA-256 फ़िंगरप्रिंट जाँचता है और उसे इंस्टॉल करता है (व्यवस्थापक पासवर्ड); या APT रिपॉज़िटरी के साथ `apt upgrade`।
 
 <a id="materiel"></a>
 
 ## समर्थित हार्डवेयर
 
-| कीबोर्ड | USB | इंटरफ़ेस |
+| डिवाइस | USB | स्थिति |
 |---|---|---|
-| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, इंटरफ़ेस 4 (यूसेज पेज `0xFF02`) |
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | समर्थित (HID, इंटरफ़ेस 4, यूसेज पेज `0xFF02`) |
+| ROG लैपटॉप की AniMe Matrix स्क्रीन (G14, G16…) | विविध | `asusctl` के ज़रिए **प्रायोगिक**, हार्डवेयर पर परीक्षण नहीं किया गया (देखें [उपयोग](#utilisation)) |
 
-ROG **लैपटॉप** (Zephyrus G14 आदि) की AniMe Matrix स्क्रीन एक अलग प्रोटोकॉल इस्तेमाल करती हैं: वे यहाँ **समर्थित नहीं** हैं (इसके बजाय `asusctl` देखें)।
-
-Ubuntu 26.04 (X11, PipeWire) पर परीक्षण किया गया। Python ≥ 3.10, hidapi, Tk और systemd वाला कोई भी डिस्ट्रीब्यूशन उपयुक्त होना चाहिए।
+Ubuntu 26.04 (X11, PipeWire, Cinnamon) पर परीक्षण किया गया। Python ≥ 3.10, hidapi, Tk और systemd वाला कोई भी डिस्ट्रीब्यूशन उपयुक्त होना चाहिए।
 
 <a id="installation"></a>
 
 ## इंस्टॉलेशन
 
-### .deb पैकेज (Debian, Ubuntu, Mint, Pop!_OS…)
+### APT रिपॉज़िटरी (Debian, Ubuntu, Mint, Pop!_OS…) — `apt upgrade` से अपडेट
 
-1. [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest) पेज से `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` डाउनलोड करें।
-2. इसे इंस्टॉल करें (apt निर्भरताएँ अपने आप ले लेता है):
-   ```bash
-   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
-   ```
-3. **कीबोर्ड को निकालें और फिर से लगाएँ** (udev रूल लॉग-इन किए हुए यूज़र को एक्सेस देता है)।
-4. एप्लिकेशन मेनू से **AniMe Matrix** लॉन्च करें, या टर्मिनल में `animematrix` चलाएँ।
+```bash
+curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
+```
+
+फिर **कीबोर्ड को निकालें और फिर से लगाएँ** (udev रूल लॉग-इन किए हुए यूज़र को एक्सेस देता है) और मेनू से **AniMe Matrix** लॉन्च करें।
+
+### अन्य फ़ॉर्मैट ([Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest) पेज)
+
+| सिस्टम | फ़ाइल | इंस्टॉलेशन |
+|---|---|---|
+| Debian, Ubuntu… | `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` | `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb` |
+| Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
+| Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
+| सभी (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (नीचे दिया गया udev रूल भी इंस्टॉल करें; ऑडियो विज़ुअलाइज़र नहीं) |
 
 पैकेज इंस्टॉल करता है:
 
 | तत्व | स्थान |
 |---|---|
 | प्रोग्राम | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| कमांड | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
-| यूज़र सर्विसेज़ | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (डिफ़ॉल्ट रूप से सक्रिय नहीं) |
+| कमांड | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| यूज़र सर्विस | `/usr/lib/systemd/user/animematrixd.service` (सभी सेशन के लिए सक्रिय) |
 | udev रूल | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | मेनू और आइकन | `animematrix.desktop`, आइकन `animematrix` |
-
-अनइंस्टॉल: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`।
 
 ### सोर्स से
 
@@ -117,9 +136,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-उपयोगी सिस्टम टूल: `imagemagick` (रूपांतरण), `pulseaudio-utils` (`parec`, ऑडियो के लिए), `zenity` (फ़ाइल चयनकर्ता), `libnotify-bin` (टॉगल नोटिफ़िकेशन)।
-
-सोर्स से बैकग्राउंड सर्विसेज़ के लिए, `systemd/*.service` फ़ाइलों को `~/.config/systemd/user/` में कॉपी करें, `ExecStart=` लाइनों को `.venv/bin/python` के पाथ और स्क्रिप्ट (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`) से बदलें, फिर `systemctl --user daemon-reload` चलाएँ।
+उपयोगी सिस्टम टूल: `imagemagick` (क्लासिक रूपांतरण), `pulseaudio-utils` (`parec`, ऑडियो के लिए), `zenity` (फ़ाइल चयनकर्ता), `libnotify-bin` (नोटिफ़िकेशन), `python3-gi` और `gir1.2-ayatanaappindicator3-0.1` (सिस्टम ट्रे आइकन), `openrgb` (कीज़ के रंग)।
 
 <a id="utilisation"></a>
 
@@ -129,67 +146,73 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 `animematrix` (या मेनू में **AniMe Matrix** एंट्री)।
 
-गोल इंटरफ़ेस में, गोल बटन *GIF / छवियाँ*, *इफ़ेक्ट्स*, *ऑडियो* और *सेटिंग्स* ब्लॉक खोलते हैं (ड्रॉअर में या वृत्त के अंदर); *घड़ी* और *रोकें* तुरंत असर करते हैं; नीचे का आर्क ब्राइटनेस सेट करता है; पृष्ठभूमि को खींचकर विंडो को हिलाया जाता है; ऊपर के छोटे बटन छोटा या बंद करते हैं। गोल आकार X11 SHAPE एक्सटेंशन का उपयोग करता है (`python3-xlib` पैकेज); इसके बिना, वही इंटरफ़ेस एक आयताकार विंडो में दिखता है।
+गोल इंटरफ़ेस में, गोल बटन *GIF*, *इफ़ेक्ट्स*, *ऑडियो* और *सेटिंग्स* ब्लॉक खोलते हैं (ड्रॉअर में या वृत्त के अंदर); *घड़ी* और *रोकें* तुरंत असर करते हैं; नीचे का आर्क ब्राइटनेस सेट करता है; पृष्ठभूमि को खींचकर विंडो को हिलाया जाता है; ऊपर के छोटे बटन छोटा या बंद करते हैं। गोल आकार X11 SHAPE एक्सटेंशन का उपयोग करता है (`python3-xlib` पैकेज); इसके बिना, वही इंटरफ़ेस एक आयताकार विंडो में दिखता है।
 
-- **GIF / छवियाँ**: चयन के लिए *GIF/छवियाँ…*, पूरे फ़ोल्डर के लिए *फ़ोल्डर (गैलरी)…*। चुना गया फ़ोल्डर बैकग्राउंड गैलरी का फ़ोल्डर भी बन जाता है। *रूपांतरित संस्करण प्राथमिकता दें (matrix/)* मौजूद होने पर `dossier/matrix/nom.gif` पढ़ता है (जो रूपांतरण से बनता है)।
-- **इफ़ेक्ट्स** और **ऑडियो**: चुनें, समायोजित करें, *▶ इफ़ेक्ट चलाएँ*। स्लाइडर तुरंत असर करते हैं; *लय* एनिमेशन को तेज़ या धीमा करती है।
+- **GIF / छवियाँ**: *GIF/छवियाँ…* या *फ़ोल्डर (गैलरी)…*; *सटीक ज्यामिति* अनुपात बनाए रखती है (कोना छवि को खींचने के बजाय काटता है); *👁 सटीक पूर्वावलोकन (भेजने से पहले)* कुछ भी भेजे बिना रेंडर दिखाता है; *🎞 एनिमेशन बनाएं (एडिटर)*; *📚 एनिमेशन लाइब्रेरी*; GIF बदलने के लिए *स्मार्ट रूपांतरण*।
+- **इफ़ेक्ट्स** और **ऑडियो**: चुनें, समायोजित करें, *▶ इफ़ेक्ट चलाएँ*। स्लाइडर तुरंत असर करते हैं; *लय* पूरे एनिमेशन को तेज़ या धीमा करती है। गेम्स ऐरो कीज़, स्पेस और एंटर से खेले जाते हैं, लॉन्चर विंडो सबसे आगे होनी चाहिए।
 - **चमक**, **🕒 घड़ी**, **■ रोकें** (जो स्क्रीन साफ़ करता है) सभी टैब में समान रूप से उपलब्ध हैं।
-- **सेटिंग्स**: *सत्र शुरू होने पर* = **GIF गैलरी**, **घड़ी**, **पिछला प्लेबैक** या **कुछ नहीं**; *इंटरफ़ेस:* 4 इंटरफ़ेस में से एक चुनता है (लॉन्चर फिर से शुरू होता है, अभी जो दिखाया जा रहा है वह चलता रहता है)।
+- **सेटिंग्स**: सत्र शुरुआत (GIF गैलरी, घड़ी, पिछला प्लेबैक या कुछ नहीं), भाषा, थीम, इंटरफ़ेस, डेस्कटॉप नोटिफ़िकेशन, कीबोर्ड के रंग (OpenRGB), *शेड्यूल…*, सिस्टम ट्रे आइकन, एक्सटेंशन फ़ोल्डर, अपडेट।
 
-**लॉन्चर बंद करने पर, जो दिखाया जा रहा था वह चलता रहता है** (GIF, उस समय की सेटिंग्स वाला इफ़ेक्ट, ऑडियो विज़ुअलाइज़र या घड़ी): लॉन्चर उसे बैकग्राउंड सर्विस `animematrix-lecture.service` को सौंप देता है। अगली बार लॉन्च करने पर, जैसे ही कुछ और शुरू किया जाता है (क्योंकि कीबोर्ड पर केवल एक ही प्रोग्राम लिख सकता है), वह फिर से नियंत्रण ले लेता है। बंद करने से पहले *■ रोकें* स्क्रीन को बंद छोड़ देता है।
+**लॉन्चर बंद करना कुछ भी नहीं रोकता**: `animematrixd` बैकग्राउंड सर्विस दिखाना जारी रखती है। *■ रोकें* स्क्रीन को बंद कर देता है।
 
-### टॉगल और बैकग्राउंड सर्विसेज़
+### बैकग्राउंड सर्विस और कमांड लाइन
 
 ```bash
-animematrix-bascule            # चालू → बंद ; बंद → आख़िरी मोड
-animematrix-bascule gif        # बैकग्राउंड गैलरी, सेशन शुरू होने पर भी
-animematrix-bascule horloge    # बैकग्राउंड घड़ी, सेशन शुरू होने पर भी
-animematrix-bascule lecture    # लॉन्चर की पिछली प्लेबैक, सेशन शुरू होने पर भी
-animematrix-bascule off        # बंद, शुरुआत में कुछ नहीं
-animematrix-bascule etat       # मौजूदा मोड
+animematrix-ctl etat                               # क्या दिखाया जा रहा है
+animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # गैलरी (फ़ोल्डर या फ़ाइलें)
+animematrix-ctl effet "Plasma" --param speed=250   # इफ़ेक्ट और सेटिंग्स
+animematrix-ctl horloge
+animematrix-ctl texte "Bonjour"
+animematrix-ctl notifier "Café prêt" --duree 5     # ओवरले फिर वापसी
+animematrix-ctl luminosite 60
+animematrix-ctl stop
 ```
-
-यही विकल्प मेनू आइकन के राइट-क्लिक में भी मिलते हैं। पर्दे के पीछे: `systemctl --user enable --now animematrix-galerie.service` (या `animematrix-horloge.service`)।
-
-### कमांड लाइन से
 
 | कमांड | भूमिका |
 |---|---|
+| `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | टॉगल (मेनू आइकन के राइट-क्लिक में भी); चुना गया मोड सत्र शुरुआत का मोड भी होता है |
+| `animematrixd --http 8765` | लोकल HTTP API वाली बैकग्राउंड सर्विस (`POST http://127.0.0.1:8765/api`, सॉकेट जैसा ही JSON) |
+| `animematrix-animation [fichier.gif]` | एनिमेशन एडिटर |
+| `animematrix-apercu fichier.gif -o apercu.gif` | किसी GIF (फ़ाइल) का सटीक पूर्वावलोकन |
+| `animematrix-convertir dossier/ [--fidele] [--classique]` | मैट्रिक्स के लिए GIF रूपांतरित करता है (`dossier/matrix/` में) |
 | `animematrix-effet --liste` | इफ़ेक्ट्स और विज़ुअलाइज़र की सूची दिखाता है |
-| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | एक इफ़ेक्ट शुरू करता है (रोकने के लिए Ctrl+C) |
-| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | किसी फ़ोल्डर को क्रमवार दिखाता है (डिफ़ॉल्ट रूप से लॉन्चर में चुना गया आख़िरी फ़ोल्डर, अन्यथा `~/Images/AniMe-Matrix`) |
-| `animematrix-lecture` | लॉन्चर की पिछली प्लेबैक को फिर से चलाता है (`~/.config/rog-flare2/lecture.json`) |
-| `animematrix-horloge -b 25` | घड़ी; `--clear` स्क्रीन साफ़ करता है, `--once --text 12:34` एक टेक्स्ट दिखाता है |
-| `animematrix-convertir dossier/ [--sortie D] [--force]` | मैट्रिक्स के लिए GIF रूपांतरित करता है (`dossier/matrix/` में) |
-| `animematrix-dessin` | ड्रॉइंग एडिटर |
+| `animematrix-dessin` | LED-दर-LED एडिटर (बंद होने पर नियंत्रण बैकग्राउंड सर्विस को सौंपता है) |
 
 ### ऑडियो
 
-विज़ुअलाइज़र `parec` (PipeWire या PulseAudio) के ज़रिए **डिफ़ॉल्ट साउंड आउटपुट के मॉनिटर** को सुनते हैं: वे PC पर बज रहे साउंड पर प्रतिक्रिया देते हैं, माइक्रोफ़ोन पर नहीं। आउटपुट बदलने के लिए, सिस्टम का डिफ़ॉल्ट आउटपुट बदलें।
+विज़ुअलाइज़र `parec` (PipeWire या PulseAudio) के ज़रिए **डिफ़ॉल्ट साउंड आउटपुट के मॉनिटर** को सुनते हैं: वे PC पर बज रहे साउंड पर प्रतिक्रिया देते हैं, माइक्रोफ़ोन पर नहीं।
 
 ### « Keyboard React » इफ़ेक्ट
 
 यह `pynput` की मदद से टाइपिंग की लय पर स्क्रीन को जगाता है, जो जब तक इफ़ेक्ट चलता है तब तक पूरे सेशन की-प्रेस पढ़ता रहता है। यह X11 पर काम करता है; Wayland पर यह की-प्रेस प्राप्त नहीं करता।
 
+### कीबोर्ड के रंग (OpenRGB)
+
+*सेटिंग्स* → *कीबोर्ड के रंग (OpenRGB)*: थीम का रंग या स्क्रीन के साथ पल्स। बैकग्राउंड सर्विस ज़रूरत पड़ने पर `openrgb --server` शुरू करती है। OpenRGB को कीबोर्ड की पिछली लाइटिंग पता नहीं होती: कीबोर्ड में सेव किए गए इफ़ेक्ट को वापस पाने के लिए, उसे निकालें और फिर से लगाएँ।
+
+### ROG लैपटॉप (प्रायोगिक)
+
+`~/.config/rog-flare2/materiel` में `portable-asusctl` लिखें फिर बैकग्राउंड सर्विस को फिर से शुरू करें: फ़्रेम `asusctl anime image` के ज़रिए जाते हैं (अधिकतम 5 फ़्रेम प्रति सेकंड)। किसी वास्तविक लैपटॉप पर परीक्षण नहीं किया गया: टिकट्स में फ़ीडबैक का स्वागत है।
+
 <a id="gif"></a>
 
 ## अच्छे GIF तैयार करना
 
-स्क्रीन कोई आयत नहीं है: 24 ऑफ़सेट पंक्तियाँ, ऊपर 19 से नीचे 7 LED तक, वास्तव में अलग-अलग दिखने वाले 3 ग्रे स्तर, पड़ोसी LED के बीच एक हेलो। सिल्हूट, पिक्टोग्राम, छोटे टेक्स्ट और धीमी गति अच्छी दिखती है; फ़ोटो और वीडियो नहीं।
+स्क्रीन कोई आयत नहीं है: 24 ऑफ़सेट पंक्तियाँ, ऊपर 19 से नीचे 7 LED तक (दायाँ किनारा सीधा, बायाँ किनारा तिरछा), वास्तव में अलग-अलग दिखने वाले 3 ग्रे स्तर, पड़ोसी LED के बीच एक हेलो। सिल्हूट, पिक्टोग्राम, छोटे टेक्स्ट और धीमी गति अच्छी दिखती है; फ़ोटो और वीडियो नहीं।
 
-पूरी गाइड (कैनवस साइज़, स्तर, गति, चमक, ImageMagick कमांड): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**।
+पूरी गाइड (कैनवस, स्तर, गति, रूपांतरण, सटीक ज्यामिति): **[docs/GUIDE-GIF.md](../GUIDE-GIF.md)**।
 
 <a id="fonctionnement"></a>
 
 ## यह कैसे काम करता है
 
-- **ट्रांसपोर्ट**: hidapi कीबोर्ड का HID इंटरफ़ेस नंबर 4 खोलता है और उसमें **1024 बाइट** के फ़्रेम लिखता है।
+- **ट्रांसपोर्ट**: hidapi कीबोर्ड का HID इंटरफ़ेस नंबर 4 खोलता है और उसमें **1024 बाइट** के फ़्रेम लिखता है; कीबोर्ड हर फ़्रेम वापस भेजता है।
 - **फ़्रेम**: `60 81 00 00` + **312 बाइट** (हार्डवेयर क्रम में प्रति LED 0-255 चमक) + 1024 तक शून्य।
-- **ज्यामिति**: विकर्ण रूप से ऑफ़सेट 24 पंक्तियाँ (19 → 7 LED), या समकक्ष रूप से 37 → 15 कॉलम की 12 लॉजिकल पंक्तियाँ (PolyWollyWin मॉडल); दोनों मैपिंग सभी 312 LED पर समान पाई गई हैं।
-- **GIF**: हर फ़्रेम को फिर से जोड़ा जाता है (ऑप्टिमाइज़्ड GIF केवल अंतर संग्रहीत करते हैं), ग्रेस्केल में बदला जाता है, 24 पंक्तियों में घटाया जाता है और पंक्ति-दर-पंक्ति सैंपल किया जाता है।
-- **एनिमेशन**: कोई एम्बेडेड मेमोरी इस्तेमाल नहीं होती; एनिमेशन होस्ट द्वारा फ़्रेम एक के बाद एक भेजने से बनता है (इफ़ेक्ट्स के लिए लगभग 30 फ़्रेम/सेकंड)।
+- **ज्यामिति**: 24 ऑफ़सेट पंक्तियाँ (पंक्ति r कॉलम (r+1)//2 से 18 तक कवर करती है), या समकक्ष रूप से 37 → 15 कॉलम की 12 लॉजिकल पंक्तियाँ (PolyWollyWin मॉडल); दोनों मैपिंग सभी 312 LED पर समान पाई गई हैं।
+- **बैकग्राउंड सर्विस**: `animematrixd` अकेले कीबोर्ड को संभालती है; बुनियादी प्लेबैक और ओवरले (नोटिफ़िकेशन); JSON सॉकेट `$XDG_RUNTIME_DIR/animematrix.sock`; कीबोर्ड का ऑटोमैटिक फिर से कनेक्ट होना।
+- **एनिमेशन**: होस्ट फ़्रेम एक के बाद एक भेजता है (इफ़ेक्ट्स के लिए लगभग 30 फ़्रेम/सेकंड); कीबोर्ड की अंतर्निहित मेमोरी इस्तेमाल नहीं होती (रिसर्च: [docs/RECHERCHE-MEMOIRE.md](../RECHERCHE-MEMOIRE.md))।
 
-मूल रिवर्स-इंजीनियरिंग नोट्स (USBPcap कैप्चर, LED क्रम, कैलिब्रेशन पॉइंट) **[docs/PROTOCOL.md](../PROTOCOL.md)** में हैं; `*.cap` कैप्चर और `parse_usbpcap.py` / `rog_flare2_replay_capture.py` टूल उन लोगों के लिए रिपॉज़िटरी में बने हुए हैं जो और आगे जाना चाहते हैं।
+मूल रिवर्स-इंजीनियरिंग नोट्स **[docs/PROTOCOL.md](../PROTOCOL.md)** में हैं; `*.cap` कैप्चर और `parse_usbpcap.py` / `rog_flare2_replay_capture.py` टूल रिपॉज़िटरी में बने रहते हैं।
 
 ⚠️ लैपटॉप के AniMe Matrix पैकेट (`0x5E …`, `0xEC …`) कीबोर्ड को न भेजें: यह सही प्रोटोकॉल नहीं है और कीबोर्ड को ब्लॉक कर सकता है (निकालें और फिर से लगाएँ, या **Fn + Esc** को 10-15 सेकंड दबाए रखें)।
 
@@ -201,12 +224,13 @@ animematrix-bascule etat       # मौजूदा मोड
 |---|---|---|
 | `interface 4 not found` | कीबोर्ड नहीं दिख रहा या अधिकार नहीं हैं | `lsusb \| grep 0b05:19fc`; क्या udev रूल इंस्टॉल है? निकालें और फिर से लगाएँ |
 | `Permission denied` / `open failed` | udev रूल लागू नहीं हुआ | `sudo udevadm control --reload-rules && sudo udevadm trigger`, फिर फिर से लगाएँ |
-| स्क्रीन नहीं बदलती | कोई और प्रोग्राम पहले से लिख रहा है | `animematrix-bascule off`, अन्य लॉन्चर या स्क्रिप्ट बंद करें |
+| « animematrixd सर्विस तक नहीं पहुँचा जा सका » | बैकग्राउंड सर्विस रुकी हुई है | `systemctl --user restart animematrixd.service` या `animematrixd &` |
+| स्क्रीन नहीं बदलती | कोई और प्रोग्राम कीबोर्ड पर लिख रहा है | पुरानी स्क्रिप्ट बंद करें; `animematrix-ctl etat` |
 | विज़ुअलाइज़र डेमो मोड में बने रहते हैं | `parec` नहीं है या साउंड नहीं है | `pulseaudio-utils` इंस्टॉल करें, साउंड बजाएँ |
 | « Keyboard React » प्रतिक्रिया नहीं देता | Wayland सेशन या `pynput` अनुपलब्ध | X11 सेशन, `sudo apt install python3-pynput` |
-| बैकग्राउंड गैलरी शुरू नहीं होती | फ़ोल्डर खाली है या मौजूद नहीं है | लॉन्चर में (GIF टैब) एक फ़ोल्डर चुनें |
 | गोल विंडो आयताकार दिखती है | SHAPE एक्सटेंशन या `python3-xlib` मौजूद नहीं है | `sudo apt install python3-xlib`, या *सेटिंग्स* → *इंटरफ़ेस:* → *क्लासिक* |
-| किसी सर्विस का लॉग | — | `journalctl --user -u animematrix-galerie.service -f` |
+| OpenRGB के बाद कीज़ एक ही रंग में रहती हैं | OpenRGB मूल इफ़ेक्ट को फिर से नहीं बना पाता | कीबोर्ड को निकालें और फिर से लगाएँ |
+| बैकग्राउंड सर्विस का लॉग | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
 
@@ -215,32 +239,34 @@ animematrix-bascule etat       # मौजूदा मोड
 | फ़ाइल | भूमिका |
 |---|---|
 | `rog_flare2_launcher.py` | ग्राफ़िकल लॉन्चर (Tk) |
-| `rog_flare2_i18n.py`, `locale/` | इंटरफ़ेस का अनुवाद (19 भाषाएँ, हर भाषा के लिए एक JSON कैटलॉग) |
-| `rog_flare2_themes.py` | इंटरफ़ेस थीम (ROG और गुलाबी) |
-| `rog_flare2_ui_ronde.py` | गोल इंटरफ़ेस (डायल + ड्रॉअर, डायल, गोलाकार): ड्रॉइंग, विंडो का आकार, LED प्रीव्यू |
-| `rog_flare2_effets.py` | इफ़ेक्ट्स और ऑडियो विज़ुअलाइज़र (Linux के लिए अनुकूलित PolyWollyWin इंजन) |
-| `polywollywin/` | PolyWollyWin का इफ़ेक्ट इंजन, बिना बदलाव के कॉपी किया गया (MIT) |
-| `rog_flare2_folder_player.py` | बैकग्राउंड गैलरी (सर्विस) |
-| `rog_flare2_lecture.py` | बैकग्राउंड प्लेबैक: लॉन्चर बंद होने के समय जो दिखा रहा था उसे आगे जारी रखता है (सर्विस) |
-| `rog_flare2_clock_v3.py` | घड़ी (सर्विस) |
-| `rog_flare2_bascule.sh` | गैलरी / घड़ी / बंद के बीच टॉगल |
-| `rog_flare2_convertir.py` | GIF रूपांतरण (ImageMagick) |
-| `rog_flare2_matrix_paint.py` | HID ट्रांसपोर्ट, LED क्रम, ड्रॉइंग एडिटर |
-| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | रिवर्स-इंजीनियरिंग टूल और कैप्चर |
-| `systemd/` | यूज़र सर्विसेज़ |
-| `packaging/` | udev रूल, मेनू एंट्री, आइकन, .deb पैकेज की फ़ाइलें और स्क्रिप्ट |
-| `docs/` | GIF गाइड, प्रोटोकॉल नोट्स, स्क्रीनशॉट |
+| `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | गोल इंटरफ़ेस, थीम |
+| `rog_flare2_i18n.py`, `locale/` | अनुवाद (19 भाषाएँ; `locale/_cles.json` = अनुवाद किए जाने वाले टेक्स्ट) |
+| `rog_flare2_demon.py`, `rog_flare2_ctl.py` | `animematrixd` बैकग्राउंड सर्विस, क्लाइंट और `animematrix-ctl` कमांड |
+| `rog_flare2_core.py` | GIF स्ट्रीमिंग प्लेबैक, घड़ी, ज्यामिति |
+| `rog_flare2_effets.py`, `polywollywin/` | इफ़ेक्ट्स और विज़ुअलाइज़र (PolyWollyWin इंजन, MIT), एक्सटेंशन |
+| `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | सिस्टम मॉनिटर, चल रहा गाना, गेम्स |
+| `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | नोटिफ़िकेशन, समय शेड्यूलिंग और ट्रिगर |
+| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | OpenRGB के ज़रिए रंग, सिस्टम ट्रे आइकन, लैपटॉप (प्रायोगिक) |
+| `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | एनिमेशन एडिटर, सिम्युलेटर, रूपांतरण |
+| `rog_flare2_bibliotheque.py`, `bibliotheque/` | एनिमेशन लाइब्रेरी (कैटलॉग, CC0 GIF) |
+| `rog_flare2_maj.py` | रिलीज़ से अपडेट |
+| `rog_flare2_matrix_paint.py`, `rog_flare2_clock_v3.py`, `rog_flare2_folder_player.py` | HID ट्रांसपोर्ट और LED एडिटर, घड़ी, गैलरी (मूल टूल) |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | रिवर्स-इंजीनियरिंग |
+| `examples/effets/` | एक्सटेंशन का उदाहरण |
+| `tests/` | टेस्ट (वास्तविक क्लिक वाले इंटरफ़ेस टेस्ट सहित) |
+| `systemd/`, `packaging/` | यूज़र सर्विस; .deb, RPM, Arch, Flatpak, APT रिपॉज़िटरी |
+| `docs/` | GIF गाइड, एक्सटेंशन, प्रोटोकॉल, रिसर्च, स्क्रीनशॉट, अनुवादित README |
 
 <a id="deb"></a>
 
-## .deb पैकेज बनाना
+## पैकेज बनाना
 
 ```bash
 packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-केवल `dpkg-deb` और `bash` की ज़रूरत है; संस्करण `rog_flare2_launcher.py` (`VERSION`) से पढ़ा जाता है।
+`packaging/install.sh` प्रोजेक्ट को किसी भी डायरेक्टरी स्ट्रक्चर में इंस्टॉल करता है; यह .deb, RPM (`packaging/rpm/`), Arch पैकेज (`packaging/aur/`) और Flatpak (`packaging/flatpak/`) के लिए इस्तेमाल होता है। हर पब्लिश की गई रिलीज़ पर, GitHub RPM, Arch पैकेज और Flatpak बनाता है, और साइन किए गए APT रिपॉज़िटरी को अपडेट करता है। वर्ज़न `rog_flare2_core.py` (`VERSION`) से पढ़ा जाता है। टेस्ट: `python -m pytest tests`।
 
 <a id="credits"></a>
 
@@ -249,6 +275,7 @@ packaging/build-deb.sh
 - **NicRoss512** — प्रोटोकॉल की रिवर्स-इंजीनियरिंग, मूल घड़ी और एडिटर: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol)। यह रिपॉज़िटरी वहीं से शुरू होती है; इसका इतिहास सुरक्षित रखा गया है।
 - **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), Windows कंट्रोलर जिसका इफ़ेक्ट और ऑडियो विज़ुअलाइज़र इंजन यहाँ इस्तेमाल किया गया है।
 - **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), LED व्यवहार (हेलो, दिखने वाले स्तर, गति) के लिए।
+- **asus-linux** — [asusctl](https://gitlab.com/asus-linux/asusctl), लैपटॉप स्क्रीन के लिए इस्तेमाल किया गया।
 
 यह एक स्वतंत्र प्रोजेक्ट है, ASUS से संबद्ध नहीं। "ROG", "AniMe Matrix" और "Armoury Crate" ASUSTeK के ट्रेडमार्क हैं।
 
@@ -256,7 +283,7 @@ packaging/build-deb.sh
 
 ## लाइसेंस
 
-इस रिपॉज़िटरी के कोड के लिए [MIT](../../LICENSE)। `polywollywin/` अपने लेखक के MIT लाइसेंस के अंतर्गत ही रहता है ([polywollywin/LICENSE](../../polywollywin/LICENSE))। NicRoss512 की मूल फ़ाइलें (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, कैप्चर) बिना किसी स्पष्ट लाइसेंस के प्रकाशित की गई थीं और अपने लेखक की ही रहती हैं; इन्हें श्रेय के साथ फिर से वितरित किया जाता है।
+इस रिपॉज़िटरी के कोड के लिए [MIT](../../LICENSE); `bibliotheque/` के एनिमेशन CC0 के अंतर्गत हैं। `polywollywin/` अपने लेखक के MIT लाइसेंस के अंतर्गत ही रहता है ([polywollywin/LICENSE](../../polywollywin/LICENSE))। NicRoss512 की मूल फ़ाइलें (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, कैप्चर) बिना किसी स्पष्ट लाइसेंस के प्रकाशित की गई थीं और अपने लेखक की ही रहती हैं; इन्हें श्रेय के साथ फिर से वितरित किया जाता है।
 
 <a id="soutien"></a>
 
@@ -268,4 +295,4 @@ packaging/build-deb.sh
 
 **https://buymeacoffee.com/anticitoyen** — यह लिंक लॉन्चर के *सेटिंग्स* टैब में भी मौजूद है।
 
-बग रिपोर्ट और विचार: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues)।
+बग रिपोर्ट, विचार, और साझा करने के लिए एनिमेशन: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues)।

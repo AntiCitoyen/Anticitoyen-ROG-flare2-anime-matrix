@@ -1,12 +1,30 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Démon animematrixd : seul propriétaire de l'écran, socket JSON, API
+    HTTP locale, commande animematrix-ctl ; remplace les services galerie,
+    horloge et lecture (reprise automatique de leur réglage).
+  * Nouveaux contenus : moniteur système, morceau en cours (MPRIS),
+    notifications du bureau, jeux (Snake, Pong, Tetris, casse-briques).
+  * Création : éditeur d'animation, bibliothèque partagée (10 animations
+    CC0), aperçu fidèle (simulateur), conversion intelligente, géométrie
+    fidèle, effets en extensions.
+  * Automatisation : programmation horaire et déclencheurs (verrouillage,
+    veille, plein écran), couleurs du clavier via OpenRGB, icône de barre
+    système.
+  * Paquets : RPM, Arch, Flatpak, dépôt APT signé ; portables ROG via
+    asusctl (expérimental) ; tests automatiques et intégration continue.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.3.0) stable; urgency=medium
+
   * Mises à jour intégrées (Réglages → Rechercher les mises à jour) :
     vérification automatique quotidienne (désactivable), téléchargement
     du .deb de la dernière release GitHub, contrôle SHA-256, installation
     avec pkexec (apt-get, sinon dpkg), relance proposée.
   * Tiroir et cadran dimensionnés d'après le contenu des réglages.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 11:55:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.2.1) stable; urgency=medium
 

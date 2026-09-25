@@ -399,10 +399,16 @@ def migrate_legacy() -> str:
     """Première exécution après les versions ≤ 1.3 : reprend le service activé au démarrage, puis le désactive."""
     import subprocess
     mode = "rien"
+    wants = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "systemd" / "user" / "default.target.wants"
     for unit, m in LEGACY.items():
-        if subprocess.run(["systemctl", "--user", "is-enabled", "--quiet", unit]).returncode == 0:
+        link = wants / unit  # après la mise à jour du paquet, le lien reste mais l'unité n'existe plus
+        enabled = link.is_symlink() or subprocess.run(["systemctl", "--user", "is-enabled", "--quiet", unit],
+                                                      capture_output=True).returncode == 0
+        if enabled:
             mode = m
             subprocess.run(["systemctl", "--user", "disable", "--now", unit], capture_output=True)
+            if link.is_symlink():
+                link.unlink()  # lien orphelin de l'ancienne unité
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     START_FILE.write_text(mode + "\n")
     return mode

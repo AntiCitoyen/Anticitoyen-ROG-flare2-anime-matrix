@@ -5,12 +5,11 @@
 # AniMe Matrix per Linux — ROG Strix Flare II Animate
 
 [![Release](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![CI](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/actions/workflows/ci.yml)
 [![Licenza MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](../../LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-Pilotare su Linux lo schermo **AniMe Matrix** (312 mini-LED) della tastiera **ASUS ROG Strix Flare II Animate**, senza Armoury Crate né Windows: GIF e immagini, galleria di sfondo, orologio, 19 effetti animati, 7 visualizzatori audio, disegno LED per LED.
-
-L'interfaccia dell'applicazione è disponibile in 19 lingue: segue automaticamente la lingua del sistema e può essere cambiata nella scheda *Impostazioni* → *Lingua:*.
+Pilotare su Linux lo schermo **AniMe Matrix** (312 mini-LED) della tastiera **ASUS ROG Strix Flare II Animate**, senza Armoury Crate né Windows: GIF e galleria, orologio, effetti e visualizzatori audio, giochi, monitor di sistema, notifiche del desktop, programmazione oraria, editor di animazioni, libreria condivisa, colori della tastiera sincronizzati.
 
 <div align="center">
 
@@ -38,7 +37,7 @@ L'interfaccia dell'applicazione è disponibile in 19 lingue: segue automaticamen
 - [Come funziona](#fonctionnement)
 - [Risoluzione dei problemi](#depannage)
 - [Organizzazione del repository](#depot)
-- [Costruire il pacchetto .deb](#deb)
+- [Costruire i pacchetti](#deb)
 - [Crediti](#credits)
 - [Licenza](#licence)
 - [Sostenere il progetto](#soutien)
@@ -51,57 +50,77 @@ L'interfaccia dell'applicazione è disponibile in 19 lingue: segue automaticamen
 
 ASUS fornisce lo schermo AniMe Matrix di questa tastiera solo su Windows (Armoury Crate). Questo progetto comunica direttamente con la tastiera via USB HID e offre:
 
-- **Un lanciatore grafico** (`animematrix`), a scelta tra **4 interfacce**: *Quadrante + cassetto* (finestra rotonda con un pannello di impostazioni che esce a destra, quella predefinita), *Quadrante* (tutto nel cerchio), *Arrotondata* (angoli molto arrotondati, rotella di luminosità) e *Classica* (schede). Le interfacce rotonde mostrano **in diretta i 312 LED**, esattamente come vengono inviati alla tastiera. Quattro blocchi di comandi:
-  - **GIF / immagini**: riprodurre uno o più file, o un'intera cartella in galleria, in loop; convertire GIF per la matrice.
-  - **Effetti**: 19 animazioni (pioggia in stile Matrix, plasma, fuoco, stelle, fuochi d'artificio, fulmini, metaball, onda, serpente, testo scorrevole, orologio stilizzato, reazione alla tastiera…), regolabili mentre sono in esecuzione.
-  - **Audio**: 7 visualizzatori che reagiscono al suono riprodotto dal PC (spettro, KITT/KARR, starburst, oscilloscopio, fuoco audio…).
-  - **Impostazioni**: cosa viene mostrato all'apertura della sessione, lingua, tema e interfaccia, editor di disegno, link del progetto.
-- **Un orologio** HH:MM, dal lanciatore o come servizio in background.
-- **Una galleria di sfondo**: un servizio `systemd --user` che scorre una cartella di GIF fin dall'apertura della sessione.
-- **Un interruttore a un clic** (`animematrix-bascule`): l'icona nel menu accende o spegne lo schermo; il clic destro permette di scegliere Galleria GIF, Orologio o Schermo spento.
-- **Una conversione di GIF adatta alla matrice** (`animematrix-convertir`): 19×24, grigi, 3 livelli, senza dithering — vedi [../GUIDE-GIF.md](../GUIDE-GIF.md).
-- **Un editor di disegno** LED per LED (`animematrix-dessin`).
-- **11 temi**: 5 ispirati a ROG (Classic, Strix, Glitch, Gold, Carbon), 5 rosa (Sakura, Zucchero filato, Oro rosa, Rosa lavanda, Notte rosa) e quello di sistema, selezionabili in *Impostazioni* → *Tema:*.
-- **Aggiornamenti integrati**: *Impostazioni* → *Cerca aggiornamenti*; controllo automatico una volta al giorno (disattivabile). Il launcher scarica il `.deb` dell'ultima release GitHub, ne verifica l'impronta SHA-256 e lo installa dopo aver chiesto la password di amministratore (`pkexec`).
-- **Un basso consumo**: i GIF vengono decodificati fotogramma per fotogramma; una galleria di 400 GIF gira con circa 25 MB di memoria.
+**Visualizzare**
+- **GIF e immagini**: un file, una selezione o un'intera cartella in galleria; riproduzione in streaming (una galleria di 400 GIF occupa circa 25 MB di memoria).
+- **Orologio** HH:MM.
+- **19 effetti animati** (pioggia in stile Matrix, plasma, fuoco, stelle, fuochi d'artificio, fulmini, metaball, onda, testo scorrevole…) e **7 visualizzatori audio** che reagiscono al suono riprodotto dal PC.
+- **Monitor di sistema**: CPU, RAM, GPU, temperatura, velocità di rete e ora, sotto forma di indicatori.
+- **Brano in riproduzione**: al cambio di traccia, « ARTISTA - TITOLO » scorre una volta, poi un visualizzatore (Spotify, VLC, Rhythmbox, browser… via MPRIS).
+- **Notifiche del desktop**: « APP: TITOLO » viene mostrato in sovrimpressione, poi la riproduzione riprende (disattivate per default, elenco di applicazioni autorizzate).
+- **Giochi** giocabili da tastiera: Snake, Pong, Tetris, rompimattoncini, con record.
+
+**Creare**
+- **Editor di animazioni** fotogramma per fotogramma, sulla vera geometria dello schermo: 3 livelli, striscia dei fotogrammi, livello fantasma, spostamento, copia-incolla, anteprima, invio alla tastiera, esportazione GIF.
+- **Libreria di animazioni** condivisa: sfogliare, riprodurre, aggiungere alla propria galleria, proporre le proprie.
+- **Conversione intelligente** di GIF: ritaglio sul soggetto, soggetto chiaro su sfondo nero, contorni rinforzati, 3 livelli.
+- **Anteprima fedele** prima dell'invio: rendering simulato dello schermo (disposizione reale, alone tra i LED).
+- **Effetti come estensioni**: un file Python inserito in una cartella aggiunge un effetto (vedere [../EXTENSIONS.md](../EXTENSIONS.md)).
+
+**Automatizzare**
+- **Demone `animematrixd`**: unico proprietario dello schermo, continua a visualizzare quando il lanciatore è chiuso; comando `animematrix-ctl` e API HTTP locale opzionale.
+- **Programmazione oraria**: fasce orarie (giorni, notte compresa) con orologio, galleria, monitor, brano in riproduzione o schermo spento; schermo nero quando la sessione è bloccata, in sospensione o quando un'applicazione è a schermo intero.
+- **Colori della tastiera tramite OpenRGB**: colore del tema sui tasti, oppure pulsazione sincronizzata con lo schermo.
+- **Icona nella barra di sistema**: menu rapido (modalità, luminosità).
+
+**Comodità**
+- **4 interfacce** (*Quadrante + cassetto* predefinita, *Quadrante*, *Arrotondata*, *Classica*) con **anteprima dal vivo dei 312 LED**, **11 temi** (5 ROG, 5 rosa, di sistema) e **19 lingue**.
+- **Aggiornamenti integrati**: il lanciatore scarica l'ultima release, ne verifica l'impronta SHA-256 e la installa (password di amministratore); oppure `apt upgrade` con il repository APT.
 
 <a id="materiel"></a>
 
 ## Hardware supportato
 
-| Tastiera | USB | Interfaccia |
+| Dispositivo | USB | Stato |
 |---|---|---|
-| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, interfaccia 4 (usage page `0xFF02`) |
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | supportato (HID, interfaccia 4, usage page `0xFF02`) |
+| Schermi AniMe Matrix dei portatili ROG (G14, G16…) | vari | **sperimentale** tramite `asusctl`, non testato su hardware reale (vedere [Utilizzo](#utilisation)) |
 
-Gli schermi AniMe Matrix dei **portatili** ROG (Zephyrus G14, ecc.) usano un protocollo diverso: **non** sono supportati qui (vedere piuttosto `asusctl`).
-
-Testato su Ubuntu 26.04 (X11, PipeWire). Qualsiasi distribuzione con Python ≥ 3.10, hidapi, Tk e systemd dovrebbe andare bene.
+Testato su Ubuntu 26.04 (X11, PipeWire, Cinnamon). Qualsiasi distribuzione con Python ≥ 3.10, hidapi, Tk e systemd dovrebbe andare bene.
 
 <a id="installation"></a>
 
 ## Installazione
 
-### Pacchetto .deb (Debian, Ubuntu, Mint, Pop!_OS…)
+### Repository APT (Debian, Ubuntu, Mint, Pop!_OS…) — aggiornamenti con `apt upgrade`
 
-1. Scaricare `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` dalla pagina [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest).
-2. Installarlo (apt recupera le dipendenze):
-   ```bash
-   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
-   ```
-3. **Scollegare e ricollegare la tastiera** (la regola udev concede l'accesso all'utente connesso).
-4. Avviare **AniMe Matrix** dal menu delle applicazioni, oppure `animematrix` da terminale.
+```bash
+curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
+```
+
+Poi **scollegare e ricollegare la tastiera** (la regola udev concede l'accesso all'utente connesso) e avviare **AniMe Matrix** dal menu.
+
+### Altri formati (pagina [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest))
+
+| Sistema | File | Installazione |
+|---|---|---|
+| Debian, Ubuntu… | `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` | `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb` |
+| Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
+| Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
+| Tutti (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (installare anche la regola udev qui sotto; nessun visualizzatore audio) |
 
 Il pacchetto installa:
 
 | Elemento | Posizione |
 |---|---|
 | Programmi | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Comandi | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin`, `animematrix-lecture` |
-| Servizi utente | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service`, `animematrix-lecture.service` (non attivati di default) |
+| Comandi | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Servizio utente | `/usr/lib/systemd/user/animematrixd.service` (attivato per tutte le sessioni) |
 | Regola udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu e icona | `animematrix.desktop`, icona `animematrix` |
-
-Disinstallazione: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 
 ### Dai sorgenti
 
@@ -117,9 +136,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Strumenti di sistema utili: `imagemagick` (conversione), `pulseaudio-utils` (`parec`, per l'audio), `zenity` (selettori di file), `libnotify-bin` (notifiche dell'interruttore).
-
-Per i servizi in background dai sorgenti, copiare `systemd/*.service` in `~/.config/systemd/user/` sostituendo le righe `ExecStart=` con il percorso di `.venv/bin/python` e dello script (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`), poi `systemctl --user daemon-reload`.
+Strumenti di sistema utili: `imagemagick` (conversione classica), `pulseaudio-utils` (`parec`, per l'audio), `zenity` (selettori di file), `libnotify-bin` (notifiche), `python3-gi` e `gir1.2-ayatanaappindicator3-0.1` (icona nella barra di sistema), `openrgb` (colori dei tasti).
 
 <a id="utilisation"></a>
 
@@ -131,65 +148,71 @@ Per i servizi in background dai sorgenti, copiare `systemd/*.service` in `~/.con
 
 Nelle interfacce rotonde, i pulsanti rotondi aprono i blocchi *GIF*, *Effetti*, *Audio* e *Impostazioni* (nel cassetto o nel cerchio); *Orologio* e *Ferma* agiscono subito; l'arco in basso regola la luminosità; si sposta la finestra trascinandola dallo sfondo; i piccoli pulsanti in alto riducono a icona o chiudono. La forma rotonda usa l'estensione X11 SHAPE (pacchetto `python3-xlib`); senza di essa, la stessa interfaccia viene mostrata in una finestra rettangolare.
 
-- **GIF / immagini**: *GIF/immagini…* per una selezione, *Cartella (galleria)…* per un'intera cartella. La cartella scelta diventa anche quella della galleria di sfondo. *Preferisci le versioni convertite* legge `dossier/matrix/nom.gif` quando esiste (prodotto dalla conversione).
-- **Effetti** e **Audio**: scegliere, regolare, *▶ Avvia l'effetto*. I cursori agiscono in tempo reale; *Ritmo* accelera o rallenta l'animazione.
+- **GIF / immagini**: *GIF/immagini…* o *Cartella (galleria)…*; *Geometria fedele* mantiene le proporzioni (l'angolo taglia l'immagine invece di deformarla); *👁 Anteprima fedele (prima dell'invio)* mostra il rendering senza inviare nulla; *🎞 Crea un'animazione (editor)*; *📚 Libreria di animazioni*; *Conversione intelligente* per convertire le GIF.
+- **Effetti** e **Audio**: scegliere, regolare, *▶ Avvia l'effetto*. I cursori agiscono in tempo reale; *Ritmo* accelera o rallenta l'intera animazione. I giochi si giocano con le frecce, Spazio e Invio, con la finestra del lanciatore in primo piano.
 - **Luminosità**, **🕒 Orologio**, **■ Ferma** (che cancella lo schermo) sono comuni a tutte le schede.
-- **Impostazioni**: *All'avvio della sessione:* = Galleria GIF, Orologio, Ultima riproduzione o Niente; *Interfaccia:* sceglie una delle 4 interfacce (il lanciatore si riavvia, ciò che è visualizzato continua).
+- **Impostazioni**: avvio della sessione (Galleria GIF, Orologio, Ultima riproduzione o Niente), lingua, tema, interfaccia, notifiche del desktop, colori della tastiera (OpenRGB), *Programmazione…*, icona nella barra di sistema, cartella delle estensioni, aggiornamenti.
 
-**Quando si chiude il lanciatore, ciò che è visualizzato continua** (GIF, effetto con le sue impostazioni del momento, visualizzatore audio o orologio): il lanciatore lo affida al servizio in background `animematrix-lecture.service`. Al prossimo avvio, riprende il controllo non appena si avvia qualcos'altro (un solo programma può scrivere sulla tastiera). *■ Ferma* prima di chiudere lascia lo schermo spento.
+**Chiudere il lanciatore non interrompe nulla**: il demone `animematrixd` continua a visualizzare. *■ Ferma* spegne lo schermo.
 
-### Interruttore e servizi in background
+### Demone e riga di comando
 
 ```bash
-animematrix-bascule            # acceso → spento ; spento → ultima modalità
-animematrix-bascule gif        # galleria di sfondo, anche all'apertura di sessione
-animematrix-bascule horloge    # orologio di sfondo, anche all'apertura di sessione
-animematrix-bascule lecture    # ultima riproduzione del lanciatore, anche all'apertura di sessione
-animematrix-bascule off        # spento, niente all'apertura
-animematrix-bascule etat       # modalità corrente
+animematrix-ctl etat                               # cosa è visualizzato
+animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galleria (cartella o file)
+animematrix-ctl effet "Plasma" --param speed=250   # effetto e impostazioni
+animematrix-ctl horloge
+animematrix-ctl texte "Bonjour"
+animematrix-ctl notifier "Café prêt" --duree 5     # sovrimpressione poi ritorno
+animematrix-ctl luminosite 60
+animematrix-ctl stop
 ```
-
-Le stesse scelte sono nel clic destro dell'icona nel menu. Dietro le quinte: `systemctl --user enable --now animematrix-galerie.service` (o `animematrix-horloge.service`).
-
-### Da riga di comando
 
 | Comando | Ruolo |
 |---|---|
+| `animematrix-bascule [gif\|horloge\|lecture\|off\|etat]` | interruttore (anche nel clic destro dell'icona del menu); la modalità scelta è anche quella di avvio della sessione |
+| `animematrixd --http 8765` | demone con API HTTP locale (`POST http://127.0.0.1:8765/api`, stesso JSON del socket) |
+| `animematrix-animation [file.gif]` | editor di animazioni |
+| `animematrix-apercu file.gif -o anteprima.gif` | anteprima fedele di una GIF (file) |
+| `animematrix-convertir cartella/ [--fidele] [--classique]` | converte le GIF per la matrice (in `cartella/matrix/`) |
 | `animematrix-effet --liste` | elenca gli effetti e i visualizzatori |
-| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | avvia un effetto (Ctrl+C per fermare) |
-| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | scorre una cartella (per default l'ultima scelta nel lanciatore, altrimenti `~/Images/AniMe-Matrix`) |
-| `animematrix-lecture` | riproduce di nuovo l'ultima riproduzione del lanciatore (`~/.config/rog-flare2/lecture.json`) |
-| `animematrix-horloge -b 25` | orologio; `--clear` cancella lo schermo, `--once --text 12:34` mostra un testo |
-| `animematrix-convertir dossier/ [--sortie D] [--force]` | converte GIF per la matrice (in `dossier/matrix/`) |
-| `animematrix-dessin` | editor di disegno |
+| `animematrix-dessin` | editor LED per LED (restituisce il controllo al demone alla chiusura) |
 
 ### Audio
 
-I visualizzatori ascoltano il **monitor dell'uscita audio predefinita** con `parec` (PipeWire o PulseAudio): reagiscono a ciò che riproduce il PC, non al microfono. Per cambiare uscita, cambiare l'uscita predefinita del sistema.
+I visualizzatori ascoltano il **monitor dell'uscita audio predefinita** con `parec` (PipeWire o PulseAudio): reagiscono a ciò che riproduce il PC, non al microfono.
 
 ### Effetto « Keyboard React »
 
 Accende lo schermo al ritmo della digitazione grazie a `pynput`, che legge i tasti di tutta la sessione finché l'effetto è attivo. Funziona su X11; su Wayland non riceve i tasti.
 
+### Colori della tastiera (OpenRGB)
+
+*Impostazioni* → *Colori della tastiera (OpenRGB)*: colore del tema oppure pulsazione sincronizzata con lo schermo. Il demone avvia se necessario `openrgb --server`. OpenRGB non conosce l'illuminazione precedente della tastiera: per ritrovare l'effetto salvato nella tastiera, scollegarla e ricollegarla.
+
+### Portatili ROG (sperimentale)
+
+Scrivere `portable-asusctl` in `~/.config/rog-flare2/materiel` poi riavviare il demone: i frame passano tramite `asusctl anime image` (al massimo 5 immagini al secondo). Non testato su un portatile reale: riscontri benvenuti nei ticket.
+
 <a id="gif"></a>
 
 ## Preparare buoni GIF
 
-Lo schermo non è un rettangolo: 24 righe sfalsate, da 19 LED in alto a 7 in basso, 3 livelli di grigio veramente distinti, un alone tra LED vicini. Le sagome, i pittogrammi, i testi brevi e i movimenti lenti rendono bene; le foto e i video no.
+Lo schermo non è un rettangolo: 24 righe sfalsate, da 19 LED in alto a 7 in basso (bordo destro verticale, bordo sinistro in diagonale), 3 livelli di grigio realmente distinti, un alone tra LED vicini. Le sagome, i pittogrammi, i testi brevi e i movimenti lenti rendono bene; le foto e i video, poco.
 
-La guida completa (dimensione della tela, livelli, frequenza, luminosità, comando ImageMagick): **[../GUIDE-GIF.md](../GUIDE-GIF.md)**.
+La guida completa (tela, livelli, ritmo, conversione, geometria fedele): **[../GUIDE-GIF.md](../GUIDE-GIF.md)**.
 
 <a id="fonctionnement"></a>
 
 ## Come funziona
 
-- **Trasporto**: hidapi apre l'interfaccia HID n° 4 della tastiera e vi scrive trame da **1024 byte**.
+- **Trasporto**: hidapi apre l'interfaccia HID n° 4 della tastiera e vi scrive trame da **1024 byte**; la tastiera restituisce ogni trama.
 - **Trama**: `60 81 00 00` + **312 byte** (una luminosità 0–255 per LED, nell'ordine hardware) + zeri fino a 1024.
-- **Geometria**: 24 righe sfalsate in diagonale (19 → 7 LED), oppure in modo equivalente 12 righe logiche da 37 → 15 colonne (modello di PolyWollyWin); le due corrispondenze sono state verificate identiche sui 312 LED.
-- **GIF**: ogni fotogramma viene ricomposto (i GIF ottimizzati memorizzano solo le differenze), convertito in grigio, riportato a 24 righe e campionato riga per riga.
-- **Animazione**: nessuna memoria integrata utilizzata; l'animazione consiste nell'host che invia le trame una dopo l'altra (~30 f/s per gli effetti).
+- **Geometria**: 24 righe sfalsate (la riga r copre le colonne (r+1)//2 fino a 18), oppure in modo equivalente 12 righe logiche da 37 → 15 colonne (modello di PolyWollyWin); le due corrispondenze sono state verificate identiche sui 312 LED.
+- **Demone**: `animematrixd` gestisce da solo la tastiera; riproduzione di base e sovrimpressione (notifiche); socket JSON `$XDG_RUNTIME_DIR/animematrix.sock`; riconnessione automatica della tastiera.
+- **Animazione**: l'host invia le trame una dopo l'altra (~30 f/s per gli effetti); la memoria interna della tastiera non viene utilizzata (ricerca: [../RECHERCHE-MEMOIRE.md](../RECHERCHE-MEMOIRE.md)).
 
-Le note originali di reverse engineering (catture USBPcap, ordine dei LED, punti di calibrazione) sono in **[../PROTOCOL.md](../PROTOCOL.md)**; le catture `*.cap` e gli strumenti `parse_usbpcap.py` / `rog_flare2_replay_capture.py` restano nel repository per chi vuole approfondire.
+Le note originali di reverse engineering sono in **[../PROTOCOL.md](../PROTOCOL.md)**; le catture `*.cap` e gli strumenti `parse_usbpcap.py` / `rog_flare2_replay_capture.py` restano nel repository.
 
 ⚠️ Non inviare alla tastiera i pacchetti degli AniMe Matrix dei portatili (`0x5E …`, `0xEC …`): non è il protocollo corretto e può bloccare la tastiera (scollegare/ricollegare, oppure tenere premuto **Fn + Esc** per 10–15 s).
 
@@ -201,12 +224,13 @@ Le note originali di reverse engineering (catture USBPcap, ordine dei LED, punti
 |---|---|---|
 | `interface 4 not found` | tastiera non rilevata o permessi mancanti | `lsusb \| grep 0b05:19fc`; regola udev installata? scollegare/ricollegare |
 | `Permission denied` / `open failed` | regola udev non applicata | `sudo udevadm control --reload-rules && sudo udevadm trigger`, poi ricollegare |
-| Lo schermo non cambia | un altro programma sta già scrivendo | `animematrix-bascule off`, chiudere gli altri lanciatori o script |
-| I visualizzatori restano in modalità demo | `parec` assente o nessun suono | installare `pulseaudio-utils`, riprodurre audio |
+| « Servizio animematrixd non raggiungibile » | demone fermo | `systemctl --user restart animematrixd.service` oppure `animematrixd &` |
+| Lo schermo non cambia | un altro programma scrive sulla tastiera | chiudere i vecchi script; `animematrix-ctl etat` |
+| I visualizzatori restano in modalità demo | nessun `parec` o nessun suono | installare `pulseaudio-utils`, riprodurre audio |
 | « Keyboard React » non reagisce | sessione Wayland o `pynput` assente | sessione X11, `sudo apt install python3-pynput` |
-| La galleria di sfondo non si avvia | cartella vuota o assente | scegliere una cartella nel lanciatore (scheda GIF) |
 | La finestra rotonda viene mostrata come un rettangolo | estensione SHAPE o `python3-xlib` mancante | `sudo apt install python3-xlib`, oppure *Impostazioni* → *Interfaccia:* → *Classica* |
-| Log di un servizio | — | `journalctl --user -u animematrix-galerie.service -f` |
+| I tasti restano di un colore dopo OpenRGB | OpenRGB non ripristina l'effetto originale | scollegare e ricollegare la tastiera |
+| Log del demone | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
 
@@ -215,32 +239,34 @@ Le note originali di reverse engineering (catture USBPcap, ordine dei LED, punti
 | File | Ruolo |
 |---|---|
 | `rog_flare2_launcher.py` | lanciatore grafico (Tk) |
-| `rog_flare2_i18n.py`, `locale/` | traduzione dell'interfaccia (19 lingue, un catalogo JSON per lingua) |
-| `rog_flare2_themes.py` | temi dell'interfaccia (ROG e rosa) |
-| `rog_flare2_ui_ronde.py` | interfacce rotonde (quadrante + cassetto, quadrante, arrotondata): disegno, forma della finestra, anteprima LED |
-| `rog_flare2_effets.py` | effetti e visualizzatori audio (motore PolyWollyWin adattato a Linux) |
-| `polywollywin/` | motore di effetti di PolyWollyWin, copiato senza modifiche (MIT) |
-| `rog_flare2_folder_player.py` | galleria di sfondo (servizio) |
-| `rog_flare2_lecture.py` | riproduzione in background: riprende ciò che il lanciatore mostrava alla chiusura (servizio) |
-| `rog_flare2_clock_v3.py` | orologio (servizio) |
-| `rog_flare2_bascule.sh` | interruttore galleria / orologio / spento |
-| `rog_flare2_convertir.py` | conversione GIF (ImageMagick) |
-| `rog_flare2_matrix_paint.py` | trasporto HID, ordine dei LED, editor di disegno |
-| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | strumenti e catture di reverse engineering |
-| `systemd/` | servizi utente |
-| `packaging/` | regola udev, voce di menu, icona, file e script del pacchetto .deb |
-| `docs/` | guida GIF, note di protocollo, screenshot |
+| `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | interfacce rotonde, temi |
+| `rog_flare2_i18n.py`, `locale/` | traduzione (19 lingue; `locale/_cles.json` = testi da tradurre) |
+| `rog_flare2_demon.py`, `rog_flare2_ctl.py` | demone `animematrixd`, client e comando `animematrix-ctl` |
+| `rog_flare2_core.py` | riproduzione GIF in streaming, orologio, geometria |
+| `rog_flare2_effets.py`, `polywollywin/` | effetti e visualizzatori (motore PolyWollyWin, MIT), estensioni |
+| `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor di sistema, brano in riproduzione, giochi |
+| `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifiche, programmazione oraria e trigger |
+| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | colori tramite OpenRGB, icona nella barra di sistema, portatili (sperimentale) |
+| `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | editor di animazioni, simulatore, conversione |
+| `rog_flare2_bibliotheque.py`, `bibliotheque/` | libreria di animazioni (catalogo, GIF CC0) |
+| `rog_flare2_maj.py` | aggiornamenti dalle release |
+| `rog_flare2_matrix_paint.py`, `rog_flare2_clock_v3.py`, `rog_flare2_folder_player.py` | trasporto HID ed editor LED, orologio, galleria (strumenti originali) |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | reverse engineering |
+| `examples/effets/` | esempio di estensione |
+| `tests/` | test (incluse interfacce con clic reali) |
+| `systemd/`, `packaging/` | servizio utente; .deb, RPM, Arch, Flatpak, repository APT |
+| `docs/` | guida GIF, estensioni, protocollo, ricerca, screenshot, README tradotti |
 
 <a id="deb"></a>
 
-## Costruire il pacchetto .deb
+## Costruire i pacchetti
 
 ```bash
 packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-Sono necessari solo `dpkg-deb` e `bash`; la versione viene letta da `rog_flare2_launcher.py` (`VERSION`).
+`packaging/install.sh` installa il progetto in qualsiasi albero di directory; viene usato per il .deb, l'RPM (`packaging/rpm/`), il pacchetto Arch (`packaging/aur/`) e il Flatpak (`packaging/flatpak/`). A ogni release pubblicata, GitHub costruisce l'RPM, il pacchetto Arch e il Flatpak, e aggiorna il repository APT firmato. La versione viene letta in `rog_flare2_core.py` (`VERSION`). Test: `python -m pytest tests`.
 
 <a id="credits"></a>
 
@@ -248,7 +274,8 @@ Sono necessari solo `dpkg-deb` e `bash`; la versione viene letta da `rog_flare2_
 
 - **NicRoss512** — reverse engineering del protocollo, orologio ed editor originali: [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Questo repository ne deriva; la sua cronologia è conservata.
 - **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), controller Windows di cui viene ripreso qui il motore di effetti e visualizzatori audio.
-- **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), per il comportamento dei LED (alone, livelli percepiti, frequenza).
+- **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), per il comportamento dei LED (alone, livelli percepiti, ritmo).
+- **asus-linux** — [asusctl](https://gitlab.com/asus-linux/asusctl), utilizzato per gli schermi dei portatili.
 
 Progetto indipendente, non affiliato ad ASUS. « ROG », « AniMe Matrix » e « Armoury Crate » sono marchi di ASUSTeK.
 
@@ -256,7 +283,7 @@ Progetto indipendente, non affiliato ad ASUS. « ROG », « AniMe Matrix » e «
 
 ## Licenza
 
-[MIT](../../LICENSE) per il codice di questo repository. `polywollywin/` resta sotto la licenza MIT del suo autore ([../../polywollywin/LICENSE](../../polywollywin/LICENSE)). I file originali di NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `../PROTOCOL.md`, catture) sono stati pubblicati senza licenza esplicita e restano del loro autore; sono ridistribuiti con attribuzione.
+[MIT](../../LICENSE) per il codice di questo repository; le animazioni di `bibliotheque/` sono sotto CC0. `polywollywin/` resta sotto la licenza MIT del suo autore ([../../polywollywin/LICENSE](../../polywollywin/LICENSE)). I file originali di NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `../PROTOCOL.md`, catture) sono stati pubblicati senza licenza esplicita e restano del loro autore; sono ridistribuiti con attribuzione.
 
 <a id="soutien"></a>
 
@@ -268,4 +295,4 @@ Se questo progetto ti è utile, un caffè aiuta a mantenerlo:
 
 **https://buymeacoffee.com/anticitoyen** — il link si trova anche nella scheda *Impostazioni* del lanciatore.
 
-Segnalazioni di bug e idee: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Segnalazioni di bug, idee e animazioni da condividere: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
