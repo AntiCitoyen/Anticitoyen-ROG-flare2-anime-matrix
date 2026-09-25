@@ -51,13 +51,16 @@ Armoury Crate나 Windows 없이 리눅스에서 **ASUS ROG Strix Flare II Animat
 ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 제공합니다. 이 프로젝트는 USB HID를 통해 키보드와 직접 통신하며 다음을 제공합니다.
 
 **표시**
-- **GIF와 이미지**: 파일 하나, 선택한 여러 파일, 또는 폴더 전체를 갤러리로 재생 ; 스트리밍 재생(400개 GIF로 이루어진 갤러리도 메모리 약 25MB로 실행).
-- **시계** HH:MM.
-- **19가지 애니메이션 효과**(매트릭스 풍 비, 플라즈마, 불, 별, 불꽃놀이, 번개, 메타볼, 파도, 흐르는 텍스트…)와 PC에서 재생되는 소리에 반응하는 **7가지 오디오 시각화**.
+- **GIF, 이미지, 동영상**: 파일 하나, 선택한 여러 파일, 또는 폴더 전체를 갤러리로 재생하며, 창에 끌어다 놓을 수도 있습니다 ; 동영상(MP4, WebM, MKV…)은 ffmpeg로 재생 ; 썸네일 갤러리 ; 변환된 프레임은 캐시에 보관(400개 GIF로 이루어진 갤러리도 메모리 약 25MB로 실행).
+- **시계**: 디지털, 아날로그, 이진, 단어(프랑스어, 영어, 독일어, 스페인어, 이탈리아어, 포르투갈어, 네덜란드어) 또는 스타일 문자판.
+- **애니메이션 효과**(매트릭스 풍 비, 플라즈마, 불, 별, 불꽃놀이, 번개, 메타볼, 파도…)와 PC에서 재생되는 소리에 반응하는 **7가지 오디오 시각화**.
+- **텍스트**: 원하는 메시지를 모든 문자(악센트, 키릴 문자, 아랍 문자, 힌디어, 중국어, 일본어, 한국어…)로 왼쪽, 오른쪽, 위, 아래로 스크롤하거나 고정해서 표시.
+- **웹캠**(영상 또는 실루엣)과 **화면 미러링**(전체 화면, 마우스 주변 또는 활성 창).
 - **시스템 모니터**: CPU, RAM, GPU, 온도, 네트워크 속도, 시간을 게이지로 표시.
 - **재생 중인 곡**: 트랙이 바뀌면 "아티스트 - 제목"이 한 번 스크롤된 뒤 시각화가 표시됩니다(Spotify, VLC, Rhythmbox, 브라우저… MPRIS 사용).
 - **데스크톱 알림**: "앱 이름 : 제목"이 화면 위에 겹쳐 표시된 뒤 원래 재생으로 돌아갑니다(기본적으로 꺼져 있으며, 허용할 앱 목록 지정 가능).
-- 키보드로 **즐길 수 있는 게임**: 스네이크, 퐁, 테트리스, 벽돌 깨기, 기록 저장.
+- 키보드로 **즐길 수 있는 게임**: 스네이크, 퐁(혼자 또는 둘이서), 테트리스, 벽돌 깨기, 인베이더, 플래피, 기록 저장.
+- **표시등**: 마이크가 음소거되었거나 사용 중일 때, 웹캠이 켜져 있을 때, OBS가 방송 또는 녹화 중일 때 켜지는 작은 빛 블록.
 
 **만들기**
 - 화면의 실제 기하 구조를 반영한 프레임 단위 **애니메이션 편집기**: 3단계, 필름스트립, 어니언 스킨, 이동, 복사-붙여넣기, 미리 보기, 키보드로 전송, GIF 내보내기.
@@ -68,12 +71,17 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 
 **자동화**
 - **`animematrixd` 데몬**: 화면의 유일한 소유자로, 런처를 닫아도 계속 표시를 유지합니다 ; `animematrix-ctl` 명령과 선택적 로컬 HTTP API 제공.
-- **시간별 예약**: 시계, 갤러리, 모니터, 재생 중인 곡, 또는 화면 끄기를 요일별(야간 포함) 구간으로 지정 ; 세션이 잠기거나 절전 상태이거나 앱이 전체 화면일 때 화면 자동 꺼짐.
+- **시간별 예약**: 시계, 갤러리, 모니터, 재생 중인 곡, 효과, 재생 목록, 또는 화면 끄기를 요일별(야간 포함) 구간으로 지정 ; 세션이 잠기거나 절전 상태이거나 앱이 전체 화면일 때 화면 자동 꺼짐.
+- **앱별 프로필**: 게임이나 앱이 맨 앞에 있는 동안 그 앱 전용 콘텐츠 표시(*감지* 버튼).
+- **재생 목록 및 즐겨찾기**: GIF, 효과, 시계… 각각 정해진 시간 동안 반복 재생 ; 시스템 트레이 아이콘과 명령줄에서도 사용 가능.
+- **웹 리모컨**: 로컬 네트워크의 휴대폰에서 화면을 제어하는 페이지(QR 코드, 토큰).
+- **긴 명령 완료 알림**: 터미널에서 긴 명령이 끝나면 "완료: make 2 min 05"가 표시됩니다.
 - **OpenRGB를 통한 키보드 색상**: 테마 색을 키에 적용하거나 화면과 함께 맥동.
 - **시스템 트레이 아이콘**: 빠른 메뉴(모드, 밝기).
 
 **편의성**
 - 실시간 **312 LED 미리 보기**, **11가지 테마**(ROG 5종, 핑크 5종, 시스템), **19개 언어**를 갖춘 **4가지 인터페이스**(*다이얼 + 서랍* 기본, *다이얼*, *둥근 모서리*, *클래식*).
+- **X11과 Wayland**: evdev를 통한 키보드 반응, Sway, Hyprland, KDE(kdotool) 또는 GNOME(*Window Calls* 확장)에서 활성 창 정보 읽기.
 - **내장 업데이트**: 런처가 최신 릴리스를 내려받아 SHA-256 지문을 확인한 뒤 설치(관리자 비밀번호 필요) ; 또는 APT 저장소로 `apt upgrade`.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | 지원됨(HID, interface 4, usage page `0xFF02`) |
 | ROG 노트북(G14, G16 등)의 AniMe Matrix 화면 | 다양함 | `asusctl`을 통한 **실험적** 지원, 실제 기기에서 테스트되지 않음([사용법](#utilisation) 참고) |
 
-Ubuntu 26.04(X11, PipeWire, Cinnamon)에서 테스트되었습니다. Python ≥ 3.10, hidapi, Tk, systemd를 갖춘 배포판이라면 모두 사용할 수 있을 것입니다.
+Ubuntu 26.04(X11, PipeWire, Cinnamon)에서 테스트되었습니다. Python ≥ 3.10, hidapi, Tk, systemd를 갖춘 배포판이라면 모두 사용할 수 있을 것입니다 ; Wayland에서는 런처가 XWayland를 통해 실행됩니다.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-유용한 시스템 도구: `imagemagick`(기본 변환), `pulseaudio-utils`(`parec`, 오디오용), `zenity`(파일 선택 대화상자), `libnotify-bin`(알림), `python3-gi` 및 `gir1.2-ayatanaappindicator3-0.1`(시스템 트레이 아이콘), `openrgb`(키 색상).
+유용한 시스템 도구: `imagemagick`(기본 변환), `pulseaudio-utils`(`parec`, 오디오용), `zenity`(파일 선택 대화상자), `libnotify-bin`(알림), `python3-gi` 및 `gir1.2-ayatanaappindicator3-0.1`(시스템 트레이 아이콘), `openrgb`(키 색상), `ffmpeg`(동영상, 웹캠, 화면 미러링), `python3-evdev`(Wayland에서 키보드 반응), `x11-utils`(X11에서 활성 창), `python3-qrcode`(리모컨 QR 코드), `tkdnd`(끌어다 놓기).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 둥근 인터페이스에서는 둥근 버튼을 눌러 *GIF*, *효과*, *오디오*, *설정* 블록을 엽니다(서랍 안이나 원 안에서) ; *시계*와 *정지*는 즉시 실행됩니다 ; 아래쪽 호는 밝기를 조절합니다 ; 배경을 드래그해 창을 이동합니다 ; 위쪽의 작은 버튼은 최소화 또는 닫기입니다. 둥근 형태는 X11 SHAPE 확장(`python3-xlib` 패키지)을 사용합니다 ; 이 확장이 없으면 같은 인터페이스가 사각형 창으로 표시됩니다.
 
-- **GIF / 이미지**: *GIF/이미지…* 또는 *폴더 (갤러리)…* ; *실제 비율*은 비율을 유지합니다(이미지를 늘리는 대신 모서리를 잘라냄) ; *👁 실제와 같은 미리 보기(보내기 전)*는 아무것도 전송하지 않고 결과를 보여줍니다 ; *🎞 애니메이션 만들기 (편집기)* ; *📚 애니메이션 라이브러리* ; GIF 변환을 위한 *스마트 변환*.
-- **효과**와 **오디오**: 선택하고, 조정한 뒤 *▶ 효과 실행*. 슬라이더는 실시간으로 작동하며, *템포*는 전체 애니메이션을 빠르거나 느리게 만듭니다. 게임은 화살표 키, 스페이스, 엔터로 플레이하며, 런처 창이 맨 앞에 있어야 합니다.
+- **GIF / 이미지**: *GIF/이미지…* 또는 *폴더 (갤러리)…*(또는 창에 끌어다 놓기) ; *실제 비율*은 비율을 유지합니다(이미지를 늘리는 대신 모서리를 잘라냄) ; *👁 실제와 같은 미리 보기(보내기 전)*는 아무것도 전송하지 않고 결과를 보여줍니다 ; *🎞 애니메이션 만들기 (편집기)* ; *📚 애니메이션 라이브러리* ; *★ 재생 목록 및 즐겨찾기* ; *🖼 썸네일 갤러리*(클릭: 재생, 오른쪽 클릭: 즐겨찾기) ; *🎥 웹캠*과 *🖥 화면 미러링* ; GIF 변환을 위한 *스마트 변환*.
+- **효과**와 **오디오**: 선택하고, 조정한 뒤 *▶ 효과 실행*. 슬라이더는 실시간으로 작동하며, *템포*는 전체 애니메이션을 빠르거나 느리게 만듭니다. *텍스트* 효과는 메시지와 스크롤 방향을 입력받습니다. 게임은 화살표 키, 스페이스, 엔터로 플레이하며, 런처 창이 맨 앞에 있어야 합니다 ; 2인용 퐁: 왼쪽 플레이어는 Z/W와 S.
 - **밝기**, **🕒 시계**, **■ 정지**(화면을 지움)는 모든 탭에 공통입니다.
-- **설정**: 세션 시작 시(GIF 갤러리, 시계, 마지막 재생, 또는 없음), 언어, 테마, 인터페이스, 데스크톱 알림, 키보드 색상(OpenRGB), *일정…*, 시스템 트레이 아이콘, 확장 폴더, 업데이트.
+- **설정**: 세션 시작 시(GIF 갤러리, 시계, 마지막 재생, 또는 없음), 시계 문자판, 언어, 테마, 인터페이스, 데스크톱 알림, 키보드 색상(OpenRGB), *일정…*(트리거, 앱별 프로필, 시간 구간), *표시등…*, *웹 리모컨…*, 시스템 트레이 아이콘, 긴 명령 완료 알림, 확장 폴더, 업데이트.
 
 **런처를 닫아도 아무것도 멈추지 않습니다**: `animematrixd` 데몬이 계속 화면을 표시합니다. *■ 정지*를 누르면 화면이 꺼집니다.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # 갤러리(폴더 또는 파
 animematrix-ctl effet "Plasma" --param speed=250   # 효과와 설정
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # 재생 목록(이름 없이: 목록 표시)
+animematrix-ctl favori 2                           # 즐겨찾기 2번(번호 없이: 목록 표시)
 animematrix-ctl notifier "Café prêt" --duree 5     # 겹쳐 표시 후 복귀
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ animematrix-ctl stop
 
 ### "Keyboard React" 효과
 
-`pynput`을 통해 타이핑 리듬에 맞춰 화면을 켭니다. 이 효과가 실행되는 동안 세션 전체의 키 입력을 읽습니다. X11에서는 작동하지만, Wayland에서는 키 입력을 받지 못합니다.
+이 효과가 실행되는 동안 타이핑 리듬에 맞춰 화면을 켭니다: X11에서는 `pynput`으로, Wayland에서는 `/dev/input`의 키보드를 읽어서 작동합니다(`python3-evdev`). Wayland에서 효과가 데모 모드에 머문다면, ROG 키보드만 읽을 수 있도록 허용하세요:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### 표시등
+
+*설정* → *표시등(마이크, 웹캠, OBS)…*: 화면 왼쪽 위에 2 × 2 LED 블록이 재생 중인 내용 위에 켜지며(1: 마이크 음소거 또는 사용 중, 2: 웹캠 사용 중, 3: OBS 방송 또는 녹화 중), 변경될 때마다 스크롤 텍스트로 알릴 수 있습니다. OBS: WebSocket 서버를 활성화하고(*도구* → *WebSocket 서버 설정*) 포트와 비밀번호를 입력하세요.
+
+### 웹 리모컨
+
+*설정* → *웹 리모컨…*: *웹 리모컨 켜기*를 선택한 뒤, 같은 네트워크의 휴대폰에서 주소를 여세요(또는 QR 코드를 스캔). 페이지에서 화면을 실시간으로 보면서 시계, 갤러리, 효과, 즐겨찾기, 목록, 밝기, 메시지를 제어할 수 있습니다. 주소에는 토큰이 포함되어 있습니다: 공유하지 말고, *새 토큰*으로 변경하세요 ; 페이지는 암호화되지 않으므로(HTTP) 신뢰할 수 있는 네트워크에서만 사용하세요.
+
+### 긴 명령 완료 알림
+
+*설정* → *긴 명령 완료 알림(터미널)*은 `~/.bashrc`(및 `~/.zshrc`)에 한 줄을 추가합니다: 30초 이상 걸린 명령은 끝날 때 "완료: make 2 min 05" 또는 "실패(2): …"를 표시합니다. 기준 시간: `ANIMEMATRIX_FIN_SECONDES` ; 대화형 명령(편집기, `ssh`, `less`…)은 무시됩니다.
 
 ### 키보드 색상(OpenRGB)
 
@@ -227,7 +255,9 @@ animematrix-ctl stop
 | "animematrixd 서비스에 연결할 수 없음" | 데몬이 정지됨 | `systemctl --user restart animematrixd.service` 또는 `animematrixd &` |
 | 화면이 바뀌지 않음 | 다른 프로그램이 키보드에 쓰고 있음 | 이전 스크립트 종료 ; `animematrix-ctl etat` |
 | 시각화가 데모 모드에 머무름 | `parec`이 없거나 소리가 없음 | `pulseaudio-utils` 설치, 소리 재생 |
-| "Keyboard React"가 반응하지 않음 | Wayland 세션이거나 `pynput`이 없음 | X11 세션 사용, `sudo apt install python3-pynput` |
+| "Keyboard React"가 반응하지 않음 | `pynput`(X11) 또는 `python3-evdev`(Wayland)가 없거나 키보드를 읽을 수 없음 | 패키지 설치 ; Wayland에서는 [Keyboard React](#utilisation)의 udev 규칙 |
+| 웹캠, 동영상 또는 화면 미러링이 작동하지 않음 | `ffmpeg` 없음 | `sudo apt install ffmpeg` ; Wayland에서는 화면 미러링이 포털을 거침(`gstreamer1.0-pipewire`) |
+| Wayland에서 앱별 프로필이나 전체 화면 감지가 작동하지 않음 | 컴포지터가 활성 창을 알려 주지 않음 | GNOME: *Window Calls* 확장 ; KDE: `kdotool` ; Sway와 Hyprland: 별도 작업 불필요 |
 | 둥근 창이 사각형으로 표시됨 | SHAPE 확장 또는 `python3-xlib` 누락 | `sudo apt install python3-xlib`, 또는 *설정* → *인터페이스:* → *클래식* |
 | OpenRGB 이후 키가 한 가지 색으로 고정됨 | OpenRGB가 원래 효과를 재현하지 못함 | 키보드를 분리했다가 다시 연결 |
 | 데몬 로그 확인 | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ animematrix-ctl stop
 |---|---|
 | `rog_flare2_launcher.py` | 그래픽 런처 (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | 둥근 인터페이스, 테마 |
-| `rog_flare2_i18n.py`, `locale/` | 번역(19개 언어 ; `locale/_cles.json` = 번역할 텍스트) |
+| `rog_flare2_i18n.py`, `locale/` | 번역(19개 언어 ; `locale/_cles.json` = 번역할 텍스트 ; [docs/TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | `animematrixd` 데몬, 클라이언트와 `animematrix-ctl` 명령 |
-| `rog_flare2_core.py` | GIF 스트리밍 재생, 시계, 기하 구조 |
+| `rog_flare2_core.py` | GIF 스트리밍 재생, 프레임 캐시, 시계, 기하 구조 |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | 모든 문자 체계의 텍스트, *텍스트* 효과, 시계 문자판 |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | 재생 목록, 즐겨찾기, 썸네일 갤러리, 끌어다 놓기 |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | 동영상, 웹캠, 화면 미러링 ; 표시등 ; 웹 리모컨 |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | 키 입력과 활성 창(X11, Wayland), 긴 명령 완료 알림, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | 효과와 시각화(PolyWollyWin 엔진, MIT), 확장 |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | 시스템 모니터, 재생 중인 곡, 게임 |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | 알림, 시간별 예약과 트리거 |
@@ -295,4 +329,4 @@ packaging/build-deb.sh
 
 **https://buymeacoffee.com/anticitoyen** — 이 링크는 런처의 *설정* 탭에도 있습니다.
 
-버그 리포트, 아이디어, 공유하고 싶은 애니메이션: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+버그 리포트, 아이디어, 공유하고 싶은 애니메이션: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). 번역: [docs/TRADUIRE.md](../TRADUIRE.md).

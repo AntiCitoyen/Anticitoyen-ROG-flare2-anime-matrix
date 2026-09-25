@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.anticitoyen.AniMeMatrix</id>
+  <name>AniMe Matrix</name>
+  <summary>Control the LED display of the ROG Strix Flare II Animate keyboard</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="io.github.anticitoyen"><name>AntiCitoyen</name></developer>
+  <description>
+    <p>AniMe Matrix drives the 312-LED AniMe Matrix display of the ASUS ROG Strix Flare II Animate keyboard (USB 0b05:19fc).</p>
+    <ul>
+      <li>GIF, image and video gallery, clock faces (digital, analog, binary, in words), free text in any direction</li>
+      <li>Effects and audio visualizers, playable games, system monitor, now playing, desktop notifications</li>
+      <li>Playlists and favorites, schedule and per-application profiles, status lights (microphone, webcam, OBS)</li>
+      <li>Animation editor, community library, faithful preview, web remote for your phone</li>
+    </ul>
+    <p>The udev rule giving access to the keyboard must be installed on the host: see the project page.</p>
+  </description>
+  <launchable type="desktop-id">io.github.anticitoyen.AniMeMatrix.desktop</launchable>
+  <url type="homepage">https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix</url>
+  <url type="bugtracker">https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues</url>
+  <url type="vcs-browser">https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix</url>
+  <url type="donation">https://buymeacoffee.com/anticitoyen</url>
+  <branding>
+    <color type="primary" scheme_preference="light">#f2c6cc</color>
+    <color type="primary" scheme_preference="dark">#5a0d17</color>
+  </branding>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Dial and drawer interface</caption>
+      <image>https://raw.githubusercontent.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/main/docs/captures/en/interface-drawer.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Classic interface</caption>
+      <image>https://raw.githubusercontent.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/main/docs/captures/en/interface-classic.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Themes</caption>
+      <image>https://raw.githubusercontent.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/main/docs/captures/themes-en.png</image>
+    </screenshot>
+  </screenshots>
+  <requires><display_length compare="ge">640</display_length></requires>
+  <supports><control>pointing</control><control>keyboard</control></supports>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.5.0" date="2026-09-26"><description><p>Wayland, playlists, profiles, status lights, videos, webcam, screen mirror, web remote, new clock faces and games.</p></description></release>
+    <release version="1.4.1" date="2026-09-25"><description><p>System monitor and games reachable again.</p></description></release>
+    <release version="1.4.0" date="2026-09-25"><description><p>Daemon, 17 improvements.</p></description></release>
+  </releases>
+</component>

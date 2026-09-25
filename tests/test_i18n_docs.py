@@ -20,18 +20,13 @@ def test_catalogue_complete(code):
 
 
 def test_every_ui_string_is_in_the_catalogue():
-    """Tout _("…") littéral du code doit figurer dans locale/_cles.json."""
-    import ast
-    missing = set()
-    for f in ["rog_flare2_launcher.py", "rog_flare2_matrix_paint.py", "rog_flare2_ui_ronde.py", "rog_flare2_maj.py",
-              "rog_flare2_ui_programme.py", "rog_flare2_animation.py", "rog_flare2_bibliotheque.py",
-              "rog_flare2_tray.py"]:
-        for node in ast.walk(ast.parse((ROOT / f).read_text(encoding="utf-8"))):
-            if (isinstance(node, ast.Call) and getattr(node.func, "id", None) == "_" and node.args
-                    and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str)):
-                if node.args[0].value not in SOURCES:
-                    missing.add(node.args[0].value)
-    assert not missing
+    """Tout _("…") littéral des modules, et chaque libellé passé à _() par variable, figure dans locale/_cles.json."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("i18n_textes", ROOT / "tests" / "i18n_textes.py")
+    tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tool)
+    wanted = {**tool.literal_strings(), **tool.dynamic_strings()}
+    assert not set(wanted) - set(SOURCES)
 
 
 README = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -66,3 +61,12 @@ def test_no_ai_mention_in_published_files():
         f = ROOT / name
         if f.suffix in {".py", ".md", ".json", ".sh", ".service", ".desktop", ".yml"} and f.exists():
             assert not pattern.search(f.read_text(encoding="utf-8", errors="ignore")), name
+
+
+def test_weblate_base_file_in_sync():
+    """locale/_source.json (fichier de base Weblate) suit _cles.json et fr.json : tests/i18n_modele.py le régénère."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("i18n_modele", ROOT / "tests" / "i18n_modele.py")
+    tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tool)
+    assert json.loads((ROOT / "locale" / "_source.json").read_text(encoding="utf-8")) == tool.build()

@@ -41,6 +41,7 @@ from rog_flare2_core import (  # noqa: F401  (réexportés pour les autres modul
     iter_gif_frames, media_files, pick_version, play_clock, play_file, save_gallery_dir,
 )
 from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, PLUGIN_DIR, effect_class, effect_label
+from rog_flare2_flatpak import in_flatpak
 from rog_flare2_jeux import GAMES
 
 GAME_NAMES = {g.name for g in GAMES}
@@ -75,6 +76,47 @@ def stop_legacy_services() -> None:
     active = [s for s in LEGACY_SERVICES if systemctl("is-active", "--quiet", s) == 0]
     if active:
         systemctl("stop", *active)
+
+
+class ScrollArea(ttk.Frame):
+    """Bloc à hauteur bornée, qui défile (molette, barre) quand son contenu est plus haut."""
+
+    def __init__(self, parent, max_height: int = 480):
+        super().__init__(parent)
+        self.max_height = max_height
+        self.canvas = tk.Canvas(self, highlightthickness=0, bd=0, background=themes.palette().get("bg", "#0e0f12"))
+        self.bar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.bar.set)
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.inner = ttk.Frame(self.canvas)
+        self._item = self.canvas.create_window(0, 0, window=self.inner, anchor="nw")
+        self.inner.bind("<Configure>", lambda _e: self._fit())
+        self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfigure(self._item, width=e.width))
+        for seq in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            self.bind_all(seq, self._wheel, add="+")
+
+    def _fit(self):
+        w, h = self.inner.winfo_reqwidth(), self.inner.winfo_reqheight()
+        self.canvas.configure(width=w, height=min(h, self.max_height), scrollregion=(0, 0, w, h))
+        scroll = h > self.max_height
+        if scroll != bool(self.bar.winfo_manager()):
+            self.canvas.pack_forget()  # la barre d'abord : sinon le canevas prend toute la largeur
+            if scroll:
+                self.bar.pack(side="right", fill="y")
+            else:
+                self.bar.pack_forget()
+            self.canvas.pack(side="left", fill="both", expand=True)
+
+    def _wheel(self, event):
+        try:
+            over = self.winfo_containing(event.x_root, event.y_root)
+        except (KeyError, tk.TclError):
+            return
+        while over is not None and over is not self:
+            over = over.master
+        if over is self and self.inner.winfo_reqheight() > self.max_height:
+            down = getattr(event, "num", 0) == 5 or getattr(event, "delta", 0) < 0
+            self.canvas.yview_scroll(3 if down else -3, "units")
 
 
 class LauncherApp(tk.Tk):
@@ -135,7 +177,7 @@ class LauncherApp(tk.Tk):
             )
         elif gallery_dir().is_dir():
             self.set_files(media_files(gallery_dir()), gallery_dir().name)
-        if maj.due():
+        if maj.due() and not in_flatpak():
             self.check_updates(silent=True)
 
     def _build_classic(self):
@@ -167,10 +209,16 @@ class LauncherApp(tk.Tk):
     def build_sections(self, parent, padding=12, wrap=380) -> list[tuple[ttk.Frame, str]]:
         """Les quatre blocs de commandes (GIF, Effets, Audio, Réglages), communs à toutes les interfaces."""
         self.wrap = wrap
-        gif = self._build_gif_tab(parent, padding)
+        # GIF et Réglages : hauteur bornée, défilement (sinon la fenêtre dépasse les écrans de 1080 px)
+        gif_area, sett_area = ScrollArea(parent), ScrollArea(parent)
+        self._build_gif_tab(gif_area.inner, padding).pack(fill="both", expand=True)
         eff, self.effect_panel = self._build_effect_tab(parent, "Effets", list(EFFECTS), "Plasma", padding)
         aud, self.audio_panel = self._build_effect_tab(parent, "Audio", list(AUDIO_EFFECTS), "Spectrum Bars", padding)
-        sett = self._build_settings_tab(parent, padding)
+        self._build_settings_tab(sett_area.inner, padding).pack(fill="both", expand=True)
+        for area in (gif_area, sett_area):
+            area.update_idletasks()
+            area._fit()
+        gif, sett = gif_area, sett_area
         return [(gif, _("GIF / images")), (eff, _("Effets")), (aud, _("Audio")), (sett, _("Réglages"))]
 
     def _build_gif_tab(self, parent, padding=12) -> ttk.Frame:
@@ -381,19 +429,23 @@ class LauncherApp(tk.Tk):
         self.tray_var = tk.BooleanVar(value=tray.AUTOSTART.exists())
         ttk.Checkbutton(tab, text=_("Icône dans la barre système"), variable=self.tray_var,
                         command=self._toggle_tray).pack(anchor="w", pady=(4, 0))
-        import rog_flare2_fin as fin
-        self.fin_var = tk.BooleanVar(value=fin.enabled())
-        ttk.Checkbutton(tab, text=_("Afficher la fin des commandes longues (terminal)"), variable=self.fin_var,
-                        command=lambda: fin.set_enabled(self.fin_var.get())).pack(anchor="w", pady=(2, 0))
+        if not in_flatpak():  # ~/.bashrc hors d'atteinte du bac à sable Flatpak
+            import rog_flare2_fin as fin
+            self.fin_var = tk.BooleanVar(value=fin.enabled())
+            ttk.Checkbutton(tab, text=_("Afficher la fin des commandes longues (terminal)"), variable=self.fin_var,
+                            command=lambda: fin.set_enabled(self.fin_var.get())).pack(anchor="w", pady=(2, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
-        self.update_btn = ttk.Button(tab, text=_("Rechercher les mises à jour"), command=self.on_update_button)
-        self.update_btn.pack(fill="x", pady=(8, 0))
-        self.update_auto = tk.BooleanVar(value=maj.load_state().get("auto", True))
-        ttk.Checkbutton(tab, text=_("Vérifier au démarrage"), variable=self.update_auto,
-                        command=lambda: maj.save_state({**maj.load_state(), "auto": self.update_auto.get()})
-                        ).pack(anchor="w")
+        if in_flatpak():  # mises à jour par Flatpak (logithèque, flatpak update)
+            ttk.Label(tab, text=_("Mises à jour : par la logithèque (Flatpak)"), style="Muted.TLabel").pack()
+        else:
+            self.update_btn = ttk.Button(tab, text=_("Rechercher les mises à jour"), command=self.on_update_button)
+            self.update_btn.pack(fill="x", pady=(8, 0))
+            self.update_auto = tk.BooleanVar(value=maj.load_state().get("auto", True))
+            ttk.Checkbutton(tab, text=_("Vérifier au démarrage"), variable=self.update_auto,
+                            command=lambda: maj.save_state({**maj.load_state(), "auto": self.update_auto.get()})
+                            ).pack(anchor="w")
         ttk.Button(tab, text=_("☕ Soutenir le projet (Buy Me a Coffee)"),
                    command=lambda: webbrowser.open(SUPPORT_URL)).pack(fill="x", pady=(8, 4))
         ttk.Button(tab, text=_("Page du projet (GitHub)"),
@@ -655,9 +707,13 @@ class LauncherApp(tk.Tk):
     def set_boot_mode(self, label: str):
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         START_FILE.write_text(BOOT_MODES[label] + "\n")
-        systemctl("enable", "animematrixd.service")  # le démon démarre avec la session
-        for service in LEGACY_SERVICES:
-            systemctl("disable", service)
+        from rog_flare2_flatpak import request_autostart
+        if in_flatpak():  # pas de systemd dans le bac à sable : portail Background
+            request_autostart(BOOT_MODES[label] != "rien", _("Afficher sur l'écran du clavier dès l'ouverture de session"))
+        else:
+            systemctl("enable", "animematrixd.service")  # le démon démarre avec la session
+            for service in LEGACY_SERVICES:
+                systemctl("disable", service)
         self.status.config(text=_("Au démarrage : {mode}").format(mode=_(label)))
 
     # --- Conversion ImageMagick (rog_flare2_convertir.py) -------------------

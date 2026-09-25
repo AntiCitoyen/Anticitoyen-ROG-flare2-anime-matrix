@@ -10,6 +10,7 @@ BuildRequires:  python3
 Requires:       python3 >= 3.10, python3-hidapi, python3-pillow, python3-pillow-tk, python3-numpy, python3-tkinter
 Recommends:     python3-xlib, python3-gobject, libayatana-appindicator-gtk3, ImageMagick, pulseaudio-utils
 Recommends:     zenity, python3-pynput, libnotify, xdg-user-dirs
+Recommends:     python3-evdev, xprop, xwininfo, ffmpeg-free, python3-qrcode, tkdnd
 
 %description
 Linux tools for the 312-LED AniMe Matrix display of the ASUS ROG Strix Flare II

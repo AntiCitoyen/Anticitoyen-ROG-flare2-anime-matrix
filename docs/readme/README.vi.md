@@ -51,13 +51,16 @@
 ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Windows (Armoury Crate). Dự án này giao tiếp trực tiếp với bàn phím qua USB HID và mang lại:
 
 **Hiển thị**
-- **GIF và hình ảnh**: một tệp, một số tệp đã chọn, hoặc cả một thư mục dưới dạng thư viện ảnh; phát theo luồng (một thư viện gồm 400 GIF chỉ chiếm khoảng 25 MB bộ nhớ).
-- **Đồng hồ** HH:MM.
-- **19 hiệu ứng động** (mưa kiểu Ma Trận, plasma, lửa, ngôi sao, pháo hoa, sét, metaball, sóng, chữ chạy…) và **7 bộ hiển thị âm thanh** phản ứng theo âm thanh mà máy tính phát ra.
+- **GIF, hình ảnh và video**: một tệp, một số tệp đã chọn, hoặc cả một thư mục dưới dạng thư viện ảnh, có thể kéo thả vào cửa sổ; video (MP4, WebM, MKV…) được phát bằng ffmpeg; thư viện hình thu nhỏ; các khung hình đã chuyển đổi được lưu trong bộ nhớ đệm (một thư viện gồm 400 GIF chỉ chiếm khoảng 25 MB bộ nhớ).
+- **Đồng hồ**: mặt số kiểu số, kiểu kim, nhị phân, bằng chữ (tiếng Pháp, tiếng Anh, tiếng Đức, tiếng Tây Ban Nha, tiếng Ý, tiếng Bồ Đào Nha, tiếng Hà Lan) hoặc cách điệu.
+- **Hiệu ứng động** (mưa kiểu Ma Trận, plasma, lửa, ngôi sao, pháo hoa, sét, metaball, sóng…) và **7 bộ hiển thị âm thanh** phản ứng theo âm thanh mà máy tính phát ra.
+- **Chữ**: thông điệp của bạn, với mọi hệ chữ viết (chữ có dấu, Kirin, Ả Rập, Hindi, Trung, Nhật, Hàn…), chạy sang trái, sang phải, lên trên, xuống dưới, hoặc đứng yên.
+- **Webcam** (hình ảnh hoặc hình bóng) và **phản chiếu màn hình** (toàn màn hình, quanh con trỏ chuột hoặc cửa sổ đang hoạt động).
 - **Giám sát hệ thống**: CPU, RAM, GPU, nhiệt độ, tốc độ mạng và giờ, dưới dạng đồng hồ đo.
 - **Bài hát đang phát**: khi đổi bài, "NGHỆ SĨ - TÊN BÀI" chạy chữ một lần rồi chuyển sang bộ hiển thị (Spotify, VLC, Rhythmbox, trình duyệt… qua MPRIS).
 - **Thông báo màn hình nền**: "ỨNG DỤNG : TIÊU ĐỀ" hiện chồng lên rồi việc phát tiếp tục (mặc định tắt, có danh sách ứng dụng được phép).
-- **Trò chơi** chơi được bằng bàn phím: Rắn, Pong, Tetris, phá gạch, có lưu kỷ lục.
+- **Trò chơi** chơi được bằng bàn phím: Rắn, Pong (một hoặc hai người), Tetris, phá gạch, Invaders, Flappy, có lưu kỷ lục.
+- **Đèn báo**: các khối sáng nhỏ khi micro bị tắt hoặc đang được dùng, khi webcam đang bật, khi OBS đang phát trực tiếp hoặc ghi hình.
 
 **Tạo**
 - **Trình chỉnh sửa hoạt ảnh** từng khung hình, trên đúng hình học của màn hình: 3 mức, dải khung hình, lớp mờ tham chiếu, dịch chuyển, sao chép-dán, xem trước, gửi tới bàn phím, xuất GIF.
@@ -68,12 +71,17 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 
 **Tự động hóa**
 - **Dịch vụ nền `animematrixd`**: chủ sở hữu duy nhất của màn hình, tiếp tục hiển thị khi đóng trình khởi chạy; lệnh `animematrix-ctl` và API HTTP nội bộ tùy chọn.
-- **Lên lịch theo khung giờ**: các khung giờ (bao gồm cả ban đêm) với đồng hồ, thư viện ảnh, giám sát, bài hát đang phát, hoặc tắt màn hình; màn hình tự tắt khi phiên bị khóa, khi ở chế độ chờ hoặc khi một ứng dụng đang toàn màn hình.
+- **Lên lịch theo khung giờ**: các khung giờ (bao gồm cả ban đêm) với đồng hồ, thư viện ảnh, giám sát, bài hát đang phát, một hiệu ứng, một danh sách phát, hoặc tắt màn hình; màn hình tự tắt khi phiên bị khóa, khi ở chế độ chờ hoặc khi một ứng dụng đang toàn màn hình.
+- **Hồ sơ theo ứng dụng**: nội dung riêng cho một trò chơi hoặc ứng dụng khi nó ở phía trước (nút *Phát hiện*).
+- **Danh sách phát và mục yêu thích**: GIF, hiệu ứng, đồng hồ… mỗi mục trong thời lượng của nó, phát lặp lại; cũng có trong biểu tượng khay hệ thống và dòng lệnh.
+- **Điều khiển từ xa qua web**: một trang để điều khiển màn hình từ điện thoại trong mạng nội bộ (mã QR, mã truy cập).
+- **Báo khi lệnh dài kết thúc**: trong terminal, "Xong: make 2 min 05" hiện ra khi một lệnh chạy lâu kết thúc.
 - **Màu bàn phím qua OpenRGB**: màu của giao diện áp lên phím, hoặc nhấp nháy theo màn hình.
 - **Biểu tượng khay hệ thống**: menu nhanh (chế độ, độ sáng).
 
 **Tiện lợi**
 - **4 giao diện** (*Mặt số + ngăn kéo* mặc định, *Mặt số*, *Bo tròn*, *Cổ điển*) với **xem trước trực tiếp 312 LED**, **11 giao diện màu** (5 kiểu ROG, 5 kiểu hồng, hệ thống) và **19 ngôn ngữ**.
+- **X11 và Wayland**: phản ứng theo bàn phím qua evdev, đọc cửa sổ đang hoạt động từ Sway, Hyprland, KDE (kdotool) hoặc GNOME (tiện ích mở rộng *Window Calls*).
 - **Cập nhật tích hợp**: trình khởi chạy tải bản phát hành mới nhất, kiểm tra vân tay SHA-256 rồi cài đặt (cần mật khẩu quản trị); hoặc `apt upgrade` với kho APT.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | được hỗ trợ (HID, interface 4, usage page `0xFF02`) |
 | Màn hình AniMe Matrix trên laptop ROG (G14, G16…) | khác nhau | **thử nghiệm** qua `asusctl`, chưa được thử nghiệm trên phần cứng thật (xem [Sử dụng](#utilisation)) |
 
-Đã thử nghiệm trên Ubuntu 26.04 (X11, PipeWire, Cinnamon). Bất kỳ bản phân phối nào có Python ≥ 3.10, hidapi, Tk và systemd đều phù hợp.
+Đã thử nghiệm trên Ubuntu 26.04 (X11, PipeWire, Cinnamon). Bất kỳ bản phân phối nào có Python ≥ 3.10, hidapi, Tk và systemd đều phù hợp; trên Wayland, trình khởi chạy chạy qua XWayland.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bản), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo), `python3-gi` và `gir1.2-ayatanaappindicator3-0.1` (biểu tượng khay hệ thống), `openrgb` (màu phím).
+Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bản), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo), `python3-gi` và `gir1.2-ayatanaappindicator3-0.1` (biểu tượng khay hệ thống), `openrgb` (màu phím), `ffmpeg` (video, webcam, phản chiếu màn hình), `python3-evdev` (phản ứng theo bàn phím trên Wayland), `x11-utils` (cửa sổ đang hoạt động trên X11), `python3-qrcode` (mã QR của điều khiển từ xa), `tkdnd` (kéo thả).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bả
 
 Trong các giao diện tròn, các nút tròn mở khối *GIF*, *Hiệu ứng*, *Âm thanh* và *Cài đặt* (trong ngăn kéo hoặc trong vòng tròn); *Đồng hồ* và *Dừng* tác động ngay lập tức; cung ở phía dưới điều chỉnh độ sáng; kéo phần nền để di chuyển cửa sổ; các nút nhỏ phía trên để thu nhỏ hoặc đóng. Hình dạng tròn sử dụng tiện ích mở rộng X11 SHAPE (gói `python3-xlib`); nếu không có, cùng một giao diện sẽ hiển thị trong một cửa sổ hình chữ nhật.
 
-- **GIF / hình ảnh**: *GIF/hình ảnh…* hoặc *Thư mục (thư viện)…*; *Hình học chân thực* giữ nguyên tỉ lệ (góc bị cắt thay vì hình ảnh bị kéo giãn); *👁 Xem trước chân thực (trước khi gửi)* cho xem kết quả mà không gửi gì cả; *🎞 Tạo hoạt ảnh (trình chỉnh sửa)*; *📚 Thư viện hoạt ảnh*; *Chuyển đổi thông minh* để chuyển đổi GIF.
-- **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm toàn bộ hoạt ảnh nhanh hơn hoặc chậm hơn. Trò chơi được chơi bằng phím mũi tên, Space và Enter, với cửa sổ trình khởi chạy ở phía trước.
+- **GIF / hình ảnh**: *GIF/hình ảnh…* hoặc *Thư mục (thư viện)…* (hoặc kéo thả vào cửa sổ); *Hình học chân thực* giữ nguyên tỉ lệ (góc bị cắt thay vì hình ảnh bị kéo giãn); *👁 Xem trước chân thực (trước khi gửi)* cho xem kết quả mà không gửi gì cả; *🎞 Tạo hoạt ảnh (trình chỉnh sửa)*; *📚 Thư viện hoạt ảnh*; *★ Danh sách phát và mục yêu thích*; *🖼 Thư viện hình thu nhỏ* (nhấp: phát, nhấp phải: yêu thích); *🎥 Webcam* và *🖥 Phản chiếu màn hình*; *Chuyển đổi thông minh* để chuyển đổi GIF.
+- **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm toàn bộ hoạt ảnh nhanh hơn hoặc chậm hơn. Hiệu ứng *Chữ* nhận thông điệp của bạn và hướng chạy chữ. Trò chơi được chơi bằng phím mũi tên, Space và Enter, với cửa sổ trình khởi chạy ở phía trước; Pong hai người: Z/W và S cho người chơi bên trái.
 - **Độ sáng**, **🕒 Đồng hồ**, **■ Dừng** (xóa màn hình) có ở mọi tab.
-- **Cài đặt**: khi khởi động phiên (Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có), ngôn ngữ, giao diện màu, giao diện, thông báo màn hình nền, màu bàn phím (OpenRGB), *Lịch hẹn…*, biểu tượng khay hệ thống, thư mục tiện ích mở rộng, cập nhật.
+- **Cài đặt**: khi khởi động phiên (Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có), mặt đồng hồ, ngôn ngữ, giao diện màu, giao diện, thông báo màn hình nền, màu bàn phím (OpenRGB), *Lịch hẹn…* (điều kiện kích hoạt, hồ sơ theo ứng dụng, khung giờ), *Đèn báo…*, *Điều khiển từ xa qua web…*, biểu tượng khay hệ thống, báo khi lệnh dài kết thúc, thư mục tiện ích mở rộng, cập nhật.
 
 **Đóng trình khởi chạy không làm gián đoạn gì cả**: dịch vụ nền `animematrixd` vẫn tiếp tục hiển thị. *■ Dừng* sẽ tắt màn hình.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # thư viện (thư mục ho�
 animematrix-ctl effet "Plasma" --param speed=250   # hiệu ứng và thiết lập
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # danh sách phát (không có tên: liệt kê)
+animematrix-ctl favori 2                           # mục yêu thích số 2 (không có số: liệt kê)
 animematrix-ctl notifier "Café prêt" --duree 5     # hiện chồng rồi quay lại
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ Các bộ hiển thị lắng nghe **bộ giám sát của thiết bị âm than
 
 ### Hiệu ứng "Keyboard React"
 
-Hiệu ứng này làm màn hình sáng theo nhịp gõ phím nhờ `pynput`, thư viện đọc các phím trong toàn bộ phiên làm việc miễn là hiệu ứng đang chạy. Nó hoạt động trên X11; trên Wayland, nó không nhận được thao tác gõ phím.
+Hiệu ứng này làm màn hình sáng theo nhịp gõ phím, miễn là hiệu ứng đang chạy: trên X11 nhờ `pynput`, trên Wayland bằng cách đọc bàn phím trong `/dev/input` (`python3-evdev`). Trên Wayland, nếu hiệu ứng vẫn ở chế độ demo, hãy cho phép đọc riêng bàn phím ROG:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### Đèn báo
+
+*Cài đặt* → *Đèn báo (micro, webcam, OBS)…*: một khối 2 × 2 LED sáng lên ở góc trên bên trái màn hình, đè lên nội dung đang phát (1: micro bị tắt hoặc đang được dùng, 2: webcam đang được dùng, 3: OBS đang phát trực tiếp hoặc ghi hình), và mỗi thay đổi có thể được báo bằng chữ chạy. OBS: bật máy chủ WebSocket (*Công cụ* → *Cài đặt máy chủ WebSocket*) rồi nhập cổng và mật khẩu của nó.
+
+### Điều khiển từ xa qua web
+
+*Cài đặt* → *Điều khiển từ xa qua web…*: đánh dấu *Bật điều khiển từ xa qua web*, rồi mở địa chỉ (hoặc quét mã QR) trên điện thoại cùng mạng. Trang hiển thị màn hình trực tiếp và cho phép điều khiển đồng hồ, thư viện ảnh, hiệu ứng, mục yêu thích, danh sách, độ sáng và thông điệp. Địa chỉ chứa mã truy cập: đừng chia sẻ nó, hãy đổi bằng *Mã truy cập mới*; trang không được mã hóa (HTTP): chỉ dùng trong mạng tin cậy.
+
+### Báo khi lệnh dài kết thúc
+
+*Cài đặt* → *Báo khi lệnh dài kết thúc (terminal)* thêm một dòng vào `~/.bashrc` (và `~/.zshrc`): mọi lệnh chạy quá 30 giây sẽ hiển thị khi kết thúc "Xong: make 2 min 05" hoặc "Thất bại (2): …". Ngưỡng: `ANIMEMATRIX_FIN_SECONDES`; các lệnh tương tác (trình soạn thảo, `ssh`, `less`…) được bỏ qua.
 
 ### Màu bàn phím (OpenRGB)
 
@@ -227,7 +255,9 @@ Các ghi chú reverse engineering gốc nằm trong **[docs/PROTOCOL.md](../PROT
 | "Không kết nối được dịch vụ animematrixd" | dịch vụ nền đã dừng | `systemctl --user restart animematrixd.service` hoặc `animematrixd &` |
 | Màn hình không thay đổi | một chương trình khác đang ghi vào bàn phím | đóng các script cũ ; `animematrix-ctl etat` |
 | Bộ hiển thị vẫn ở chế độ demo | không có `parec` hoặc không có âm thanh | cài `pulseaudio-utils`, phát âm thanh |
-| "Keyboard React" không phản ứng | phiên Wayland hoặc thiếu `pynput` | dùng phiên X11, `sudo apt install python3-pynput` |
+| "Keyboard React" không phản ứng | thiếu `pynput` (X11) hoặc `python3-evdev` (Wayland), hoặc không đọc được bàn phím | cài gói tương ứng ; trên Wayland, dùng quy tắc udev ở phần [Keyboard React](#utilisation) |
+| Webcam, video hoặc phản chiếu màn hình không hoạt động | thiếu `ffmpeg` | `sudo apt install ffmpeg` ; trên Wayland, phản chiếu màn hình đi qua portal (`gstreamer1.0-pipewire`) |
+| Hồ sơ theo ứng dụng hoặc phát hiện toàn màn hình không có tác dụng trên Wayland | compositor không cho biết cửa sổ đang hoạt động | GNOME: tiện ích mở rộng *Window Calls* ; KDE: `kdotool` ; Sway và Hyprland: không cần làm gì |
 | Cửa sổ tròn hiển thị thành hình chữ nhật | thiếu tiện ích mở rộng SHAPE hoặc `python3-xlib` | `sudo apt install python3-xlib`, hoặc *Cài đặt* → *Giao diện:* → *Cổ điển* |
 | Các phím vẫn giữ một màu sau OpenRGB | OpenRGB không tái hiện được hiệu ứng gốc | rút rồi cắm lại bàn phím |
 | Nhật ký của dịch vụ nền | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ Các ghi chú reverse engineering gốc nằm trong **[docs/PROTOCOL.md](../PROT
 |---|---|
 | `rog_flare2_launcher.py` | trình khởi chạy đồ họa (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | giao diện tròn, giao diện màu |
-| `rog_flare2_i18n.py`, `locale/` | bản dịch (19 ngôn ngữ ; `locale/_cles.json` = văn bản cần dịch) |
+| `rog_flare2_i18n.py`, `locale/` | bản dịch (19 ngôn ngữ ; `locale/_cles.json` = văn bản cần dịch ; [docs/TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | dịch vụ nền `animematrixd`, ứng dụng khách và lệnh `animematrix-ctl` |
-| `rog_flare2_core.py` | phát GIF theo luồng, đồng hồ, hình học |
+| `rog_flare2_core.py` | phát GIF theo luồng, bộ nhớ đệm khung hình, đồng hồ, hình học |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | chữ cho mọi hệ chữ viết, hiệu ứng *Chữ*, mặt đồng hồ |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | danh sách phát, mục yêu thích, thư viện hình thu nhỏ, kéo thả |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | video, webcam, phản chiếu màn hình ; đèn báo ; điều khiển từ xa qua web |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | phím và cửa sổ đang hoạt động (X11, Wayland), báo khi lệnh dài kết thúc, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin, MIT), tiện ích mở rộng |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | giám sát hệ thống, bài hát đang phát, trò chơi |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | thông báo, lên lịch theo khung giờ và các điều kiện kích hoạt |
@@ -295,4 +329,4 @@ Nếu dự án này hữu ích với bạn, một ly cà phê sẽ giúp duy tr�
 
 **https://buymeacoffee.com/anticitoyen** — liên kết này cũng có trong tab *Cài đặt* của trình khởi chạy.
 
-Báo cáo lỗi, ý tưởng và hoạt ảnh muốn chia sẻ: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Báo cáo lỗi, ý tưởng và hoạt ảnh muốn chia sẻ: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). Bản dịch: [docs/TRADUIRE.md](../TRADUIRE.md).

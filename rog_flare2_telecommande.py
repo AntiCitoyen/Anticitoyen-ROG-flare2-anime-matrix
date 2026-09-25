@@ -78,12 +78,12 @@ def catalogue() -> dict:
 
 def page() -> bytes:
     from rog_flare2_i18n import _
-    texts = {k: _(v) for k, v in {
-        "clock": "Horloge", "gallery": "Galerie GIF", "stop": "Arrêter", "brightness": "Luminosité",
-        "effect": "▶ Lancer l'effet", "favorites": "Favoris", "lists": "Listes de lecture",
-        "notify": "Afficher", "message": "Message à afficher", "noToken": "Jeton absent ou refusé : "
-        "ouvrez l'adresse complète affichée dans le lanceur (Réglages → Télécommande web).",
-        "playing": "En cours :", "nothing": "Rien"}.items()}
+    texts = {"clock": _("Horloge"), "gallery": _("Galerie GIF"), "stop": _("Arrêter"),
+             "brightness": _("Luminosité"), "effect": _("▶ Lancer l'effet"), "favorites": _("Favoris"),
+             "lists": _("Listes de lecture"), "notify": _("Afficher"), "message": _("Message à afficher"),
+             "noToken": _("Jeton absent ou refusé : ouvrez l'adresse complète affichée dans le lanceur "
+                          "(Réglages → Télécommande web)."),
+             "playing": _("En cours :"), "nothing": _("Rien")}
     return PAGE.replace("__TEXTS__", json.dumps(texts, ensure_ascii=False)).encode()
 
 

@@ -37,6 +37,17 @@ jobs:
           sed "s/@VERSION@/$V/" packaging/rpm/anticitoyen-rog-flare2-anime-matrix.spec > ~/rpmbuild/SPECS/animematrix.spec
           rpmbuild -bb ~/rpmbuild/SPECS/animematrix.spec
           gh release upload "$TAG" ~/rpmbuild/RPMS/noarch/*.rpm --clobber --repo "$GITHUB_REPOSITORY"
+      - name: Publish to Copr
+        continue-on-error: true
+        env:
+          COPR_CONFIG: ${{ secrets.COPR_CONFIG }}
+        run: |
+          if [ -z "$COPR_CONFIG" ]; then echo "COPR_CONFIG absent : publication Copr sautée"; exit 0; fi
+          dnf install -y copr-cli
+          mkdir -p ~/.config
+          printf '%s\n' "$COPR_CONFIG" > ~/.config/copr
+          rpmbuild -bs ~/rpmbuild/SPECS/animematrix.spec
+          copr-cli build --nowait animematrix ~/rpmbuild/SRPMS/*.src.rpm
 
   arch:
     runs-on: ubuntu-24.04
@@ -54,8 +65,32 @@ jobs:
           sed "s/@VERSION@/$V/" packaging/aur/PKGBUILD > /home/builder/pkg/PKGBUILD
           cp packaging/aur/animematrix.install /home/builder/pkg/
           chown -R builder /home/builder/pkg
-          su builder -c "cd /home/builder/pkg && makepkg --nodeps --noconfirm && makepkg --printsrcinfo > .SRCINFO"
+          su builder -c "cd /home/builder/pkg && makepkg --nodeps --noconfirm"
+          # somme de contrôle réelle de l'archive des sources (pour l'AUR), puis .SRCINFO
+          SUM=$(sha256sum /home/builder/pkg/*-"$V".tar.gz | cut -d' ' -f1)
+          sed -i "s/^sha256sums=('SKIP')/sha256sums=('$SUM')/" /home/builder/pkg/PKGBUILD
+          su builder -c "cd /home/builder/pkg && makepkg --printsrcinfo > .SRCINFO"
           gh release upload "$TAG" /home/builder/pkg/*.pkg.tar.zst --clobber --repo "$GITHUB_REPOSITORY"
+      - name: Publish to the AUR
+        continue-on-error: true  # compte AUR pas encore créé : la release reste valable
+        env:
+          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "$AUR_SSH_PRIVATE_KEY" ]; then echo "AUR_SSH_PRIVATE_KEY absent : publication AUR sautée"; exit 0; fi
+          pacman -S --noconfirm --needed openssh
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$AUR_SSH_PRIVATE_KEY" > ~/.ssh/aur
+          chmod 600 ~/.ssh/aur
+          ssh-keyscan -t ed25519 aur.archlinux.org >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/aur -o IdentitiesOnly=yes"
+          git clone ssh://aur@aur.archlinux.org/anticitoyen-rog-flare2-anime-matrix.git aur
+          cp /home/builder/pkg/PKGBUILD /home/builder/pkg/.SRCINFO /home/builder/pkg/animematrix.install aur/
+          cd aur
+          git config user.name "AntiCitoyen"
+          git config user.email "anticitoyen@users.noreply.gitlab.com"
+          git add PKGBUILD .SRCINFO animematrix.install
+          git commit -m "Update to ${TAG#v}" || exit 0
+          git push origin HEAD:master
 
   flatpak:
     runs-on: ubuntu-24.04

@@ -51,13 +51,16 @@ Bestuur onder Linux het **AniMe Matrix**-scherm (312 mini-leds) van het **ASUS R
 ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Armoury Crate). Dit project communiceert rechtstreeks met het toetsenbord via USB HID en biedt:
 
 **Weergeven**
-- **GIF's en afbeeldingen**: een bestand, een selectie of een hele map als galerij; streaming weergave (een galerij van 400 GIF's past in ~25 MB geheugen).
-- **Klok** UU:MM.
-- **19 geanimeerde effecten** (regen in Matrix-stijl, plasma, vuur, sterren, vuurwerk, bliksem, metaballs, golf, lopende tekst…) en **7 audiovisualisaties** die reageren op het geluid dat de pc afspeelt.
+- **GIF's, afbeeldingen en video's**: een bestand, een selectie of een hele map als galerij, ook door ze op het venster te slepen; video's (MP4, WebM, MKV…) afgespeeld via ffmpeg; miniaturengalerij; geconverteerde frames in de cache bewaard (een galerij van 400 GIF's past in ~25 MB geheugen).
+- **Klok**: digitale, analoge, binaire wijzerplaat, in woorden (Frans, Engels, Duits, Spaans, Italiaans, Portugees, Nederlands) of gestileerd.
+- **Geanimeerde effecten** (regen in Matrix-stijl, plasma, vuur, sterren, vuurwerk, bliksem, metaballs, golf…) en **7 audiovisualisaties** die reageren op het geluid dat de pc afspeelt.
+- **Tekst**: je eigen bericht, in alle schriften (accenten, Cyrillisch, Arabisch, Hindi, Chinees, Japans, Koreaans…), lopend naar links, naar rechts, omhoog, omlaag, of stilstaand.
+- **Webcam** (beeld of silhouet) en **schermspiegeling** (volledig scherm, rond de muis of actief venster).
 - **Systeemmonitor**: cpu, ram, gpu, temperatuur, netwerksnelheid en tijd, als meters.
 - **Nu spelend**: bij een nummerwissel schuift « ARTIEST - TITEL » eenmaal voorbij, daarna een visualisatie (Spotify, VLC, Rhythmbox, browsers… via MPRIS).
 - **Bureaubladmeldingen**: « APP: TITEL » wordt in overlay getoond, waarna de weergave wordt hervat (standaard uitgeschakeld, lijst met toegestane toepassingen).
-- **Spellen** speelbaar met het toetsenbord: Snake, Pong, Tetris, breakout, met records.
+- **Spellen** speelbaar met het toetsenbord: Snake, Pong (alleen of met z'n tweeën), Tetris, breakout, Invaders, Flappy, met records.
+- **Indicatoren**: kleine lichtblokjes wanneer de microfoon gedempt of in gebruik is, wanneer de webcam aan staat, wanneer OBS uitzendt of opneemt.
 
 **Maken**
 - **Animatie-editor** beeld voor beeld, op de echte geometrie van het scherm: 3 niveaus, filmstrook, spooklaag, verschuiving, kopiëren-plakken, voorvertoning, verzenden naar het toetsenbord, GIF-export.
@@ -68,12 +71,17 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 
 **Automatiseren**
 - **Daemon `animematrixd`**: enige eigenaar van het scherm, blijft weergeven wanneer de launcher gesloten is; commando `animematrix-ctl` en optionele lokale HTTP-API.
-- **Tijdgebonden planning**: tijdvakken (dagen, ook 's nachts) met klok, galerij, monitor, nu spelend of uitgeschakeld scherm; zwart scherm wanneer de sessie is vergrendeld, in slaapstand staat of wanneer een toepassing op volledig scherm draait.
+- **Tijdgebonden planning**: tijdvakken (dagen, ook 's nachts) met klok, galerij, monitor, nu spelend, een effect, een afspeellijst of uitgeschakeld scherm; zwart scherm wanneer de sessie is vergrendeld, in slaapstand staat of wanneer een toepassing op volledig scherm draait.
+- **Profielen per app**: eigen inhoud voor een spel of toepassing zolang die op de voorgrond staat (knop *Detecteren*).
+- **Afspeellijsten en favorieten**: GIF's, effecten, klok… elk gedurende zijn eigen tijd, in een lus; ook in het pictogram in het systeemvak en via de opdrachtregel.
+- **Webafstandsbediening**: een pagina om het scherm te bedienen vanaf een telefoon in het lokale netwerk (QR-code, token).
+- **Einde van lange opdrachten**: in de terminal verschijnt « Klaar : make 2 min 05 » wanneer een lange opdracht klaar is.
 - **Toetsenbordkleuren via OpenRGB**: themakleur op de toetsen, of pulserend synchroon met het scherm.
 - **Pictogram in het systeemvak**: snelmenu (modi, helderheid).
 
 **Comfort**
 - **4 interfaces** (*Draaiknop + lade* standaard, *Draaiknop*, *Afgerond*, *Klassiek*) met **live voorvertoning van de 312 leds**, **11 thema's** (5 ROG, 5 roze, systeem) en **19 talen**.
+- **X11 en Wayland**: reactie op het toetsenbord via evdev, actief venster opgevraagd bij Sway, Hyprland, KDE (kdotool) of GNOME (extensie *Window Calls*).
 - **Ingebouwde updates**: de launcher haalt de nieuwste release op, controleert de SHA-256-controlesom en installeert deze (beheerderswachtwoord); of `apt upgrade` met de APT-repository.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | ondersteund (HID, interface 4, usage page `0xFF02`) |
 | AniMe Matrix-schermen van ROG-laptops (G14, G16…) | diverse | **experimenteel** via `asusctl`, niet getest op hardware (zie [Gebruik](#utilisation)) |
 
-Getest op Ubuntu 26.04 (X11, PipeWire, Cinnamon). Elke distributie met Python ≥ 3.10, hidapi, Tk en systemd zou moeten werken.
+Getest op Ubuntu 26.04 (X11, PipeWire, Cinnamon). Elke distributie met Python ≥ 3.10, hidapi, Tk en systemd zou moeten werken; onder Wayland draait de launcher via XWayland.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Nuttige systeemtools: `imagemagick` (klassieke conversie), `pulseaudio-utils` (`parec`, voor audio), `zenity` (bestandskiezers), `libnotify-bin` (meldingen), `python3-gi` en `gir1.2-ayatanaappindicator3-0.1` (pictogram in het systeemvak), `openrgb` (kleuren van de toetsen).
+Nuttige systeemtools: `imagemagick` (klassieke conversie), `pulseaudio-utils` (`parec`, voor audio), `zenity` (bestandskiezers), `libnotify-bin` (meldingen), `python3-gi` en `gir1.2-ayatanaappindicator3-0.1` (pictogram in het systeemvak), `openrgb` (kleuren van de toetsen), `ffmpeg` (video's, webcam, schermspiegeling), `python3-evdev` (reactie op het toetsenbord onder Wayland), `x11-utils` (actief venster onder X11), `python3-qrcode` (QR-code van de afstandsbediening), `tkdnd` (slepen en neerzetten).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ Nuttige systeemtools: `imagemagick` (klassieke conversie), `pulseaudio-utils` (`
 
 In de ronde interfaces openen de ronde knoppen de blokken *GIF*, *Effecten*, *Audio* en *Instellingen* (in de lade of in de cirkel); *Klok* en *Stoppen* werken meteen; de boog onderaan regelt de helderheid; het venster wordt verplaatst door het aan de achtergrond te slepen; de kleine knoppen bovenaan minimaliseren of sluiten het. De ronde vorm gebruikt de X11 SHAPE-extensie (pakket `python3-xlib`); zonder deze wordt dezelfde interface in een rechthoekig venster weergegeven.
 
-- **GIF / afbeeldingen**: *GIF's/afbeeldingen…* of *Map (galerij)…*; *Getrouwe geometrie* behoudt de verhoudingen (de hoek snijdt de afbeelding bij in plaats van ze uit te rekken); *👁 Getrouwe voorvertoning (vóór verzenden)* toont de weergave zonder iets te verzenden; *🎞 Animatie maken (editor)*; *📚 Animatiebibliotheek*; *Slimme conversie* om GIF's te converteren.
-- **Effecten** en **Audio**: kiezen, instellen, *▶ Effect starten*. De schuifregelaars werken live; *Tempo* versnelt of vertraagt de hele animatie. De spellen worden bediend met de pijltjestoetsen, spatie en enter, met het launchervenster op de voorgrond.
+- **GIF / afbeeldingen**: *GIF's/afbeeldingen…* of *Map (galerij)…* (of slepen en neerzetten op het venster); *Getrouwe geometrie* behoudt de verhoudingen (de hoek snijdt de afbeelding bij in plaats van ze uit te rekken); *👁 Getrouwe voorvertoning (vóór verzenden)* toont de weergave zonder iets te verzenden; *🎞 Animatie maken (editor)*; *📚 Animatiebibliotheek*; *★ Afspeellijsten en favorieten*; *🖼 Miniaturengalerij* (klik: afspelen, rechtsklik: favoriet); *🎥 Webcam* en *🖥 Schermspiegeling*; *Slimme conversie* om GIF's te converteren.
+- **Effecten** en **Audio**: kiezen, instellen, *▶ Effect starten*. De schuifregelaars werken live; *Tempo* versnelt of vertraagt de hele animatie. Het effect *Tekst* neemt je bericht en de looprichting. De spellen worden bediend met de pijltjestoetsen, spatie en enter, met het launchervenster op de voorgrond; Pong met z'n tweeën: Z/W en S voor de linkerspeler.
 - **Helderheid**, **🕒 Klok**, **■ Stoppen** (wat het scherm wist) zijn gemeenschappelijk voor alle tabbladen.
-- **Instellingen**: opstarten van de sessie (GIF-galerij, Klok, Laatste weergave of Niets), taal, thema, interface, bureaubladmeldingen, toetsenbordkleuren (OpenRGB), *Planning…*, pictogram in het systeemvak, map met extensies, updates.
+- **Instellingen**: opstarten van de sessie (GIF-galerij, Klok, Laatste weergave of Niets), klokweergave, taal, thema, interface, bureaubladmeldingen, toetsenbordkleuren (OpenRGB), *Planning…* (triggers, profielen per app, tijdvakken), *Indicatoren…*, *Webafstandsbediening…*, pictogram in het systeemvak, einde van lange opdrachten, map met extensies, updates.
 
 **Als je de launcher sluit, wordt niets onderbroken**: de daemon `animematrixd` blijft weergeven. *■ Stoppen* schakelt het scherm uit.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galerij (map of bestanden)
 animematrix-ctl effet "Plasma" --param speed=250   # effect en instellingen
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # afspeellijst (zonder naam: toont ze)
+animematrix-ctl favori 2                           # favoriet nr. 2 (zonder nummer: toont ze)
 animematrix-ctl notifier "Café prêt" --duree 5     # overlay, daarna terug
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ De visualisaties luisteren naar de **monitor van de standaard audio-uitgang** vi
 
 ### Effect « Keyboard React »
 
-Dit laat het scherm oplichten op het ritme van het typen dankzij `pynput`, dat toetsaanslagen van de hele sessie leest zolang het effect actief is. Het werkt onder X11; onder Wayland ontvangt het geen toetsaanslagen.
+Dit laat het scherm oplichten op het ritme van het typen, zolang het effect actief is: onder X11 via `pynput`, onder Wayland door het toetsenbord in `/dev/input` te lezen (`python3-evdev`). Blijft het effect onder Wayland in demomodus, geef dan leestoegang tot alleen het ROG-toetsenbord:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### Indicatoren
+
+*Instellingen* → *Indicatoren (microfoon, webcam, OBS)…*: een blok van 2 × 2 leds licht linksboven op het scherm op, over de weergave heen (1: microfoon gedempt of in gebruik, 2: webcam in gebruik, 3: OBS live of aan het opnemen), en elke wijziging kan met een lopende tekst worden aangekondigd. OBS: schakel de WebSocket-server in (*Extra* → *WebSocket-serverinstellingen*) en neem de poort en het wachtwoord over.
+
+### Webafstandsbediening
+
+*Instellingen* → *Webafstandsbediening…*: vink *Inschakelen* aan en open dan het adres (of scan de QR-code) op een telefoon in hetzelfde netwerk. De pagina toont het scherm live en biedt klok, galerij, effecten, favorieten, afspeellijsten, helderheid en bericht. Het adres bevat een token: deel het niet en vervang het met *Nieuw token*; de pagina is niet versleuteld (HTTP): alleen op een vertrouwd netwerk.
+
+### Einde van lange opdrachten
+
+*Instellingen* → *Einde van lange opdrachten tonen (terminal)* voegt een regel toe aan `~/.bashrc` (en `~/.zshrc`): elke opdracht van meer dan 30 seconden toont na afloop « Klaar : make 2 min 05 » of « Mislukt (2) : … ». Drempel: `ANIMEMATRIX_FIN_SECONDES`; interactieve opdrachten (editors, `ssh`, `less`…) worden genegeerd.
 
 ### Toetsenbordkleuren (OpenRGB)
 
@@ -227,7 +255,9 @@ De oorspronkelijke reverse-engineeringnotities staan in **[../PROTOCOL.md](../PR
 | « Service animematrixd onbereikbaar » | daemon gestopt | `systemctl --user restart animematrixd.service` of `animematrixd &` |
 | Het scherm verandert niet | een ander programma schrijft naar het toetsenbord | oude scripts sluiten; `animematrix-ctl etat` |
 | De visualisaties blijven in demomodus | geen `parec` of geen geluid | `pulseaudio-utils` installeren, geluid afspelen |
-| « Keyboard React » reageert niet | Wayland-sessie of `pynput` ontbreekt | X11-sessie, `sudo apt install python3-pynput` |
+| « Keyboard React » reageert niet | `pynput` (X11) of `python3-evdev` (Wayland) ontbreekt, of toetsenbord niet leesbaar | het pakket installeren; onder Wayland de udev-regel van [Keyboard React](#utilisation) |
+| Webcam, video's of schermspiegeling werken niet | `ffmpeg` ontbreekt | `sudo apt install ffmpeg`; onder Wayland loopt schermspiegeling via de portal (`gstreamer1.0-pipewire`) |
+| Profielen per app of volledig scherm zonder effect onder Wayland | actief venster onbekend bij de compositor | GNOME: extensie *Window Calls*; KDE: `kdotool`; Sway en Hyprland: niets te doen |
 | Het ronde venster wordt als een rechthoek weergegeven | SHAPE-extensie of `python3-xlib` ontbreekt | `sudo apt install python3-xlib`, of *Instellingen* → *Interface:* → *Klassiek* |
 | De toetsen behouden een kleur na OpenRGB | OpenRGB herstelt het oorspronkelijke effect niet | het toetsenbord loskoppelen en opnieuw aansluiten |
 | Logboek van de daemon | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ De oorspronkelijke reverse-engineeringnotities staan in **[../PROTOCOL.md](../PR
 |---|---|
 | `rog_flare2_launcher.py` | grafische launcher (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | ronde interfaces, thema's |
-| `rog_flare2_i18n.py`, `locale/` | vertaling (19 talen; `locale/_cles.json` = te vertalen teksten) |
+| `rog_flare2_i18n.py`, `locale/` | vertaling (19 talen; `locale/_cles.json` = te vertalen teksten; [../TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | daemon `animematrixd`, client en commando `animematrix-ctl` |
-| `rog_flare2_core.py` | streaming GIF-weergave, klok, geometrie |
+| `rog_flare2_core.py` | streaming GIF-weergave, framecache, klok, geometrie |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | tekst in alle schriften, effect *Tekst*, klokweergaven |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | afspeellijsten, favorieten, miniaturengalerij, slepen en neerzetten |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | video's, webcam, schermspiegeling; indicatoren; webafstandsbediening |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | toetsen en actief venster (X11, Wayland), einde van lange opdrachten, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | effecten en visualisaties (PolyWollyWin-engine, MIT), extensies |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | systeemmonitor, nu spelend, spellen |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | meldingen, tijdgebonden planning en triggers |
@@ -295,4 +329,4 @@ Als je iets hebt aan dit project, helpt een kopje koffie om het te onderhouden:
 
 **https://buymeacoffee.com/anticitoyen** — de link staat ook op het tabblad *Instellingen* van de launcher.
 
-Bugmeldingen, ideeën en te delen animaties: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Bugmeldingen, ideeën en te delen animaties: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). Vertalingen: [../TRADUIRE.md](../TRADUIRE.md).

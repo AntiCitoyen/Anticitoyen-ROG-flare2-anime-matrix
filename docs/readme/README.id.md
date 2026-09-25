@@ -51,13 +51,16 @@ Mengendalikan layar **AniMe Matrix** (312 mini-LED) pada keyboard **ASUS ROG Str
 ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armoury Crate). Proyek ini berkomunikasi langsung dengan keyboard melalui USB HID dan menghadirkan:
 
 **Menampilkan**
-- **GIF dan gambar**: satu berkas, beberapa berkas terpilih, atau seluruh folder sebagai galeri; diputar secara streaming (galeri berisi 400 GIF hanya memakai memori sekitar 25 MB).
-- **Jam** HH:MM.
-- **19 efek animasi** (hujan gaya Matrix, plasma, api, bintang, kembang api, petir, metaball, gelombang, teks bergulir…) dan **7 visualizer audio** yang bereaksi terhadap suara yang diputar oleh PC.
+- **GIF, gambar, dan video**: satu berkas, beberapa berkas terpilih, atau seluruh folder sebagai galeri, bisa diseret dan dilepas ke jendela; video (MP4, WebM, MKV…) diputar dengan ffmpeg; galeri gambar mini; bingkai hasil konversi disimpan di cache (galeri berisi 400 GIF hanya memakai memori sekitar 25 MB).
+- **Jam**: muka jam digital, analog, biner, dalam kata (Prancis, Inggris, Jerman, Spanyol, Italia, Portugis, Belanda), atau bergaya.
+- **Efek animasi** (hujan gaya Matrix, plasma, api, bintang, kembang api, petir, metaball, gelombang…) dan **7 visualizer audio** yang bereaksi terhadap suara yang diputar oleh PC.
+- **Teks**: pesan Anda, dalam semua aksara (huruf beraksen, Sirilik, Arab, Hindi, Tionghoa, Jepang, Korea…), bergulir ke kiri, ke kanan, ke atas, ke bawah, atau diam.
+- **Webcam** (gambar atau siluet) dan **cermin layar** (seluruh layar, di sekitar tetikus, atau jendela aktif).
 - **Monitor sistem**: CPU, RAM, GPU, suhu, kecepatan jaringan, dan jam, dalam bentuk pengukur.
 - **Lagu yang sedang diputar**: saat lagu berganti, "ARTIS - JUDUL" bergulir sekali, lalu muncul visualizer (Spotify, VLC, Rhythmbox, peramban… melalui MPRIS).
 - **Notifikasi desktop**: "APLIKASI : JUDUL" ditampilkan menimpa layar lalu tampilan sebelumnya kembali (dinonaktifkan secara default, dengan daftar aplikasi yang diizinkan).
-- **Permainan yang bisa dimainkan** dengan keyboard: Ular, Pong, Tetris, pemecah bata, dengan rekor tersimpan.
+- **Permainan yang bisa dimainkan** dengan keyboard: Ular, Pong (sendiri atau berdua), Tetris, pemecah bata, Invaders, Flappy, dengan rekor tersimpan.
+- **Indikator**: blok cahaya kecil saat mikrofon dibisukan atau sedang digunakan, saat webcam aktif, saat OBS sedang siaran atau merekam.
 
 **Membuat**
 - **Editor animasi** per bingkai, sesuai geometri asli layar: 3 tingkat, filmstrip, onion skin, geser, salin-tempel, pratinjau, kirim ke keyboard, ekspor GIF.
@@ -68,12 +71,17 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 
 **Otomatisasi**
 - **Daemon `animematrixd`**: satu-satunya pemilik layar, tetap menampilkan konten meski peluncur ditutup; perintah `animematrix-ctl` dan API HTTP lokal opsional.
-- **Penjadwalan waktu**: rentang waktu (termasuk malam hari) dengan jam, galeri, monitor, lagu yang sedang diputar, atau layar mati; layar otomatis mati saat sesi terkunci, saat tidur, atau saat sebuah aplikasi dalam mode layar penuh.
+- **Penjadwalan waktu**: rentang waktu (termasuk malam hari) dengan jam, galeri, monitor, lagu yang sedang diputar, sebuah efek, daftar putar, atau layar mati; layar otomatis mati saat sesi terkunci, saat tidur, atau saat sebuah aplikasi dalam mode layar penuh.
+- **Profil per aplikasi**: konten khusus untuk sebuah game atau aplikasi selama berada di depan (tombol *Deteksi*).
+- **Daftar putar dan favorit**: GIF, efek, jam… masing-masing selama durasinya, berulang; juga tersedia di ikon baki sistem dan baris perintah.
+- **Remote web**: halaman untuk mengendalikan layar dari ponsel di jaringan lokal (kode QR, token).
+- **Akhir perintah panjang**: di terminal, "Selesai: make 2 min 05" ditampilkan saat perintah yang lama selesai.
 - **Warna keyboard melalui OpenRGB**: warna tema pada tombol, atau berdenyut mengikuti layar.
 - **Ikon baki sistem**: menu cepat (mode, kecerahan).
 
 **Kenyamanan**
 - **4 antarmuka** (*Dial + laci* bawaan, *Dial*, *Membulat*, *Klasik*) dengan **pratinjau langsung 312 LED**, **11 tema** (5 ROG, 5 merah muda, sistem) dan **19 bahasa**.
+- **X11 dan Wayland**: reaksi terhadap keyboard melalui evdev, jendela aktif dibaca dari Sway, Hyprland, KDE (kdotool), atau GNOME (ekstensi *Window Calls*).
 - **Pembaruan bawaan**: peluncur mengunduh rilis terbaru, memverifikasi sidik jari SHA-256, lalu memasangnya (perlu kata sandi administrator); atau `apt upgrade` dengan repositori APT.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | didukung (HID, interface 4, usage page `0xFF02`) |
 | Layar AniMe Matrix pada laptop ROG (G14, G16…) | beragam | **eksperimental** melalui `asusctl`, belum diuji pada perangkat asli (lihat [Penggunaan](#utilisation)) |
 
-Telah diuji pada Ubuntu 26.04 (X11, PipeWire, Cinnamon). Distribusi apa pun dengan Python ≥ 3.10, hidapi, Tk, dan systemd seharusnya cocok.
+Telah diuji pada Ubuntu 26.04 (X11, PipeWire, Cinnamon). Distribusi apa pun dengan Python ≥ 3.10, hidapi, Tk, dan systemd seharusnya cocok; di Wayland, peluncur berjalan melalui XWayland.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi), `python3-gi` dan `gir1.2-ayatanaappindicator3-0.1` (ikon baki sistem), `openrgb` (warna tombol).
+Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi), `python3-gi` dan `gir1.2-ayatanaappindicator3-0.1` (ikon baki sistem), `openrgb` (warna tombol), `ffmpeg` (video, webcam, cermin layar), `python3-evdev` (reaksi keyboard di Wayland), `x11-utils` (jendela aktif di X11), `python3-qrcode` (kode QR remote), `tkdnd` (seret dan lepas).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (
 
 Pada antarmuka bulat, tombol bulat membuka blok *GIF*, *Efek*, *Audio*, dan *Pengaturan* (di laci atau di dalam lingkaran); *Jam* dan *Berhenti* langsung bereaksi; busur di bagian bawah mengatur kecerahan; jendela dipindahkan dengan menarik bagian latarnya; tombol-tombol kecil di bagian atas untuk meminimalkan atau menutup. Bentuk bulat menggunakan ekstensi X11 SHAPE (paket `python3-xlib`); tanpanya, antarmuka yang sama ditampilkan dalam jendela persegi panjang.
 
-- **GIF / gambar**: *GIF/gambar…* atau *Folder (galeri)…*; *Geometri akurat* mempertahankan proporsi (sudut gambar terpotong, bukan gambar yang diregangkan); *👁 Pratinjau akurat (sebelum dikirim)* menampilkan hasilnya tanpa mengirim apa pun; *🎞 Buat animasi (editor)*; *📚 Pustaka animasi*; *Konversi pintar* untuk mengonversi GIF.
-- **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser bekerja secara langsung; *Tempo* mempercepat atau memperlambat seluruh animasi. Permainan dimainkan dengan tombol panah, Spasi, dan Enter, dengan jendela peluncur di posisi terdepan.
+- **GIF / gambar**: *GIF/gambar…* atau *Folder (galeri)…* (atau seret dan lepas ke jendela); *Geometri akurat* mempertahankan proporsi (sudut gambar terpotong, bukan gambar yang diregangkan); *👁 Pratinjau akurat (sebelum dikirim)* menampilkan hasilnya tanpa mengirim apa pun; *🎞 Buat animasi (editor)*; *📚 Pustaka animasi*; *★ Daftar putar dan favorit*; *🖼 Galeri gambar mini* (klik: putar, klik kanan: favorit); *🎥 Webcam* dan *🖥 Cermin layar*; *Konversi pintar* untuk mengonversi GIF.
+- **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser bekerja secara langsung; *Tempo* mempercepat atau memperlambat seluruh animasi. Efek *Teks* menerima pesan Anda dan arah gulirnya. Permainan dimainkan dengan tombol panah, Spasi, dan Enter, dengan jendela peluncur di posisi terdepan; Pong berdua: Z/W dan S untuk pemain kiri.
 - **Kecerahan**, **🕒 Jam**, **■ Berhenti** (menghapus layar) tersedia di semua tab.
-- **Pengaturan**: saat sesi dimulai (Galeri GIF, Jam, Putar terakhir, atau Tidak ada), bahasa, tema, antarmuka, notifikasi desktop, warna keyboard (OpenRGB), *Jadwal…*, ikon baki sistem, folder ekstensi, pembaruan.
+- **Pengaturan**: saat sesi dimulai (Galeri GIF, Jam, Putar terakhir, atau Tidak ada), muka jam, bahasa, tema, antarmuka, notifikasi desktop, warna keyboard (OpenRGB), *Jadwal…* (pemicu, profil per aplikasi, rentang waktu), *Indikator…*, *Remote web…*, ikon baki sistem, akhir perintah panjang, folder ekstensi, pembaruan.
 
 **Menutup peluncur tidak menghentikan apa pun**: daemon `animematrixd` terus menampilkan konten. *■ Berhenti* akan mematikan layar.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galeri (folder atau berkas)
 animematrix-ctl effet "Plasma" --param speed=250   # efek dan pengaturannya
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # daftar putar (tanpa nama: tampilkan daftarnya)
+animematrix-ctl favori 2                           # favorit no. 2 (tanpa nomor: tampilkan daftarnya)
 animematrix-ctl notifier "Café prêt" --duree 5     # tampil menimpa lalu kembali
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ Visualizer mendengarkan **monitor dari output suara default** melalui `parec` (P
 
 ### Efek "Keyboard React"
 
-Efek ini menyalakan layar mengikuti ritme ketikan berkat `pynput`, yang membaca tombol dari seluruh sesi selama efek berjalan. Efek ini berfungsi di X11; di Wayland, efek ini tidak menerima input tombol.
+Efek ini menyalakan layar mengikuti ritme ketikan selama efek berjalan: di X11 melalui `pynput`, di Wayland dengan membaca keyboard di `/dev/input` (`python3-evdev`). Di Wayland, jika efek tetap dalam mode demo, izinkan pembacaan khusus untuk keyboard ROG:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### Indikator
+
+*Pengaturan* → *Indikator (mikrofon, webcam, OBS)…*: blok 2 × 2 LED menyala di kiri atas layar, di atas tampilan yang sedang diputar (1: mikrofon dibisukan atau digunakan, 2: webcam digunakan, 3: OBS sedang siaran langsung atau merekam), dan setiap perubahan dapat diumumkan dengan teks bergulir. OBS: aktifkan server WebSocket (*Alat* → *Pengaturan Server WebSocket*) lalu masukkan port dan kata sandinya.
+
+### Remote web
+
+*Pengaturan* → *Remote web…*: centang *Aktifkan remote web*, lalu buka alamatnya (atau pindai kode QR) di ponsel pada jaringan yang sama. Halaman ini menampilkan layar secara langsung dan menyediakan jam, galeri, efek, favorit, daftar, kecerahan, dan pesan. Alamatnya berisi token: jangan dibagikan, ganti dengan *Token baru*; halaman tidak dienkripsi (HTTP): hanya untuk jaringan tepercaya.
+
+### Akhir perintah panjang
+
+*Pengaturan* → *Tampilkan akhir perintah panjang (terminal)* menambahkan satu baris ke `~/.bashrc` (dan `~/.zshrc`): setiap perintah yang berjalan lebih dari 30 detik menampilkan "Selesai: make 2 min 05" atau "Gagal (2): …" saat berakhir. Ambang: `ANIMEMATRIX_FIN_SECONDES`; perintah interaktif (editor, `ssh`, `less`…) diabaikan.
 
 ### Warna keyboard (OpenRGB)
 
@@ -227,7 +255,9 @@ Catatan reverse engineering aslinya ada di **[docs/PROTOCOL.md](../PROTOCOL.md)*
 | "Layanan animematrixd tidak dapat dijangkau" | daemon berhenti | `systemctl --user restart animematrixd.service` atau `animematrixd &` |
 | Layar tidak berubah | program lain sedang menulis ke keyboard | tutup skrip lama; `animematrix-ctl etat` |
 | Visualizer tetap dalam mode demo | tidak ada `parec` atau tidak ada suara | instal `pulseaudio-utils`, putar suara |
-| "Keyboard React" tidak bereaksi | sesi Wayland atau `pynput` tidak ada | gunakan sesi X11, `sudo apt install python3-pynput` |
+| "Keyboard React" tidak bereaksi | `pynput` (X11) atau `python3-evdev` (Wayland) tidak ada, atau keyboard tidak bisa dibaca | instal paketnya; di Wayland, aturan udev di [Keyboard React](#utilisation) |
+| Webcam, video, atau cermin layar tidak berfungsi | `ffmpeg` tidak ada | `sudo apt install ffmpeg`; di Wayland, cermin layar melalui portal (`gstreamer1.0-pipewire`) |
+| Profil per aplikasi atau layar penuh tidak berpengaruh di Wayland | jendela aktif tidak diketahui oleh compositor | GNOME: ekstensi *Window Calls*; KDE: `kdotool`; Sway dan Hyprland: tidak perlu apa-apa |
 | Jendela bulat ditampilkan sebagai persegi panjang | ekstensi SHAPE atau `python3-xlib` tidak ada | `sudo apt install python3-xlib`, atau *Pengaturan* → *Antarmuka:* → *Klasik* |
 | Tombol tetap satu warna setelah OpenRGB | OpenRGB tidak menampilkan efek aslinya | cabut lalu pasang kembali keyboard |
 | Log daemon | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ Catatan reverse engineering aslinya ada di **[docs/PROTOCOL.md](../PROTOCOL.md)*
 |---|---|
 | `rog_flare2_launcher.py` | peluncur grafis (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | antarmuka bulat, tema |
-| `rog_flare2_i18n.py`, `locale/` | terjemahan (19 bahasa ; `locale/_cles.json` = teks yang perlu diterjemahkan) |
+| `rog_flare2_i18n.py`, `locale/` | terjemahan (19 bahasa ; `locale/_cles.json` = teks yang perlu diterjemahkan ; [docs/TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | daemon `animematrixd`, klien dan perintah `animematrix-ctl` |
-| `rog_flare2_core.py` | pemutaran GIF secara streaming, jam, geometri |
+| `rog_flare2_core.py` | pemutaran GIF secara streaming, cache bingkai, jam, geometri |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | teks semua aksara, efek *Teks*, muka jam |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | daftar putar, favorit, galeri gambar mini, seret dan lepas |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | video, webcam, cermin layar ; indikator ; remote web |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | tombol dan jendela aktif (X11, Wayland), akhir perintah panjang, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | efek dan visualizer (engine PolyWollyWin, MIT), ekstensi |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor sistem, lagu yang sedang diputar, permainan |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifikasi, penjadwalan waktu dan pemicunya |
@@ -295,4 +329,4 @@ Jika proyek ini bermanfaat bagi Anda, secangkir kopi akan membantu perawatannya:
 
 **https://buymeacoffee.com/anticitoyen** — tautan ini juga tersedia di tab *Pengaturan* pada peluncur.
 
-Laporan bug, ide, dan animasi yang ingin dibagikan: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Laporan bug, ide, dan animasi yang ingin dibagikan: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). Terjemahan: [docs/TRADUIRE.md](../TRADUIRE.md).

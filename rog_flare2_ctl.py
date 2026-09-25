@@ -56,9 +56,13 @@ def ensure_daemon(wait: float = 4.0) -> bool:
     except (OSError, DaemonError, ValueError):
         pass
     # Service systemd seulement pour le socket standard (pas pour un environnement de test isolé)
-    standard = SOCKET_PATH.parent == Path(f"/run/user/{os.getuid()}")
-    if not standard or subprocess.run(["systemctl", "--user", "start", "animematrixd.service"],
-                                      capture_output=True).returncode != 0:
+    standard = SOCKET_PATH.parent == Path(f"/run/user/{os.getuid()}") and not os.environ.get("FLATPAK_ID")
+    try:
+        started = standard and subprocess.run(["systemctl", "--user", "start", "animematrixd.service"],
+                                              capture_output=True).returncode == 0
+    except OSError:  # pas de systemctl (Flatpak, conteneur)
+        started = False
+    if not started:
         subprocess.Popen([sys.executable, str(Path(__file__).with_name("rog_flare2_demon.py"))],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                          start_new_session=True)

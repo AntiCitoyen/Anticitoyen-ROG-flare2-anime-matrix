@@ -102,5 +102,14 @@
  "Waves": "Vagues",
  "Width": "Largeur",
  "X Position": "Position X",
- "Y Position": "Position Y"
+ "Y Position": "Position Y",
+ "Text": "Texte",
+ "Analog Clock": "Horloge analogique",
+ "Seconds": "Secondes",
+ "Binary Clock": "Horloge binaire",
+ "Off level": "Niveau éteint",
+ "Word Clock": "Horloge en mots",
+ "Pong 2P (game)": "Pong à deux (jeu)",
+ "Invaders (game)": "Invaders (jeu)",
+ "Flappy (game)": "Flappy (jeu)"
 }

@@ -140,3 +140,21 @@ def test_effect_list_fully_visible_and_game_by_real_clicks(launcher):
              ("choix", pick, lambda: cb.get() == "Snake (jeu)"),
              ("lancer", launch, lambda: (ctl.request("status")["show"] or {}).get("name") == "Snake (game)")]
     assert run_steps(app, steps, delay=900) == []
+
+
+def test_settings_scroll_with_the_wheel(launcher):
+    """Réglages plus hauts que l'écran : bloc borné, défilement par la molette (vrai événement)."""
+    import rog_flare2_launcher as L
+    app = launcher("drawer")
+    ui = app.round_ui
+    area = ui.frames[3]
+    assert isinstance(area, L.ScrollArea) and area.winfo_reqheight() <= area.max_height + 4
+
+    def wheel():
+        x = area.winfo_rootx() + area.winfo_width() // 2
+        y = area.winfo_rooty() + area.winfo_height() // 2
+        subprocess.run(["xdotool", "mousemove", str(x), str(y), "click", "5", "click", "5"], check=True)
+
+    steps = [("ouvre", lambda: ui.toggle_section(3, keep_open=True), lambda: area.bar.winfo_ismapped()),
+             ("molette", wheel, lambda: area.canvas.yview()[0] > 0)]
+    assert run_steps(app, steps, delay=700) == []

@@ -13,7 +13,14 @@ optdepends=('python-xlib: round windows (X11 SHAPE)'
             'imagemagick: classic GIF conversion'
             'libpulse: desktop audio capture (parec)'
             'zenity: file pickers'
-            'python-pynput: Keyboard React effect'
+            'python-pynput: Keyboard React effect (X11)'
+            'python-evdev: Keyboard React effect (Wayland)'
+            'xorg-xprop: active window, full screen detection (X11)'
+            'xorg-xwininfo: screen mirror of the active window (X11)'
+            'ffmpeg: videos, webcam, screen mirror'
+            'gst-plugin-pipewire: screen mirror under Wayland'
+            'python-qrcode: QR code of the web remote'
+            'tkdnd: drag and drop of files'
             'openrgb: keyboard colour sync')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')

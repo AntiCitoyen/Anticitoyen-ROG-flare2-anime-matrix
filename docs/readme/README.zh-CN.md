@@ -51,13 +51,16 @@
 ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matrix 屏幕的官方支持。本项目通过 USB HID 直接与键盘通信，提供：
 
 **显示**
-- **GIF 与图片**：单个文件、多选文件，或整个文件夹作为图库；流式播放（400 个 GIF 组成的图库运行时内存占用约 25 MB）。
-- **时钟** HH:MM。
-- **19 种动态效果**（矩阵雨、等离子、火焰、星空、烟花、闪电、融球、波浪、滚动文字……）和 **7 种音频可视化器**，随电脑播放的声音而变化。
+- **GIF、图片与视频**：单个文件、多选文件，或整个文件夹作为图库，也可直接拖放到窗口上；视频（MP4、WebM、MKV 等）通过 ffmpeg 播放；缩略图库；转换后的帧会被缓存（400 个 GIF 组成的图库运行时内存占用约 25 MB）。
+- **时钟**：数字、指针、二进制、文字（法语、英语、德语、西班牙语、意大利语、葡萄牙语、荷兰语）或花式表盘。
+- **动态效果**（矩阵雨、等离子、火焰、星空、烟花、闪电、融球、波浪……）和 **7 种音频可视化器**，随电脑播放的声音而变化。
+- **文字**：你的消息，支持所有文字系统（带重音的字母、西里尔字母、阿拉伯文、印地文、中文、日文、韩文……），可向左、向右、向上、向下滚动或固定显示。
+- **摄像头**（图像或剪影）与**屏幕镜像**（整个屏幕、鼠标周围或活动窗口）。
 - **系统监视器**：以仪表盘形式显示 CPU、内存、GPU、温度、网络流量与时间。
 - **当前播放曲目**：切换曲目时，「艺术家 - 标题」滚动播放一次，随后显示可视化效果（通过 MPRIS 支持 Spotify、VLC、Rhythmbox、浏览器等）。
 - **桌面通知**：以「应用：标题」的形式叠加显示，随后恢复播放（默认关闭，可设置允许通知的应用列表）。
-- **可玩的键盘游戏**：贪吃蛇、乒乓球、俄罗斯方块、打砖块，附带记录。
+- **可玩的键盘游戏**：贪吃蛇、乒乓（单人或双人）、俄罗斯方块、打砖块、太空侵略者、Flappy，附带记录。
+- **指示灯**：麦克风静音或正在使用、摄像头运行、OBS 直播或录制时，屏幕上会亮起小光块。
 
 **创建**
 - **逐帧动画编辑器**，基于屏幕的真实几何结构：3 级灰阶、时间轴、幽灵图层、平移、复制粘贴、预览、发送至键盘、导出 GIF。
@@ -68,12 +71,17 @@ ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matr
 
 **自动化**
 - **`animematrixd` 守护进程**：唯一的屏幕所有者，即使关闭启动器也会继续显示；提供 `animematrix-ctl` 命令与可选的本地 HTTP API。
-- **定时排程**：按时间段（包括夜间）设置显示时钟、图库、监视器、当前播放曲目或熄屏；会话锁定、待机或有应用全屏时自动熄屏。
+- **定时排程**：按时间段（包括夜间）设置显示时钟、图库、监视器、当前播放曲目、某个效果、播放列表或熄屏；会话锁定、待机或有应用全屏时自动熄屏。
+- **按应用配置**：某个游戏或应用位于前台时，显示其专属内容（*检测* 按钮）。
+- **播放列表和收藏**：GIF、效果、时钟……各按设定的时长依次循环播放；也可在系统托盘图标和命令行中使用。
+- **网页遥控**：通过一个网页，用局域网内的手机控制屏幕（二维码、令牌）。
+- **长时间命令的结束**：在终端中，长时间运行的命令结束时显示「完成：make 2 min 05」。
 - **通过 OpenRGB 同步键盘颜色**：使用主题颜色，或与屏幕同步呼吸效果。
 - **系统托盘图标**：快捷菜单（模式、亮度）。
 
 **便捷**
 - **4 种界面**（默认为 *表盘 + 抽屉*，另有 *表盘*、*圆角*、*经典*），带 **312 颗 LED 实时预览**、**11 套主题**（5 套 ROG 风格、5 套粉色系、1 套跟随系统）与 **19 种语言**。
+- **X11 与 Wayland**：通过 evdev 响应键盘，活动窗口从 Sway、Hyprland、KDE（kdotool）或 GNOME（*Window Calls* 扩展）读取。
 - **内置更新**：启动器下载最新 release，校验其 SHA-256 指纹后安装（需要管理员密码）；或通过 APT 仓库执行 `apt upgrade`。
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matr
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | 已支持（HID，接口 4，usage page `0xFF02`） |
 | ROG 笔记本电脑的 AniMe Matrix 屏幕（G14、G16 等） | 多种 | **实验性**，通过 `asusctl` 实现，未在实机上测试过（见[使用方法](#utilisation)） |
 
-已在 Ubuntu 26.04（X11、PipeWire、Cinnamon）上测试通过。任何具备 Python ≥ 3.10、hidapi、Tk 和 systemd 的发行版理论上均可使用。
+已在 Ubuntu 26.04（X11、PipeWire、Cinnamon）上测试通过。任何具备 Python ≥ 3.10、hidapi、Tk 和 systemd 的发行版理论上均可使用；在 Wayland 下，启动器通过 XWayland 运行。
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-有用的系统工具：`imagemagick`（经典转换）、`pulseaudio-utils`（`parec`，用于音频）、`zenity`（文件选择器）、`libnotify-bin`（通知）、`python3-gi` 与 `gir1.2-ayatanaappindicator3-0.1`（系统托盘图标）、`openrgb`（键盘颜色）。
+有用的系统工具：`imagemagick`（经典转换）、`pulseaudio-utils`（`parec`，用于音频）、`zenity`（文件选择器）、`libnotify-bin`（通知）、`python3-gi` 与 `gir1.2-ayatanaappindicator3-0.1`（系统托盘图标）、`openrgb`（键盘颜色）、`ffmpeg`（视频、摄像头、屏幕镜像）、`python3-evdev`（Wayland 下的键盘响应）、`x11-utils`（X11 下的活动窗口）、`python3-qrcode`（遥控二维码）、`tkdnd`（拖放）。
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 在圆形界面中，圆形按钮用于打开 *GIF*、*效果*、*音频* 与 *设置* 模块（在抽屉中或圆圈内）；*时钟* 与 *停止* 立即生效；底部的弧形用于调节亮度；拖动背景可移动窗口；顶部的小按钮用于最小化或关闭。圆形外观依赖 X11 SHAPE 扩展（`python3-xlib` 包）；若没有该扩展，则以矩形窗口显示同一界面。
 
-- **GIF / 图片**：*GIF/图片…* 或 *文件夹（图库）…*；*真实几何* 保持比例（裁切边角而不是拉伸图像）；*👁 真实预览（发送前）* 在不发送任何内容的情况下展示渲染效果；*🎞 创建动画（编辑器）*；*📚 动画库*；*智能转换* 用于转换 GIF。
-- **效果** 与 **音频**：选择、调整，然后 *▶ 启动效果*。滑块实时生效；*节奏* 用于加快或减慢整个动画。游戏使用方向键、空格与回车操作，需将启动器窗口置于前台。
+- **GIF / 图片**：*GIF/图片…* 或 *文件夹（图库）…*（或拖放到窗口上）；*真实几何* 保持比例（裁切边角而不是拉伸图像）；*👁 真实预览（发送前）* 在不发送任何内容的情况下展示渲染效果；*🎞 创建动画（编辑器）*；*📚 动画库*；*★ 播放列表和收藏*；*🖼 缩略图库*（单击：播放，右键：收藏）；*🎥 摄像头* 与 *🖥 屏幕镜像*；*智能转换* 用于转换 GIF。
+- **效果** 与 **音频**：选择、调整，然后 *▶ 启动效果*。滑块实时生效；*节奏* 用于加快或减慢整个动画。*文字* 效果可输入你的消息并设置滚动方向。游戏使用方向键、空格与回车操作，需将启动器窗口置于前台；双人乒乓：左侧玩家使用 Z/W 与 S。
 - **亮度**、**🕒 时钟**、**■ 停止**（清空屏幕）在所有标签页中通用。
-- **设置**：会话启动内容（GIF 图库、时钟、上次播放或无）、语言、主题、界面、桌面通知、键盘颜色（OpenRGB）、*排程…*、系统托盘图标、扩展文件夹、更新。
+- **设置**：会话启动内容（GIF 图库、时钟、上次播放或无）、时钟表盘、语言、主题、界面、桌面通知、键盘颜色（OpenRGB）、*计划…*（触发条件、按应用配置、时间段）、*指示灯…*、*网页遥控…*、系统托盘图标、长时间命令的结束、扩展文件夹、更新。
 
 **关闭启动器不会中断任何内容**：`animematrixd` 守护进程会继续显示。*■ 停止* 会熄灭屏幕。
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # 图库（文件夹或文件
 animematrix-ctl effet "Plasma" --param speed=250   # 效果与参数
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # 播放列表（不带名称：列出所有列表）
+animematrix-ctl favori 2                           # 第 2 个收藏（不带编号：列出所有收藏）
 animematrix-ctl notifier "Café prêt" --duree 5     # 叠加显示后恢复
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ animematrix-ctl stop
 
 ### “Keyboard React” 效果
 
-它通过 `pynput` 根据按键节奏点亮屏幕，`pynput` 会在效果运行期间监听整个会话中的按键。它在 X11 下可正常工作；在 Wayland 下无法接收按键事件。
+效果运行期间，它会根据按键节奏点亮屏幕：X11 下通过 `pynput`，Wayland 下读取 `/dev/input` 中的键盘（`python3-evdev`）。在 Wayland 下，如果效果一直停留在演示模式，请授权仅读取 ROG 键盘：
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### 指示灯
+
+*设置* → *指示灯（麦克风、摄像头、OBS）…*：屏幕左上角会亮起一个 2 × 2 LED 的小块，叠加在当前播放内容之上（1：麦克风静音或正在使用，2：摄像头正在使用，3：OBS 直播或录制中），每次状态变化还可通过滚动文字提示。OBS：启用 WebSocket 服务器（*工具* → *WebSocket 服务器设置*），并填入其端口与密码。
+
+### 网页遥控
+
+*设置* → *网页遥控…*：勾选 *启用网页遥控*，然后在同一网络中的手机上打开该地址（或扫描二维码）。页面实时显示屏幕内容，并提供时钟、图库、效果、收藏、列表、亮度与消息功能。该地址包含一个令牌：请勿分享，可通过 *新令牌* 更换；页面未加密（HTTP）：仅限在可信网络中使用。
+
+### 长时间命令的结束
+
+*设置* → *显示长时间命令的结束（终端）* 会在 `~/.bashrc`（以及 `~/.zshrc`）中添加一行：任何运行超过 30 秒的命令结束时都会显示「完成：make 2 min 05」或「失败（2）：…」。阈值：`ANIMEMATRIX_FIN_SECONDES`；交互式命令（编辑器、`ssh`、`less` 等）会被忽略。
 
 ### 键盘颜色（OpenRGB）
 
@@ -227,7 +255,9 @@ animematrix-ctl stop
 | “无法连接 animematrixd 服务” | 守护进程已停止 | `systemctl --user restart animematrixd.service` 或 `animematrixd &` |
 | 屏幕内容不变化 | 其他程序正在写入键盘 | 关闭旧的脚本；`animematrix-ctl etat` |
 | 可视化器一直处于演示模式 | 没有 `parec` 或没有声音 | 安装 `pulseaudio-utils`，播放一些声音 |
-| “Keyboard React” 没有反应 | Wayland 会话或缺少 `pynput` | 改用 X11 会话，`sudo apt install python3-pynput` |
+| “Keyboard React” 没有反应 | 缺少 `pynput`（X11）或 `python3-evdev`（Wayland），或无法读取键盘 | 安装相应的包；在 Wayland 下，使用 [Keyboard React](#utilisation) 中的 udev 规则 |
+| 摄像头、视频或屏幕镜像无法使用 | 缺少 `ffmpeg` | `sudo apt install ffmpeg`；在 Wayland 下，屏幕镜像通过门户（`gstreamer1.0-pipewire`）实现 |
+| 在 Wayland 下按应用配置或全屏检测不起作用 | 合成器无法提供活动窗口 | GNOME：*Window Calls* 扩展；KDE：`kdotool`；Sway 与 Hyprland：无需任何操作 |
 | 圆形窗口显示为矩形 | 缺少 SHAPE 扩展或 `python3-xlib` | `sudo apt install python3-xlib`，或 *设置* → *界面：* → *经典* |
 | 使用 OpenRGB 后按键一直保持同一颜色 | OpenRGB 无法还原原始效果 | 拔下键盘再重新插上 |
 | 守护进程日志 | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ animematrix-ctl stop
 |---|---|
 | `rog_flare2_launcher.py` | 图形启动器（Tk） |
 | `rog_flare2_ui_ronde.py`、`rog_flare2_themes.py` | 圆形界面、主题 |
-| `rog_flare2_i18n.py`、`locale/` | 界面翻译（19 种语言；`locale/_cles.json` = 待翻译文本） |
+| `rog_flare2_i18n.py`、`locale/` | 界面翻译（19 种语言；`locale/_cles.json` = 待翻译文本；[TRADUIRE.md](../TRADUIRE.md)） |
 | `rog_flare2_demon.py`、`rog_flare2_ctl.py` | `animematrixd` 守护进程、客户端与 `animematrix-ctl` 命令 |
-| `rog_flare2_core.py` | GIF 流式播放、时钟、几何结构 |
+| `rog_flare2_core.py` | GIF 流式播放、帧缓存、时钟、几何结构 |
+| `rog_flare2_texte.py`、`rog_flare2_horloges.py` | 支持所有文字系统的文本、*文字* 效果、时钟表盘 |
+| `rog_flare2_listes.py`、`rog_flare2_vignettes.py` | 播放列表、收藏、缩略图库、拖放 |
+| `rog_flare2_video.py`、`rog_flare2_voyants.py`、`rog_flare2_telecommande.py` | 视频、摄像头、屏幕镜像；指示灯；网页遥控 |
+| `rog_flare2_touches.py`、`rog_flare2_fenetre.py`、`rog_flare2_fin.py`、`rog_flare2_flatpak.py` | 按键与活动窗口（X11、Wayland）、长时间命令的结束、Flatpak |
 | `rog_flare2_effets.py`、`polywollywin/` | 效果与可视化器（PolyWollyWin 引擎，MIT 许可）、扩展 |
 | `rog_flare2_infos.py`、`rog_flare2_mpris.py`、`rog_flare2_jeux.py` | 系统监视器、当前播放曲目、游戏 |
 | `rog_flare2_notifs.py`、`rog_flare2_programme.py`、`rog_flare2_ui_programme.py` | 通知、定时排程与触发条件 |
@@ -295,4 +329,4 @@ packaging/build-deb.sh
 
 **https://buymeacoffee.com/anticitoyen** —— 该链接同样可以在启动器的 *设置* 标签页中找到。
 
-问题反馈、创意与动画分享：[Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues)。
+问题反馈、创意与动画分享：[Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues)。翻译：[TRADUIRE.md](../TRADUIRE.md)。

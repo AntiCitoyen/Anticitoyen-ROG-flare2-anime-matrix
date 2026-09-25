@@ -51,13 +51,16 @@
 ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) altında sunar. Bu proje klavyeyle doğrudan USB HID üzerinden konuşur ve şunları sunar:
 
 **Görüntüleme**
-- **GIF ve görüntüler**: tek bir dosya, bir seçim ya da tüm bir klasör galeri olarak; akışlı oynatma (400 GIF'lik bir galeri yaklaşık 25 MB bellekte çalışır).
-- HH:MM biçiminde **Saat**.
-- **19 animasyonlu efekt** (Matrix tarzı yağmur, plazma, ateş, yıldızlar, havai fişekler, şimşekler, metaball'lar, dalga, kayan yazı…) ve bilgisayarda çalan sese tepki veren **7 ses görselleştirici**.
+- **GIF, görüntüler ve videolar**: tek bir dosya, bir seçim ya da tüm bir klasör galeri olarak, pencereye sürükle-bırak ile; videolar (MP4, WebM, MKV…) ffmpeg ile oynatılır; küçük resim galerisi; dönüştürülen kareler önbellekte tutulur (400 GIF'lik bir galeri yaklaşık 25 MB bellekte çalışır).
+- **Saat**: dijital, analog, ikili, kelimelerle (Fransızca, İngilizce, Almanca, İspanyolca, İtalyanca, Portekizce, Felemenkçe) veya stilize kadran.
+- **Animasyonlu efektler** (Matrix tarzı yağmur, plazma, ateş, yıldızlar, havai fişekler, şimşekler, metaball'lar, dalga…) ve bilgisayarda çalan sese tepki veren **7 ses görselleştirici**.
+- **Metin**: mesajınız, tüm yazı sistemlerinde (aksanlı harfler, Kiril, Arapça, Hintçe, Çince, Japonca, Korece…), sola, sağa, yukarı, aşağı kayan ya da sabit.
+- **Web kamerası** (görüntü veya siluet) ve **ekran yansıtma** (tüm ekran, fare çevresi veya etkin pencere).
 - **Sistem monitörü**: CPU, RAM, GPU, sıcaklık, ağ hızı ve saat, gösterge şeklinde.
 - **Çalan parça**: parça değiştiğinde bir kez « SANATÇI - BAŞLIK » kayan yazı olarak geçer, ardından bir görselleştirici gösterilir (Spotify, VLC, Rhythmbox, tarayıcılar… MPRIS üzerinden).
 - **Masaüstü bildirimleri**: « UYGULAMA: BAŞLIK » ekranın üzerinde belirir, ardından oynatma kaldığı yerden devam eder (varsayılan olarak kapalı, izin verilen uygulamalar listesiyle).
-- Klavyeyle **oynanabilir oyunlar**: Snake, Pong, Tetris, kırma oyunu, en yüksek skorlarla.
+- Klavyeyle **oynanabilir oyunlar**: Snake, Pong (tek başına veya iki kişi), Tetris, kırma oyunu, Invaders, Flappy, en yüksek skorlarla.
+- **Göstergeler**: mikrofon kapatıldığında veya kullanıldığında, web kamerası çalıştığında, OBS yayın yaptığında veya kayıt aldığında yanan küçük ışıklı bloklar.
 
 **Oluşturma**
 - Ekranın gerçek geometrisi üzerinde kare kare çalışan **animasyon düzenleyici**: 3 seviye, zaman çizelgesi, hayalet katman, kaydırma, kopyala-yapıştır, önizleme, klavyeye gönderme, GIF olarak dışa aktarma.
@@ -68,12 +71,17 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 
 **Otomasyon**
 - **`animematrixd` arka plan servisi**: ekranın tek sahibi olarak, başlatıcı kapatıldığında da göstermeye devam eder; `animematrix-ctl` komutu ve isteğe bağlı yerel HTTP API'si.
-- **Zaman programlama**: saat, galeri, monitör, çalan parça veya kapalı ekran ile (gece dahil) zaman aralıkları; oturum kilitliyken, uyku modundayken veya bir uygulama tam ekrandayken ekran siyah kalır.
+- **Zaman programlama**: saat, galeri, monitör, çalan parça, bir efekt, bir oynatma listesi veya kapalı ekran ile (gece dahil) zaman aralıkları; oturum kilitliyken, uyku modundayken veya bir uygulama tam ekrandayken ekran siyah kalır.
+- **Uygulama profilleri**: bir oyun veya uygulama ön planda olduğu sürece ona özel içerik (*Algıla* düğmesi).
+- **Oynatma listeleri ve favoriler**: GIF'ler, efektler, saat… her biri kendi süresince, döngü halinde; sistem tepsisi simgesinde ve komut satırında da.
+- **Web kumandası**: yerel ağdaki bir telefondan ekranı yönetmek için bir sayfa (QR kod, belirteç).
+- **Uzun komutların bitişi**: terminalde uzun bir komut bittiğinde « Tamamlandı: make 2 min 05 » gösterilir.
 - **OpenRGB üzerinden klavye renkleri**: tuşlarda tema rengi, ya da ekranla birlikte nabız gibi atma.
 - **Sistem tepsisi simgesi**: hızlı menü (modlar, parlaklık).
 
 **Kullanım kolaylığı**
 - **4 arayüz** (varsayılan olarak *Kadran + çekmece*, *Kadran*, *Yuvarlatılmış*, *Klasik*) ile **312 LED'in canlı önizlemesi**, **11 tema** (5 ROG, 5 pembe, sistem) ve **19 dil**.
+- **X11 ve Wayland**: evdev ile klavye tepkisi, etkin pencere Sway, Hyprland, KDE (kdotool) veya GNOME (*Window Calls* uzantısı) üzerinden okunur.
 - **Yerleşik güncellemeler**: başlatıcı en son sürümü indirir, SHA-256 özetini doğrular ve kurar (yönetici parolası); ya da APT deposuyla `apt upgrade`.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | destekleniyor (HID, arayüz 4, kullanım sayfası `0xFF02`) |
 | ROG dizüstü bilgisayarlarının AniMe Matrix ekranları (G14, G16…) | çeşitli | `asusctl` üzerinden **deneysel**, donanımda test edilmedi (bkz. [Kullanım](#utilisation)) |
 
-Ubuntu 26.04 (X11, PipeWire, Cinnamon) üzerinde test edildi. Python ≥ 3.10, hidapi, Tk ve systemd içeren her dağıtım uygun olmalıdır.
+Ubuntu 26.04 (X11, PipeWire, Cinnamon) üzerinde test edildi. Python ≥ 3.10, hidapi, Tk ve systemd içeren her dağıtım uygun olmalıdır; Wayland altında başlatıcı XWayland üzerinden çalışır.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (bildirimler), `python3-gi` ve `gir1.2-ayatanaappindicator3-0.1` (sistem tepsisi simgesi), `openrgb` (tuş renkleri).
+Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (bildirimler), `python3-gi` ve `gir1.2-ayatanaappindicator3-0.1` (sistem tepsisi simgesi), `openrgb` (tuş renkleri), `ffmpeg` (videolar, web kamerası, ekran yansıtma), `python3-evdev` (Wayland altında klavye tepkisi), `x11-utils` (X11 altında etkin pencere), `python3-qrcode` (kumandanın QR kodu), `tkdnd` (sürükle-bırak).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-u
 
 Yuvarlak arayüzlerde, yuvarlak düğmeler *GIF*, *Efektler*, *Ses* ve *Ayarlar* bloklarını açar (çekmecede veya çemberin içinde); *Saat* ve *Durdur* hemen etkili olur; alttaki yay parlaklığı ayarlar; pencere, arka planından tutularak taşınır; üstteki küçük düğmeler küçültür veya kapatır. Yuvarlak biçim X11 SHAPE uzantısını kullanır (`python3-xlib` paketi); bu uzantı yoksa, aynı arayüz dikdörtgen bir pencerede görüntülenir.
 
-- **GIF / görüntüler**: seçim için *GIF/görüntüler…* veya tüm klasör için *Klasör (galeri)…*; *Gerçek geometri* oranları korur (köşe, görüntüyü uzatmak yerine keser); *👁 Gerçekçi önizleme (göndermeden önce)* hiçbir şey göndermeden görüntüyü gösterir; *🎞 Animasyon oluştur (düzenleyici)*; *📚 Animasyon kitaplığı*; GIF'leri dönüştürmek için *Akıllı dönüştürme*.
-- **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anında etki eder; *Tempo* tüm animasyonu hızlandırır veya yavaşlatır. Oyunlar ok tuşları, Boşluk ve Enter ile oynanır, başlatıcı penceresi önde olmalıdır.
+- **GIF / görüntüler**: seçim için *GIF/görüntüler…* veya tüm klasör için *Klasör (galeri)…* (veya pencereye sürükle-bırak); *Gerçek geometri* oranları korur (köşe, görüntüyü uzatmak yerine keser); *👁 Gerçekçi önizleme (göndermeden önce)* hiçbir şey göndermeden görüntüyü gösterir; *🎞 Animasyon oluştur (düzenleyici)*; *📚 Animasyon kitaplığı*; *★ Oynatma listeleri ve favoriler*; *🖼 Küçük resim galerisi* (tıkla: oynat, sağ tık: favori); *🎥 Web kamerası* ve *🖥 Ekran yansıtma*; GIF'leri dönüştürmek için *Akıllı dönüştürme*.
+- **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anında etki eder; *Tempo* tüm animasyonu hızlandırır veya yavaşlatır. *Metin* efekti mesajınızı ve kayma yönünü alır. Oyunlar ok tuşları, Boşluk ve Enter ile oynanır, başlatıcı penceresi önde olmalıdır; iki kişilik Pong: sol oyuncu için Z/W ve S.
 - **Parlaklık**, **🕒 Saat**, **■ Durdur** (ekranı temizler) tüm sekmelerde ortaktır.
-- **Ayarlar**: oturum başlangıcı (GIF galerisi, Saat, Son oynatma veya Hiçbiri), dil, tema, arayüz, masaüstü bildirimleri, klavye renkleri (OpenRGB), *Zamanlama…*, sistem tepsisi simgesi, eklentiler klasörü, güncellemeler.
+- **Ayarlar**: oturum başlangıcı (GIF galerisi, Saat, Son oynatma veya Hiçbiri), saat kadranı, dil, tema, arayüz, masaüstü bildirimleri, klavye renkleri (OpenRGB), *Zamanlama…* (tetikleyiciler, uygulama profilleri, zaman aralıkları), *Göstergeler (mikrofon, web kamerası, OBS)…*, *Web kumandası…*, sistem tepsisi simgesi, uzun komutların bitişi, eklentiler klasörü, güncellemeler.
 
 **Başlatıcıyı kapatmak hiçbir şeyi durdurmaz**: `animematrixd` arka plan servisi göstermeye devam eder. *■ Durdur*, ekranı kapatır.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galeri (klasör veya dosyal
 animematrix-ctl effet "Plasma" --param speed=250   # efekt ve ayarlar
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # oynatma listesi (adsız: listeleri gösterir)
+animematrix-ctl favori 2                           # 2 numaralı favori (numarasız: favorileri gösterir)
 animematrix-ctl notifier "Café prêt" --duree 5     # üstte gösterilir sonra geri döner
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ Görselleştiriciler, `parec` (PipeWire veya PulseAudio) ile **varsayılan ses �
 
 ### « Keyboard React » efekti
 
-`pynput` sayesinde yazma ritmine göre ekranı yakar; bu, efekt çalıştığı sürece tüm oturumun tuş vuruşlarını okur. X11 altında çalışır; Wayland altında tuş vuruşlarını almaz.
+Efekt çalıştığı sürece yazma ritmine göre ekranı yakar: X11 altında `pynput` ile, Wayland altında klavyeyi `/dev/input` içinden okuyarak (`python3-evdev`). Wayland altında efekt demo modunda kalırsa, yalnızca ROG klavyesinin okunmasına izin verin:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### Göstergeler
+
+*Ayarlar* → *Göstergeler (mikrofon, web kamerası, OBS)…*: ekranın sol üst köşesinde, oynatmanın üzerinde 2 × 2 LED'lik bir blok yanar (1: mikrofon kapalı veya kullanımda, 2: web kamerası kullanımda, 3: OBS canlı yayında veya kayıtta) ve her değişiklik kayan bir yazıyla duyurulabilir. OBS: WebSocket sunucusunu etkinleştirin (*Araçlar* → *WebSocket Sunucu Ayarları*) ve bağlantı noktasını ve parolasını buraya girin.
+
+### Web kumandası
+
+*Ayarlar* → *Web kumandası…*: *Web kumandasını etkinleştir* kutusunu işaretleyin, ardından aynı ağdaki bir telefonda adresi açın (veya QR kodu okutun). Sayfa ekranı canlı gösterir ve saat, galeri, efektler, favoriler, listeler, parlaklık ve mesaj sunar. Adres bir belirteç içerir: paylaşmayın, *Yeni belirteç* ile değiştirin; sayfa şifrelenmemiştir (HTTP): yalnızca güvenilir ağlarda kullanın.
+
+### Uzun komutların bitişi
+
+*Ayarlar* → *Uzun komutların bitişini göster (terminal)*, `~/.bashrc` (ve `~/.zshrc`) dosyasına bir satır ekler: 30 saniyeden uzun süren her komut bittiğinde « Tamamlandı: make 2 min 05 » veya « Başarısız (2): … » gösterir. Eşik: `ANIMEMATRIX_FIN_SECONDES`; etkileşimli komutlar (düzenleyiciler, `ssh`, `less`…) yok sayılır.
 
 ### Klavye renkleri (OpenRGB)
 
@@ -227,7 +255,9 @@ Orijinal tersine mühendislik notları **[docs/PROTOCOL.md](../PROTOCOL.md)** i�
 | « animematrixd servisine ulaşılamıyor » | arka plan servisi durmuş | `systemctl --user restart animematrixd.service` veya `animematrixd &` |
 | Ekran değişmiyor | başka bir program klavyeye yazıyor | eski betikleri kapatın; `animematrix-ctl etat` |
 | Görselleştiriciler demo modunda kalıyor | `parec` yok veya ses yok | `pulseaudio-utils` kurun, ses çalın |
-| « Keyboard React » tepki vermiyor | Wayland oturumu veya `pynput` eksik | X11 oturumu, `sudo apt install python3-pynput` |
+| « Keyboard React » tepki vermiyor | `pynput` (X11) veya `python3-evdev` (Wayland) eksik ya da klavye okunamıyor | paketi kurun; Wayland altında [Keyboard React](#utilisation) bölümündeki udev kuralı |
+| Web kamerası, videolar veya ekran yansıtma çalışmıyor | `ffmpeg` eksik | `sudo apt install ffmpeg`; Wayland altında ekran yansıtma portal üzerinden geçer (`gstreamer1.0-pipewire`) |
+| Uygulama profilleri veya tam ekran Wayland altında etkisiz | etkin pencere bileşikleyici tarafından bilinmiyor | GNOME: *Window Calls* uzantısı; KDE: `kdotool`; Sway ve Hyprland: yapılacak bir şey yok |
 | Yuvarlak pencere dikdörtgen görünüyor | SHAPE uzantısı veya `python3-xlib` eksik | `sudo apt install python3-xlib`, veya *Ayarlar* → *Arayüz:* → *Klasik* |
 | OpenRGB'den sonra tuşlar tek renkte kalıyor | OpenRGB, orijinal efekti yeniden oluşturamıyor | klavyeyi çıkarıp yeniden takın |
 | Arka plan servisinin günlüğü | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ Orijinal tersine mühendislik notları **[docs/PROTOCOL.md](../PROTOCOL.md)** i�
 |---|---|
 | `rog_flare2_launcher.py` | grafik başlatıcı (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | yuvarlak arayüzler, temalar |
-| `rog_flare2_i18n.py`, `locale/` | çeviri (19 dil; `locale/_cles.json` = çevrilecek metinler) |
+| `rog_flare2_i18n.py`, `locale/` | çeviri (19 dil; `locale/_cles.json` = çevrilecek metinler; [docs/TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | `animematrixd` arka plan servisi, istemci ve `animematrix-ctl` komutu |
-| `rog_flare2_core.py` | GIF akışlı oynatma, saat, geometri |
+| `rog_flare2_core.py` | GIF akışlı oynatma, kare önbelleği, saat, geometri |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | tüm yazı sistemlerinde metin, *Metin* efekti, saat kadranları |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | oynatma listeleri, favoriler, küçük resim galerisi, sürükle-bırak |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | videolar, web kamerası, ekran yansıtma; göstergeler; web kumandası |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | tuşlar ve etkin pencere (X11, Wayland), uzun komutların bitişi, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | efektler ve görselleştiriciler (PolyWollyWin motoru, MIT), eklentiler |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | sistem monitörü, çalan parça, oyunlar |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | bildirimler, zaman programlama ve tetikleyiciler |
@@ -295,4 +329,4 @@ Bu proje işinize yarıyorsa, bir kahve onu sürdürmeye yardımcı olur:
 
 **https://buymeacoffee.com/anticitoyen** — bağlantı, başlatıcının *Ayarlar* sekmesinde de bulunur.
 
-Hata bildirimleri, fikirler ve paylaşılacak animasyonlar: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Hata bildirimleri, fikirler ve paylaşılacak animasyonlar: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). Çeviriler: [docs/TRADUIRE.md](../TRADUIRE.md).

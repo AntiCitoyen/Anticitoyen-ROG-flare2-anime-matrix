@@ -1,0 +1,47 @@
+name: Flathub
+
+# Prépare et vérifie le paquet Flathub : dépendances Python en sources hors ligne
+# (flatpak-pip-generator, dans le SDK), construction sans réseau, flatpak-builder-lint.
+# Le python3-modules.json produit est joint en artefact pour être versionné.
+on:
+  workflow_dispatch:
+  push:
+    paths: ["packaging/flathub/**", ".github/workflows/flathub.yml"]
+
+jobs:
+  flathub:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flatpak tools and GNOME runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder python3-pip
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y flathub org.gnome.Platform//51 org.gnome.Sdk//51 org.flatpak.Builder
+      - name: Python dependencies as offline sources
+        run: |
+          if [ ! -f packaging/flathub/python3-modules.json ]; then
+            pip3 install --user --break-system-packages requirements-parser pyyaml
+            curl -fsSLo pipgen.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/pip/flatpak-pip-generator.py
+            python3 pipgen.py --runtime org.gnome.Sdk//51 --prefer-wheels numpy,pillow,hidapi \
+              --output packaging/flathub/python3-modules \
+              hidapi pillow numpy python-xlib pynput evdev qrcode
+          fi
+      - name: Build without network
+        run: |
+          flatpak-builder --user --force-clean --sandbox --repo=repo build \
+            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml
+          flatpak build-bundle repo AniMeMatrix-flathub.flatpak io.github.anticitoyen.AniMeMatrix
+      - name: Lint (manifest, metainfo, build)
+        run: |
+          flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest \
+            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml | tee lint-manifest.txt || true
+          flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo | tee lint-repo.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flathub
+          path: |
+            packaging/flathub/python3-modules.json
+            lint-*.txt
+            AniMeMatrix-flathub.flatpak

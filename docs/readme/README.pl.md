@@ -51,13 +51,16 @@ Sterowanie pod Linuksem ekranem **AniMe Matrix** (312 mini-diod LED) klawiatury 
 ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armoury Crate). Ten projekt komunikuje się bezpośrednio z klawiaturą przez USB HID i dostarcza:
 
 **Wyświetlanie**
-- **GIF-y i obrazy**: pojedynczy plik, wybór plików lub cały folder jako galeria; odtwarzanie strumieniowe (galeria 400 GIF-ów mieści się w ~25 MB pamięci).
-- **Zegar** GG:MM.
-- **19 animowanych efektów** (deszcz w stylu Matrix, plazma, ogień, gwiazdy, fajerwerki, błyskawice, metaballe, fala, przewijany tekst…) oraz **7 wizualizatorów audio** reagujących na dźwięk odtwarzany przez komputer.
+- **GIF-y, obrazy i filmy**: pojedynczy plik, wybór plików lub cały folder jako galeria, do przeciągnięcia i upuszczenia na okno; filmy (MP4, WebM, MKV…) odtwarzane przez ffmpeg; galeria miniatur; przekonwertowane klatki trzymane w pamięci podręcznej (galeria 400 GIF-ów mieści się w ~25 MB pamięci).
+- **Zegar**: tarcza cyfrowa, analogowa, binarna, słowna (francuski, angielski, niemiecki, hiszpański, włoski, portugalski, niderlandzki) lub stylizowana.
+- **Animowane efekty** (deszcz w stylu Matrix, plazma, ogień, gwiazdy, fajerwerki, błyskawice, metaballe, fala…) oraz **7 wizualizatorów audio** reagujących na dźwięk odtwarzany przez komputer.
+- **Tekst**: Twoja wiadomość, w każdym piśmie (znaki diakrytyczne, cyrylica, arabski, hindi, chiński, japoński, koreański…), przewijana w lewo, w prawo, w górę, w dół lub nieruchoma.
+- **Kamera** (obraz lub sylwetka) i **lustro ekranu** (cały ekran, obszar wokół myszy lub aktywne okno).
 - **Monitor systemu**: CPU, RAM, GPU, temperatura, przepustowość sieci i godzina, w formie wskaźników.
 - **Aktualnie odtwarzany utwór**: przy zmianie utworu „WYKONAWCA - TYTUŁ” przewija się raz, a następnie pojawia się wizualizator (Spotify, VLC, Rhythmbox, przeglądarki… przez MPRIS).
 - **Powiadomienia pulpitu**: „APLIKACJA: TYTUŁ” wyświetla się jako nakładka, po czym odtwarzanie wraca do poprzedniego stanu (domyślnie wyłączone, lista dozwolonych aplikacji).
-- **Grywalne gry** na klawiaturze: Snake, Pong, Tetris, Breakout, z rekordami.
+- **Grywalne gry** na klawiaturze: Snake, Pong (w pojedynkę lub we dwóch), Tetris, Breakout, Invaders, Flappy, z rekordami.
+- **Wskaźniki**: małe świecące bloki, gdy mikrofon jest wyciszony lub używany, gdy kamera działa, gdy OBS nadaje lub nagrywa.
 
 **Tworzenie**
 - **Edytor animacji** klatka po klatce, na rzeczywistej geometrii ekranu: 3 poziomy, oś czasu, warstwa-widmo, przesunięcie, kopiuj-wklej, podgląd, wysyłanie do klawiatury, eksport GIF.
@@ -68,12 +71,17 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 
 **Automatyzacja**
 - **Demon `animematrixd`**: jedyny właściciel ekranu, kontynuuje wyświetlanie po zamknięciu launchera; polecenie `animematrix-ctl` i opcjonalne lokalne API HTTP.
-- **Harmonogram**: przedziały czasowe (dni, także noc) z zegarem, galerią, monitorem, aktualnie odtwarzanym utworem lub wyłączonym ekranem; czarny ekran, gdy sesja jest zablokowana, w uśpieniu lub gdy aplikacja działa w pełnym ekranie.
+- **Harmonogram**: przedziały czasowe (dni, także noc) z zegarem, galerią, monitorem, aktualnie odtwarzanym utworem, efektem, listą odtwarzania lub wyłączonym ekranem; czarny ekran, gdy sesja jest zablokowana, w uśpieniu lub gdy aplikacja działa w pełnym ekranie.
+- **Profile aplikacji**: własna zawartość dla gry lub aplikacji, dopóki jest na pierwszym planie (przycisk *Wykryj*).
+- **Listy odtwarzania i ulubione**: GIF-y, efekty, zegar… każdy przez swój czas, w pętli; także w ikonie na pasku systemowym i w wierszu poleceń.
+- **Pilot przez przeglądarkę**: strona do sterowania ekranem z telefonu w sieci lokalnej (kod QR, token).
+- **Zakończenie długich poleceń**: w terminalu wyświetla się „Gotowe: make 2 min 05”, gdy długie polecenie się kończy.
 - **Kolory klawiatury przez OpenRGB**: kolor motywu na klawiszach lub pulsowanie zsynchronizowane z ekranem.
 - **Ikona na pasku systemowym**: szybkie menu (tryby, jasność).
 
 **Wygoda**
 - **4 interfejsy** (*Tarcza + szuflada* domyślnie, *Tarcza*, *Zaokrąglony*, *Klasyczny*) z **podglądem 312 diod LED na żywo**, **11 motywami** (5 ROG, 5 różowych, systemowy) i **19 językami**.
+- **X11 i Wayland**: reakcja na klawiaturę przez evdev, aktywne okno odczytywane z Sway, Hyprland, KDE (kdotool) lub GNOME (rozszerzenie *Window Calls*).
 - **Wbudowane aktualizacje**: launcher pobiera najnowsze wydanie, sprawdza jego odcisk SHA-256 i instaluje je (hasło administratora); albo `apt upgrade` z repozytorium APT.
 
 <a id="materiel"></a>
@@ -85,7 +93,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 | ASUS ROG Strix Flare II Animate | `0b05:19fc` | obsługiwane (HID, interfejs 4, usage page `0xFF02`) |
 | Ekrany AniMe Matrix laptopów ROG (G14, G16…) | różne | **eksperymentalne** przez `asusctl`, nietestowane na sprzęcie (zob. [Użytkowanie](#utilisation)) |
 
-Testowano na Ubuntu 26.04 (X11, PipeWire, Cinnamon). Każda dystrybucja z Pythonem ≥ 3.10, hidapi, Tk i systemd powinna działać.
+Testowano na Ubuntu 26.04 (X11, PipeWire, Cinnamon). Każda dystrybucja z Pythonem ≥ 3.10, hidapi, Tk i systemd powinna działać; pod Waylandem launcher działa przez XWayland.
 
 <a id="installation"></a>
 
@@ -136,7 +144,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Przydatne narzędzia systemowe: `imagemagick` (klasyczna konwersja), `pulseaudio-utils` (`parec`, do audio), `zenity` (wybór plików), `libnotify-bin` (powiadomienia), `python3-gi` i `gir1.2-ayatanaappindicator3-0.1` (ikona na pasku systemowym), `openrgb` (kolory klawiszy).
+Przydatne narzędzia systemowe: `imagemagick` (klasyczna konwersja), `pulseaudio-utils` (`parec`, do audio), `zenity` (wybór plików), `libnotify-bin` (powiadomienia), `python3-gi` i `gir1.2-ayatanaappindicator3-0.1` (ikona na pasku systemowym), `openrgb` (kolory klawiszy), `ffmpeg` (filmy, kamera, lustro ekranu), `python3-evdev` (reakcja na klawiaturę pod Waylandem), `x11-utils` (aktywne okno pod X11), `python3-qrcode` (kod QR pilota), `tkdnd` (przeciągnij i upuść).
 
 <a id="utilisation"></a>
 
@@ -148,10 +156,10 @@ Przydatne narzędzia systemowe: `imagemagick` (klasyczna konwersja), `pulseaudio
 
 W okrągłych interfejsach okrągłe przyciski otwierają bloki *GIF*, *Efekty*, *Audio* i *Ustawienia* (w szufladzie lub w kole); *Zegar* i *Zatrzymaj* działają natychmiast; dolny łuk reguluje jasność; okno przesuwa się, przeciągając je za tło; małe przyciski u góry minimalizują lub zamykają. Okrągły kształt wykorzystuje rozszerzenie X11 SHAPE (pakiet `python3-xlib`); bez niego ten sam interfejs wyświetla się w prostokątnym oknie.
 
-- **GIF / obrazy**: *GIF/obrazy…* lub *Folder (galeria)…*; *Wierna geometria* zachowuje proporcje (róg przycina obraz zamiast go rozciągać); *👁 Wierny podgląd (przed wysłaniem)* pokazuje wynik bez niczego wysyłania; *🎞 Utwórz animację (edytor)*; *📚 Biblioteka animacji*; *Inteligentna konwersja* do przekształcania GIF-ów.
-- **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia całą animację. Gry gra się strzałkami, spacją i Enterem, gdy okno launchera jest na pierwszym planie.
+- **GIF / obrazy**: *GIF/obrazy…* lub *Folder (galeria)…* (lub przeciągnij i upuść na okno); *Wierna geometria* zachowuje proporcje (róg przycina obraz zamiast go rozciągać); *👁 Wierny podgląd (przed wysłaniem)* pokazuje wynik bez niczego wysyłania; *🎞 Utwórz animację (edytor)*; *📚 Biblioteka animacji*; *★ Listy odtwarzania i ulubione*; *🖼 Galeria miniatur* (klik: odtwórz, prawy klik: ulubione); *🎥 Kamera* i *🖥 Lustro ekranu*; *Inteligentna konwersja* do przekształcania GIF-ów.
+- **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia całą animację. Efekt *Tekst* przyjmuje Twoją wiadomość i kierunek przewijania. Gry gra się strzałkami, spacją i Enterem, gdy okno launchera jest na pierwszym planie; Pong we dwóch: Z/W i S dla lewego gracza.
 - **Jasność**, **🕒 Zegar**, **■ Zatrzymaj** (co czyści ekran) są wspólne dla wszystkich zakładek.
-- **Ustawienia**: start sesji (Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic), język, motyw, interfejs, powiadomienia pulpitu, kolory klawiatury (OpenRGB), *Harmonogram…*, ikona na pasku systemowym, folder rozszerzeń, aktualizacje.
+- **Ustawienia**: start sesji (Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic), tarcza zegara, język, motyw, interfejs, powiadomienia pulpitu, kolory klawiatury (OpenRGB), *Harmonogram…* (wyzwalacze, profile aplikacji, przedziały czasu), *Wskaźniki (mikrofon, kamera, OBS)…*, *Pilot przez przeglądarkę…*, ikona na pasku systemowym, zakończenie długich poleceń, folder rozszerzeń, aktualizacje.
 
 **Zamknięcie launchera niczego nie przerywa**: demon `animematrixd` kontynuuje wyświetlanie. *■ Zatrzymaj* wyłącza ekran.
 
@@ -163,6 +171,9 @@ animematrix-ctl gif ~/Images/AniMe-Matrix --fidele # galeria (folder lub pliki)
 animematrix-ctl effet "Plasma" --param speed=250   # efekt i ustawienia
 animematrix-ctl horloge
 animematrix-ctl texte "Bonjour"
+animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
+animematrix-ctl liste "Soirée"                     # lista odtwarzania (bez nazwy: wyświetla listy)
+animematrix-ctl favori 2                           # ulubiony nr 2 (bez numeru: wyświetla ulubione)
 animematrix-ctl notifier "Café prêt" --duree 5     # nakładka, potem powrót
 animematrix-ctl luminosite 60
 animematrix-ctl stop
@@ -184,7 +195,24 @@ Wizualizatory nasłuchują **monitora domyślnego wyjścia dźwięku** za pomoc�
 
 ### Efekt „Keyboard React”
 
-Zapala ekran w rytm pisania dzięki `pynput`, który odczytuje klawisze z całej sesji, dopóki efekt działa. Działa pod X11; pod Waylandem nie odbiera klawiszy.
+Zapala ekran w rytm pisania, dopóki efekt działa: pod X11 przez `pynput`, pod Waylandem odczytując klawiaturę w `/dev/input` (`python3-evdev`). Jeśli pod Waylandem efekt pozostaje w trybie demo, zezwól na odczyt tylko klawiatury ROG:
+
+```bash
+sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/73-rog-flare2-animate-touches.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+### Wskaźniki
+
+*Ustawienia* → *Wskaźniki (mikrofon, kamera, OBS)…*: blok 2 × 2 diod zapala się w lewym górnym rogu ekranu, ponad odtwarzaną treścią (1: mikrofon wyciszony lub używany, 2: kamera używana, 3: OBS na żywo lub nagrywa), a każdą zmianę może ogłosić przewijany tekst. OBS: włącz serwer WebSocket (*Narzędzia* → *Ustawienia serwera WebSocket*) i przepisz jego port i hasło.
+
+### Pilot przez przeglądarkę
+
+*Ustawienia* → *Pilot przez przeglądarkę…*: zaznacz *Włącz pilota przez przeglądarkę*, a następnie otwórz adres (lub zeskanuj kod QR) na telefonie w tej samej sieci. Strona pokazuje ekran na żywo i oferuje zegar, galerię, efekty, ulubione, listy, jasność i wiadomość. Adres zawiera token: nie udostępniaj go, zmień go przyciskiem *Nowy token*; strona nie jest szyfrowana (HTTP): tylko zaufana sieć.
+
+### Zakończenie długich poleceń
+
+*Ustawienia* → *Pokazuj zakończenie długich poleceń (terminal)* dodaje wiersz do `~/.bashrc` (i `~/.zshrc`): każde polecenie trwające ponad 30 sekund wyświetla po zakończeniu „Gotowe: make 2 min 05” lub „Niepowodzenie (2): …”. Próg: `ANIMEMATRIX_FIN_SECONDES`; polecenia interaktywne (edytory, `ssh`, `less`…) są pomijane.
 
 ### Kolory klawiatury (OpenRGB)
 
@@ -227,7 +255,9 @@ Oryginalne notatki z inżynierii wstecznej znajdują się w **[../PROTOCOL.md](.
 | „Usługa animematrixd niedostępna” | demon zatrzymany | `systemctl --user restart animematrixd.service` lub `animematrixd &` |
 | Ekran się nie zmienia | inny program zapisuje na klawiaturze | zamknij stare skrypty; `animematrix-ctl etat` |
 | Wizualizatory pozostają w trybie demo | brak `parec` lub brak dźwięku | zainstaluj `pulseaudio-utils`, odtwórz dźwięk |
-| „Keyboard React” nie reaguje | sesja Wayland lub brak `pynput` | sesja X11, `sudo apt install python3-pynput` |
+| „Keyboard React” nie reaguje | brak `pynput` (X11) lub `python3-evdev` (Wayland) albo klawiatura nieczytelna | zainstaluj pakiet; pod Waylandem reguła udev z [Keyboard React](#utilisation) |
+| Kamera, filmy lub lustro ekranu nie działają | brak `ffmpeg` | `sudo apt install ffmpeg`; pod Waylandem lustro ekranu przechodzi przez portal (`gstreamer1.0-pipewire`) |
+| Profile aplikacji lub pełny ekran bez efektu pod Waylandem | kompozytor nie podaje aktywnego okna | GNOME: rozszerzenie *Window Calls*; KDE: `kdotool`; Sway i Hyprland: nic do zrobienia |
 | Okrągłe okno wyświetla się jako prostokąt | brak rozszerzenia SHAPE lub `python3-xlib` | `sudo apt install python3-xlib`, albo *Ustawienia* → *Interfejs:* → *Klasyczny* |
 | Klawisze pozostają w jednym kolorze po OpenRGB | OpenRGB nie odtwarza oryginalnego efektu | odłącz i podłącz ponownie klawiaturę |
 | Dziennik demona | — | `journalctl --user -u animematrixd.service -f` |
@@ -240,9 +270,13 @@ Oryginalne notatki z inżynierii wstecznej znajdują się w **[../PROTOCOL.md](.
 |---|---|
 | `rog_flare2_launcher.py` | launcher graficzny (Tk) |
 | `rog_flare2_ui_ronde.py`, `rog_flare2_themes.py` | okrągłe interfejsy, motywy |
-| `rog_flare2_i18n.py`, `locale/` | tłumaczenie (19 języków; `locale/_cles.json` = teksty do przetłumaczenia) |
+| `rog_flare2_i18n.py`, `locale/` | tłumaczenie (19 języków; `locale/_cles.json` = teksty do przetłumaczenia; [../TRADUIRE.md](../TRADUIRE.md)) |
 | `rog_flare2_demon.py`, `rog_flare2_ctl.py` | demon `animematrixd`, klient i polecenie `animematrix-ctl` |
-| `rog_flare2_core.py` | odtwarzanie GIF-ów strumieniowo, zegar, geometria |
+| `rog_flare2_core.py` | odtwarzanie GIF-ów strumieniowo, pamięć podręczna klatek, zegar, geometria |
+| `rog_flare2_texte.py`, `rog_flare2_horloges.py` | tekst w każdym piśmie, efekt *Tekst*, tarcze zegara |
+| `rog_flare2_listes.py`, `rog_flare2_vignettes.py` | listy odtwarzania, ulubione, galeria miniatur, przeciąganie i upuszczanie |
+| `rog_flare2_video.py`, `rog_flare2_voyants.py`, `rog_flare2_telecommande.py` | filmy, kamera, lustro ekranu; wskaźniki; pilot przez przeglądarkę |
+| `rog_flare2_touches.py`, `rog_flare2_fenetre.py`, `rog_flare2_fin.py`, `rog_flare2_flatpak.py` | klawisze i aktywne okno (X11, Wayland), zakończenie długich poleceń, Flatpak |
 | `rog_flare2_effets.py`, `polywollywin/` | efekty i wizualizatory (silnik PolyWollyWin, MIT), rozszerzenia |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor systemu, aktualnie odtwarzany utwór, gry |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | powiadomienia, harmonogram i wyzwalacze |
@@ -295,4 +329,4 @@ Jeśli ten projekt jest dla Ciebie przydatny, kawa pomaga w jego utrzymaniu:
 
 **https://buymeacoffee.com/anticitoyen** — link znajduje się także w zakładce *Ustawienia* launchera.
 
-Zgłoszenia błędów, pomysły i animacje do udostępnienia: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
+Zgłoszenia błędów, pomysły i animacje do udostępnienia: [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues). Tłumaczenia: [../TRADUIRE.md](../TRADUIRE.md).

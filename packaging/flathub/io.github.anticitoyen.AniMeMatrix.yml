@@ -1,0 +1,33 @@
+# Manifeste Flathub (construit sans réseau) ; python3-modules.json : généré par .github/workflows/flathub.yml
+id: io.github.anticitoyen.AniMeMatrix
+runtime: org.gnome.Platform
+runtime-version: "51"
+sdk: org.gnome.Sdk
+command: animematrix
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio                 # visualiseurs audio (moniteur de la sortie son)
+  - --share=network                     # bibliothèque d'animations, télécommande web (réseau local)
+  - --device=all                        # accès HID/USB au clavier (règle udev installée sur l'hôte)
+  - --filesystem=xdg-pictures           # galerie de GIF
+  - --filesystem=xdg-videos:ro
+  - --filesystem=xdg-download:ro
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.mpris.MediaPlayer2.*  # morceau en cours
+modules:
+  - python3-modules.json
+  - name: animematrix
+    buildsystem: simple
+    build-commands:
+      - packaging/install.sh / /app /usr/bin/python3
+      - install -Dm644 packaging/flathub/io.github.anticitoyen.AniMeMatrix.metainfo.xml
+        /app/share/metainfo/io.github.anticitoyen.AniMeMatrix.metainfo.xml
+      - mv /app/share/applications/animematrix.desktop /app/share/applications/io.github.anticitoyen.AniMeMatrix.desktop
+      - sed -i 's/^Icon=animematrix$/Icon=io.github.anticitoyen.AniMeMatrix/' /app/share/applications/io.github.anticitoyen.AniMeMatrix.desktop
+      - mv /app/share/icons/hicolor/scalable/apps/animematrix.svg /app/share/icons/hicolor/scalable/apps/io.github.anticitoyen.AniMeMatrix.svg
+      - rm -rf /app/lib/systemd /app/lib/udev  # sans effet dans le bac à sable (règle udev : sur l'hôte)
+    sources:
+      - type: dir
+        path: ../..

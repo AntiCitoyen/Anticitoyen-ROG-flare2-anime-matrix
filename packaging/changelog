@@ -1,11 +1,26 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Wayland : réaction au clavier par evdev, fenêtre active (Sway, Hyprland,
+    KDE, GNOME), plein écran.
+  * Profils par application, listes de lecture et favoris, télécommande web.
+  * Voyants : micro, webcam, OBS. Fin des commandes longues du terminal.
+  * Vidéos dans la galerie, webcam, miroir d'écran ; galerie en vignettes,
+    glisser-déposer.
+  * Effet Texte (tout sens, toutes écritures) ; cadrans analogique, binaire,
+    en mots ; jeux Pong à deux, Invaders, Flappy.
+  * Cache des trames converties, trames identiques non renvoyées.
+  * Publication AUR et Copr, manifeste Flathub, traductions via Weblate.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.4.1) stable; urgency=medium
+
   * Liste des effets entièrement déroulée : le moniteur système et les jeux,
     en fin de liste, restaient cachés sous le défilement.
   * Version affichée sous le titre de chaque interface et dans la barre de
     titre.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 14:10:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.4.0) stable; urgency=medium
 
