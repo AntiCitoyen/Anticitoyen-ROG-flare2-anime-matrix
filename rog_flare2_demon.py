@@ -286,6 +286,12 @@ class Daemon:
                     setattr(effect, attr, param_value(specs[attr], raw))
                     show.setdefault("params", {})[attr] = raw
             return {"ok": True}
+        if cmd == "key":  # touche pour un jeu en cours
+            on_key = getattr(self.effect, "on_key", None)
+            if on_key is None:
+                return {"ok": False, "error": "aucun jeu en cours"}
+            on_key(str(req.get("key", "")))
+            return {"ok": True}
         if cmd == "config":  # réglages relus (notifications du bureau)
             from rog_flare2_notifs import load_config
             return {"ok": True, "notifications": self.notifs.start(load_config())}

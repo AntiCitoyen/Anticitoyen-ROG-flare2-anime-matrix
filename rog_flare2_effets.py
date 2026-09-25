@@ -113,6 +113,9 @@ from rog_flare2_infos import SystemMonitorEffect  # noqa: E402  (écran d'infos 
 EFFECTS[SystemMonitorEffect.name] = SystemMonitorEffect
 from rog_flare2_mpris import NowPlayingEffect  # noqa: E402  (morceau en cours, MPRIS)
 AUDIO_EFFECTS[NowPlayingEffect.name] = NowPlayingEffect
+from rog_flare2_jeux import GAMES  # noqa: E402  (jeux jouables : touches transmises par le lanceur)
+for _game in GAMES:
+    EFFECTS[_game.name] = _game
 
 # Extensions : tout fichier .py de ce dossier peut définir des effets (sous-classes de BaseEffect
 # avec un attribut name). Voir docs/EXTENSIONS.md et examples/effets/.

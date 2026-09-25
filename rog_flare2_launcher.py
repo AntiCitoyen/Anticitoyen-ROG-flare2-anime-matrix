@@ -39,6 +39,9 @@ from rog_flare2_core import (  # noqa: F401  (réexportés pour les autres modul
     iter_gif_frames, media_files, pick_version, play_clock, play_file, save_gallery_dir,
 )
 from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, PLUGIN_DIR, PLUGIN_NAMES, effect_class
+from rog_flare2_jeux import GAMES
+
+GAME_NAMES = {g.name for g in GAMES}
 
 
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
@@ -121,6 +124,7 @@ class LauncherApp(tk.Tk):
                 self.round_ui = RoundUI(self, self.interface)
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.bind_all("<KeyPress>", self._game_key, add="+")
         self._poll_status()
         if getattr(self, "round_ui", None) is not None:
             self._poll_frame()
@@ -218,6 +222,10 @@ class LauncherApp(tk.Tk):
         ttk.Label(spd, text=_("Cadence"), width=14).pack(side="left")
         ttk.Scale(spd, from_=0.2, to=3.0, variable=panel["speed"], orient="horizontal").pack(
             side="left", fill="x", expand=True)
+        if title == "Effets":
+            self.game_hint = ttk.Label(tab, text=_("Jeux : flèches et Espace, Entrée pour rejouer (fenêtre au premier plan)"),
+                                       style="Muted.TLabel", wraplength=self.wrap)
+            self.game_hint.pack(anchor="w", pady=(6, 0))
         if title == "Audio":
             ttk.Label(tab, text=_("Source : moniteur de la sortie son par défaut (parec)"),
                       style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w", pady=(6, 0))
@@ -508,6 +516,17 @@ class LauncherApp(tk.Tk):
                 "speed": float(panel["speed"].get())}
         self.show_panel = panel
         self._play(show, _("Effet : {name}").format(name=effect_label(name)))
+
+    def _game_key(self, event):
+        """Touches transmises au jeu affiché (sauf pendant la saisie dans un champ)."""
+        show = self.show or {}
+        if show.get("type") != "effet" or show.get("name") not in GAME_NAMES:
+            return
+        if isinstance(event.widget, (tk.Entry, ttk.Entry, ttk.Combobox)):
+            return
+        if event.keysym in ("Up", "Down", "Left", "Right", "space", "Return", "KP_Enter"):
+            self._send("key", key=event.keysym)
+            return "break"
 
     def _speed_changed(self, panel: dict):
         if self.show and self.show.get("type") == "effet" and self.show_panel is panel:
