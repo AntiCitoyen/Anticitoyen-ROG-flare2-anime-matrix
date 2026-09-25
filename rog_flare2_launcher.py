@@ -119,6 +119,8 @@ class LauncherApp(tk.Tk):
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.bind_all("<KeyPress>", self._game_key, add="+")
+        from rog_flare2_vignettes import enable_drop
+        enable_drop(self, self._dropped)  # fichiers ou dossier glissés sur la fenêtre (tkdnd)
         self._poll_status()
         if getattr(self, "round_ui", None) is not None:
             self._poll_frame()
@@ -194,6 +196,7 @@ class LauncherApp(tk.Tk):
         ttk.Button(tab, text=_("🎞 Créer une animation (éditeur)"), command=self.open_animation).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("📚 Bibliothèque d'animations"), command=self.open_library).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("★ Listes de lecture et favoris"), command=self.open_lists).pack(fill="x", pady=(0, 4))
+        ttk.Button(tab, text=_("🖼 Galerie en vignettes"), command=self.open_thumbnails).pack(fill="x", pady=(0, 4))
         live = ttk.Frame(tab)
         live.pack(fill="x", pady=(0, 4))
         ttk.Button(live, text=_("🎥 Webcam"), command=self.start_webcam).pack(side="left", expand=True, fill="x")
@@ -561,6 +564,34 @@ class LauncherApp(tk.Tk):
 
     def start_clock(self):
         self._play({"type": "horloge"}, _("Horloge"))
+
+    def _file_show(self, f: Path) -> dict:
+        return {"type": "gif", "files": [str(f)], "loop": True, "converted": self.converted_var.get(),
+                "fidele": self.faithful_var.get()}
+
+    def open_thumbnails(self):
+        from rog_flare2_listes import load_favorites, save_favorites
+        from rog_flare2_vignettes import ThumbnailWindow
+        files = self.gif_files or (media_files(gallery_dir()) if gallery_dir().is_dir() else [])
+
+        def favorite(f: Path):
+            save_favorites(load_favorites() + [{"label": f.name, "show": self._file_show(f)}])
+        ThumbnailWindow(self, files, lambda f: self._play(self._file_show(f), f.name), favorite,
+                        pick_version if self.converted_var.get() else (lambda f: f))
+
+    def _dropped(self, paths: list[Path]):
+        """Glisser-déposer : un dossier devient la galerie ; des fichiers sont lus tout de suite."""
+        folders = [p for p in paths if p.is_dir()]
+        if folders:
+            save_gallery_dir(folders[0])
+            self.set_files(media_files(folders[0]), folders[0].name)
+        else:
+            files = [p for p in paths if p.suffix.lower() in MEDIA_EXTENSIONS]
+            if not files:
+                self.set_status(_("Aucun fichier lisible déposé"))
+                return
+            self.set_files(files, files[0].name if len(files) == 1 else _("{n} fichier(s)").format(n=len(files)))
+        self.start_playback()
 
     def start_webcam(self):
         self._play({"type": "webcam", "silhouette": self.silhouette_var.get()}, _("Webcam"))
