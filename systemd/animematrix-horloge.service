@@ -1,0 +1,11 @@
+[Unit]
+Description=AniMe Matrix - horloge (ROG Strix Flare II Animate)
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/animematrix-horloge -b 25
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

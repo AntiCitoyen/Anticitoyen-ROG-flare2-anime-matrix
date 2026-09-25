@@ -1,660 +1,242 @@
-# ASUS ROG Strix Flare II Animate AniMe Matrix Protocol Notes
+# AniMe Matrix pour Linux — ROG Strix Flare II Animate
 
-Reverse-engineering notes and Linux tools for the **ASUS ROG Strix Flare II Animate** keyboard AniMe Matrix display.
+[![Release](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-soutenir-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/anticitoyen)
 
-This document describes the protocol discovered from USBPcap captures, the physical LED mapping, and the Python scripts used to display a clock and test/draw on the matrix.
+Piloter sous Linux l'écran **AniMe Matrix** (312 mini-LED) du clavier **ASUS ROG Strix Flare II Animate**, sans Armoury Crate ni Windows : GIF et images, galerie de fond, horloge, 19 effets animés, 7 visualiseurs audio, dessin LED par LED.
 
-> Device tested: `ASUSTeK ROG STRIX FLARE II ANIMATE`  
-> USB VID:PID: `0b05:19fc`  
-> Firmware/device revision seen in captures: `bcdDevice 3.14`
+*English summary [at the bottom](#english-summary).*
 
----
-
-## Status
-
-Working:
-
-- Write frames to the AniMe Matrix from Linux.
-- Display a live HH:MM clock.
-- Control brightness by per-pixel intensity.
-- Paint/test individual LEDs in a Tkinter GUI.
-- Full 312 LED framebuffer access, including the leftmost/top-left LEDs.
-
-Not implemented yet:
-
-- Import GIF/image files directly in the Linux tool.
-- Exact replication of Armoury Crate animation editor features.
-- Any persistent/on-board storage programming.
+| GIF / images | Effets | Audio | Réglages |
+|---|---|---|---|
+| ![Onglet GIF](docs/lanceur-gif.png) | ![Onglet Effets](docs/lanceur-effets.png) | ![Onglet Audio](docs/lanceur-audio.png) | ![Onglet Réglages](docs/lanceur-reglages.png) |
 
 ---
 
-## Important safety notes
+## Sommaire
 
-Do **not** use the laptop AniMe Matrix protocol on this keyboard.
-
-The following protocol families were tested and are **not** the correct protocol for this keyboard:
-
-- `0x5E C0 02 ...` AniMe Matrix laptop packets.
-- HID `SET_REPORT` control transfers with report id `0x5e`.
-- `0xEC ...` motherboard/OLED-controller style packets.
-
-Some of those commands caused the keyboard to freeze, reset, or make interface 4 time out.
-
-If the keyboard hangs during experiments:
-
-1. Unplug both USB connectors from the PC.
-2. Wait 10-15 seconds.
-3. Plug it back in.
-4. If needed, hold **Fn + Esc** for about 10-15 seconds to reset the keyboard.
-
-The final scripts in this repository use only the discovered safe frame write:
-
-```text
-1024-byte interrupt OUT frame on interface 4 / endpoint 0x07
-frame[0:2] = 60 81
-```
-
-No control transfers are used.
+- [Ce que fait le projet](#ce-que-fait-le-projet)
+- [Matériel pris en charge](#matériel-pris-en-charge)
+- [Installation](#installation)
+- [Utilisation](#utilisation)
+- [Préparer de bons GIF](#préparer-de-bons-gif)
+- [Comment ça marche](#comment-ça-marche)
+- [Dépannage](#dépannage)
+- [Organisation du dépôt](#organisation-du-dépôt)
+- [Construire le paquet .deb](#construire-le-paquet-deb)
+- [Crédits](#crédits)
+- [Licence](#licence)
+- [Soutenir le projet](#soutenir-le-projet)
+- [English summary](#english-summary)
 
 ---
 
-## Linux device layout
+## Ce que fait le projet
 
-On the tested Linux system the keyboard enumerates as a composite HID device:
+ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Crate). Ce projet parle directement au clavier en USB HID et apporte :
 
-```text
-VID:PID: 0b05:19fc
-Product: ROG STRIX FLARE II ANIMATE
-Manufacturer: ASUSTeK
+- **Un lanceur graphique** (`animematrix`) en quatre onglets :
+  - **GIF / images** : lire un ou plusieurs fichiers, ou tout un dossier en galerie, en boucle ; convertir des GIF pour la matrice.
+  - **Effets** : 19 animations (pluie façon Matrix, plasma, feu, étoiles, feux d'artifice, éclairs, métaballes, vague, serpent, texte défilant, horloge stylisée, réaction au clavier…), réglables pendant qu'elles tournent.
+  - **Audio** : 7 visualiseurs qui réagissent au son joué par le PC (spectre, KITT/KARR, starburst, oscilloscope, feu audio…).
+  - **Réglages** : ce qui s'affiche à l'ouverture de session, éditeur de dessin, liens du projet.
+- **Une horloge** HH:MM, depuis le lanceur ou en service de fond.
+- **Une galerie de fond** : un service `systemd --user` qui fait défiler un dossier de GIF dès l'ouverture de session.
+- **Une bascule en un clic** (`animematrix-bascule`) : l'icône du menu allume ou éteint l'écran ; le clic droit choisit Galerie GIF, Horloge ou Éteindre.
+- **Une conversion de GIF adaptée à la matrice** (`animematrix-convertir`) : 19×24, gris, 3 niveaux, sans tramage — voir [docs/GUIDE-GIF.md](docs/GUIDE-GIF.md).
+- **Un éditeur de dessin** LED par LED (`animematrix-dessin`).
+- **Une faible consommation** : les GIF sont décodés image par image ; une galerie de 400 GIF tourne en ~25 Mo de mémoire.
+
+## Matériel pris en charge
+
+| Clavier | USB | Interface |
+|---|---|---|
+| ASUS ROG Strix Flare II Animate | `0b05:19fc` | HID, interface 4 (usage page `0xFF02`) |
+
+Les écrans AniMe Matrix des **portables** ROG (Zephyrus G14, etc.) utilisent un autre protocole : ils ne sont **pas** pris en charge ici (voir plutôt `asusctl`).
+
+Testé sur Ubuntu 26.04 (X11, PipeWire). Toute distribution avec Python ≥ 3.10, hidapi, Tk et systemd doit convenir.
+
+## Installation
+
+### Paquet .deb (Debian, Ubuntu, Mint, Pop!_OS…)
+
+1. Télécharger `anticitoyen-rog-flare2-anime-matrix_<version>_all.deb` depuis la page [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest).
+2. L'installer (apt récupère les dépendances) :
+   ```bash
+   sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb
+   ```
+3. **Débrancher puis rebrancher le clavier** (la règle udev donne l'accès à l'utilisateur connecté).
+4. Lancer **AniMe Matrix** depuis le menu des applications, ou `animematrix` dans un terminal.
+
+Le paquet installe :
+
+| Élément | Emplacement |
+|---|---|
+| Programmes | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
+| Commandes | `animematrix`, `animematrix-bascule`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-convertir`, `animematrix-dessin` |
+| Services utilisateur | `/usr/lib/systemd/user/animematrix-galerie.service`, `animematrix-horloge.service` (non activés d'office) |
+| Règle udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
+| Menu et icône | `animematrix.desktop`, icône `animematrix` |
+
+Désinstallation : `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
+
+### Depuis les sources
+
+```bash
+git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
+cd Anticitoyen-ROG-flare2-anime-matrix
+python3 -m venv .venv
+.venv/bin/pip install hidapi pillow numpy pynput
+# accès au clavier sans root
+sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+# puis débrancher/rebrancher le clavier
+.venv/bin/python rog_flare2_launcher.py
 ```
 
-Typical `hidapi` enumeration:
+Outils système utiles : `imagemagick` (conversion), `pulseaudio-utils` (`parec`, pour l'audio), `zenity` (sélecteurs de fichiers), `libnotify-bin` (notifications de la bascule).
 
-```text
-iface=0 usage_page=0x0001 usage=0x0006 -> /dev/hidraw1  keyboard
-iface=1 usage_page=0xff00 usage=0x0001 -> /dev/hidraw2  vendor, 64-byte reports
-iface=2 multiple collections             -> /dev/hidraw3  consumer/system/vendor/mouse
-iface=3 usage_page=0x0001 usage=0x0006 -> /dev/hidraw4  keyboard
-iface=4 usage_page=0xff02 usage=0x0001 -> /dev/hidraw5  vendor, 1024-byte reports
+Pour les services de fond depuis les sources, copier `systemd/*.service` dans `~/.config/systemd/user/` en remplaçant les lignes `ExecStart=` par le chemin de `.venv/bin/python` et du script (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`), puis `systemctl --user daemon-reload`.
+
+## Utilisation
+
+### Le lanceur
+
+`animematrix` (ou l'entrée **AniMe Matrix** du menu).
+
+- **GIF / images** : *GIF/images…* pour une sélection, *Dossier (galerie)…* pour tout un dossier. Le dossier choisi devient aussi celui de la galerie de fond. *Préférer les versions converties* lit `dossier/matrix/nom.gif` quand il existe (produit par la conversion).
+- **Effets** et **Audio** : choisir, régler, *▶ Lancer l'effet*. Les curseurs agissent en direct ; *Vitesse* accélère ou ralentit l'animation.
+- **Luminosité**, **🕒 Horloge**, **■ Arrêter** (qui efface l'écran) sont communs à tous les onglets.
+- **Réglages** : *Au démarrage de session* = Galerie GIF, Horloge ou Rien.
+
+Pendant qu'il affiche quelque chose, le lanceur met en pause le service de fond (un seul programme peut écrire sur le clavier) et le relance à sa fermeture.
+
+### Bascule et services de fond
+
+```bash
+animematrix-bascule            # allumé → éteint ; éteint → dernier mode
+animematrix-bascule gif        # galerie de fond, aussi au démarrage de session
+animematrix-bascule horloge    # horloge de fond, aussi au démarrage de session
+animematrix-bascule off        # éteint, rien au démarrage
+animematrix-bascule etat       # mode courant
 ```
 
-The AniMe Matrix frames are written to **interface 4**, usually `/dev/hidraw5`.
+Les mêmes choix sont dans le clic droit de l'icône du menu. Sous le capot : `systemctl --user enable --now animematrix-galerie.service` (ou `animematrix-horloge.service`).
 
-From the USB descriptor:
+### En ligne de commande
 
-```text
-Interface 4:
-  HID class, vendor-defined usage page 0xff02
-  Endpoint IN:  0x86, interrupt, 1024 bytes
-  Endpoint OUT: 0x07, interrupt, 1024 bytes
+| Commande | Rôle |
+|---|---|
+| `animematrix-effet --liste` | liste les effets et visualiseurs |
+| `animematrix-effet "Plasma" --brightness 60 --vitesse 1.5` | lance un effet (Ctrl+C pour arrêter) |
+| `animematrix-galerie [dossier] --brightness 60 [--originaux]` | fait défiler un dossier (par défaut le dernier choisi dans le lanceur, sinon `~/Images/AniMe-Matrix`) |
+| `animematrix-horloge -b 25` | horloge ; `--clear` efface l'écran, `--once --text 12:34` affiche un texte |
+| `animematrix-convertir dossier/ [--sortie D] [--force]` | convertit des GIF pour la matrice (dans `dossier/matrix/`) |
+| `animematrix-dessin` | éditeur de dessin |
+
+### Audio
+
+Les visualiseurs écoutent le **moniteur de la sortie son par défaut** avec `parec` (PipeWire ou PulseAudio) : ils réagissent à ce que joue le PC, pas au micro. Pour changer de sortie, changer la sortie par défaut du système.
+
+### Effet « Keyboard React »
+
+Il allume l'écran au rythme de la frappe grâce à `pynput`, qui lit les touches de toute la session tant que l'effet tourne. Il fonctionne sous X11 ; sous Wayland, il ne reçoit pas les touches.
+
+## Préparer de bons GIF
+
+L'écran n'est pas un rectangle : 24 rangées décalées, de 19 LED en haut à 7 en bas, 3 niveaux de gris vraiment distincts, un halo entre LED voisines. Les silhouettes, pictogrammes, textes courts et mouvements lents rendent bien ; les photos et vidéos, non.
+
+Le guide complet (taille de toile, niveaux, cadence, luminosité, commande ImageMagick) : **[docs/GUIDE-GIF.md](docs/GUIDE-GIF.md)**.
+
+## Comment ça marche
+
+- **Transport** : hidapi ouvre l'interface HID n° 4 du clavier et y écrit des trames de **1024 octets**.
+- **Trame** : `60 81 00 00` + **312 octets** (une luminosité 0–255 par LED, dans l'ordre matériel) + zéros jusqu'à 1024.
+- **Géométrie** : 24 rangées décalées en diagonale (19 → 7 LED), ou de façon équivalente 12 rangées logiques de 37 → 15 colonnes (modèle de PolyWollyWin) ; les deux correspondances ont été vérifiées identiques sur les 312 LED.
+- **GIF** : chaque image est recomposée (les GIF optimisés ne stockent que les différences), passée en gris, ramenée à 24 rangées et échantillonnée rangée par rangée.
+- **Animation** : pas de mémoire embarquée utilisée ; l'animation, c'est l'hôte qui envoie les trames les unes après les autres (~30 i/s pour les effets).
+
+Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, points de calibration) sont dans **[docs/PROTOCOL.md](docs/PROTOCOL.md)** ; les captures `*.cap` et les outils `parse_usbpcap.py` / `rog_flare2_replay_capture.py` restent dans le dépôt pour qui veut aller plus loin.
+
+⚠️ N'envoyez pas au clavier les paquets des AniMe Matrix de portables (`0x5E …`, `0xEC …`) : ce n'est pas le bon protocole et cela peut bloquer le clavier (débrancher/rebrancher, ou maintenir **Fn + Échap** 10–15 s).
+
+## Dépannage
+
+| Symptôme | Cause probable | Solution |
+|---|---|---|
+| `interface 4 not found` | clavier non vu ou pas de droits | `lsusb \| grep 0b05:19fc` ; règle udev installée ? débrancher/rebrancher |
+| `Permission denied` / `open failed` | règle udev non appliquée | `sudo udevadm control --reload-rules && sudo udevadm trigger`, puis rebrancher |
+| L'écran ne change pas | un autre programme écrit déjà | `animematrix-bascule off`, fermer les autres lanceurs ou scripts |
+| Les visualiseurs restent en mode démo | pas de `parec` ou pas de son | installer `pulseaudio-utils`, jouer du son |
+| « Keyboard React » ne réagit pas | session Wayland ou `pynput` absent | session X11, `sudo apt install python3-pynput` |
+| La galerie de fond ne démarre pas | dossier vide ou absent | choisir un dossier dans le lanceur (onglet GIF) |
+| Journal d'un service | — | `journalctl --user -u animematrix-galerie.service -f` |
+
+## Organisation du dépôt
+
+| Fichier | Rôle |
+|---|---|
+| `rog_flare2_launcher.py` | lanceur graphique (Tk) |
+| `rog_flare2_effets.py` | effets et visualiseurs audio (moteur PolyWollyWin adapté à Linux) |
+| `polywollywin/` | moteur d'effets de PolyWollyWin, copié sans modification (MIT) |
+| `rog_flare2_folder_player.py` | galerie de fond (service) |
+| `rog_flare2_clock_v3.py` | horloge (service) |
+| `rog_flare2_bascule.sh` | bascule galerie / horloge / éteint |
+| `rog_flare2_convertir.py` | conversion de GIF (ImageMagick) |
+| `rog_flare2_matrix_paint.py` | transport HID, ordre des LED, éditeur de dessin |
+| `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `*.cap` | outils et captures de rétro-ingénierie |
+| `systemd/` | services utilisateur |
+| `packaging/` | règle udev, entrée de menu, icône, fichiers et script du paquet .deb |
+| `docs/` | guide GIF, notes de protocole, captures d'écran |
+
+## Construire le paquet .deb
+
+```bash
+packaging/build-deb.sh
+# → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-The report descriptor for interface 4 declares 1024-byte input/output reports and no numbered report IDs:
+Seuls `dpkg-deb` et `bash` sont nécessaires ; la version est lue dans `rog_flare2_launcher.py` (`VERSION`).
 
-```text
-06 02 ff 09 01 a1 01
-09 02 75 08 96 00 04 15 00 26 ff 00 81 02
-09 03 75 08 96 00 04 15 00 26 ff 00 91 02
-c0
-```
+## Crédits
+
+- **NicRoss512** — rétro-ingénierie du protocole, horloge et éditeur d'origine : [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Ce dépôt en part ; son historique est conservé.
+- **Mike Opitz** — [PolyWollyWin](https://github.com/MikeOpitz99/PolyWollyWin) (MIT), contrôleur Windows dont le moteur d'effets et de visualiseurs audio est repris ici.
+- **Yoshi Walsh** — [Mastering the AniMe Matrix](https://blog.yoshiwalsh.me/asus-anime-matrix/), pour le comportement des LED (halo, niveaux perçus, cadence).
+
+Projet indépendant, non affilié à ASUS. « ROG », « AniMe Matrix » et « Armoury Crate » sont des marques d'ASUSTeK.
+
+## Licence
+
+[MIT](LICENSE) pour le code de ce dépôt. `polywollywin/` reste sous la licence MIT de son auteur ([polywollywin/LICENSE](polywollywin/LICENSE)). Les fichiers d'origine de NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, captures) ont été publiés sans licence explicite et restent à leur auteur ; ils sont redistribués avec attribution.
+
+## Soutenir le projet
+
+Si ce projet vous rend service, un café aide à le maintenir :
+
+[![Buy Me a Coffee](https://img.buymeacoffee.com/button-api/?text=Offrir%20un%20café&emoji=☕&slug=anticitoyen&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/anticitoyen)
+
+**https://buymeacoffee.com/anticitoyen** — le lien est aussi dans l'onglet *Réglages* du lanceur.
+
+Rapports de bugs et idées : [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
 
 ---
 
-## Udev permissions
+## English summary
 
-A useful udev rule for non-root access:
+Linux tools for the 312-LED **AniMe Matrix** display of the **ASUS ROG Strix Flare II Animate** keyboard (USB `0b05:19fc`), no Armoury Crate needed:
 
-```bash
-sudo tee /etc/udev/rules.d/72-rog-flare-animate.rules >/dev/null <<'EOF'
-SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="19fc", MODE="0660", TAG+="uaccess"
-SUBSYSTEM=="usb", ATTR{idVendor}=="0b05", ATTR{idProduct}=="19fc", MODE="0660", TAG+="uaccess"
-EOF
+- a graphical launcher (`animematrix`): GIFs/images, folder gallery, clock, 19 animated effects, 7 audio visualizers (desktop audio via `parec`), GIF conversion, drawing editor, start-up mode;
+- a background gallery or clock as `systemd --user` services, toggled from the menu icon or `animematrix-bascule gif|horloge|off`;
+- streaming GIF decoding (≈25 MB for a 400-GIF gallery);
+- a udev rule for non-root access.
 
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
+**Install:** download the `.deb` from [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest), run `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb`, replug the keyboard, start **AniMe Matrix** from the menu.
 
-Then unplug/replug the keyboard.
+**Protocol:** hidapi, HID interface 4, 1024-byte writes: `60 81 00 00` + 312 LED brightness bytes (hardware order) + zero padding. Details in [docs/PROTOCOL.md](docs/PROTOCOL.md).
 
----
+The UI is in French. Credits: protocol reverse engineering by NicRoss512, effects engine from PolyWollyWin by Mike Opitz (MIT).
 
-## Python dependencies
-
-Arch Linux:
-
-```bash
-sudo pacman -S python-hidapi tk
-```
-
-Other distributions / virtualenv:
-
-```bash
-python -m pip install hidapi
-```
-
-The paint GUI requires Tkinter. Package names vary by distro, for example:
-
-```bash
-sudo apt install python3-tk
-```
-
----
-
-## Frame protocol
-
-### Transport
-
-Use `hidapi` and open the HID device whose `interface_number == 4`.
-
-Write exactly **1024 bytes** with `hid.write(frame)`.
-
-Important: do **not** prepend an extra `0x00` HID Report ID byte. The USBPcap capture shows exactly 1024 bytes sent to endpoint `0x07 OUT`.
-
-### Frame format
-
-The final frame format discovered from `fill.cap` is:
-
-```text
-offset  size  meaning
-------  ----  ------------------------------------
-0       1     0x60
-1       1     0x81
-2       2     0x00 0x00, observed zero/reserved
-4       312   LED brightness values, one byte per LED
-316     rest  zero padding up to 1024 bytes
-```
-
-So the complete frame is:
-
-```text
-60 81 00 00 [312 bytes LED brightness] [zero padding to 1024]
-```
-
-### Clear frame
-
-```python
-frame = bytearray(1024)
-frame[0:2] = b"\x60\x81"
-h.write(bytes(frame))
-```
-
-### Full white frame
-
-```python
-frame = bytearray(1024)
-frame[0:2] = b"\x60\x81"
-frame[4:4+312] = b"\xff" * 312
-h.write(bytes(frame))
-```
-
-### Per-pixel brightness
-
-There does not appear to be a separate brightness command in this protocol. Brightness is controlled by the byte value of each LED:
-
-```text
-0x00 = off
-0x01..0xfe = dim to bright
-0xff = full brightness
-```
-
-The clock script exposes this as a percent value:
-
-```text
---brightness 0..100
-```
-
-which is converted to:
-
-```python
-raw = round(percent * 255 / 100)
-```
-
-### Minimal Python sender
-
-```python
-import hid
-
-VID = 0x0B05
-PID = 0x19FC
-IFACE = 4
-
-path = next(d["path"] for d in hid.enumerate(VID, PID)
-            if d.get("interface_number") == IFACE)
-
-h = hid.device()
-h.open_path(path)
-
-frame = bytearray(1024)
-frame[0:2] = b"\x60\x81"
-frame[4:4+312] = b"\xff" * 312
-
-# Exactly 1024 bytes. No leading Report-ID byte.
-h.write(bytes(frame))
-h.close()
-```
-
----
-
-## Physical LED layout
-
-The physical AniMe Matrix has 312 LEDs arranged as 24 staggered rows.
-
-Row lengths, top to bottom:
-
-```python
-PHYSICAL_ROW_COUNTS = [
-    19, 18, 18, 17, 17, 16, 16, 15, 15, 14, 14, 13,
-    13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 8, 7,
-]
-```
-
-The sum is exactly 312.
-
-Rows are staggered diagonally. For mapping purposes, an integer "global column" offset works well:
-
-```python
-def physical_row_offset(row: int) -> int:
-    # row is zero-based
-    # row 0 -> 0
-    # rows 1/2 -> 1
-    # rows 3/4 -> 2
-    # etc.
-    return (row + 1) // 2
-```
-
-### Raw index order
-
-The framebuffer order is not simple row-major.
-
-It is pair/interleaved by physical rows:
-
-```text
-row pair 0: rows 2 / 1
-row pair 1: rows 4 / 3
-row pair 2: rows 6 / 5
-...
-row pair 11: rows 24 / 23
-```
-
-Inside each global column, the lower row of the pair is emitted first, then the upper row. Points outside the row length are skipped.
-
-Python mapping generator:
-
-```python
-PHYSICAL_ROW_COUNTS = [
-    19, 18, 18, 17, 17, 16, 16, 15, 15, 14, 14, 13,
-    13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 8, 7,
-]
-
-LED_COUNT = 312
-
-
-def physical_row_offset(row: int) -> int:
-    return (row + 1) // 2
-
-
-def build_physical_order() -> list[tuple[int, int]]:
-    """Return raw_index -> (physical_row, physical_col), both zero-based."""
-    order = []
-    for pair in range(len(PHYSICAL_ROW_COUNTS) // 2):
-        lower = 2 * pair + 1
-        upper = 2 * pair
-        for gcol in range(19):
-            for row in (lower, upper):
-                col = gcol - physical_row_offset(row)
-                if 0 <= col < PHYSICAL_ROW_COUNTS[row]:
-                    order.append((row, col))
-    assert len(order) == LED_COUNT
-    assert len(set(order)) == LED_COUNT
-    return order
-```
-
-### Calibration points
-
-The mapping above matches these observed scan points. Rows/dots below are **1-based**:
-
-```text
-raw index 0   -> row 1,  dot 1
-raw index 1   -> row 2,  dot 1
-raw index 2   -> row 1,  dot 2
-raw index 10  -> row 1,  dot 6
-raw index 11  -> row 2,  dot 6
-raw index 21  -> row 2,  dot 11
-raw index 61  -> row 3,  dot 13
-raw index 111 -> row 7,  dot 4
-raw index 161 -> row 10, dot 13
-raw index 211 -> row 14, dot 10
-raw index 261 -> row 19, dot 1
-raw index 291 -> row 22, dot 6
-raw index 310 -> row 24, dot 7
-raw index 311 -> row 23, dot 8
-```
-
-The early confusion came from using `FB_OFFSET = 15`, which effectively skipped the first 11 LEDs. `fill.cap` proved the correct framebuffer start is `FB_OFFSET = 4`.
-
----
-
-## Scripts
-
-### `rog_flare2_clock_v3.py`
-
-Live clock renderer for the keyboard AniMe Matrix.
-
-Features:
-
-- Displays current system time in `HH:MM` format.
-- Blinking colon by default.
-- Tuned custom font for readability on the diagonal matrix.
-- User brightness control.
-- Safe protocol: direct 1024-byte `60 81` frame writes only.
-
-Example usage:
-
-```bash
-python rog_flare2_clock_v3.py
-```
-
-Run one test frame:
-
-```bash
-python rog_flare2_clock_v3.py --once --text 12:34
-```
-
-Brightness:
-
-```bash
-python rog_flare2_clock_v3.py -b 15     # dim
-python rog_flare2_clock_v3.py -b 35     # default
-python rog_flare2_clock_v3.py -b 100    # full brightness
-```
-
-Raw brightness value:
-
-```bash
-python rog_flare2_clock_v3.py --raw-brightness 64
-```
-
-Disable colon blinking:
-
-```bash
-python rog_flare2_clock_v3.py --no-blink
-```
-
-Clear the matrix:
-
-```bash
-python rog_flare2_clock_v3.py --clear
-```
-
-List render presets:
-
-```bash
-python rog_flare2_clock_v3.py --list-presets
-```
-
-Default preset:
-
-```text
-flare
-```
-
-The best readable clock settings found on the tested keyboard were:
-
-```text
-xs = 0,6,14,20
-row_shifts = 0,3,4,3,0
-```
-
-Note: the clock script was originally tuned against Armoury Crate's system-clock placement. If you want full-matrix drawing or exact physical testing, use the paint GUI, which uses the final full framebuffer offset `4`.
-
----
-
-### `rog_flare2_matrix_paint.py`
-
-Tkinter GUI for painting and testing the AniMe Matrix.
-
-Features:
-
-- Draw / erase / toggle LEDs with the mouse.
-- Auto-send frames while drawing.
-- Brightness slider.
-- Clear / Fill / Invert / Checker / Diagonal patterns.
-- Raw index scanner.
-- Physical calibrated view using the final 312 LED mapping.
-- Save/load patterns as JSON.
-
-Run:
-
-```bash
-python rog_flare2_matrix_paint.py
-```
-
-Controls:
-
-```text
-Left click / drag   draw
-Right click / drag  erase
-Middle click        toggle
-Space               send current frame
-c                   clear
-```
-
-Modes:
-
-```text
-Logical 32x10
-Physical calibrated
-Physical row-major
-```
-
-Recommended mode for real hardware testing:
-
-```text
-Physical calibrated
-```
-
-Useful tests:
-
-1. Press **Fill**. All 312 LEDs should light.
-2. Enter a raw index and press **Light only**.
-3. Press **Scan raw** to walk the framebuffer order.
-
-The GUI uses the final full framebuffer:
-
-```text
-FB_OFFSET = 4
-frame[4 + raw_index] = brightness
-```
-
----
-
-### `rog_flare2_replay_capture.py`
-
-Small protocol validation script. It replays the first captured Armoury Crate clock frames from `clock.cap`.
-
-Useful to confirm that the transport and basic `60 81` frame write work on a machine.
-
-Examples:
-
-```bash
-python rog_flare2_replay_capture.py --once a
-python rog_flare2_replay_capture.py --once b
-python rog_flare2_replay_capture.py --loop
-python rog_flare2_replay_capture.py --clear
-```
-
-Frames `a` and `b` are the same clock capture with the colon off/on.
-
----
-
-### `parse_usbpcap.py`
-
-Development helper used to parse USBPcap `.cap` files without `tshark`.
-
-It extracts USBPcap records, device descriptors, interface descriptors, and non-empty payloads for the ASUS device.
-
-Example:
-
-```bash
-python parse_usbpcap.py clock.cap > summary.txt
-```
-
-This script is only for reverse-engineering/debugging and is not needed at runtime.
-
----
-
-## Captures used for reverse engineering
-
-### System clock capture
-
-Armoury Crate was set to system-clock mode. The matrix showed `02:43` and the colon blinked. The capture contained repeated 1024-byte frames:
-
-```text
-60 81 ...
-```
-
-Only a small subset of bytes were non-zero because only the clock glyphs were lit.
-
-This capture first revealed:
-
-- Interface 4 / endpoint `0x07 OUT`.
-- 1024-byte frames.
-- Prefix `60 81`.
-- Per-pixel brightness bytes.
-
-### Fill capture
-
-Armoury Crate was used to fill/light all LEDs. The capture contained:
-
-```text
-60 81 00 00 ff ff ff ...
-```
-
-The full-white frame had:
-
-```text
-312 bytes of 0xff from offset 4 to offset 315 inclusive
-```
-
-This proved the correct framebuffer offset:
-
-```text
-FB_OFFSET = 4
-```
-
-### GIF capture
-
-An animated GIF capture showed the same frame format, but with varying grayscale byte values instead of only `0x00`/`0xff`.
-
-This confirmed that animation frames are just repeated `60 81` framebuffer writes.
-
----
-
-## Systemd user service example
-
-Install the clock script somewhere permanent:
-
-```bash
-mkdir -p ~/.local/bin
-cp rog_flare2_clock_v3.py ~/.local/bin/rog_flare2_clock.py
-chmod +x ~/.local/bin/rog_flare2_clock.py
-```
-
-Create service:
-
-```bash
-mkdir -p ~/.config/systemd/user
-nano ~/.config/systemd/user/rog-flare-clock.service
-```
-
-Example service:
-
-```ini
-[Unit]
-Description=ROG Strix Flare II Animate AniMe Matrix Clock
-After=graphical-session.target
-
-[Service]
-ExecStart=/usr/bin/python /home/user/.local/bin/rog_flare2_clock.py -b 25
-Restart=always
-RestartSec=2
-
-[Install]
-WantedBy=default.target
-```
-
-Enable:
-
-```bash
-systemctl --user daemon-reload
-systemctl --user enable --now rog-flare-clock.service
-```
-
-Check logs:
-
-```bash
-journalctl --user -u rog-flare-clock.service -f
-```
-
----
-
-## Troubleshooting
-
-### `interface 4 not found`
-
-Check that the keyboard is connected and visible:
-
-```bash
-lsusb | grep -i 0b05
-```
-
-List HID devices with Python:
-
-```python
-import hid
-for d in hid.enumerate(0x0b05, 0x19fc):
-    print(d.get("interface_number"), d.get("path"), hex(d.get("usage_page", 0)))
-```
-
-You should see `interface_number == 4`.
-
-### Permission denied
-
-Install the udev rule above, reload rules, and replug the keyboard.
-
-As a temporary test:
-
-```bash
-sudo python rog_flare2_clock_v3.py --once --text 12:34
-```
-
-### Matrix does not update
-
-Make sure no other process is holding the HID device. Close Armoury Crate if passing the keyboard through a VM, and stop other test scripts.
-
-Try a clear frame:
-
-```bash
-python rog_flare2_matrix_paint.py
-# press Connect, then Clear
-```
-
-or:
-
-```bash
-python rog_flare2_clock_v3.py --clear
-```
-
-### Keyboard resets or HID timeouts
-
-Do not run old probe scripts that use control transfers or `0x5E`/`0xEC` protocols.
-
-Recover by unplugging/replugging. If needed, hold **Fn + Esc** for about 10-15 seconds.
-
----
-
-## License / credits
-
-These notes are based on community reverse engineering and USBPcap captures from a real ROG Strix Flare II Animate keyboard.
-
-No ASUS proprietary code is included. The protocol description is derived from observed USB traffic and clean-room experimentation.
+**Support:** [buymeacoffee.com/anticitoyen](https://buymeacoffee.com/anticitoyen)

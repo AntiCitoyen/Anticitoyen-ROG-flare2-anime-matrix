@@ -1,0 +1,13 @@
+anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
+
+  * Première version publique :
+    - lanceur en onglets : GIF/images, galerie d'un dossier, horloge,
+      effets et visualiseurs audio (moteur PolyWollyWin), réglages ;
+    - lecture des GIF en flux (mémoire constante, ~25 Mo au lieu
+      de plusieurs Go) ;
+    - préférence pour les versions converties (matrix/) ;
+    - services systemd utilisateur galerie/horloge, bascule ;
+    - capture audio par parec (PipeWire/PulseAudio), sans PortAudio ;
+    - règle udev, entrée de menu, icône.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@

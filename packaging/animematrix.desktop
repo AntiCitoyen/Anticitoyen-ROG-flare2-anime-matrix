@@ -1,0 +1,29 @@
+[Desktop Entry]
+Type=Application
+Name=AniMe Matrix
+GenericName=Écran AniMe Matrix du clavier ROG
+GenericName[en]=ROG keyboard AniMe Matrix display
+Comment=GIF, horloge, effets et visualiseurs audio sur l'écran du ROG Strix Flare II Animate
+Comment[en]=GIFs, clock, effects and audio visualizers on the ROG Strix Flare II Animate display
+Exec=animematrix
+Icon=animematrix
+Terminal=false
+Categories=Utility;
+Keywords=rog;asus;clavier;keyboard;matrix;anime;gif;led;
+StartupNotify=true
+Actions=gif;horloge;off;
+
+[Desktop Action gif]
+Name=Galerie GIF
+Name[en]=GIF gallery
+Exec=animematrix-bascule gif
+
+[Desktop Action horloge]
+Name=Horloge
+Name[en]=Clock
+Exec=animematrix-bascule horloge
+
+[Desktop Action off]
+Name=Éteindre l'écran
+Name[en]=Turn the display off
+Exec=animematrix-bascule off

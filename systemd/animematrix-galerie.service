@@ -1,0 +1,11 @@
+[Unit]
+Description=AniMe Matrix - galerie GIF (ROG Strix Flare II Animate)
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/animematrix-galerie --brightness 60
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
