@@ -30,6 +30,7 @@ from rog_flare2_convertir import convertir_tout
 from rog_flare2_i18n import LANG, LANGUAGES, _, save_language
 import rog_flare2_ctl as ctl
 import rog_flare2_maj as maj
+import rog_flare2_notifs as notifs
 from rog_flare2_demon import START_FILE
 from rog_flare2_matrix_paint import FB_OFFSET
 import rog_flare2_themes as themes
@@ -298,6 +299,18 @@ class LauncherApp(tk.Tk):
         icb = ttk.Combobox(itf, textvariable=self.itf_var, values=list(itf_labels), state="readonly", width=18)
         icb.pack(side="left", padx=8)
         icb.bind("<<ComboboxSelected>>", lambda _e: self.change_interface(itf_labels[self.itf_var.get()]))
+        cfg = notifs.load_config()
+        self.notif_var = tk.BooleanVar(value=cfg.get("actif", False))
+        ttk.Checkbutton(tab, text=_("Notifications du bureau sur l'écran"), variable=self.notif_var,
+                        command=self._save_notifications).pack(anchor="w", pady=(4, 0))
+        apps = ttk.Frame(tab)
+        apps.pack(fill="x")
+        ttk.Label(apps, text=_("Applications (vide = toutes) :")).pack(side="left")
+        self.notif_apps = tk.StringVar(value=", ".join(cfg.get("applis", [])))
+        entry = ttk.Entry(apps, textvariable=self.notif_apps)
+        entry.pack(side="left", fill="x", expand=True, padx=(6, 0))
+        entry.bind("<Return>", lambda _e: self._save_notifications())
+        entry.bind("<FocusOut>", lambda _e: self._save_notifications())
         ttk.Label(tab, text=_("La galerie de fond lit le dernier dossier choisi dans l'onglet GIF."),
                   style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w")
         ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
@@ -602,6 +615,11 @@ class LauncherApp(tk.Tk):
             return
         save_language(code)
         self.restart()
+
+    def _save_notifications(self):
+        apps = [a.strip() for a in self.notif_apps.get().split(",") if a.strip()]
+        notifs.save_config({"actif": bool(self.notif_var.get()), "applis": apps})
+        self._send("config")
 
     def open_plugin_dir(self):
         """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""

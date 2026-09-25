@@ -135,6 +135,8 @@ class Daemon:
         self.overlay_stop = threading.Event()
         self.lock = threading.RLock()
         self.server = None  # serveur du socket (commande quit)
+        from rog_flare2_notifs import NotificationWatcher
+        self.notifs = NotificationWatcher(lambda text: self.notify(text, 0))
 
     # ---------- état ----------
     @staticmethod
@@ -223,7 +225,10 @@ class Daemon:
 
     # ---------- surimpression ----------
     def notify(self, text: str, duration: float = 6.0):
+        """Surimpression d'un texte défilant ; duration <= 0 : le temps d'un passage complet."""
         from rog_flare2_effets import make_effect, run_effect
+        if duration <= 0:
+            duration = (37 + 5 * len(text)) / 20.0 + 0.5  # 20 colonnes/s, police de 5 colonnes
         with self.lock:
             self.overlay_stop.set()
             if self.overlay_thread is not None:
@@ -281,6 +286,9 @@ class Daemon:
                     setattr(effect, attr, param_value(specs[attr], raw))
                     show.setdefault("params", {})[attr] = raw
             return {"ok": True}
+        if cmd == "config":  # réglages relus (notifications du bureau)
+            from rog_flare2_notifs import load_config
+            return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
             return {"ok": True}
@@ -404,10 +412,13 @@ def main():
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     daemon.start_mode()
+    from rog_flare2_notifs import load_config
+    daemon.notifs.start(load_config())
     try:
         server.serve_forever()
     finally:
         daemon.stop_event.set()
+        daemon.notifs.stop()
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

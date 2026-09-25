@@ -111,3 +111,17 @@ def test_socket_and_ctl(monkeypatch):
         d.stop()
         server.server_close()
         D.SOCKET_PATH.unlink(missing_ok=True)
+
+
+def test_notification_auto_duration(daemon):
+    daemon.handle({"cmd": "notify", "text": "AB", "duration": 0})  # 0 : le temps d'un passage (~2,8 s)
+    time.sleep(0.3)
+    assert daemon.handle({"cmd": "status"})["overlay"] is True
+    time.sleep(3.2)
+    assert daemon.handle({"cmd": "status"})["overlay"] is False
+
+
+def test_config_command_without_notifications(daemon):
+    import rog_flare2_notifs as N
+    N.save_config({"actif": False, "applis": []})
+    assert daemon.handle({"cmd": "config"}) == {"ok": True, "notifications": False}

@@ -186,5 +186,7 @@
  "Period": "effet écran d'infos système (nom et curseurs)",
  "Now Playing": "effet morceau en cours (MPRIS) : nom et curseurs",
  "Visualizer": "effet morceau en cours (MPRIS) : nom et curseurs",
- "Scroll": "effet morceau en cours (MPRIS) : nom et curseurs"
+ "Scroll": "effet morceau en cours (MPRIS) : nom et curseurs",
+ "Notifications du bureau sur l'écran": "Réglages : notifications du bureau affichées sur la matrice",
+ "Applications (vide = toutes) :": "Réglages : notifications du bureau affichées sur la matrice"
 }
