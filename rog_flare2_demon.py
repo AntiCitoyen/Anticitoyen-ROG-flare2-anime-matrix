@@ -45,6 +45,7 @@ SHOW_FILE = CONFIG_DIR / "lecture.json"  # dernière lecture (rejouée au démar
 START_FILE = CONFIG_DIR / "demarrage"
 STATE_FILE = CONFIG_DIR / "demon.json"  # luminosité mémorisée
 BLANK = bytes(PREFIX) + bytes(FRAME_SIZE - len(PREFIX))
+KEEPALIVE = 1.0  # une trame identique est quand même renvoyée au bout d'une seconde
 
 
 class FakeTransport:
@@ -77,6 +78,9 @@ class Screen:
         self.last = BLANK
         self.overlay_active = False
         self.holds: set[str] = set()  # raisons d'écran noir (verrouillage, veille, plein écran…)
+        self.sent: bytes | None = None  # dernière trame réellement envoyée (None : à renvoyer)
+        self.sent_at = 0.0
+        self.skipped = 0  # trames identiques non renvoyées (statistique)
 
     def _ensure(self) -> bool:
         if self.released:
@@ -85,6 +89,7 @@ class Screen:
             try:
                 self.transport.connect()
                 self.connected = True
+                self.sent = None
             except Exception:
                 return False
         return True
@@ -99,10 +104,16 @@ class Screen:
             self.last = frame
             if not self._ensure():
                 return
+            now = time.monotonic()
+            if frame == self.sent and now - self.sent_at < KEEPALIVE:
+                self.skipped += 1  # image fixe, horloge entre deux minutes… : rien de neuf sur l'USB
+                return
             try:
                 self.transport.write(frame)
+                self.sent, self.sent_at = frame, now
             except Exception:
                 self.connected = False
+                self.sent = None
                 self.transport.close()
 
     def hold(self, reason: str, on: bool):
@@ -113,14 +124,17 @@ class Screen:
                 if self._ensure():
                     try:
                         self.transport.write(BLANK)
+                        self.sent, self.sent_at = BLANK, time.monotonic()
                     except Exception:
                         self.connected = False
+                        self.sent = None
         (self.holds.add if on else self.holds.discard)(reason)
 
     def release(self):
         with self.lock:
             self.released = True
             self.connected = False
+            self.sent = None
             self.transport.close()
 
     def resume(self):
@@ -312,7 +326,7 @@ class Daemon:
                     "openrgb": self.rgb.status, "hold": sorted(self.screen.holds),
                     "regle": (self.programme.current or {}).get("contenu"),
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
-                    "overlay": self.screen.overlay_active}
+                    "overlay": self.screen.overlay_active, "skipped": self.screen.skipped}
         if cmd == "play":
             self.play(req["show"])
             return {"ok": True}

@@ -71,3 +71,39 @@ def test_play_clock_stops(tmp_path):
     stop.set()
     t.join(2)
     assert not t.is_alive() and sink.frames
+
+
+def test_play_file_cache_gives_same_frames_without_decoding(tmp_path, monkeypatch):
+    gif = make_gif(tmp_path / "c.gif", n=5)
+    first = Sink()
+    core.play_file(gif, first, threading.Event(), lambda: 60)
+    assert list(core.CACHE_DIR.glob("*.amx"))
+    direct = [core.image_to_frame(img, 60) for img, _d in _frames(gif)]
+    assert first.frames == direct  # cache pleine luminosité + table : même résultat que la conversion directe
+    monkeypatch.setattr(core, "iter_gif_frames", lambda _p: (_ for _ in ()).throw(AssertionError("décodé")))
+    second = Sink()
+    core.play_file(gif, second, threading.Event(), lambda: 60)
+    assert second.frames == first.frames
+
+
+def _frames(gif):
+    for img, delay in core.iter_gif_frames(gif):
+        yield img.copy(), delay
+
+
+def test_cache_invalidated_when_file_changes(tmp_path):
+    gif = make_gif(tmp_path / "d.gif", n=3)
+    key = core._cache_path(gif, False)
+    time.sleep(0.01)
+    make_gif(gif, n=4)
+    os.utime(gif, ns=(time.time_ns(), time.time_ns() + 10**9))
+    assert core._cache_path(gif, False) != key
+
+
+def test_interrupted_play_is_not_cached(tmp_path):
+    gif = make_gif(tmp_path / "e.gif", n=6)
+    stop = threading.Event()
+    sink = Sink()
+    sink.write = lambda f: (Sink.write(sink, f), stop.set())[0]
+    core.play_file(gif, sink, stop, lambda: 60)
+    assert not core._cache_path(gif, False).exists()

@@ -42,6 +42,7 @@ sed "s|^ExecStart=/usr/bin/|ExecStart=$PREFIX/bin/|" "$DEPOT/systemd/animematrix
     > "$DEST$PREFIX/lib/systemd/user/animematrixd.service"
 chmod 644 "$DEST$PREFIX/lib/systemd/user/animematrixd.service"
 install -m 644 "$DEPOT/packaging/72-rog-flare2-animate.rules" "$DEST$PREFIX/lib/udev/rules.d/"
+install -D -m 644 "$DEPOT/packaging/73-rog-flare2-animate-touches.rules" "$DEST$SHARE/udev/73-rog-flare2-animate-touches.rules"  # optionnel (Wayland)
 "$PYTHON" "$DEPOT/packaging/gen-desktop.py"
 install -m 644 "$DEPOT/packaging/animematrix.desktop" "$DEST$PREFIX/share/applications/"
 install -m 644 "$DEPOT/packaging/animematrix.svg" "$DEST$PREFIX/share/icons/hicolor/scalable/apps/"

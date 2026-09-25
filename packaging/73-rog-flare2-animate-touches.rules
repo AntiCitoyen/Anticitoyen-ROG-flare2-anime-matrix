@@ -1,0 +1,3 @@
+# Optionnel : lecture des touches du clavier ROG Strix Flare II Animate pour l effet
+# « Réaction au clavier » sous Wayland (evdev). À copier dans /etc/udev/rules.d/.
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="19fc", TAG+="uaccess"

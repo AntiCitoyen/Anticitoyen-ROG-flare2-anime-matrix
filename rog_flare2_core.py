@@ -150,18 +150,100 @@ def is_faithful(path: Path) -> bool:
         return False
 
 
+CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "animematrix" / "trames"
+CACHE_MAGIC = b"AMX1"
+CACHE_MAX_BYTES = 256 * 1024 * 1024
+LED_BYTES = len(PHYSICAL_CALIBRATED_ORDER)
+
+
+def _cache_path(path: Path, fidele: bool) -> Path:
+    """Clé : chemin, taille, date et géométrie ; un fichier modifié donne une nouvelle entrée."""
+    import hashlib
+    st = path.stat()
+    key = f"{path.resolve()}|{st.st_size}|{st.st_mtime_ns}|{int(fidele)}|{LED_BYTES}"
+    return CACHE_DIR / (hashlib.sha1(key.encode()).hexdigest() + ".amx")
+
+
+def _read_cache(cache: Path) -> list[tuple[bytes, float]] | None:
+    try:
+        data = cache.read_bytes()
+    except OSError:
+        return None
+    if data[:4] != CACHE_MAGIC:
+        return None
+    step, frames = 2 + LED_BYTES, []
+    for i in range(4, len(data) - step + 1, step):
+        frames.append((data[i + 2:i + step], int.from_bytes(data[i:i + 2], "little") / 1000.0))
+    return frames or None
+
+
+def _write_cache(cache: Path, frames: list[tuple[bytes, float]]) -> None:
+    try:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        body = b"".join(min(65535, round(d * 1000)).to_bytes(2, "little") + leds for leds, d in frames)
+        tmp = cache.with_suffix(".tmp")
+        tmp.write_bytes(CACHE_MAGIC + body)
+        tmp.replace(cache)
+        _prune_cache()
+    except OSError:
+        pass
+
+
+def _prune_cache() -> None:
+    """Garde le cache sous CACHE_MAX_BYTES en retirant les entrées les moins récemment lues."""
+    entries = [(f.stat().st_atime, f.stat().st_size, f) for f in CACHE_DIR.glob("*.amx")]
+    total = sum(size for _t, size, _f in entries)
+    for _t, size, f in sorted(entries):
+        if total <= CACHE_MAX_BYTES:
+            break
+        f.unlink(missing_ok=True)
+        total -= size
+
+
+def _dimmer(brightness: int) -> bytes:
+    """Table de 256 octets : applique la luminosité par bytes.translate (même arrondi que image_to_frame)."""
+    scale = brightness / 100.0
+    return bytes(max(0, min(255, int(v * scale))) for v in range(256))
+
+
+HEADER = bytes(PREFIX) + bytes(FB_OFFSET - len(PREFIX))
+TRAILER = bytes(FRAME_SIZE - FB_OFFSET - LED_BYTES)
+
+
 def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event, brightness,
               fidele: bool = False) -> None:
-    """Joue une fois un GIF/image en flux ; brightness() est relue à chaque frame."""
+    """Joue une fois un GIF/image ; brightness() est relue à chaque frame.
+
+    Les trames converties (pleine luminosité) sont gardées dans ~/.cache/animematrix/trames :
+    à la lecture suivante, ni décodage ni conversion.
+    """
     fidele = fidele or is_faithful(path)
-    n = 0
-    for img, delay in iter_gif_frames(path):
-        if stop_event.is_set():
-            return
-        transport.write(image_to_frame(img, brightness(), fidele))
-        n += 1
-        stop_event.wait(delay)
-    if n == 1:
+    cache = _cache_path(path, fidele)
+    frames = _read_cache(cache)
+    table, level = _dimmer(100), 100
+    if frames is None:
+        frames = []
+        for img, delay in iter_gif_frames(path):
+            if stop_event.is_set():
+                return  # interrompu : rien n'est mis en cache
+            leds = image_to_frame(img, 100, fidele)[FB_OFFSET:FB_OFFSET + LED_BYTES]
+            frames.append((leds, delay))
+            b = brightness()
+            if b != level:
+                table, level = _dimmer(b), b
+            transport.write(HEADER + leds.translate(table) + TRAILER)
+            stop_event.wait(delay)
+        _write_cache(cache, frames)
+    else:
+        for leds, delay in frames:
+            if stop_event.is_set():
+                return
+            b = brightness()
+            if b != level:
+                table, level = _dimmer(b), b
+            transport.write(HEADER + leds.translate(table) + TRAILER)
+            stop_event.wait(delay)
+    if len(frames) == 1:
         stop_event.wait(STILL_SECONDS)
 
 

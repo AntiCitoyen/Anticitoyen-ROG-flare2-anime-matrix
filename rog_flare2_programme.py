@@ -8,7 +8,7 @@
   démon affiche le contenu ; à la fin, la lecture manuelle reprend.
 - Déclencheurs : écran noir tant que la session est verrouillée
   (ScreenSaver.ActiveChanged), pendant la mise en veille (logind PrepareForSleep),
-  ou quand la fenêtre active est en plein écran (X11, _NET_WM_STATE_FULLSCREEN).
+  ou quand la fenêtre active est en plein écran (rog_flare2_fenetre : X11, Sway, Hyprland, GNOME).
 """
 from __future__ import annotations
 
@@ -105,17 +105,9 @@ class Monitor:
 
 
 def fullscreen_active() -> bool:
-    """Fenêtre active en plein écran (X11, xprop)."""
-    try:
-        win = subprocess.run(["xprop", "-root", "_NET_ACTIVE_WINDOW"], capture_output=True, text=True,
-                             timeout=2).stdout.split()[-1]
-        if win in ("0x0", ""):
-            return False
-        state = subprocess.run(["xprop", "-id", win, "_NET_WM_STATE"], capture_output=True, text=True,
-                               timeout=2).stdout
-        return "_NET_WM_STATE_FULLSCREEN" in state
-    except (OSError, IndexError, subprocess.SubprocessError):
-        return False
+    """Fenêtre active en plein écran (X11, Sway, Hyprland, GNOME avec Window Calls)."""
+    from rog_flare2_fenetre import active_window
+    return bool((active_window() or {}).get("fullscreen"))
 
 
 class Programme:

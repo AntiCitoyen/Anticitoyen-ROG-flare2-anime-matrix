@@ -136,3 +136,14 @@ def test_migration_from_legacy_dangling_link(tmp_path, monkeypatch):
     assert D.migrate_legacy() == "horloge"
     assert D.START_FILE.read_text().strip() == "horloge"
     assert not (wants / "animematrix-horloge.service").is_symlink()
+
+
+def test_identical_frames_are_not_resent(daemon, monkeypatch):
+    screen = daemon.screen
+    frame = bytes(D.BLANK[:4]) + bytes([9]) * 312 + bytes(1024 - 316)
+    for _ in range(5):
+        screen.write(frame)
+    assert screen.transport.frames.count(frame) == 1 and screen.skipped >= 4
+    monkeypatch.setattr(D, "KEEPALIVE", 0.0)  # au-delà du délai, la même trame repart
+    screen.write(frame)
+    assert screen.transport.frames.count(frame) == 2

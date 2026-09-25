@@ -109,6 +109,41 @@ pww._SHARED_AUDIO_CAPTURE = AUDIO  # lu en global par les effets audio à chaque
 EFFECTS: dict[str, type[pww.BaseEffect]] = {cls.name: cls for cls in pww.ALL_EFFECTS}
 AUDIO_EFFECTS: dict[str, type[pww.BaseEffect]] = dict(pww.AUDIO_VISUALIZERS)
 
+
+class KeyboardReactEffect(pww.KeyboardReactEffect):
+    """Réaction au clavier : touches par rog_flare2_touches (evdev sous Wayland, pynput sous X11)."""
+
+    def __init__(self, decay: float = 0.82, glow: int = 2):
+        import rog_flare2_touches as touches
+        # mêmes champs que PolyWollyWin, sans son écouteur pynput (aveugle sous Wayland)
+        self.decay, self.glow = decay, glow
+        self._buf = np.zeros((pww.ROWS, pww.COLS), dtype=np.float32)
+        self._lock = threading.Lock()
+        self._demo_t, self._caps = 0.0, False
+        self._listener = touches.listen(self._press, self._release)
+        self._demo = self._listener is None
+
+    def _press(self, name: str):
+        if name in ("shift", "caps_lock"):
+            self._caps = True
+            return
+        bri, glow = (255, int(self.glow) + 2) if self._caps else (180, int(self.glow))
+        if name == "space":
+            self._flash_row(10, 28, bri, glow)
+        elif name == "enter":
+            self._flash_col(6, 35, bri, glow)
+        elif name == "backspace":
+            self._flash_col(2, 34, bri, glow)
+        elif name in pww._KEY_POS:
+            self._flash_point(*pww._KEY_POS[name], bri, glow)
+
+    def _release(self, name: str):
+        if name in ("shift", "caps_lock"):
+            self._caps = False
+
+
+EFFECTS[KeyboardReactEffect.name] = KeyboardReactEffect
+
 from rog_flare2_infos import SystemMonitorEffect  # noqa: E402  (écran d'infos système)
 EFFECTS[SystemMonitorEffect.name] = SystemMonitorEffect
 from rog_flare2_mpris import NowPlayingEffect  # noqa: E402  (morceau en cours, MPRIS)
