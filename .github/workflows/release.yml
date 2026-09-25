@@ -31,8 +31,9 @@ jobs:
           dnf install -y rpm-build python3 gh
           V="${TAG#v}"
           mkdir -p ~/rpmbuild/SOURCES ~/rpmbuild/SPECS
-          git config --global --add safe.directory "$PWD"
-          git archive --prefix="Anticitoyen-ROG-flare2-anime-matrix-$V/" -o ~/rpmbuild/SOURCES/Anticitoyen-ROG-flare2-anime-matrix-$V.tar.gz HEAD
+          # git is missing when checkout runs in this container: the tree has no .git
+          tar --exclude=.git --transform "s,^\.,Anticitoyen-ROG-flare2-anime-matrix-$V," \
+            -czf ~/rpmbuild/SOURCES/Anticitoyen-ROG-flare2-anime-matrix-$V.tar.gz .
           sed "s/@VERSION@/$V/" packaging/rpm/anticitoyen-rog-flare2-anime-matrix.spec > ~/rpmbuild/SPECS/animematrix.spec
           rpmbuild -bb ~/rpmbuild/SPECS/animematrix.spec
           gh release upload "$TAG" ~/rpmbuild/RPMS/noarch/*.rpm --clobber --repo "$GITHUB_REPOSITORY"
