@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Touches : image de l'écran et spectre audio ; couleurs par plage horaire
+    et par profil d'application.
+  * Écran réellement éteint pendant le verrouillage, la veille et le plein écran.
   * Sécurité : API HTTP locale protégée des pages web, télécommande limitée
     aux commandes sûres, mises à jour vérifiées par root avant installation,
     entrées de la bibliothèque contrôlées, dossier du socket vérifié.

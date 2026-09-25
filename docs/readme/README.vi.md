@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Màu bàn phím
 
-*Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Thêm hai chế độ phần mềm: *Hình màn hình* (phím phản chiếu màn hình, phóng to) và *Phổ âm thanh* (mỗi cột một thanh). Mỗi khung giờ và mỗi hồ sơ ứng dụng cũng có thể chọn màu phím riêng (*Lịch hẹn…*).
 
 ### Laptop ROG (thử nghiệm)
 

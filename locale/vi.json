@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "hoạt ảnh quá lớn: gói bị từ chối",
  "entrée de catalogue invalide : {name}": "mục danh mục không hợp lệ: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "thiếu mã SHA-256: gói bị từ chối",
- "nom de paquet inattendu : paquet rejeté": "tên gói không mong đợi: gói bị từ chối"
+ "nom de paquet inattendu : paquet rejeté": "tên gói không mong đợi: gói bị từ chối",
+ "Image de l'écran (logiciel)": "Hình màn hình (phần mềm)",
+ "Spectre audio (logiciel)": "Phổ âm thanh (phần mềm)",
+ "Touches inchangées": "Giữ nguyên phím",
+ "Touches éteintes": "Tắt đèn phím"
 }

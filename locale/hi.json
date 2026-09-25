@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "एनिमेशन बहुत बड़ा है: पैकेज अस्वीकृत",
  "entrée de catalogue invalide : {name}": "अमान्य कैटलॉग प्रविष्टि: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "SHA-256 चेकसम नहीं है: पैकेज अस्वीकृत",
- "nom de paquet inattendu : paquet rejeté": "अप्रत्याशित पैकेज नाम: पैकेज अस्वीकृत"
+ "nom de paquet inattendu : paquet rejeté": "अप्रत्याशित पैकेज नाम: पैकेज अस्वीकृत",
+ "Image de l'écran (logiciel)": "स्क्रीन की छवि (सॉफ़्टवेयर)",
+ "Spectre audio (logiciel)": "ऑडियो स्पेक्ट्रम (सॉफ़्टवेयर)",
+ "Touches inchangées": "कुंजियाँ अपरिवर्तित",
+ "Touches éteintes": "कुंजियाँ बंद"
 }

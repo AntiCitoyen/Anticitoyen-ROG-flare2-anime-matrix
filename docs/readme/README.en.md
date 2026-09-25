@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Keyboard colours
 
-*Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Two more software modes: *Screen image* (the keys mirror the screen, enlarged) and *Audio spectrum* (one bar per column). Each time slot and each application profile can also pick its key colours (*Schedule…*).
 
 ### ROG laptops (experimental)
 

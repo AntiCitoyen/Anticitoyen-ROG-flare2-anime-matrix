@@ -48,6 +48,9 @@ class ScheduleWindow:
             self.triggers[key] = var
         self.labels = content_choices()
         self.keys = {v: k for k, v in self.labels.items()}
+        from rog_flare2_ui_rgb import preset_labels
+        self.presets = preset_labels()
+        self.preset_names = {v: k for k, v in self.presets.items()}
         ttk.Separator(body).pack(fill="x", pady=10)
         ttk.Label(body, text=_("Profils par application (prioritaires) :")).pack(anchor="w")
         self.profiles_frame = ttk.Frame(body)
@@ -77,7 +80,8 @@ class ScheduleWindow:
         f.pack(fill="x", pady=2)
         row = {"frame": f, "debut": tk.StringVar(value=rule["debut"]), "fin": tk.StringVar(value=rule["fin"]),
                "jours": [tk.BooleanVar(value=d in rule.get("jours", range(7))) for d in range(7)],
-               "contenu": tk.StringVar(value=self.keys.get(rule.get("contenu"), _("Horloge")))}
+               "contenu": tk.StringVar(value=self.keys.get(rule.get("contenu"), _("Horloge"))),
+               "touches": tk.StringVar(value=self.preset_names.get(rule.get("touches", ""), _("Touches inchangées")))}
         ttk.Entry(f, textvariable=row["debut"], width=6).pack(side="left")
         ttk.Label(f, text="→").pack(side="left", padx=2)
         ttk.Entry(f, textvariable=row["fin"], width=6).pack(side="left")
@@ -85,6 +89,7 @@ class ScheduleWindow:
             ttk.Checkbutton(f, text=self.days[i] if i < len(self.days) else str(i), variable=var).pack(side="left")
         ttk.Combobox(f, textvariable=row["contenu"], values=list(self.labels), state="readonly",
                      width=16).pack(side="left", padx=4)
+        self._keys_box(f, row)
         ttk.Button(f, text="✕", width=3, command=lambda: self.remove_row(row)).pack(side="left")
         self.rows.append(row)
 
@@ -93,15 +98,27 @@ class ScheduleWindow:
         f = ttk.Frame(self.profiles_frame)
         f.pack(fill="x", pady=2)
         row = {"frame": f, "app": tk.StringVar(value=profile.get("app", "")),
-               "contenu": tk.StringVar(value=self.keys.get(profile.get("contenu"), _("Horloge")))}
+               "contenu": tk.StringVar(value=self.keys.get(profile.get("contenu"), _("Horloge"))),
+               "touches": tk.StringVar(value=self.preset_names.get(profile.get("touches", ""),
+                                                                   _("Touches inchangées")))}
         ttk.Entry(f, textvariable=row["app"], width=20).pack(side="left")
         detect = ttk.Button(f, text=_("Détecter"))
         detect.configure(command=lambda: self.detect(row, detect, 3))
         detect.pack(side="left", padx=4)
         ttk.Combobox(f, textvariable=row["contenu"], values=list(self.labels), state="readonly",
                      width=24).pack(side="left", padx=4)
+        self._keys_box(f, row)
         ttk.Button(f, text="✕", width=3, command=lambda: (f.destroy(), self.profiles.remove(row))).pack(side="left")
         self.profiles.append(row)
+
+    def _keys_box(self, parent, row: dict):
+        """Couleurs des touches pendant la règle ou le profil (rog_flare2_rgb)."""
+        ttk.Combobox(parent, textvariable=row["touches"], values=list(self.presets), state="readonly",
+                     height=len(self.presets), width=18).pack(side="left", padx=4)
+
+    def _keys_of(self, row: dict) -> dict:
+        preset = self.presets.get(row["touches"].get(), "")
+        return {"touches": preset} if preset else {}
 
     def detect(self, row: dict, button, left: int):
         """Compte à rebours, puis classe de la fenêtre active (le temps d'y cliquer)."""
@@ -129,9 +146,9 @@ class ScheduleWindow:
                 self.status.config(text=_("Heures au format HH:MM"))
                 return
             rules.append({"debut": debut, "fin": fin, "jours": [d for d, v in enumerate(row["jours"]) if v.get()],
-                          "contenu": self.labels.get(row["contenu"].get(), "horloge")})
-        profiles = [{"app": r["app"].get().strip(), "contenu": self.labels.get(r["contenu"].get(), "horloge")}
-                    for r in self.profiles if r["app"].get().strip()]
+                          "contenu": self.labels.get(row["contenu"].get(), "horloge"), **self._keys_of(row)})
+        profiles = [{"app": r["app"].get().strip(), "contenu": self.labels.get(r["contenu"].get(), "horloge"),
+                     **self._keys_of(r)} for r in self.profiles if r["app"].get().strip()]
         cfg = {"regles": rules, "profils": profiles, **{k: bool(v.get()) for k, v in self.triggers.items()}}
         prog.save_config(cfg)
         self.on_saved()

@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "アニメーションが大きすぎます：パッケージを拒否しました",
  "entrée de catalogue invalide : {name}": "無効なカタログ項目：{name}",
  "empreinte SHA-256 absente : paquet rejeté": "SHA-256 チェックサムがありません：パッケージを拒否しました",
- "nom de paquet inattendu : paquet rejeté": "予期しないパッケージ名：パッケージを拒否しました"
+ "nom de paquet inattendu : paquet rejeté": "予期しないパッケージ名：パッケージを拒否しました",
+ "Image de l'écran (logiciel)": "画面の映像（ソフトウェア）",
+ "Spectre audio (logiciel)": "オーディオスペクトラム（ソフトウェア）",
+ "Touches inchangées": "キーは変更しない",
+ "Touches éteintes": "キーを消灯"
 }

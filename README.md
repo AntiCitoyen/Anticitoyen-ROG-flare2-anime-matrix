@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Couleurs du clavier
 
-*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*).
 
 ### Portables ROG (expérimental)
 

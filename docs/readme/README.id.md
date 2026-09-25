@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Warna keyboard
 
-*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*).
 
 ### Laptop ROG (eksperimental)
 

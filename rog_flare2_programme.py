@@ -9,8 +9,10 @@
   démon affiche le contenu ; à la fin, la lecture manuelle reprend.
 - Profils par application : tant que la fenêtre active correspond (classe ou titre
   contenant le texte du profil), son contenu passe avant les plages horaires.
-- Contenus : horloge, galerie, moniteur, morceau, eteint, « effet:<nom> », « gif:<fichier> »,
+- Contenus : horloge, galerie, moniteur, morceau, eteint, clavier, « effet:<nom> », « gif:<fichier> »,
   « liste:<nom> » (liste de lecture).
+- « touches » (facultatif) : couleurs des touches pendant la règle ou le profil — un effet du clavier
+  (arc-en-ciel, respiration…), « statique:#rrggbb », « eteint », ou theme / pulsation / ecran / audio.
 - Déclencheurs : écran noir tant que la session est verrouillée
   (ScreenSaver.ActiveChanged), pendant la mise en veille (logind PrepareForSleep),
   ou quand la fenêtre active est en plein écran (rog_flare2_fenetre : X11, Sway, Hyprland, GNOME).
@@ -131,8 +133,9 @@ class Monitor:
 class Programme:
     """Fils du démon : règles horaires (toutes les 20 s) et déclencheurs."""
 
-    def __init__(self, play_rule, end_rule, hold):
+    def __init__(self, play_rule, end_rule, hold, keys=None):
         self.play_rule, self.end_rule, self.hold = play_rule, end_rule, hold
+        self.keys = keys  # (préréglage des touches | None) -> None
         self.cfg = load_config()
         self.current: dict | None = None  # règle appliquée
         self.monitors: list[Monitor] = []
@@ -164,6 +167,8 @@ class Programme:
                 self.end_rule()
             else:
                 self.play_rule(show_for(target.get("contenu", "horloge")))
+            if self.keys is not None:
+                self.keys((target or {}).get("touches"))
             self.current = target
 
     def _loop(self, stop):

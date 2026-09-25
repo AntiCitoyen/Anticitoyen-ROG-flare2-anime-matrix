@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Cores do teclado
 
-*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*).
 
 ### Notebooks ROG (experimental)
 

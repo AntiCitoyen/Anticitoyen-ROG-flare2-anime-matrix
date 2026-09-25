@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "rog_flare2_bibliotheque (source française)",
  "entrée de catalogue invalide : {name}": "rog_flare2_bibliotheque (source française)",
  "empreinte SHA-256 absente : paquet rejeté": "rog_flare2_maj (source française)",
- "nom de paquet inattendu : paquet rejeté": "rog_flare2_maj (source française)"
+ "nom de paquet inattendu : paquet rejeté": "rog_flare2_maj (source française)",
+ "Image de l'écran (logiciel)": "lanceur (source française)",
+ "Spectre audio (logiciel)": "lanceur (source française)",
+ "Touches inchangées": "lanceur (source française)",
+ "Touches éteintes": "lanceur (source française)"
 }

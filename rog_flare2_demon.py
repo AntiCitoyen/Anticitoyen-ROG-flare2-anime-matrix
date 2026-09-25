@@ -149,20 +149,39 @@ class Screen:
         if not self.overlay_active:
             self.write(base)
 
+    def _panel(self, level: int):
+        """Luminosité du panneau (60 A8 87) : 0 l'éteint vraiment, même si le clavier repasse de lui-même
+        sur l'animation enregistrée faute de trames. Clavier Flare II seulement (écho attendu)."""
+        if hasattr(self.transport, "read"):
+            from rog_flare2_memoire import show_frame
+            self.transport.write(show_frame(level))
+
     def hold(self, reason: str, on: bool):
-        """Écran noir tant qu'une raison est active ; la lecture reprend quand il n'en reste aucune."""
+        """Écran éteint tant qu'une raison est active ; la lecture reprend quand il n'en reste aucune."""
+        was_held = bool(self.holds)
         if on and not self.holds:
             with self.lock:
                 self.last = BLANK
                 if self._ensure():
                     try:
                         self.transport.write(BLANK)
+                        self._panel(0)
                         self.sent, self.sent_at = BLANK, time.monotonic()
                         self.software_sent = True
                     except Exception:
                         self.connected = False
                         self.sent = None
         (self.holds.add if on else self.holds.discard)(reason)
+        if was_held and not self.holds and not self.hardware:
+            # (animation du clavier affichée : son fil la rallume lui-même, software_sent)
+            with self.lock:
+                if self._ensure():
+                    try:
+                        self._panel(100)
+                    except Exception:
+                        self.connected = False
+                self.sent = None
+            self.write(self.base, "base")  # la dernière image revient tout de suite, sans attendre la suivante
 
     def raw(self, fn):
         """fn(transport) sous le verrou, hors du flux de trames 60 81 (mémoire du clavier)."""
@@ -221,10 +240,11 @@ class Daemon:
         from rog_flare2_notifs import NotificationWatcher
         from rog_flare2_rgb import KeyboardLights
         self.notifs = NotificationWatcher(lambda text: self.notify(text, 0))
-        self.rgb = KeyboardLights(self._screen_level, self._accent)
+        self.rgb = KeyboardLights(self._screen_level, self._accent,
+                                  lambda: self.screen.last[FB_OFFSET:FB_OFFSET + LED_COUNT])
         from rog_flare2_programme import Programme
         self.manual: dict | None = None  # dernière lecture demandée par un client (reprise après une règle)
-        self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold)
+        self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold, self._rule_keys)
         from rog_flare2_voyants import Watcher
         self.voyants = Watcher(self._badges_changed, self._announce)
         from rog_flare2_telecommande import RemoteServer
@@ -405,6 +425,12 @@ class Daemon:
         else:
             self.play(show, manual=False)
 
+    def _rule_keys(self, preset: str | None):
+        try:
+            self.rgb.override(preset or None)
+        except KeyError:
+            print(f"touches : préréglage inconnu {preset!r}", file=sys.stderr, flush=True)
+
     def _end_rule(self):
         if self.manual is None:
             self.stop(manual=False)
@@ -483,11 +509,12 @@ class Daemon:
             self.stop()
             return {"ok": True}
         if cmd == "rgb":  # couleurs des touches (rog_flare2_rgb)
-            from rog_flare2_rgb import EFFECTS, load_config as rgb_config, save_config as rgb_save
+            from rog_flare2_rgb import EFFECTS, SOFTWARE_MODES, load_config as rgb_config, save_config as rgb_save
             cfg = {**rgb_config(), **req.get("config", {})}
-            if cfg.get("effet") not in EFFECTS or cfg.get("mode") not in ("clavier", "theme", "pulsation", "off"):
+            if cfg.get("effet") not in EFFECTS or cfg.get("mode") not in ("clavier", "off", *SOFTWARE_MODES):
                 return {"ok": False, "error": f"réglage inconnu : {cfg.get('mode')!r} / {cfg.get('effet')!r}"}
             rgb_save(cfg)
+            self.rgb.overridden = None  # un choix explicite passe avant la règle en cours
             self.rgb.start(cfg)
             if cfg["mode"] == "clavier":
                 try:

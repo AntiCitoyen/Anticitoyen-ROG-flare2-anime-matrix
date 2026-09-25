@@ -211,18 +211,97 @@ def effect_kwargs(cfg: dict) -> dict:
             "random": bool(cfg.get("aleatoire"))}
 
 
-class KeyboardLights:
-    """Fil du démon : couleurs des touches selon le réglage (rgb.json)."""
+SOFTWARE_MODES = ("theme", "pulsation", "ecran", "audio")  # couleurs envoyées touche par touche par le démon
+KEY_ROWS = 6  # rangées de touches (la 7e, index 6, est le rétroéclairage)
 
-    def __init__(self, screen_level, accent, transport=None):
+
+def preset_config(preset: str) -> dict:
+    """Préréglage d'une règle de programmation ou d'un profil (« touches ») -> réglage complet."""
+    if preset in SOFTWARE_MODES:
+        return {**DEFAULT_CONFIG, "mode": preset}
+    if preset == "eteint":
+        return {**DEFAULT_CONFIG, "effet": "statique", "couleurs": ["#000000"], "luminosite": 0}
+    if preset.startswith("statique:#"):
+        return {**DEFAULT_CONFIG, "effet": "statique", "couleurs": [preset.split(":", 1)[1]]}
+    if preset in EFFECTS:
+        return {**DEFAULT_CONFIG, "effet": preset}
+    raise KeyError(preset)
+
+
+def screen_frame(leds: bytes, positions, rgb, fraction: float = 1.0) -> dict[int, tuple[int, int, int]]:
+    """Les touches reprennent l'image de l'écran, agrandie au clavier (30 × 6 cases, maximum par case)."""
+    grid = [[0] * KEY_ROWS for _ in range(COLUMNS)]
+    for level, (x, y) in zip(leds, positions):
+        c, r = min(COLUMNS - 1, int(x * COLUMNS)), min(KEY_ROWS - 1, int(y * KEY_ROWS))
+        grid[c][r] = max(grid[c][r], level)
+    out = {}
+    for c in range(COLUMNS):
+        for r in range(KEY_ROWS):
+            k = grid[c][r] / 255 * fraction
+            out[c * 8 + r] = tuple(int(v * k) for v in rgb)
+        k = max(grid[c]) / 255 * fraction
+        out[c * 8 + 6] = tuple(int(v * k) for v in rgb)
+    return out
+
+
+def bars_frame(levels, brightness: float = 1.0) -> dict[int, tuple[int, int, int]]:
+    """Spectre : une barre par colonne, du bas vers le haut, teinte arc-en-ciel de gauche à droite."""
+    import colorsys
+    out = {}
+    for c in range(COLUMNS):
+        r_, g_, b_ = colorsys.hsv_to_rgb(c / COLUMNS * 0.83, 1.0, brightness)
+        rgb = (int(r_ * 255), int(g_ * 255), int(b_ * 255))
+        height = float(levels[c]) * KEY_ROWS
+        for r in range(KEY_ROWS):
+            k = max(0.0, min(1.0, height - (KEY_ROWS - 1 - r)))  # rangée 5 (Ctrl) en bas
+            out[c * 8 + r] = tuple(int(v * k) for v in rgb)
+        out[c * 8 + 6] = tuple(int(v * min(1.0, float(levels[c]))) for v in rgb)
+    return out
+
+
+class Spectrum:
+    """Niveaux par colonne (30 bandes logarithmiques) du son joué, montée immédiate, retombée douce."""
+
+    def __init__(self):
+        import numpy as np
+        self.np = np
+        self.levels = np.zeros(COLUMNS)
+        self.peak = 1e-4
+
+    def columns(self):
+        np = self.np
+        from rog_flare2_effets import AUDIO
+        buf, last_t, rate, _mode = AUDIO.get()
+        target = np.zeros(COLUMNS)
+        if buf is not None and buf.size >= 256 and time.monotonic() - last_t < 1.0:
+            spec = np.abs(np.fft.rfft(buf * np.hanning(buf.size)))
+            freqs = np.fft.rfftfreq(buf.size, 1 / rate)
+            edges = np.geomspace(40, min(16000, rate / 2), COLUMNS + 1)
+            idx = np.searchsorted(freqs, edges)
+            vals = np.array([spec[a:max(a + 1, b)].max() for a, b in zip(idx[:-1], idx[1:])])
+            vals = np.log1p(vals * 20)
+            self.peak = max(self.peak * 0.997, float(vals.max()), 1e-4)  # gain automatique
+            target = np.clip(vals / self.peak, 0, 1)
+        self.levels = np.maximum(target, self.levels * 0.8)
+        return self.levels
+
+
+class KeyboardLights:
+    """Fil du démon : couleurs des touches selon le réglage (rgb.json), ou le préréglage d'une règle
+    de programmation ou d'un profil d'application tant qu'il est actif (override)."""
+
+    def __init__(self, screen_level, accent, screen_leds=None, transport=None):
         self.screen_level = screen_level  # () -> 0..1, luminosité moyenne de l'écran
         self.accent = accent  # () -> "#rrggbb"
+        self.screen_leds = screen_leds  # () -> 312 niveaux affichés par l'écran
         fake = os.environ.get("ANIMEMATRIX_FAUX_CLAVIER")
         self.transport = transport or (FakeRGBTransport() if fake else RGBTransport())
         self.lock = threading.Lock()
         self.stop_event = threading.Event()
         self.thread: threading.Thread | None = None
         self.status = "off"
+        self.base: dict = dict(DEFAULT_CONFIG)
+        self.overridden: str | None = None
 
     def apply(self, cfg: dict, save: bool = True) -> None:
         """Effet du clavier (enregistré dans le clavier si save)."""
@@ -234,42 +313,92 @@ class KeyboardLights:
                 raise
 
     def start(self, cfg: dict):
-        self.stop()
-        mode = cfg.get("mode", "clavier")
-        self.status = mode
-        if mode not in ("theme", "pulsation"):
+        """Réglage de base (rgb.json) ; un préréglage actif reste prioritaire."""
+        self.base = cfg
+        self._activate(reapply=False)
+
+    def override(self, preset: str | None):
+        """Préréglage d'une règle ou d'un profil ; None : retour au réglage de base."""
+        if preset == self.overridden:
             return
-        self.stop_event = threading.Event()
-        self.thread = threading.Thread(target=self._run, args=(cfg, self.stop_event), daemon=True)
-        self.thread.start()
+        if preset is not None:
+            preset_config(preset)  # préréglage inconnu : KeyError, rien ne change
+        self.overridden = preset
+        self._activate(reapply=True)
+
+    def _activate(self, reapply: bool):
+        cfg = preset_config(self.overridden) if self.overridden else self.base
+        was_direct = self._stop_thread()
+        mode = cfg.get("mode", "clavier")
+        self.status = mode if not self.overridden else f"{mode} ({self.overridden})"
+        if mode in SOFTWARE_MODES:
+            self.stop_event = threading.Event()
+            self.thread = threading.Thread(target=self._run, args=(cfg, self.stop_event), daemon=True)
+            self.thread.start()
+        elif mode == "clavier" and (reapply or was_direct):  # le clavier reprend (ou prend) son effet
+            try:
+                self.apply(cfg, save=False)
+            except (OSError, KeyError):
+                pass
+
+    def _frame(self, mode, accent, spectrum):
+        rgb = hex_rgb(accent)
+        if mode == "pulsation":
+            return solid_frame(rgb, 0.15 + 0.85 * self.screen_level())
+        if mode == "ecran" and self.screen_leds is not None:
+            if not hasattr(self, "_positions"):
+                from rog_flare2_simulateur import _positions
+                pos = _positions(1.0, 0.0)
+                x0, y0 = min(x for x, _y in pos), min(y for _x, y in pos)
+                w = (max(x for x, _y in pos) - x0) or 1
+                h = (max(y for _x, y in pos) - y0) or 1
+                self._positions = [((x - x0) / w, (y - y0) / h) for x, y in pos]
+            return screen_frame(self.screen_leds(), self._positions, rgb)
+        if mode == "audio":
+            return bars_frame(spectrum.columns())
+        return solid_frame(rgb)
 
     def _run(self, cfg, stop):
+        mode = cfg["mode"]
+        spectrum = Spectrum() if mode == "audio" else None
+        try:
+            self._loop(mode, stop, spectrum)
+        finally:
+            if spectrum is not None:  # parec arrêté (un visualiseur de l'écran le relance s'il en a besoin)
+                from rog_flare2_effets import AUDIO
+                AUDIO.stop()
+
+    def _loop(self, mode, stop, spectrum):
         last, accent, accent_at = None, self.accent(), time.monotonic()
+        fps = {"theme": 1.0, "pulsation": 15, "ecran": 20, "audio": 25}[mode]
         while not stop.is_set():
             if time.monotonic() - accent_at > 1.0:  # thème relu une fois par seconde
                 accent, accent_at = self.accent(), time.monotonic()
-            level = 0.15 + 0.85 * self.screen_level() if cfg["mode"] == "pulsation" else 1.0
-            frame = solid_frame(hex_rgb(accent), level)
             try:
-                if frame != last or cfg["mode"] == "theme":  # thème : renvoyé chaque seconde (rebranchement)
+                frame = self._frame(mode, accent, spectrum)
+                if frame != last or mode == "theme":  # thème : renvoyé chaque seconde (rebranchement)
                     with self.lock:
                         send_direct(self.transport, frame)
                     last = frame
-                    self.status = cfg["mode"]
+                    self.status = mode if not self.overridden else f"{mode} ({self.overridden})"
             except OSError as exc:
                 self.status = f"clavier indisponible : {exc}"
                 self.transport.close()
                 last = None
                 stop.wait(3)
-            stop.wait(1 / 15 if cfg["mode"] == "pulsation" else 1.0)
+            stop.wait(1 / fps)
 
-    def stop(self):
+    def _stop_thread(self) -> bool:
         was_direct = self.thread is not None
         self.stop_event.set()
         if self.thread is not None:
             self.thread.join(timeout=3)
         self.thread = None
-        if was_direct:  # le clavier reprend l'effet enregistré
+        return was_direct
+
+    def stop(self):
+        """Arrêt du démon : le clavier reprend l'effet enregistré s'il recevait des couleurs directes."""
+        if self._stop_thread():
             try:
                 self.apply(load_config(), save=False)
             except (OSError, KeyError):

@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "анимация слишком большая: пакет отклонён",
  "entrée de catalogue invalide : {name}": "недопустимая запись каталога: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "нет контрольной суммы SHA-256: пакет отклонён",
- "nom de paquet inattendu : paquet rejeté": "неожиданное имя пакета: пакет отклонён"
+ "nom de paquet inattendu : paquet rejeté": "неожиданное имя пакета: пакет отклонён",
+ "Image de l'écran (logiciel)": "Изображение экрана (программно)",
+ "Spectre audio (logiciel)": "Спектр звука (программно)",
+ "Touches inchangées": "Клавиши без изменений",
+ "Touches éteintes": "Клавиши выключены"
 }

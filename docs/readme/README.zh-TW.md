@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### 鍵盤顏色
 
-*設定* → *🌈 鍵盤顏色…*：效果（彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴）、顏色、速度、亮度、方向。*試用* 立即套用，*儲存到鍵盤* 拔除後仍保留。*主題顏色* 與 *隨螢幕脈動* 由常駐程式逐鍵傳送；離開後恢復已儲存的效果。命令列：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。
+*設定* → *🌈 鍵盤顏色…*：效果（彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴）、顏色、速度、亮度、方向。*試用* 立即套用，*儲存到鍵盤* 拔除後仍保留。*主題顏色* 與 *隨螢幕脈動* 由常駐程式逐鍵傳送；離開後恢復已儲存的效果。命令列：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 另有兩種軟體模式：*螢幕畫面*（按鍵放大映射螢幕內容）與*音訊頻譜*（每欄一條光柱）。每個時段與每個應用程式設定檔也可以選擇按鍵顏色（*排程…*）。
 
 ### ROG 筆記型電腦(實驗性)
 

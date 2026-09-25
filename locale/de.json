@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "Animation zu groß: Paket abgelehnt",
  "entrée de catalogue invalide : {name}": "ungültiger Katalogeintrag: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "SHA-256-Prüfsumme fehlt: Paket abgelehnt",
- "nom de paquet inattendu : paquet rejeté": "unerwarteter Paketname: Paket abgelehnt"
+ "nom de paquet inattendu : paquet rejeté": "unerwarteter Paketname: Paket abgelehnt",
+ "Image de l'écran (logiciel)": "Bildschirmbild (Software)",
+ "Spectre audio (logiciel)": "Audiospektrum (Software)",
+ "Touches inchangées": "Tasten unverändert",
+ "Touches éteintes": "Tasten aus"
 }

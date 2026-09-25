@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "动画过大：已拒绝该包",
  "entrée de catalogue invalide : {name}": "目录条目无效：{name}",
  "empreinte SHA-256 absente : paquet rejeté": "缺少 SHA-256 校验值：已拒绝该包",
- "nom de paquet inattendu : paquet rejeté": "包名称异常：已拒绝该包"
+ "nom de paquet inattendu : paquet rejeté": "包名称异常：已拒绝该包",
+ "Image de l'écran (logiciel)": "屏幕画面（软件）",
+ "Spectre audio (logiciel)": "音频频谱（软件）",
+ "Touches inchangées": "按键不变",
+ "Touches éteintes": "按键关闭"
 }

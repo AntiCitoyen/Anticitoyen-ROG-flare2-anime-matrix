@@ -56,3 +56,35 @@ def test_commande_du_demon():
         assert d.handle({"cmd": "status"})["rgb"] == "clavier"
     finally:
         d.stop()
+
+
+def test_presets_and_frames():
+    assert R.preset_config("eteint")["luminosite"] == 0
+    assert R.preset_config("statique:#00ff00")["couleurs"] == ["#00ff00"]
+    assert R.preset_config("audio")["mode"] == "audio"
+    import pytest
+    with pytest.raises(KeyError):
+        R.preset_config("disco")
+    # écran : une LED pleine en haut à gauche allume la case (0, 0) et le rétroéclairage de la colonne 0
+    f = R.screen_frame(bytes([255, 0]), [(0.0, 0.0), (0.99, 0.99)], (255, 0, 0))
+    assert f[0] == (255, 0, 0) and f[6] == (255, 0, 0) and f[29 * 8 + 5] == (0, 0, 0) and len(f) == 210
+    # spectre : colonne 0 pleine, colonne 1 à moitié (3 rangées du bas)
+    b = R.bars_frame([1.0, 0.5] + [0.0] * 28)
+    assert all(any(b[r]) for r in range(6)) and [any(b[8 + r]) for r in range(6)] == [False] * 3 + [True] * 3
+
+
+def test_rule_preset_overrides_then_restores(tmp_path, monkeypatch):
+    monkeypatch.setattr(R, "CONFIG_FILE", tmp_path / "rgb.json")
+    t = R.FakeRGBTransport()
+    lights = R.KeyboardLights(lambda: 0.5, lambda: "#ffffff", lambda: bytes(312), transport=t)
+    lights.start(dict(R.DEFAULT_CONFIG))  # arc-en-ciel du clavier : rien à envoyer
+    assert t.reports == []
+    lights.override("respiration")
+    assert t.reports[-1][:3] == bytes([0x51, 0x2C, 1])
+    lights.override("ecran")
+    time.sleep(0.3)
+    assert lights.thread is not None and t.reports[-1][:2] == b"\xc0\x81" and "ecran" in lights.status
+    lights.start(dict(R.DEFAULT_CONFIG))  # rechargement des réglages : la règle reste prioritaire
+    assert lights.thread is not None
+    lights.override(None)  # fin de la règle : retour à l'arc-en-ciel enregistré
+    assert lights.thread is None and t.reports[-1][:3] == bytes([0x51, 0x2C, 4]) and lights.status == "clavier"

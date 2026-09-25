@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Colori della tastiera
 
-*Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
+*Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Altre due modalità software: *Immagine dello schermo* (i tasti riproducono lo schermo, ingrandito) e *Spettro audio* (una barra per colonna). Ogni fascia oraria e ogni profilo di applicazione può anche scegliere i colori dei tasti (*Programmazione…*).
 
 ### Portatili ROG (sperimentale)
 

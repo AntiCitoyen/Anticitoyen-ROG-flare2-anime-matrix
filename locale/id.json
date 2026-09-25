@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "animasi terlalu besar: paket ditolak",
  "entrée de catalogue invalide : {name}": "entri katalog tidak valid: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "checksum SHA-256 tidak ada: paket ditolak",
- "nom de paquet inattendu : paquet rejeté": "nama paket tidak terduga: paket ditolak"
+ "nom de paquet inattendu : paquet rejeté": "nama paket tidak terduga: paket ditolak",
+ "Image de l'écran (logiciel)": "Gambar layar (perangkat lunak)",
+ "Spectre audio (logiciel)": "Spektrum audio (perangkat lunak)",
+ "Touches inchangées": "Tombol tidak berubah",
+ "Touches éteintes": "Tombol mati"
 }

@@ -148,9 +148,9 @@ def main(argv=None):
                    help="au-delà de 196 images : garder le début, ou retirer une image sur deux")
     m.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
     sub.add_parser("clavier", help="affiche l'animation enregistrée dans le clavier")
-    from rog_flare2_rgb import DIRECTIONS, EFFECTS
-    r = sub.add_parser("rgb", help="couleurs des touches : effet du clavier, ou theme / pulsation")
-    r.add_argument("effet", choices=[*EFFECTS, "theme", "pulsation", "off"])
+    from rog_flare2_rgb import DIRECTIONS, EFFECTS, SOFTWARE_MODES
+    r = sub.add_parser("rgb", help="couleurs des touches : effet du clavier, ou theme / pulsation / ecran / audio")
+    r.add_argument("effet", choices=[*EFFECTS, *SOFTWARE_MODES, "off"])
     r.add_argument("--couleur", action="append", default=[], metavar="#rrggbb", help="répétable (dégradés)")
     r.add_argument("--vitesse", type=int, help="0 (lent) à 100 (rapide)")
     r.add_argument("--luminosite", type=int, help="0 à 100, par crans de 25")
@@ -182,7 +182,7 @@ def main(argv=None):
     elif args.cmd == "clavier":
         show = {"type": "clavier"}
     elif args.cmd == "rgb":
-        if args.effet in ("theme", "pulsation", "off"):
+        if args.effet in (*SOFTWARE_MODES, "off"):
             config = {"mode": args.effet}
         else:
             config = {"mode": "clavier", "effet": args.effet, "couleurs": args.couleur, "aleatoire": args.aleatoire}

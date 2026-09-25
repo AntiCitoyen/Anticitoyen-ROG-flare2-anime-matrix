@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "animatie te groot: pakket geweigerd",
  "entrée de catalogue invalide : {name}": "ongeldige catalogusvermelding: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "SHA-256-controlesom ontbreekt: pakket geweigerd",
- "nom de paquet inattendu : paquet rejeté": "onverwachte pakketnaam: pakket geweigerd"
+ "nom de paquet inattendu : paquet rejeté": "onverwachte pakketnaam: pakket geweigerd",
+ "Image de l'écran (logiciel)": "Schermbeeld (software)",
+ "Spectre audio (logiciel)": "Audiospectrum (software)",
+ "Touches inchangées": "Toetsen ongewijzigd",
+ "Touches éteintes": "Toetsen uit"
 }

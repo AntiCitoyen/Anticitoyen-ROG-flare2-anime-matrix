@@ -11,16 +11,27 @@ from rog_flare2_i18n import _
 MAX_COLORS = 7
 
 
+def effect_labels() -> dict[str, str]:
+    """Libellé affiché -> effet ou mode (fenêtre des couleurs, programmation)."""
+    return {
+        _("Arc-en-ciel (vague)"): "arc-en-ciel", _("Statique"): "statique", _("Respiration"): "respiration",
+        _("Cycle des couleurs"): "cycle", _("Réactif (touche pressée)"): "reactif",
+        _("Ondulation"): "ondulation", _("Nuit étoilée"): "nuit-etoilee", _("Sable mouvant"): "sable",
+        _("Courant"): "courant", _("Pluie"): "pluie",
+        _("Couleur du thème (logiciel)"): "theme", _("Pulsation avec l'écran (logiciel)"): "pulsation",
+        _("Image de l'écran (logiciel)"): "ecran", _("Spectre audio (logiciel)"): "audio"}
+
+
+def preset_labels() -> dict[str, str]:
+    """Choix « Touches » d'une règle ou d'un profil : inchangées, éteintes, ou un effet / mode."""
+    return {_("Touches inchangées"): "", _("Touches éteintes"): "eteint", **effect_labels()}
+
+
 class RGBWindow:
     def __init__(self, parent, send):
         self.send = send  # (cmd, **kw) -> réponse du démon ou None
         cfg = rgb.load_config()
-        self.labels = {
-            _("Arc-en-ciel (vague)"): "arc-en-ciel", _("Statique"): "statique", _("Respiration"): "respiration",
-            _("Cycle des couleurs"): "cycle", _("Réactif (touche pressée)"): "reactif",
-            _("Ondulation"): "ondulation", _("Nuit étoilée"): "nuit-etoilee", _("Sable mouvant"): "sable",
-            _("Courant"): "courant", _("Pluie"): "pluie",
-            _("Couleur du thème (logiciel)"): "theme", _("Pulsation avec l'écran (logiciel)"): "pulsation"}
+        self.labels = effect_labels()
         self.directions = {_("Vers la gauche"): "gauche", _("Vers la droite"): "droite", _("Vers le haut"): "haut",
                            _("Vers le bas"): "bas", _("Horizontal"): "horizontal", _("Vertical"): "vertical"}
         self.win = tk.Toplevel(parent)
@@ -31,7 +42,7 @@ class RGBWindow:
         ttk.Label(body, text=_("Les effets du clavier tournent sans logiciel et restent après débranchement."),
                   style="Muted.TLabel", wraplength=420).pack(anchor="w", pady=(0, 8))
 
-        key = cfg["mode"] if cfg["mode"] in ("theme", "pulsation") else cfg.get("effet", "arc-en-ciel")
+        key = cfg["mode"] if cfg["mode"] in rgb.SOFTWARE_MODES else cfg.get("effet", "arc-en-ciel")
         self.effect = tk.StringVar(value=next((k for k, v in self.labels.items() if v == key), _("Arc-en-ciel (vague)")))
         cb = ttk.Combobox(body, textvariable=self.effect, values=list(self.labels), state="readonly",
                           height=len(self.labels), width=36)
@@ -75,7 +86,7 @@ class RGBWindow:
 
     def _effect_changed(self, keep_colors: bool = False):
         key = self._key()
-        software = key in ("theme", "pulsation")
+        software = key in rgb.SOFTWARE_MODES
         default = [] if software else rgb.EFFECTS[key][1]
         if not keep_colors or not self.colors:
             self.colors = list(default)
@@ -128,7 +139,7 @@ class RGBWindow:
     # ---------- envoi ----------
     def config(self) -> dict:
         key = self._key()
-        if key in ("theme", "pulsation"):
+        if key in rgb.SOFTWARE_MODES:
             return {"mode": key}
         return {"mode": "clavier", "effet": key, "couleurs": [rgb.rgb_hex(c) for c in self.colors],
                 "vitesse": int(self.speed.get()), "luminosite": int(self.level.get()),

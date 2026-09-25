@@ -379,5 +379,9 @@
  "animation trop volumineuse : paquet rejeté": "애니메이션이 너무 큼: 패키지 거부됨",
  "entrée de catalogue invalide : {name}": "잘못된 카탈로그 항목: {name}",
  "empreinte SHA-256 absente : paquet rejeté": "SHA-256 체크섬 없음: 패키지 거부됨",
- "nom de paquet inattendu : paquet rejeté": "예상치 못한 패키지 이름: 패키지 거부됨"
+ "nom de paquet inattendu : paquet rejeté": "예상치 못한 패키지 이름: 패키지 거부됨",
+ "Image de l'écran (logiciel)": "화면 이미지(소프트웨어)",
+ "Spectre audio (logiciel)": "오디오 스펙트럼(소프트웨어)",
+ "Touches inchangées": "키 변경 없음",
+ "Touches éteintes": "키 끄기"
 }

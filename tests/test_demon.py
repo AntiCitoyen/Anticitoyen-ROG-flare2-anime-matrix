@@ -161,7 +161,12 @@ def test_old_daemon_is_replaced_after_an_update(monkeypatch):
     t = threading.Thread(target=server.serve_forever, daemon=True)
     t.start()
     started = []
-    monkeypatch.setattr(ctl.subprocess, "Popen", lambda *a, **kw: started.append(a))
+    import subprocess
+    import types
+    # module subprocess propre à ctl : patcher subprocess.Popen lui-même casserait les autres fils
+    monkeypatch.setattr(ctl, "subprocess", types.SimpleNamespace(
+        Popen=lambda *a, **kw: started.append(a), run=subprocess.run, DEVNULL=subprocess.DEVNULL,
+        SubprocessError=subprocess.SubprocessError))
     try:
         assert ctl.ensure_daemon(wait=0.5) is False  # nouveau démon « lancé » (factice) mais muet
         t.join(3)
@@ -201,3 +206,20 @@ def test_release_resumes_when_the_editor_dies(daemon):
     proc.wait()
     time.sleep(1.5)
     assert not daemon.screen.released  # l'éditeur a disparu sans « resume » : l'écran est rendu
+
+
+def test_hold_really_switches_the_panel_off(monkeypatch):
+    class EchoTransport(FakeTransport):
+        def read(self, size=1024, timeout_ms=0):
+            return b""
+    monkeypatch.setattr(D, "FlareTransport", EchoTransport)
+    d = D.Daemon()
+    try:
+        d.screen.write(bytes(D.PREFIX) + bytes([0, 0, 9]) + bytes(1019), "base")
+        d.screen.hold("verrouillage", True)
+        sent = d.screen.transport.frames
+        assert sent[-1][:6] == bytes.fromhex("60a88700ff00")  # panneau éteint
+        d.screen.hold("verrouillage", False)
+        assert sent[-2][:6] == bytes.fromhex("60a88764ff00") and sent[-1][D.FB_OFFSET] == 9  # rallumé, image rendue
+    finally:
+        d.stop()

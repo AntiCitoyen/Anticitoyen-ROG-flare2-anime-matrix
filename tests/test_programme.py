@@ -136,3 +136,15 @@ def test_schedule_window_saves_profiles():
     root.destroy()
     assert P.load_config()["profils"] == [{"app": "blender", "contenu": "effet:Plasma"},
                                           {"app": "steam_app", "contenu": "moniteur"}]
+
+
+def test_rule_keys_preset_follows_the_rule():
+    import datetime
+    import rog_flare2_programme as P
+    seen = []
+    prog = P.Programme(lambda show: None, lambda: None, lambda *a: None, seen.append)
+    prog.cfg = {"regles": [{"debut": "08:00", "fin": "09:00", "contenu": "horloge", "touches": "eteint"}]}
+    prog.tick(datetime.datetime(2026, 9, 28, 8, 30))
+    prog.tick(datetime.datetime(2026, 9, 28, 8, 31))  # même règle : rien de renvoyé
+    prog.tick(datetime.datetime(2026, 9, 28, 10, 0))
+    assert seen == ["eteint", None]
