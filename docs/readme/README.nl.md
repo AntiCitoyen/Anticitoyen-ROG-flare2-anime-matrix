@@ -62,6 +62,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 - **Een op de matrix afgestemde GIF-conversie** (`animematrix-convertir`): 19×24, grijstinten, 3 niveaus, zonder dithering — zie [../GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Een tekeneditor** LED voor LED (`animematrix-dessin`).
 - **11 thema's**: 5 geïnspireerd op ROG (Classic, Strix, Glitch, Gold, Carbon), 5 roze (Sakura, Kauwgom, Roségoud, Lavendelroze, Roze nacht) en dat van het systeem, te kiezen via *Instellingen* → *Thema:*.
+- **Ingebouwde updates**: *Instellingen* → *Naar updates zoeken*; automatische controle eens per dag (uit te schakelen). De starter downloadt de `.deb` van de nieuwste GitHub-release, controleert de SHA-256-controlesom en installeert hem na het vragen van het beheerderswachtwoord (`pkexec`).
 - **Laag verbruik**: de GIF's worden beeld voor beeld gedecodeerd; een galerij van 400 GIF's draait op ongeveer 25 MB geheugen.
 
 <a id="materiel"></a>

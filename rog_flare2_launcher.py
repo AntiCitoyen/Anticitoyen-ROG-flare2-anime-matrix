@@ -20,6 +20,7 @@ import subprocess
 import webbrowser
 import sys
 import threading
+import time
 from pathlib import Path
 
 import tkinter as tk
@@ -29,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from rog_flare2_clock_v3 import brightness_to_raw, make_frame
 from rog_flare2_convertir import convertir_tout
 from rog_flare2_i18n import LANG, LANGUAGES, _, save_language
+import rog_flare2_maj as maj
 import rog_flare2_themes as themes
 from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_class, make_effect, param_value, run_effect
 from rog_flare2_matrix_paint import (
@@ -51,7 +53,7 @@ MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
 MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
-VERSION = "1.2.1"
+VERSION = "1.3.0"
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
 SUPPORT_URL = "https://buymeacoffee.com/anticitoyen"
 # Services de fond (rog_flare2_bascule.sh) ; un seul peut tenir le HID.
@@ -235,6 +237,10 @@ class LauncherApp(tk.Tk):
         self.show_panel: dict | None = None
         self.live_params: dict = {}
         self._pending_status: str | None = None
+        self._pending_update: tuple[dict, bool] | None = None  # résultat d'une vérification (fil)
+        self._pending_install: tuple[bool, str] | None = None
+        self.update_info: dict | None = None
+        self.update_btn: ttk.Button | None = None
         self.running_effect = None
         self.brightness = tk.IntVar(value=60)
         self.last_frame: bytes | None = None  # dernière trame envoyée (aperçu des interfaces rondes)
@@ -270,6 +276,8 @@ class LauncherApp(tk.Tk):
             )
         elif gallery_dir().is_dir():
             self.set_files(media_files(gallery_dir()), gallery_dir().name)
+        if maj.due():
+            self.check_updates(silent=True)
 
     def _build_classic(self):
         """Interface classique : onglets."""
@@ -438,6 +446,12 @@ class LauncherApp(tk.Tk):
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
+        self.update_btn = ttk.Button(tab, text=_("Rechercher les mises à jour"), command=self.on_update_button)
+        self.update_btn.pack(fill="x", pady=(8, 0))
+        self.update_auto = tk.BooleanVar(value=maj.load_state().get("auto", True))
+        ttk.Checkbutton(tab, text=_("Vérifier au démarrage"), variable=self.update_auto,
+                        command=lambda: maj.save_state({**maj.load_state(), "auto": self.update_auto.get()})
+                        ).pack(anchor="w")
         ttk.Button(tab, text=_("☕ Soutenir le projet (Buy Me a Coffee)"),
                    command=lambda: webbrowser.open(SUPPORT_URL)).pack(fill="x", pady=(8, 4))
         ttk.Button(tab, text=_("Page du projet (GitHub)"),
@@ -452,7 +466,84 @@ class LauncherApp(tk.Tk):
         text, self._pending_status = self._pending_status, None
         if text is not None:
             self.status.config(text=text)
+        if self._pending_update is not None:
+            (info, silent), self._pending_update = self._pending_update, None
+            self._update_result(info, silent)
+        if self._pending_install is not None:
+            (ok, err), self._pending_install = self._pending_install, None
+            self._install_result(ok, err)
         self.after(100, self._poll_status)
+
+    # --- Mises à jour (releases GitHub, rog_flare2_maj.py) ------------------
+    def check_updates(self, silent: bool = False):
+        """Interroge GitHub dans un fil ; silent : vérification automatique, rien si à jour ou hors ligne."""
+        if not silent:
+            self.set_status(_("Recherche de mises à jour…"))
+
+        def worker():
+            try:
+                info = maj.latest(VERSION)
+            except (OSError, ValueError, KeyError) as exc:
+                if not silent:
+                    self.set_status(_("Impossible de joindre GitHub : {err}").format(err=exc))
+                return
+            maj.save_state({**maj.load_state(), "last": time.time()})
+            self._pending_update = (info, silent)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _update_result(self, info: dict, silent: bool):
+        if not maj.is_newer(info, VERSION):
+            if not silent:
+                self.status.config(text=_("AniMe Matrix est à jour ({version}).").format(version=VERSION))
+            return
+        self.update_info = info
+        self.status.config(text=_("Mise à jour {version} disponible").format(version=info["version"]))
+        if self.update_btn is not None:
+            self.update_btn.config(text=_("Installer la version {version}").format(version=info["version"]))
+        if not silent:
+            self.offer_update()
+
+    def on_update_button(self):
+        if self.update_info is not None:
+            self.offer_update()
+        else:
+            self.check_updates()
+
+    def offer_update(self):
+        info = self.update_info
+        if not maj.packaged():
+            messagebox.showinfo(_("Mise à jour disponible"), _(
+                "AniMe Matrix tourne depuis les sources : mettez à jour avec git pull, "
+                "ou installez le paquet .deb de la page des versions."))
+            webbrowser.open(info["page"])
+            return
+        text = _("La version {new} est disponible (installée : {current}).\n\n{notes}\n\nL'installer maintenant ?").format(
+            new=info["version"], current=VERSION, notes=maj.notes_excerpt(info["notes"], LANG))
+        if not messagebox.askyesno(_("Mise à jour disponible"), text):
+            return
+
+        def worker():
+            try:
+                deb = maj.download(info, lambda pct: self.set_status(
+                    _("Téléchargement de la version {version}… {pct} %").format(version=info["version"], pct=pct)))
+            except OSError as exc:
+                self._pending_install = (False, str(exc))
+                return
+            self.set_status(_("Installation (mot de passe administrateur)…"))
+            self._pending_install = maj.install(deb)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _install_result(self, ok: bool, err: str):
+        if ok:
+            self.update_info = None
+            if messagebox.askyesno(_("Mise à jour disponible"), _("Mise à jour installée. Relancer AniMe Matrix maintenant ?")):
+                self.restart()
+        elif err == "annulé":
+            self.status.config(text=_("Mise à jour annulée."))
+        else:
+            self.status.config(text=_("Échec de la mise à jour : {err}").format(err=err))
 
     def set_files(self, files: list[Path], label: str):
         self.gif_files = files

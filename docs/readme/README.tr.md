@@ -62,6 +62,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows altında (Armoury C
 - **Matrise uygun GIF dönüştürme** (`animematrix-convertir`): 19×24, gri, 3 seviye, tramasız — bkz. [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
 - LED LED **bir çizim düzenleyici** (`animematrix-dessin`).
 - **11 tema**: ROG'dan esinlenen 5 tema (Classic, Strix, Glitch, Gold, Carbon), 5 pembe tema (Sakura, Sakız, Pembe altın, Lavanta pembe, Pembe gece) ve sistem teması; *Ayarlar* → *Tema:* üzerinden seçilir.
+- **Yerleşik güncellemeler**: *Ayarlar* → *Güncellemeleri denetle*; günde bir kez otomatik denetim (kapatılabilir). Başlatıcı son GitHub sürümünün `.deb` dosyasını indirir, SHA-256 özetini doğrular ve yönetici parolasını sorduktan sonra kurar (`pkexec`).
 - **Düşük tüketim**: GIF'ler kare kare çözülür; 400 GIF'lik bir galeri ~25 MB bellekte çalışır.
 
 <a id="materiel"></a>

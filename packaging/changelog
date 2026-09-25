@@ -1,12 +1,22 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Mises à jour intégrées (Réglages → Rechercher les mises à jour) :
+    vérification automatique quotidienne (désactivable), téléchargement
+    du .deb de la dernière release GitHub, contrôle SHA-256, installation
+    avec pkexec (apt-get, sinon dpkg), relance proposée.
+  * Tiroir et cadran dimensionnés d'après le contenu des réglages.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.2.1) stable; urgency=medium
+
   * Interfaces rondes : les boutons (GIF, Effets, Audio, Horloge,
     Réglages, Arrêter) ne répondaient pas ; l'image de l'arc de
     luminosité, qui couvre le cadran, captait tous les clics. Elle est
     désormais insensible aux clics : seul un clic sur l'anneau règle la
     luminosité. Le disque des réglages du cadran se déplace aussi.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 11:45:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.2.0) stable; urgency=medium
 

@@ -62,6 +62,7 @@ ASUS는 이 키보드의 AniMe Matrix 디스플레이를 Windows(Armoury Crate)�
 - **매트릭스에 맞춘 GIF 변환** (`animematrix-convertir`) : 19×24, 그레이스케일, 3단계, 디더링 없음 — [docs/GUIDE-GIF.md](../GUIDE-GIF.md) 참조.
 - LED 단위 **드로잉 편집기** (`animematrix-dessin`).
 - **11가지 테마**: ROG 스타일 5종(Classic, Strix, Glitch, Gold, Carbon), 핑크 5종(벚꽃, 버블껌, 로즈 골드, 라벤더 로즈, 로즈 나이트), 시스템 기본 테마. *설정* → *테마:*에서 선택합니다.
+- **내장 업데이트**: *설정* → *업데이트 확인*; 하루 한 번 자동 확인(끌 수 있음). 런처가 최신 GitHub 릴리스의 `.deb`를 내려받아 SHA-256 체크섬을 확인하고, 관리자 비밀번호를 받은 뒤 설치합니다(`pkexec`).
 - **낮은 리소스 사용량** : GIF는 프레임 단위로 디코딩되며, 400개 GIF로 구성된 갤러리도 메모리 약 25MB로 실행됩니다.
 
 <a id="materiel"></a>

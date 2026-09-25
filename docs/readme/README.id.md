@@ -62,6 +62,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 - **Konversi GIF yang disesuaikan untuk matriks** (`animematrix-convertir`): 19×24, abu-abu, 3 tingkat, tanpa dithering — lihat [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Editor gambar** LED demi LED (`animematrix-dessin`).
 - **11 tema**: 5 terinspirasi ROG (Classic, Strix, Glitch, Gold, Carbon), 5 tema merah muda (Sakura, Permen karet, Emas mawar, Lavender merah muda, Malam merah muda) dan tema sistem, dipilih di *Pengaturan* → *Tema:*.
+- **Pembaruan bawaan**: *Pengaturan* → *Periksa pembaruan*; pemeriksaan otomatis sekali sehari (dapat dimatikan). Peluncur mengunduh `.deb` dari rilis GitHub terbaru, memverifikasi checksum SHA-256-nya, lalu memasangnya setelah meminta kata sandi administrator (`pkexec`).
 - **Konsumsi sumber daya rendah**: GIF didekode per bingkai; galeri berisi 400 GIF berjalan dengan memori sekitar 25 MB.
 
 <a id="materiel"></a>

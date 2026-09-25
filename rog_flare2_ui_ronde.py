@@ -289,14 +289,22 @@ class RoundUI:
         RoundButton(self, x + 14, y, 10, "✕", "", self.app.on_close)
 
     def _build_dial(self, drawer: bool):
-        D = 540 if drawer else 660
-        self.D = D
         self.DW = 400 if drawer else 0  # largeur du tiroir au-delà du cercle
+        # Blocs de commandes créés d'abord : leur hauteur fixe la taille du tiroir ou du cadran.
+        self._sections(wrap=self.DW - 48 if drawer else int(660 * 0.66) - 30)
+        self.app.update_idletasks()
+        need = max(f.winfo_reqheight() for f in self.frames)
+        if drawer:
+            box_h = max(540 * 0.74, need + 36)
+            D = int(max(540, box_h + 24))
+        else:
+            D = int(max(660, (need + 20) / 0.6))
+        self.D = D
         W = D + self.DW
         c = self.canvas
         c.configure(width=W, height=D)
         self.cx = self.cy = D / 2
-        self.drawer_box = (D - 150, D * 0.13, W - 4, D * 0.87) if drawer else None
+        self.drawer_box = (D - 150, (D - box_h) / 2, W - 4, (D + box_h) / 2) if drawer else None
         self.drawer_id = c.create_image(0, 0, anchor="nw", tags=("drag",)) if drawer else None
         self.dial_id = c.create_image(0, 0, anchor="nw", tags=("drag",))
         self.title_id = c.create_text(self.cx, D * 0.16, text="AniMe Matrix", font=("Sans", 16, "bold"), tags=("drag",))
@@ -328,13 +336,11 @@ class RoundUI:
         # blocs de commandes : dans le tiroir (B) ou en surimpression (A)
         if drawer:
             x0 = D + 6
-            self.content_box = (x0, D * 0.13 + 18, W - 22 - x0)
-            self._sections(wrap=self.content_box[2] - 20)
+            self.content_box = (x0, self.drawer_box[1] + 18, W - 22 - x0)
         else:
             w = D * 0.66  # bloc inscrit dans le disque intérieur
             self.overlay_id = c.create_image(self.cx, self.cy, state="hidden", tags=("drag",))
             self.content_box = (self.cx - w / 2, D * 0.18, w)
-            self._sections(wrap=int(w) - 30)
             self.close_overlay = RoundButton(self, self.cx, D * 0.135, 13, "✕", "",
                                              lambda: self.toggle_section(None))
             for item in (self.close_overlay.img_id, self.close_overlay.icon_id, self.close_overlay.label_id):

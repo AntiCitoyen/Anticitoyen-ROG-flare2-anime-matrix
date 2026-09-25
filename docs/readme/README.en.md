@@ -62,6 +62,7 @@ ASUS only provides the AniMe Matrix display of this keyboard on Windows (Armoury
 - **A GIF conversion tailored to the matrix** (`animematrix-convertir`): 19×24, grayscale, 3 levels, no dithering — see [../GUIDE-GIF.md](../GUIDE-GIF.md).
 - **A drawing editor**, LED by LED (`animematrix-dessin`).
 - **11 themes**: 5 inspired by ROG (Classic, Strix, Glitch, Gold, Carbon), 5 pink ones (Sakura, Bubblegum, Rose Gold, Lavender Rose, Rose Night) and the system look, selectable in *Settings* → *Theme:*.
+- **Built-in updates**: *Settings* → *Check for updates*; automatic check once a day (can be turned off). The launcher downloads the `.deb` of the latest GitHub release, verifies its SHA-256 checksum and installs it after asking for the administrator password (`pkexec`).
 - **Low resource usage**: GIFs are decoded frame by frame; a 400-GIF gallery runs in ~25 MB of memory.
 
 <a id="materiel"></a>

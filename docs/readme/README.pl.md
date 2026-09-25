@@ -62,6 +62,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 - **Konwersję GIF-ów dostosowaną do matrycy** (`animematrix-convertir`): 19×24, skala szarości, 3 poziomy, bez ditheringu — zob. [../GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Edytor rysunku** dioda po diodzie (`animematrix-dessin`).
 - **11 motywów**: 5 inspirowanych ROG (Classic, Strix, Glitch, Gold, Carbon), 5 różowych (Sakura, Guma balonowa, Różowe złoto, Lawendowy róż, Różowa noc) oraz systemowy, do wyboru w *Ustawienia* → *Motyw:*.
+- **Wbudowane aktualizacje**: *Ustawienia* → *Sprawdź aktualizacje*; automatyczne sprawdzanie raz dziennie (można wyłączyć). Program pobiera `.deb` z najnowszego wydania na GitHubie, sprawdza sumę SHA-256 i instaluje go po podaniu hasła administratora (`pkexec`).
 - **Niskie zużycie zasobów**: GIF-y są dekodowane klatka po klatce; galeria 400 GIF-ów działa w ~25 MB pamięci.
 
 <a id="materiel"></a>

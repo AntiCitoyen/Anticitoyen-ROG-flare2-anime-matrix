@@ -62,6 +62,7 @@ ASUS solo ofrece la pantalla AniMe Matrix de este teclado en Windows (Armoury Cr
 - **Una conversión de GIF adaptada a la matriz** (`animematrix-convertir`): 19×24, escala de grises, 3 niveles, sin tramado — ver [../GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Un editor de dibujo** LED por LED (`animematrix-dessin`).
 - **11 temas**: 5 inspirados en ROG (Classic, Strix, Glitch, Gold, Carbon), 5 rosas (Sakura, Chicle, Oro rosa, Rosa lavanda, Noche rosa) y el del sistema, a elegir en *Ajustes* → *Tema:*.
+- **Actualizaciones integradas**: *Ajustes* → *Buscar actualizaciones*; comprobación automática una vez al día (desactivable). El lanzador descarga el `.deb` de la última release de GitHub, verifica su suma SHA-256 y lo instala tras pedir la contraseña de administrador (`pkexec`).
 - **Bajo consumo**: los GIF se decodifican imagen a imagen; una galería de 400 GIF funciona con ~25 MB de memoria.
 
 <a id="materiel"></a>

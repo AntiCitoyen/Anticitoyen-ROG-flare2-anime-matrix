@@ -5,7 +5,7 @@ Priority: optional
 Architecture: all
 Installed-Size: @SIZE@
 Depends: python3 (>= 3.10), python3-hid, python3-pil, python3-pil.imagetk, python3-numpy, python3-tk
-Recommends: python3-xlib, imagemagick, pulseaudio-utils, zenity, python3-pynput, libnotify-bin, xdg-user-dirs
+Recommends: python3-xlib, pkexec, imagemagick, pulseaudio-utils, zenity, python3-pynput, libnotify-bin, xdg-user-dirs
 Maintainer: AntiCitoyen <anticitoyen@users.noreply.gitlab.com>
 Homepage: https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix
 Description: AniMe Matrix display tools for the ASUS ROG Strix Flare II Animate

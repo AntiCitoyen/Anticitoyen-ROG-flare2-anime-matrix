@@ -62,6 +62,7 @@ ASUS 仅在 Windows(通过 Armoury Crate)下为该键盘的 AniMe Matrix 屏幕�
 - **适配矩阵屏的 GIF 转换**(`animematrix-convertir`):19×24、灰度、3 级灰阶、无抖动处理——详见 [GUIDE-GIF.md](../GUIDE-GIF.md)。
 - **逐颗 LED 绘图编辑器**(`animematrix-dessin`)。
 - **11 套主题**：5 套 ROG 风格（Classic、Strix、Glitch、Gold、Carbon），5 套粉色（樱花、泡泡糖、玫瑰金、薰衣草粉、粉色之夜），以及系统默认外观，可在 *设置* → *主题：* 中选择。
+- **内置更新**：*设置* → *检查更新*；每天自动检查一次（可关闭）。启动器会下载最新 GitHub release 的 `.deb`，校验其 SHA-256，并在请求管理员密码后安装（`pkexec`）。
 - **低资源占用**:GIF 按帧解码;400 个 GIF 组成的图库运行时内存占用约 25 MB。
 
 <a id="materiel"></a>

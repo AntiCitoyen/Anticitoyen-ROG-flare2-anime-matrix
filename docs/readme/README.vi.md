@@ -62,6 +62,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 - **Chuyển đổi GIF phù hợp với ma trận LED** (`animematrix-convertir`): 19×24, thang xám, 3 mức, không dithering — xem [docs/GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Trình chỉnh sửa hình vẽ** từng LED (`animematrix-dessin`).
 - **11 giao diện**: 5 giao diện lấy cảm hứng từ ROG (Classic, Strix, Glitch, Gold, Carbon), 5 giao diện hồng (Hoa anh đào, Kẹo cao su, Vàng hồng, Hồng oải hương, Đêm hồng) và giao diện hệ thống, chọn trong *Cài đặt* → *Giao diện:*.
+- **Cập nhật tích hợp**: *Cài đặt* → *Kiểm tra cập nhật*; tự động kiểm tra mỗi ngày một lần (có thể tắt). Trình khởi chạy tải `.deb` của bản phát hành GitHub mới nhất, kiểm tra mã SHA-256 và cài đặt sau khi hỏi mật khẩu quản trị (`pkexec`).
 - **Tiêu thụ tài nguyên thấp**: các GIF được giải mã từng khung hình; một thư viện 400 GIF chạy chỉ với khoảng 25 MB bộ nhớ.
 
 <a id="materiel"></a>

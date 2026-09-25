@@ -62,6 +62,7 @@ ASUS 僅在 Windows(透過 Armoury Crate)提供這款鍵盤 AniMe Matrix 螢幕�
 - **適合矩陣螢幕的 GIF 轉換**(`animematrix-convertir`):19×24、灰階、3 階灰階、不做網點化處理——詳見 [GUIDE-GIF.md](../GUIDE-GIF.md)。
 - **逐顆 LED 繪圖編輯器**(`animematrix-dessin`)。
 - **11 套主題**：5 套 ROG 風格（Classic、Strix、Glitch、Gold、Carbon），5 套粉色（櫻花、泡泡糖、玫瑰金、薰衣草粉、粉色之夜），以及系統預設外觀，可在 *設定* → *主題：* 中選擇。
+- **內建更新**：*設定* → *檢查更新*；每天自動檢查一次（可關閉）。啟動器會下載最新 GitHub release 的 `.deb`，驗證其 SHA-256，並在要求管理員密碼後安裝（`pkexec`）。
 - **低資源消耗**:GIF 逐格解碼;由 400 個 GIF 組成的圖庫執行時記憶體占用約 25 MB。
 
 <a id="materiel"></a>

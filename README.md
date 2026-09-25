@@ -61,6 +61,7 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 - **Un éditeur de dessin** LED par LED (`animematrix-dessin`).
 - **11 thèmes** : 5 inspirés de ROG (Classic, Strix, Glitch, Gold, Carbon), 5 roses (Sakura, Barbe à papa, Or rose, Rose lavande, Nuit rose) et celui du système, au choix dans *Réglages* → *Thème :*.
 - **Une interface en 19 langues** : elle suit la langue du système et se change dans *Réglages* → *Langue :*.
+- **Mises à jour intégrées** : *Réglages* → *Rechercher les mises à jour* ; vérification automatique une fois par jour (désactivable). Le lanceur télécharge le `.deb` de la dernière release GitHub, vérifie son empreinte SHA-256 et l'installe après la demande de mot de passe administrateur (`pkexec`).
 - **Une faible consommation** : les GIF sont décodés image par image ; une galerie de 400 GIF tourne en ~25 Mo de mémoire.
 
 <a id="materiel"></a>

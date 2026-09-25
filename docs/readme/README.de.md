@@ -62,6 +62,7 @@ ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury 
 - **Eine für die Matrix angepasste GIF-Konvertierung** (`animematrix-convertir`): 19×24, Graustufen, 3 Stufen, ohne Dithering — siehe [../GUIDE-GIF.md](../GUIDE-GIF.md).
 - **Einen Zeicheneditor** LED für LED (`animematrix-dessin`).
 - **11 Designs**: 5 im ROG-Stil (Classic, Strix, Glitch, Gold, Carbon), 5 in Rosa (Sakura, Kaugummi, Roségold, Lavendelrosa, Rosa Nacht) und das des Systems, wählbar unter *Einstellungen* → *Design:*.
+- **Integrierte Updates**: *Einstellungen* → *Nach Updates suchen*; automatische Prüfung einmal täglich (abschaltbar). Der Starter lädt das `.deb` des neuesten GitHub-Release herunter, prüft seine SHA-256-Prüfsumme und installiert es nach Abfrage des Administratorpassworts (`pkexec`).
 - **Geringer Ressourcenverbrauch**: GIFs werden Bild für Bild dekodiert; eine Galerie mit 400 GIFs läuft mit ~25 MB Speicher.
 
 <a id="materiel"></a>
