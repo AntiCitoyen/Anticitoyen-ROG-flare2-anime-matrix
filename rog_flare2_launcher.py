@@ -88,7 +88,7 @@ def stop_legacy_services() -> None:
 class LauncherApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("AniMe Matrix - ROG Strix Flare II Animate")
+        self.title(f"AniMe Matrix {VERSION} - ROG Strix Flare II Animate")
         themes.apply(self, themes.saved())
         self.resizable(False, False)
 
@@ -147,7 +147,7 @@ class LauncherApp(tk.Tk):
     def _build_classic(self):
         """Interface classique : onglets."""
         ttk.Label(self, text="AniMe Matrix", font=("Sans", 16, "bold")).pack(pady=(16, 4))
-        ttk.Label(self, text="ROG Strix Flare II Animate").pack(pady=(0, 8))
+        ttk.Label(self, text=f"ROG Strix Flare II Animate · v{VERSION}").pack(pady=(0, 8))
 
         tabs = ttk.Notebook(self)
         tabs.pack(fill="both", expand=True, padx=12, pady=4)
@@ -224,7 +224,9 @@ class LauncherApp(tk.Tk):
         panel = {"labels": {effect_label(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
         panel["name"] = tk.StringVar(value=effect_label(default))
         panel["speed"].trace_add("write", lambda *_a: self._speed_changed(panel))
-        cb = ttk.Combobox(tab, textvariable=panel["name"], values=list(panel["labels"]), state="readonly")
+        # liste entière déroulée : Moniteur système et jeux, en fin de liste, restaient cachés sous le défilement
+        cb = ttk.Combobox(tab, textvariable=panel["name"], values=list(panel["labels"]), state="readonly",
+                          height=len(panel["labels"]))
         cb.pack(fill="x", pady=(0, 8))
         panel["params"] = ttk.Frame(tab)
         panel["params"].pack(fill="x")

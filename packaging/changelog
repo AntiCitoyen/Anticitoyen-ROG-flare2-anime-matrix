@@ -1,5 +1,14 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Liste des effets entièrement déroulée : le moniteur système et les jeux,
+    en fin de liste, restaient cachés sous le défilement.
+  * Version affichée sous le titre de chaque interface et dans la barre de
+    titre.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.4.0) stable; urgency=medium
+
   * Démon animematrixd : seul propriétaire de l'écran, socket JSON, API
     HTTP locale, commande animematrix-ctl ; remplace les services galerie,
     horloge et lecture (reprise automatique de leur réglage).
@@ -14,7 +23,7 @@ anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
   * Paquets : RPM, Arch, Flatpak, dépôt APT signé ; portables ROG via
     asusctl (expérimental) ; tests automatiques et intégration continue.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 13:30:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.3.0) stable; urgency=medium
 

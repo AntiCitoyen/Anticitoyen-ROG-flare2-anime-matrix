@@ -20,6 +20,7 @@ from tkinter import ttk
 from PIL import Image, ImageDraw, ImageTk
 
 import rog_flare2_themes as themes
+from rog_flare2_core import VERSION
 from rog_flare2_effets import pww  # noqa: F401  (met polywollywin/ dans sys.path)
 from rog_flare2_i18n import _
 from rog_flare2_matrix_paint import FB_OFFSET
@@ -308,7 +309,7 @@ class RoundUI:
         self.drawer_id = c.create_image(0, 0, anchor="nw", tags=("drag",)) if drawer else None
         self.dial_id = c.create_image(0, 0, anchor="nw", tags=("drag",))
         self.title_id = c.create_text(self.cx, D * 0.16, text="AniMe Matrix", font=("Sans", 16, "bold"), tags=("drag",))
-        self.sub_id = c.create_text(self.cx, D * 0.21, text="ROG Strix Flare II Animate", font=("Sans", 8),
+        self.sub_id = c.create_text(self.cx, D * 0.21, text=f"ROG Strix Flare II Animate · v{VERSION}", font=("Sans", 8),
                                     tags=("drag",))
         self.panel_id = c.create_image(self.cx, D * 0.36, tags=("drag",))
         self.preview = Preview(self, self.cx, D * 0.36, D * 0.4, D * 0.13)

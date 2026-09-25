@@ -28,7 +28,7 @@ try:
 except ImportError:
     Image = None
 
-VERSION = "1.4.0"  # version unique du projet (paquet, lanceur, démon, mises à jour)
+VERSION = "1.4.1"  # version unique du projet (paquet, lanceur, démon, mises à jour)
 MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
 MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}

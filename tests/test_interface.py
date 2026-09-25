@@ -96,3 +96,32 @@ def test_classic_interface(launcher):
     steps = [("horloge", app.start_clock, lambda: ctl.request("status")["show"]["type"] == "horloge"),
              ("arrêter", app.stop_and_clear, lambda: ctl.request("status")["show"] is None)]
     assert run_steps(app, steps) == []
+
+
+def test_effect_list_fully_visible_and_game_by_real_clicks(launcher):
+    """Liste des effets entière (Moniteur système et jeux en fin de liste) ; un jeu se lance par clics."""
+    import rog_flare2_ctl as ctl
+    from rog_flare2_core import VERSION
+    app = launcher("drawer")
+    ui = app.round_ui
+    assert VERSION in ui.canvas.itemcget(ui.sub_id, "text")
+    frame = ui.frames[1]
+    cb = [w for w in frame.winfo_children() if isinstance(w, ttk.Combobox)][0]
+    assert int(cb["height"]) >= len(cb["values"])
+    lb = cb.tk.eval(f"ttk::combobox::PopdownWindow {cb}") + ".f.l"
+
+    def pick():
+        i = list(cb["values"]).index("Snake (jeu)")
+        x, y, _w, h = map(int, cb.tk.eval(f"{lb} bbox {i}").split())
+        click(cb.tk.call("winfo", "rootx", lb) + x + 20, cb.tk.call("winfo", "rooty", lb) + y + h // 2)
+
+    def launch():
+        b = [w for w in frame.winfo_children() if isinstance(w, ttk.Button) and "Lancer" in str(w["text"])][0]
+        click(b.winfo_rootx() + b.winfo_width() / 2, b.winfo_rooty() + b.winfo_height() / 2)
+
+    steps = [("section", lambda: ui.toggle_section(1, keep_open=True), lambda: True),
+             ("liste", lambda: click(cb.winfo_rootx() + cb.winfo_width() - 8,
+                                     cb.winfo_rooty() + cb.winfo_height() / 2), lambda: True),
+             ("choix", pick, lambda: cb.get() == "Snake (jeu)"),
+             ("lancer", launch, lambda: (ctl.request("status")["show"] or {}).get("name") == "Snake (game)")]
+    assert run_steps(app, steps, delay=900) == []
