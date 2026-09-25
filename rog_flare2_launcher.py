@@ -353,6 +353,7 @@ class LauncherApp(tk.Tk):
                    command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Programmation…"), command=self.open_schedule).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Voyants (micro, webcam, OBS)…"), command=self.open_badges).pack(fill="x", pady=(4, 0))
+        ttk.Button(tab, text=_("Télécommande web…"), command=self.open_remote).pack(fill="x", pady=(4, 0))
         self.tray_var = tk.BooleanVar(value=tray.AUTOSTART.exists())
         ttk.Checkbutton(tab, text=_("Icône dans la barre système"), variable=self.tray_var,
                         command=self._toggle_tray).pack(anchor="w", pady=(4, 0))
@@ -711,6 +712,10 @@ class LauncherApp(tk.Tk):
     def open_schedule(self):
         from rog_flare2_ui_programme import ScheduleWindow
         ScheduleWindow(self, lambda: self._send("config"))
+
+    def open_remote(self):
+        from rog_flare2_ui_programme import RemoteWindow
+        RemoteWindow(self, lambda: self._send("config"))
 
     def open_badges(self):
         from rog_flare2_ui_programme import BadgesWindow

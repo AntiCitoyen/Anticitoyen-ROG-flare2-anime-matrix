@@ -191,6 +191,8 @@ class Daemon:
         self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold)
         from rog_flare2_voyants import Watcher
         self.voyants = Watcher(self._badges_changed, self._announce)
+        from rog_flare2_telecommande import RemoteServer
+        self.remote = RemoteServer(self.handle)
 
     # ---------- état ----------
     @staticmethod
@@ -386,13 +388,21 @@ class Daemon:
                     "regle": (self.programme.current or {}).get("contenu"),
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
                     "overlay": self.screen.overlay_active, "skipped": self.screen.skipped,
-                    "voyants": [k for k, v in self.voyants.states.items() if v]}
+                    "voyants": [k for k, v in self.voyants.states.items() if v],
+                    "telecommande": self.remote.httpd is not None}
         if cmd == "play":
             self.play(req["show"])
             return {"ok": True}
         if cmd == "stop":
             self.stop()
             return {"ok": True}
+        if cmd == "galerie":
+            from rog_flare2_programme import show_for
+            self.play(show_for("galerie"))
+            return {"ok": True}
+        if cmd == "catalogue":
+            from rog_flare2_telecommande import catalogue
+            return {"ok": True, **catalogue()}
         if cmd == "brightness":
             self.state["brightness"] = max(0, min(100, int(req["value"])))
             self._save_state()
@@ -430,6 +440,8 @@ class Daemon:
             self.programme.start(prog_config())
             from rog_flare2_voyants import load_config as badge_config
             self.voyants.start(badge_config())
+            from rog_flare2_telecommande import load_config as remote_config
+            self.remote.start(remote_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
@@ -568,6 +580,8 @@ def main():
     daemon.programme.start(prog_config())
     from rog_flare2_voyants import load_config as badge_config
     daemon.voyants.start(badge_config())
+    from rog_flare2_telecommande import load_config as remote_config
+    daemon.remote.start(remote_config())
     try:
         server.serve_forever()
     finally:
@@ -576,6 +590,7 @@ def main():
         daemon.rgb.stop()
         daemon.programme.stop()
         daemon.voyants.stop()
+        daemon.remote.stop()
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

@@ -191,3 +191,77 @@ class BadgesWindow:
                                   "obs_mot_de_passe": self.password.get(), "annoncer": self.announce.get()})
         self.on_saved()
         self.status.config(text=_("Voyants enregistrés"))
+
+
+class RemoteWindow:
+    """Fenêtre « Télécommande web » : activation, port, adresse avec jeton, QR code (python3-qrcode)."""
+
+    def __init__(self, parent, on_saved):
+        import rog_flare2_telecommande as remote
+        self.remote, self.on_saved = remote, on_saved
+        cfg = remote.load_config()
+        self.win = tk.Toplevel(parent)
+        self.win.title(_("Télécommande web"))
+        self.win.resizable(False, False)
+        body = ttk.Frame(self.win, padding=14)
+        body.pack(fill="both", expand=True)
+        ttk.Label(body, text=_("Pilotez l'écran depuis un téléphone du même réseau : ouvrez l'adresse ou lisez "
+                               "le QR code. Réservé à un réseau de confiance ; désactivez-la après usage."),
+                  style="Muted.TLabel", wraplength=420).pack(anchor="w", pady=(0, 8))
+        self.active = tk.BooleanVar(value=bool(cfg.get("actif")))
+        ttk.Checkbutton(body, text=_("Activer la télécommande web"), variable=self.active).pack(anchor="w")
+        row = ttk.Frame(body)
+        row.pack(fill="x", pady=4)
+        ttk.Label(row, text=_("Port :")).pack(side="left")
+        self.port = tk.StringVar(value=str(cfg.get("port", 8765)))
+        ttk.Entry(row, textvariable=self.port, width=7).pack(side="left", padx=4)
+        self.url = tk.StringVar()
+        ttk.Entry(body, textvariable=self.url, state="readonly", width=52).pack(fill="x", pady=4)
+        btns = ttk.Frame(body)
+        btns.pack(fill="x")
+        ttk.Button(btns, text=_("Copier l'adresse"), command=self.copy).pack(side="left")
+        ttk.Button(btns, text=_("Nouveau jeton"), command=self.regenerate).pack(side="left", padx=6)
+        self.qr = ttk.Label(body)
+        self.qr.pack(pady=6)
+        self.status = ttk.Label(body, text="", style="Muted.TLabel")
+        self.status.pack(anchor="w")
+        ttk.Button(body, text=_("Enregistrer"), command=self.save).pack(fill="x", pady=(8, 0))
+        self.refresh()
+
+    def refresh(self):
+        cfg = self.remote.load_config()
+        try:
+            cfg["port"] = int(self.port.get())
+        except ValueError:
+            pass
+        self.url.set(self.remote.url(cfg))
+        try:
+            import qrcode
+            from PIL import ImageTk
+            img = qrcode.make(self.url.get(), box_size=4, border=2).get_image().convert("RGB")
+            self._qr_img = ImageTk.PhotoImage(img)
+            self.qr.configure(image=self._qr_img, text="")
+        except ImportError:
+            self.qr.configure(text=_("QR code : installer python3-qrcode"), image="")
+
+    def copy(self):
+        self.win.clipboard_clear()
+        self.win.clipboard_append(self.url.get())
+        self.status.config(text=_("Adresse copiée"))
+
+    def regenerate(self):
+        self.remote.new_token()
+        self.refresh()
+        self.save()
+
+    def save(self):
+        cfg = self.remote.load_config()
+        try:
+            cfg["port"] = max(1024, min(65535, int(self.port.get())))
+        except ValueError:
+            pass
+        cfg["actif"] = self.active.get()
+        self.remote.save_config(cfg)
+        self.refresh()
+        self.on_saved()
+        self.status.config(text=_("Télécommande activée") if cfg["actif"] else _("Télécommande désactivée"))
