@@ -4,6 +4,7 @@
  "AniMe Matrix est à jour ({version}).": "AniMe Matrix è aggiornato ({version}).",
  "AniMe Matrix pour Linux {version}": "AniMe Matrix per Linux {version}",
  "AniMe Matrix tourne depuis les sources : mettez à jour avec git pull, ou installez le paquet .deb de la page des versions.": "AniMe Matrix è in esecuzione dai sorgenti: aggiorna con git pull, oppure installa il pacchetto .deb dalla pagina delle release.",
+ "Aperçu fidèle (avant envoi)": "Anteprima fedele (prima dell'invio)",
  "Applications (vide = toutes) :": "Applicazioni (vuoto = tutte):",
  "Arrondie": "Arrotondata",
  "Arrêté": "Fermato",
@@ -197,5 +198,6 @@
  "▶ Lancer les GIF": "▶ Avvia GIF",
  "☕ Soutenir le projet (Buy Me a Coffee)": "☕ Sostieni il progetto (Buy Me a Coffee)",
  "✎ Dessiner mon propre motif (éditeur)": "✎ Disegna il mio motivo (editor)",
+ "👁 Aperçu fidèle (avant envoi)": "👁 Anteprima fedele (prima dell'invio)",
  "🕒 Horloge": "🕒 Orologio"
 }

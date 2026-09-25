@@ -197,5 +197,7 @@
  "Couleurs du clavier (OpenRGB) :": "Réglages : synchronisation des couleurs des touches via OpenRGB",
  "Désactivées": "Réglages : synchronisation des couleurs des touches via OpenRGB",
  "Couleur du thème": "Réglages : synchronisation des couleurs des touches via OpenRGB",
- "Pulsation avec l'écran": "Réglages : synchronisation des couleurs des touches via OpenRGB"
+ "Pulsation avec l'écran": "Réglages : synchronisation des couleurs des touches via OpenRGB",
+ "👁 Aperçu fidèle (avant envoi)": "onglet GIF : aperçu fidèle (simulateur) avant envoi au clavier",
+ "Aperçu fidèle (avant envoi)": "onglet GIF : aperçu fidèle (simulateur) avant envoi au clavier"
 }

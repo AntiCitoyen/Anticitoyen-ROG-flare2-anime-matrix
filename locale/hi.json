@@ -4,6 +4,7 @@
  "AniMe Matrix est à jour ({version}).": "AniMe Matrix अद्यतित है ({version})।",
  "AniMe Matrix pour Linux {version}": "Linux के लिए AniMe Matrix {version}",
  "AniMe Matrix tourne depuis les sources : mettez à jour avec git pull, ou installez le paquet .deb de la page des versions.": "AniMe Matrix स्रोत से चल रहा है: git pull से अपडेट करें, या रिलीज़ पेज से .deb पैकेज इंस्टॉल करें।",
+ "Aperçu fidèle (avant envoi)": "सटीक पूर्वावलोकन (भेजने से पहले)",
  "Applications (vide = toutes) :": "ऐप्स (खाली = सभी):",
  "Arrondie": "गोलाकार",
  "Arrêté": "रुका हुआ",
@@ -197,5 +198,6 @@
  "▶ Lancer les GIF": "▶ GIF चलाएँ",
  "☕ Soutenir le projet (Buy Me a Coffee)": "☕ प्रोजेक्ट को सपोर्ट करें (Buy Me a Coffee)",
  "✎ Dessiner mon propre motif (éditeur)": "✎ अपना खुद का पैटर्न बनाएँ (एडिटर)",
+ "👁 Aperçu fidèle (avant envoi)": "👁 सटीक पूर्वावलोकन (भेजने से पहले)",
  "🕒 Horloge": "🕒 घड़ी"
 }

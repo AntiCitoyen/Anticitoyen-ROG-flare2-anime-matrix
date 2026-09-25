@@ -4,6 +4,7 @@
  "AniMe Matrix est à jour ({version}).": "AniMe Matrix is up-to-date ({version}).",
  "AniMe Matrix pour Linux {version}": "AniMe Matrix voor Linux {version}",
  "AniMe Matrix tourne depuis les sources : mettez à jour avec git pull, ou installez le paquet .deb de la page des versions.": "AniMe Matrix draait vanuit de broncode: werk bij met git pull, of installeer het .deb-pakket van de releasepagina.",
+ "Aperçu fidèle (avant envoi)": "Getrouwe voorvertoning (vóór verzenden)",
  "Applications (vide = toutes) :": "Apps (leeg = alle):",
  "Arrondie": "Afgerond",
  "Arrêté": "Gestopt",
@@ -197,5 +198,6 @@
  "▶ Lancer les GIF": "▶ GIF's afspelen",
  "☕ Soutenir le projet (Buy Me a Coffee)": "☕ Het project steunen (Buy Me a Coffee)",
  "✎ Dessiner mon propre motif (éditeur)": "✎ Mijn eigen patroon tekenen (editor)",
+ "👁 Aperçu fidèle (avant envoi)": "👁 Getrouwe voorvertoning (vóór verzenden)",
  "🕒 Horloge": "🕒 Klok"
 }

@@ -194,6 +194,7 @@ class LauncherApp(tk.Tk):
                         variable=self.converted_var).pack(anchor="w")
         self.play_btn = ttk.Button(tab, text=_("▶ Lancer les GIF"), command=self.start_playback, state="disabled")
         self.play_btn.pack(fill="x", pady=(8, 4))
+        ttk.Button(tab, text=_("👁 Aperçu fidèle (avant envoi)"), command=self.open_preview).pack(fill="x", pady=(0, 4))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
         ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
@@ -650,6 +651,17 @@ class LauncherApp(tk.Tk):
         apps = [a.strip() for a in self.notif_apps.get().split(",") if a.strip()]
         notifs.save_config({"actif": bool(self.notif_var.get()), "applis": apps})
         self._send("config")
+
+    def open_preview(self):
+        """Aperçu fidèle des GIF sélectionnés, sans rien envoyer au clavier."""
+        if not self.gif_files:
+            return
+        try:
+            from rog_flare2_simulateur import PreviewWindow
+            PreviewWindow(self, self.gif_files, self.brightness.get, _("Aperçu fidèle (avant envoi)"),
+                          pick=pick_version if self.converted_var.get() else (lambda f: f))
+        except ImportError as exc:  # PIL.ImageTk absent
+            self.set_status(_("Erreur : {err}").format(err=exc))
 
     def open_plugin_dir(self):
         """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""

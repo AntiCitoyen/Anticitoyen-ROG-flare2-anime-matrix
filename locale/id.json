@@ -4,6 +4,7 @@
  "AniMe Matrix est à jour ({version}).": "AniMe Matrix sudah terbaru ({version}).",
  "AniMe Matrix pour Linux {version}": "AniMe Matrix untuk Linux {version}",
  "AniMe Matrix tourne depuis les sources : mettez à jour avec git pull, ou installez le paquet .deb de la page des versions.": "AniMe Matrix berjalan dari sumber: perbarui dengan git pull, atau instal paket .deb dari halaman rilis.",
+ "Aperçu fidèle (avant envoi)": "Pratinjau akurat (sebelum dikirim)",
  "Applications (vide = toutes) :": "Aplikasi (kosong = semua):",
  "Arrondie": "Membulat",
  "Arrêté": "Berhenti",
@@ -197,5 +198,6 @@
  "▶ Lancer les GIF": "▶ Putar GIF",
  "☕ Soutenir le projet (Buy Me a Coffee)": "☕ Dukung proyek ini (Buy Me a Coffee)",
  "✎ Dessiner mon propre motif (éditeur)": "✎ Gambar motif saya sendiri (editor)",
+ "👁 Aperçu fidèle (avant envoi)": "👁 Pratinjau akurat (sebelum dikirim)",
  "🕒 Horloge": "🕒 Jam"
 }
