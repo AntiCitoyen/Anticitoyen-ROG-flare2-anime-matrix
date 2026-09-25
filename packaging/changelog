@@ -1,5 +1,15 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Interfaces rondes : les boutons (GIF, Effets, Audio, Horloge,
+    Réglages, Arrêter) ne répondaient pas ; l'image de l'arc de
+    luminosité, qui couvre le cadran, captait tous les clics. Elle est
+    désormais insensible aux clics : seul un clic sur l'anneau règle la
+    luminosité. Le disque des réglages du cadran se déplace aussi.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.2.0) stable; urgency=medium
+
   * 4 interfaces au choix (Réglages → Interface) : Cadran + tiroir (par
     défaut), Cadran, Arrondie, Classique. Fenêtres réellement rondes
     (extension X11 SHAPE), boutons ronds, luminosité en arc ou en molette,
@@ -9,7 +19,7 @@ anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
   * Dépendance python3-pil.imagetk ; python3-xlib recommandé.
   * README : captures des 4 interfaces dans les 19 langues.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 11:30:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.1.1) stable; urgency=medium
 

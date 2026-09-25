@@ -154,13 +154,30 @@ class ArcSlider:
         self.ui, self.cx, self.cy, self.r, self.width = ui, cx, cy, r, width
         self.start, self.sweep, self.var, self.lo, self.hi = start, sweep, var, lo, hi
         c = ui.canvas
-        self.tag = f"arc{id(self)}"
-        self.img_id = c.create_image(cx, cy, tags=(self.tag,))
-        self.label_id = c.create_text(*label, font=("Sans", 9), tags=(self.tag,)) if label else None
-        c.tag_bind(self.tag, "<Button-1>", self._drag)
-        c.tag_bind(self.tag, "<B1-Motion>", self._drag)
+        # Image carrée qui couvre les boutons : insensible aux clics (state="disabled") ;
+        # seul un clic sur l'anneau lui-même règle la valeur (on_arc).
+        self.img_id = c.create_image(cx, cy, state="disabled")
+        self.label_id = c.create_text(*label, font=("Sans", 9), state="disabled") if label else None
+        self.dragging = False
+        c.bind("<ButtonPress-1>", self._press, add="+")
+        c.bind("<B1-Motion>", lambda e: self.dragging and self._drag(e), add="+")
+        c.bind("<ButtonRelease-1>", lambda _e: setattr(self, "dragging", False), add="+")
         var.trace_add("write", lambda *_a: self.redraw())
         self.redraw()
+
+    def on_arc(self, x, y) -> bool:
+        """(x, y) sur l'anneau, à la largeur du bouton près, dans l'étendue de l'arc."""
+        dist = math.hypot(x - self.cx, y - self.cy)
+        if abs(dist - self.r) > self.width * 1.8:
+            return False
+        ang = math.degrees(math.atan2(y - self.cy, x - self.cx)) % 360
+        rel = ((ang - self.start) if self.sweep > 0 else (self.start - ang)) % 360
+        return rel <= abs(self.sweep) + 6 or rel >= 354
+
+    def _press(self, e):
+        self.dragging = self.on_arc(e.x, e.y)
+        if self.dragging:
+            self._drag(e)
 
     def _value(self) -> float:
         return (self.var.get() - self.lo) / (self.hi - self.lo)
@@ -239,6 +256,7 @@ class RoundUI:
         self.app, self.mode = app, mode
         self.p = themes.palette()
         self.open_section: int | None = None
+        self._drag_origin: tuple[int, int] | None = None
         self.buttons: dict[int, RoundButton] = {}
         self.all_buttons: list[RoundButton] = []
         app.resizable(False, False)
@@ -314,7 +332,7 @@ class RoundUI:
             self._sections(wrap=self.content_box[2] - 20)
         else:
             w = D * 0.66  # bloc inscrit dans le disque intérieur
-            self.overlay_id = c.create_image(self.cx, self.cy, state="hidden")
+            self.overlay_id = c.create_image(self.cx, self.cy, state="hidden", tags=("drag",))
             self.content_box = (self.cx - w / 2, D * 0.18, w)
             self._sections(wrap=int(w) - 30)
             self.close_overlay = RoundButton(self, self.cx, D * 0.135, 13, "✕", "",
@@ -481,9 +499,13 @@ class RoundUI:
         a.geometry(f"+{x}+{y}")
 
     def _drag_start(self, e):
-        self._drag_origin = (e.x_root - self.app.winfo_x(), e.y_root - self.app.winfo_y())
+        # un clic sur l'arc de luminosité règle la valeur, il ne déplace pas la fenêtre
+        self._drag_origin = None if self.arc.on_arc(e.x, e.y) else (
+            e.x_root - self.app.winfo_x(), e.y_root - self.app.winfo_y())
 
     def _drag_move(self, e):
+        if self._drag_origin is None:
+            return
         dx, dy = self._drag_origin
         self.app.geometry(f"+{e.x_root - dx}+{e.y_root - dy}")
 
