@@ -144,6 +144,11 @@ class KeyboardReactEffect(pww.KeyboardReactEffect):
 
 EFFECTS[KeyboardReactEffect.name] = KeyboardReactEffect
 
+from rog_flare2_texte import ScrollTextEffect  # noqa: E402  (texte défilant, toutes écritures)
+EFFECTS[ScrollTextEffect.name] = ScrollTextEffect
+from rog_flare2_horloges import CLOCK_EFFECTS  # noqa: E402  (cadrans d'horloge)
+for _clock in CLOCK_EFFECTS:
+    EFFECTS[_clock.name] = _clock
 from rog_flare2_infos import SystemMonitorEffect  # noqa: E402  (écran d'infos système)
 EFFECTS[SystemMonitorEffect.name] = SystemMonitorEffect
 from rog_flare2_mpris import NowPlayingEffect  # noqa: E402  (morceau en cours, MPRIS)

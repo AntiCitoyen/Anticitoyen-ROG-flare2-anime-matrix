@@ -287,6 +287,16 @@ class LauncherApp(tk.Tk):
         cb.pack(side="left", padx=8)
         cb.bind("<<ComboboxSelected>>", lambda _e: self.set_boot_mode(boot_labels[self.boot_var.get()]))
 
+        import rog_flare2_horloges as horloges
+        face = ttk.Frame(tab)
+        face.pack(fill="x", pady=4)
+        ttk.Label(face, text=_("Cadran de l'horloge :")).pack(side="left")
+        face_labels = {_(label): key for key, label in horloges.FACE_LABELS.items()}
+        self.face_var = tk.StringVar(value=_(horloges.FACE_LABELS[horloges.saved_face()]))
+        fcb = ttk.Combobox(face, textvariable=self.face_var, values=list(face_labels), state="readonly", width=14)
+        fcb.pack(side="left", padx=8)
+        fcb.bind("<<ComboboxSelected>>", lambda _e: self.set_face(face_labels[self.face_var.get()]))
+
         lang = ttk.Frame(tab)
         lang.pack(fill="x", pady=4)
         ttk.Label(lang, text=_("Langue :")).pack(side="left")
@@ -342,6 +352,7 @@ class LauncherApp(tk.Tk):
         ttk.Button(tab, text=_("Dossier des extensions (effets)"),
                    command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Programmation…"), command=self.open_schedule).pack(fill="x", pady=(4, 0))
+        ttk.Button(tab, text=_("Voyants (micro, webcam, OBS)…"), command=self.open_badges).pack(fill="x", pady=(4, 0))
         self.tray_var = tk.BooleanVar(value=tray.AUTOSTART.exists())
         ttk.Checkbutton(tab, text=_("Icône dans la barre système"), variable=self.tray_var,
                         command=self._toggle_tray).pack(anchor="w", pady=(4, 0))
@@ -534,6 +545,13 @@ class LauncherApp(tk.Tk):
     def start_clock(self):
         self._play({"type": "horloge"}, _("Horloge"))
 
+    def set_face(self, face: str):
+        """Cadran mémorisé ; l'horloge en cours change tout de suite."""
+        import rog_flare2_horloges as horloges
+        horloges.save_face(face)
+        if (self.show or {}).get("type") == "horloge":
+            self.start_clock()
+
     def start_effect(self, panel: dict):
         name = self._effect_name(panel)
         show = {"type": "effet", "name": name, "params": {a: v.get() for a, v in panel["values"].items()},
@@ -693,6 +711,10 @@ class LauncherApp(tk.Tk):
     def open_schedule(self):
         from rog_flare2_ui_programme import ScheduleWindow
         ScheduleWindow(self, lambda: self._send("config"))
+
+    def open_badges(self):
+        from rog_flare2_ui_programme import BadgesWindow
+        BadgesWindow(self, lambda: self._send("config"))
 
     def open_lists(self):
         from rog_flare2_listes import ListsWindow

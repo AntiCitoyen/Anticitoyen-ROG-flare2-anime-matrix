@@ -77,11 +77,13 @@ class Screen:
         self.connected = False
         self.released = False  # rendu à un autre programme (éditeur de dessin)
         self.last = BLANK
+        self.base = BLANK  # dernière trame de la lecture, sans voyants
         self.overlay_active = False
         self.holds: set[str] = set()  # raisons d'écran noir (verrouillage, veille, plein écran…)
         self.sent: bytes | None = None  # dernière trame réellement envoyée (None : à renvoyer)
         self.sent_at = 0.0
         self.skipped = 0  # trames identiques non renvoyées (statistique)
+        self.badges: list[int] = []  # LED des voyants allumés (rog_flare2_voyants), par-dessus la lecture
 
     def _ensure(self) -> bool:
         if self.released:
@@ -102,6 +104,13 @@ class Screen:
         if self.holds:
             return
         with self.lock:
+            if layer == "base":
+                self.base = frame
+            if self.badges:
+                composed = bytearray(frame)
+                for i in self.badges:
+                    composed[FB_OFFSET + i] = 255
+                frame = bytes(composed)
             self.last = frame
             if not self._ensure():
                 return
@@ -116,6 +125,12 @@ class Screen:
                 self.connected = False
                 self.sent = None
                 self.transport.close()
+
+    def set_badges(self, leds: list[int], base: bytes):
+        """Voyants changés : la dernière trame de base est réécrite avec eux."""
+        self.badges = leds
+        if not self.overlay_active:
+            self.write(base)
 
     def hold(self, reason: str, on: bool):
         """Écran noir tant qu'une raison est active ; la lecture reprend quand il n'en reste aucune."""
@@ -174,6 +189,8 @@ class Daemon:
         from rog_flare2_programme import Programme
         self.manual: dict | None = None  # dernière lecture demandée par un client (reprise après une règle)
         self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold)
+        from rog_flare2_voyants import Watcher
+        self.voyants = Watcher(self._badges_changed, self._announce)
 
     # ---------- état ----------
     @staticmethod
@@ -199,6 +216,16 @@ class Daemon:
 
     def brightness(self) -> int:
         return int(self.state.get("brightness", 60))
+
+    def _badges_changed(self, states: dict):
+        from rog_flare2_voyants import BADGES
+        self.screen.set_badges([i for name, on in states.items() if on for i in BADGES[name]], self.screen.base)
+
+    def _announce(self, name: str):
+        from rog_flare2_i18n import _
+        texts = {"micro": _("Micro coupé") if self.voyants.cfg.get("micro") == "coupe" else _("Micro actif"),
+                 "webcam": _("Webcam active"), "obs": _("OBS en direct")}
+        self.notify(texts[name], 0)
 
     # ---------- lecture de base ----------
     def _job(self, show: dict):
@@ -235,6 +262,10 @@ class Daemon:
                     self.effect = None
             return job
         if kind == "horloge":
+            from rog_flare2_horloges import FACES, saved_face
+            effect_name = FACES.get(show.get("cadran") or saved_face())
+            if effect_name:  # cadran analogique, binaire, en mots, stylisé
+                return self._job({"type": "effet", "name": effect_name, "params": {}, "speed": 1.0})
             return lambda stop: play_clock(layer, stop, self.brightness)
         if kind == "liste":
             from rog_flare2_listes import DEFAULT_SECONDS, item_show, load_lists
@@ -320,7 +351,8 @@ class Daemon:
         """Surimpression d'un texte défilant ; duration <= 0 : le temps d'un passage complet."""
         from rog_flare2_effets import make_effect, run_effect
         if duration <= 0:
-            duration = (37 + 5 * len(text)) / 20.0 + 0.5  # 20 colonnes/s, police de 5 colonnes
+            from rog_flare2_texte import render
+            duration = (37 + render(text).shape[1]) / 20.0 + 0.5  # 20 colonnes/s : un passage complet
         with self.lock:
             self.overlay_stop.set()
             if self.overlay_thread is not None:
@@ -353,7 +385,8 @@ class Daemon:
                     "openrgb": self.rgb.status, "hold": sorted(self.screen.holds),
                     "regle": (self.programme.current or {}).get("contenu"),
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
-                    "overlay": self.screen.overlay_active, "skipped": self.screen.skipped}
+                    "overlay": self.screen.overlay_active, "skipped": self.screen.skipped,
+                    "voyants": [k for k, v in self.voyants.states.items() if v]}
         if cmd == "play":
             self.play(req["show"])
             return {"ok": True}
@@ -395,6 +428,8 @@ class Daemon:
             from rog_flare2_programme import load_config as prog_config
             self.rgb.start(rgb_config())
             self.programme.start(prog_config())
+            from rog_flare2_voyants import load_config as badge_config
+            self.voyants.start(badge_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
@@ -531,6 +566,8 @@ def main():
     daemon.rgb.start(rgb_config())
     from rog_flare2_programme import load_config as prog_config
     daemon.programme.start(prog_config())
+    from rog_flare2_voyants import load_config as badge_config
+    daemon.voyants.start(badge_config())
     try:
         server.serve_forever()
     finally:
@@ -538,6 +575,7 @@ def main():
         daemon.notifs.stop()
         daemon.rgb.stop()
         daemon.programme.stop()
+        daemon.voyants.stop()
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

@@ -136,3 +136,58 @@ class ScheduleWindow:
         prog.save_config(cfg)
         self.on_saved()
         self.status.config(text=_("Programmation enregistrée"))
+
+
+class BadgesWindow:
+    """Fenêtre « Voyants » : micro, webcam, OBS (rog_flare2_voyants)."""
+
+    MIC = {"": "Désactivé", "coupe": "Quand il est coupé", "actif": "Quand une application l'utilise"}
+
+    def __init__(self, parent, on_saved):
+        import rog_flare2_voyants as voyants
+        self.voyants, self.on_saved = voyants, on_saved
+        cfg = voyants.load_config()
+        self.win = tk.Toplevel(parent)
+        self.win.title(_("Voyants"))
+        self.win.resizable(False, False)
+        body = ttk.Frame(self.win, padding=14)
+        body.pack(fill="both", expand=True)
+        ttk.Label(body, text=_("Petits blocs lumineux en haut à gauche de l'écran : 1 micro, 2 webcam, 3 OBS."),
+                  style="Muted.TLabel", wraplength=420).pack(anchor="w", pady=(0, 8))
+        mic = ttk.Frame(body)
+        mic.pack(fill="x", pady=2)
+        ttk.Label(mic, text=_("Micro :")).pack(side="left")
+        self.mic_labels = {_(v): k for k, v in self.MIC.items()}
+        self.mic = tk.StringVar(value=_(self.MIC.get(cfg.get("micro", ""), "Désactivé")))
+        ttk.Combobox(mic, textvariable=self.mic, values=list(self.mic_labels), state="readonly",
+                     width=30).pack(side="left", padx=6)
+        self.webcam = tk.BooleanVar(value=bool(cfg.get("webcam")))
+        ttk.Checkbutton(body, text=_("Webcam utilisée"), variable=self.webcam).pack(anchor="w", pady=2)
+        self.obs = tk.BooleanVar(value=bool(cfg.get("obs")))
+        ttk.Checkbutton(body, text=_("OBS en direct ou en enregistrement (obs-websocket)"),
+                        variable=self.obs).pack(anchor="w", pady=2)
+        obs = ttk.Frame(body)
+        obs.pack(fill="x", padx=(22, 0))
+        ttk.Label(obs, text=_("Port :")).pack(side="left")
+        self.port = tk.StringVar(value=str(cfg.get("obs_port", 4455)))
+        ttk.Entry(obs, textvariable=self.port, width=6).pack(side="left", padx=4)
+        ttk.Label(obs, text=_("Mot de passe :")).pack(side="left", padx=(8, 0))
+        self.password = tk.StringVar(value=cfg.get("obs_mot_de_passe", ""))
+        ttk.Entry(obs, textvariable=self.password, width=16, show="•").pack(side="left", padx=4)
+        self.announce = tk.BooleanVar(value=bool(cfg.get("annoncer", True)))
+        ttk.Checkbutton(body, text=_("Annoncer chaque changement par un texte défilant"),
+                        variable=self.announce).pack(anchor="w", pady=(6, 2))
+        self.status = ttk.Label(body, text="", style="Muted.TLabel")
+        self.status.pack(anchor="w")
+        ttk.Button(body, text=_("Enregistrer"), command=self.save).pack(fill="x", pady=(8, 0))
+
+    def save(self):
+        try:
+            port = int(self.port.get())
+        except ValueError:
+            port = 4455
+        self.voyants.save_config({"micro": self.mic_labels.get(self.mic.get(), ""), "webcam": self.webcam.get(),
+                                  "obs": self.obs.get(), "obs_port": port,
+                                  "obs_mot_de_passe": self.password.get(), "annoncer": self.announce.get()})
+        self.on_saved()
+        self.status.config(text=_("Voyants enregistrés"))

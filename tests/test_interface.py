@@ -28,8 +28,23 @@ def run_steps(app, steps, delay=500):
             app.destroy()
             return
         name, action, check = steps[k]
-        action()
-        app.after(delay, lambda: (None if check() else failures.append(name), step(k + 1)))
+
+        def verify():
+            try:
+                ok = check()
+            except Exception as exc:  # une vérification qui plante ne doit pas bloquer la boucle Tk
+                ok = False
+                name_err = f"{name} ({exc!r})"
+                failures.append(name_err)
+            else:
+                if not ok:
+                    failures.append(name)
+            step(k + 1)
+        try:
+            action()
+        except Exception as exc:
+            failures.append(f"{name} : action ({exc!r})")
+        app.after(delay, verify)
     app.after(1000, step)
     app.mainloop()
     return failures

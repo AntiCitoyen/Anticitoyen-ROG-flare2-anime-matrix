@@ -40,7 +40,7 @@ def test_effect_scrolls_then_visualizes(player, monkeypatch):
     M.WATCHER.track, M.WATCHER.changed_at = M.now_playing(), time.monotonic()
     eff = E.make_effect("Now Playing", {"scroll": 3})
     eff.tick(0.05)
-    assert eff._text is not None and eff._text.message == "AURELIE - CAFE CREME"
+    assert eff._text is not None and eff._text.message == "Aurélie - Café crème"  # texte d origine : rog_flare2_texte gère les accents
     for _ in range(400):
         eff.tick(0.1)
     assert eff._text is None  # un passage puis le visualiseur

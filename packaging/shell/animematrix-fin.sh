@@ -5,7 +5,7 @@
 [ -n "$__amx_charge" ] && return 0
 __amx_charge=1
 : "${ANIMEMATRIX_FIN_SECONDES:=30}"
-: "${ANIMEMATRIX_FIN_IGNORE:=vim nvim vi nano emacs less more man ssh top htop btop watch tail claude python python3 ipython bash zsh fish sudo su tmux screen}"
+: "${ANIMEMATRIX_FIN_IGNORE:=vim nvim vi nano emacs less more man ssh top htop btop watch tail python python3 ipython bash zsh fish sudo su tmux screen}"
 
 __amx_debut() {  # $1 : ligne de commande
     [ -n "$__amx_pret" ] || return 0

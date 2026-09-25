@@ -115,7 +115,7 @@ class NowPlayingEffect(BaseEffect):
         if track and WATCHER.changed_at != self._shown_at:  # nouvelle piste : titre défilant
             self._shown_at = WATCHER.changed_at
             artist, title = track
-            self._text = self._make("Scroll Text", {"message": ascii_upper(f"{artist} - {title}" if artist else title),
+            self._text = self._make("Scroll Text", {"message": f"{artist} - {title}" if artist else title,
                                                     "speed": 100})
             self._scrolled = 0.0
         if self._text is not None:
