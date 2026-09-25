@@ -20,8 +20,7 @@ optdepends=('python-xlib: round windows (X11 SHAPE)'
             'ffmpeg: videos, webcam, screen mirror'
             'gst-plugin-pipewire: screen mirror under Wayland'
             'python-qrcode: QR code of the web remote'
-            'tkdnd: drag and drop of files'
-            'openrgb: keyboard colour sync')
+            'tkdnd: drag and drop of files')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 install=animematrix.install

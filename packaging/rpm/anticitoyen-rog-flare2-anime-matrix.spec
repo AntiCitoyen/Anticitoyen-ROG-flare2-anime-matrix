@@ -16,7 +16,7 @@ Recommends:     python3-evdev, xprop, xwininfo, ffmpeg-free, python3-qrcode, tkd
 Linux tools for the 312-LED AniMe Matrix display of the ASUS ROG Strix Flare II
 Animate keyboard (USB 0b05:19fc): launcher with round layouts, GIF gallery,
 clock, effects and audio visualizers, games, system monitor, desktop
-notifications, schedule, animation editor, community library, OpenRGB sync.
+notifications, schedule, animation editor, community library, key colours and effects.
 
 %prep
 %autosetup -n Anticitoyen-ROG-flare2-anime-matrix-%{version}

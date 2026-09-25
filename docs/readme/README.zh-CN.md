@@ -77,7 +77,7 @@ ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matr
 - **播放列表和收藏**：GIF、效果、时钟……各按设定的时长依次循环播放；也可在系统托盘图标和命令行中使用。
 - **网页遥控**：通过一个网页，用局域网内的手机控制屏幕（二维码、令牌）。
 - **长时间命令的结束**：在终端中，长时间运行的命令结束时显示「完成：make 2 min 05」。
-- **通过 OpenRGB 同步键盘颜色**：使用主题颜色，或与屏幕同步呼吸效果。
+- **按键颜色与效果**，无需 OpenRGB：彩虹、静态、呼吸、颜色循环、触发、涟漪、星空、流沙、电流、雨滴——由键盘自身运行，拔下后仍保留；或主题颜色、随屏幕脉动。
 - **系统托盘图标**：快捷菜单（模式、亮度）。
 
 **便捷**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-有用的系统工具：`imagemagick`（经典转换）、`pulseaudio-utils`（`parec`，用于音频）、`zenity`（文件选择器）、`libnotify-bin`（通知）、`python3-gi` 与 `gir1.2-ayatanaappindicator3-0.1`（系统托盘图标）、`openrgb`（键盘颜色）、`ffmpeg`（视频、摄像头、屏幕镜像）、`python3-evdev`（Wayland 下的键盘响应）、`x11-utils`（X11 下的活动窗口）、`python3-qrcode`（遥控二维码）、`tkdnd`（拖放）。
+有用的系统工具：`imagemagick`（经典转换）、`pulseaudio-utils`（`parec`，用于音频）、`zenity`（文件选择器）、`libnotify-bin`（通知）、`python3-gi` 与 `gir1.2-ayatanaappindicator3-0.1`（系统托盘图标）、`ffmpeg`（视频、摄像头、屏幕镜像）、`python3-evdev`（Wayland 下的键盘响应）、`x11-utils`（X11 下的活动窗口）、`python3-qrcode`（遥控二维码）、`tkdnd`（拖放）。
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 图片**：*GIF/图片…* 或 *文件夹（图库）…*（或拖放到窗口上）；*真实几何* 保持比例（裁切边角而不是拉伸图像）；*👁 真实预览（发送前）* 在不发送任何内容的情况下展示渲染效果；*🎞 创建动画（编辑器）*；*📚 动画库*；*★ 播放列表和收藏*；*🖼 缩略图库*（单击：播放，右键：收藏）；*🎥 摄像头* 与 *🖥 屏幕镜像*；*智能转换* 用于转换 GIF。
 - **效果** 与 **音频**：选择、调整，然后 *▶ 启动效果*。滑块实时生效；*节奏* 用于加快或减慢整个动画。*文字* 效果可输入你的消息并设置滚动方向。游戏使用方向键、空格与回车操作，需将启动器窗口置于前台；双人乒乓：左侧玩家使用 Z/W 与 S。
 - **亮度**、**🕒 时钟**、**■ 停止**（清空屏幕）在所有标签页中通用。
-- **设置**：会话启动内容（GIF 图库、时钟、上次播放或无）、时钟表盘、语言、主题、界面、桌面通知、键盘颜色（OpenRGB）、*计划…*（触发条件、按应用配置、时间段）、*指示灯…*、*网页遥控…*、系统托盘图标、长时间命令的结束、扩展文件夹、更新。
+- **设置**：会话启动内容（GIF 图库、时钟、上次播放或无）、时钟表盘、语言、主题、界面、桌面通知、键盘颜色、*计划…*（触发条件、按应用配置、时间段）、*指示灯…*、*网页遥控…*、系统托盘图标、长时间命令的结束、扩展文件夹、更新。
 
 **关闭启动器不会中断任何内容**：`animematrixd` 守护进程会继续显示。*■ 停止* 会熄灭屏幕。
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *设置* → *显示长时间命令的结束（终端）* 会在 `~/.bashrc`（以及 `~/.zshrc`）中添加一行：任何运行超过 30 秒的命令结束时都会显示「完成：make 2 min 05」或「失败（2）：…」。阈值：`ANIMEMATRIX_FIN_SECONDES`；交互式命令（编辑器、`ssh`、`less` 等）会被忽略。
 
-### 键盘颜色（OpenRGB）
+### 键盘颜色
 
-*设置* → *键盘颜色（OpenRGB）*：使用主题颜色，或与屏幕同步呼吸效果。守护进程会在需要时启动 `openrgb --server`。OpenRGB 无法得知键盘此前的灯效：要恢复键盘中保存的原始效果，需拔下键盘再重新插上。
+*设置* → *🌈 键盘颜色…*：效果（彩虹、静态、呼吸、颜色循环、触发、涟漪、星空、流沙、电流、雨滴）、颜色、速度、亮度、方向。*试用* 立即应用，*保存到键盘* 拔下后仍保留。*主题颜色* 和 *随屏幕脉动* 由守护进程逐键发送；退出后恢复已保存的效果。命令行：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。
 
 ### ROG 笔记本电脑（实验性）
 
@@ -262,7 +262,6 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | 摄像头、视频或屏幕镜像无法使用 | 缺少 `ffmpeg` | `sudo apt install ffmpeg`；在 Wayland 下，屏幕镜像通过门户（`gstreamer1.0-pipewire`）实现 |
 | 在 Wayland 下按应用配置或全屏检测不起作用 | 合成器无法提供活动窗口 | GNOME：*Window Calls* 扩展；KDE：`kdotool`；Sway 与 Hyprland：无需任何操作 |
 | 圆形窗口显示为矩形 | 缺少 SHAPE 扩展或 `python3-xlib` | `sudo apt install python3-xlib`，或 *设置* → *界面：* → *经典* |
-| 使用 OpenRGB 后按键一直保持同一颜色 | OpenRGB 无法还原原始效果 | 拔下键盘再重新插上 |
 | 守护进程日志 | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | `rog_flare2_effets.py`、`polywollywin/` | 效果与可视化器（PolyWollyWin 引擎，MIT 许可）、扩展 |
 | `rog_flare2_infos.py`、`rog_flare2_mpris.py`、`rog_flare2_jeux.py` | 系统监视器、当前播放曲目、游戏 |
 | `rog_flare2_notifs.py`、`rog_flare2_programme.py`、`rog_flare2_ui_programme.py` | 通知、定时排程与触发条件 |
-| `rog_flare2_openrgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | 通过 OpenRGB 同步颜色、系统托盘图标、笔记本电脑（实验性） |
+| `rog_flare2_rgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | 按键颜色与效果、系统托盘图标、笔记本电脑（实验性） |
 | `rog_flare2_animation.py`、`rog_flare2_simulateur.py`、`rog_flare2_convertir.py` | 动画编辑器、模拟器、转换 |
 | `rog_flare2_bibliotheque.py`、`bibliotheque/` | 动画库（目录、CC0 授权的 GIF） |
 | `rog_flare2_maj.py` | 从 release 获取更新 |

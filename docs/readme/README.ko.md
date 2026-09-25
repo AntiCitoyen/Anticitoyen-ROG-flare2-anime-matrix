@@ -77,7 +77,7 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 - **재생 목록 및 즐겨찾기**: GIF, 효과, 시계… 각각 정해진 시간 동안 반복 재생 ; 시스템 트레이 아이콘과 명령줄에서도 사용 가능.
 - **웹 리모컨**: 로컬 네트워크의 휴대폰에서 화면을 제어하는 페이지(QR 코드, 토큰).
 - **긴 명령 완료 알림**: 터미널에서 긴 명령이 끝나면 "완료: make 2 min 05"가 표시됩니다.
-- **OpenRGB를 통한 키보드 색상**: 테마 색을 키에 적용하거나 화면과 함께 맥동.
+- **키 색상과 효과**, OpenRGB 없이: 무지개, 고정, 호흡, 색상 순환, 반응형, 물결, 별이 빛나는 밤, 유사, 전류, 비 — 키보드가 직접 실행하며 분리한 뒤에도 유지됩니다. 또는 테마 색상, 화면과 함께 맥동.
 - **시스템 트레이 아이콘**: 빠른 메뉴(모드, 밝기).
 
 **편의성**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-유용한 시스템 도구: `imagemagick`(기본 변환), `pulseaudio-utils`(`parec`, 오디오용), `zenity`(파일 선택 대화상자), `libnotify-bin`(알림), `python3-gi` 및 `gir1.2-ayatanaappindicator3-0.1`(시스템 트레이 아이콘), `openrgb`(키 색상), `ffmpeg`(동영상, 웹캠, 화면 미러링), `python3-evdev`(Wayland에서 키보드 반응), `x11-utils`(X11에서 활성 창), `python3-qrcode`(리모컨 QR 코드), `tkdnd`(끌어다 놓기).
+유용한 시스템 도구: `imagemagick`(기본 변환), `pulseaudio-utils`(`parec`, 오디오용), `zenity`(파일 선택 대화상자), `libnotify-bin`(알림), `python3-gi` 및 `gir1.2-ayatanaappindicator3-0.1`(시스템 트레이 아이콘), `ffmpeg`(동영상, 웹캠, 화면 미러링), `python3-evdev`(Wayland에서 키보드 반응), `x11-utils`(X11에서 활성 창), `python3-qrcode`(리모컨 QR 코드), `tkdnd`(끌어다 놓기).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 이미지**: *GIF/이미지…* 또는 *폴더 (갤러리)…*(또는 창에 끌어다 놓기) ; *실제 비율*은 비율을 유지합니다(이미지를 늘리는 대신 모서리를 잘라냄) ; *👁 실제와 같은 미리 보기(보내기 전)*는 아무것도 전송하지 않고 결과를 보여줍니다 ; *🎞 애니메이션 만들기 (편집기)* ; *📚 애니메이션 라이브러리* ; *★ 재생 목록 및 즐겨찾기* ; *🖼 썸네일 갤러리*(클릭: 재생, 오른쪽 클릭: 즐겨찾기) ; *🎥 웹캠*과 *🖥 화면 미러링* ; GIF 변환을 위한 *스마트 변환*.
 - **효과**와 **오디오**: 선택하고, 조정한 뒤 *▶ 효과 실행*. 슬라이더는 실시간으로 작동하며, *템포*는 전체 애니메이션을 빠르거나 느리게 만듭니다. *텍스트* 효과는 메시지와 스크롤 방향을 입력받습니다. 게임은 화살표 키, 스페이스, 엔터로 플레이하며, 런처 창이 맨 앞에 있어야 합니다 ; 2인용 퐁: 왼쪽 플레이어는 Z/W와 S.
 - **밝기**, **🕒 시계**, **■ 정지**(화면을 지움)는 모든 탭에 공통입니다.
-- **설정**: 세션 시작 시(GIF 갤러리, 시계, 마지막 재생, 또는 없음), 시계 문자판, 언어, 테마, 인터페이스, 데스크톱 알림, 키보드 색상(OpenRGB), *일정…*(트리거, 앱별 프로필, 시간 구간), *표시등…*, *웹 리모컨…*, 시스템 트레이 아이콘, 긴 명령 완료 알림, 확장 폴더, 업데이트.
+- **설정**: 세션 시작 시(GIF 갤러리, 시계, 마지막 재생, 또는 없음), 시계 문자판, 언어, 테마, 인터페이스, 데스크톱 알림, 키보드 색상, *일정…*(트리거, 앱별 프로필, 시간 구간), *표시등…*, *웹 리모컨…*, 시스템 트레이 아이콘, 긴 명령 완료 알림, 확장 폴더, 업데이트.
 
 **런처를 닫아도 아무것도 멈추지 않습니다**: `animematrixd` 데몬이 계속 화면을 표시합니다. *■ 정지*를 누르면 화면이 꺼집니다.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *설정* → *긴 명령 완료 알림(터미널)*은 `~/.bashrc`(및 `~/.zshrc`)에 한 줄을 추가합니다: 30초 이상 걸린 명령은 끝날 때 "완료: make 2 min 05" 또는 "실패(2): …"를 표시합니다. 기준 시간: `ANIMEMATRIX_FIN_SECONDES` ; 대화형 명령(편집기, `ssh`, `less`…)은 무시됩니다.
 
-### 키보드 색상(OpenRGB)
+### 키보드 색상
 
-*설정* → *키보드 색상(OpenRGB)*: 테마 색상 또는 화면과 함께 맥동. 필요할 때 데몬이 `openrgb --server`를 시작합니다. OpenRGB는 키보드에 이전에 저장된 조명 효과를 알지 못합니다: 키보드에 저장된 효과로 되돌리려면 키보드를 분리했다가 다시 연결하세요.
+*설정* → *🌈 키보드 색상…*: 효과(무지개, 고정, 호흡, 색상 순환, 반응형, 물결, 별이 빛나는 밤, 유사, 전류, 비), 색상, 속도, 밝기, 방향. *시험*은 바로 적용하고, *키보드에 저장*은 분리한 뒤에도 유지합니다. *테마 색상*과 *화면과 함께 맥동*은 데몬이 키마다 보내며, 끄면 저장된 효과로 돌아갑니다. 명령줄: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### ROG 노트북(실험적)
 
@@ -262,7 +262,6 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | 웹캠, 동영상 또는 화면 미러링이 작동하지 않음 | `ffmpeg` 없음 | `sudo apt install ffmpeg` ; Wayland에서는 화면 미러링이 포털을 거침(`gstreamer1.0-pipewire`) |
 | Wayland에서 앱별 프로필이나 전체 화면 감지가 작동하지 않음 | 컴포지터가 활성 창을 알려 주지 않음 | GNOME: *Window Calls* 확장 ; KDE: `kdotool` ; Sway와 Hyprland: 별도 작업 불필요 |
 | 둥근 창이 사각형으로 표시됨 | SHAPE 확장 또는 `python3-xlib` 누락 | `sudo apt install python3-xlib`, 또는 *설정* → *인터페이스:* → *클래식* |
-| OpenRGB 이후 키가 한 가지 색으로 고정됨 | OpenRGB가 원래 효과를 재현하지 못함 | 키보드를 분리했다가 다시 연결 |
 | 데몬 로그 확인 | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | `rog_flare2_effets.py`, `polywollywin/` | 효과와 시각화(PolyWollyWin 엔진, MIT), 확장 |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | 시스템 모니터, 재생 중인 곡, 게임 |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | 알림, 시간별 예약과 트리거 |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | OpenRGB를 통한 색상, 시스템 트레이 아이콘, 노트북(실험적) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | 키 색상과 효과, 시스템 트레이 아이콘, 노트북(실험적) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | 애니메이션 편집기, 시뮬레이터, 변환 |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | 애니메이션 라이브러리(카탈로그, CC0 GIF) |
 | `rog_flare2_maj.py` | 릴리스로부터 업데이트 |

@@ -260,6 +260,27 @@ every frame unchanged on the IN endpoint, and each frame waits for its echo.
 
 ---
 
+## Key lighting
+
+Interface 1 (usage page `0xFF00`), 64-byte reports without report ID, each answered by the keyboard
+(`rog_flare2_rgb.py`; same controller family as OpenRGB's Aura TUF keyboards).
+
+| Report | Meaning |
+|---|---|
+| `51 2C mode 00 speed level color_mode direction 02 …` | effect run by the keyboard: `mode` 0 static, 1 breathing, 2 color cycle, 3 reactive, 4 rainbow wave, 5 ripple, 6 starry night, 7 quicksand, 8 current, 9 rain; `speed` 255 (slow) … 0 (fast); `level` 0/25/50/75/100; `color_mode` 0, 1 random, 16 two colours; `direction` 4 left, 0 right, 6 up, 2 down, 8 horizontal, 1 vertical |
+| … colours (wave, ripple) | count, then per colour `position% R G B` |
+| … colours (others) | `R G B` per colour |
+| `50 55` | save the current effect (kept after unplugging) |
+| `C0 81 left 00` + 15 × `index R G B` | direct per-key colour; `left` = entries still to send (210 → 15) |
+| `12 00` | firmware version (answer bytes 6.5.4: `03.00.14`) |
+
+- Key index = `column × 8 + row`: 30 columns, rows 0 (F keys) … 5 (Ctrl row), row 6 = underglow.
+  Armoury Crate sends all 210 entries, row by row.
+- Checked on the keyboard: rainbow wave saved with `50 55`, direct colours, back to the saved effect
+  by sending its `51 2C` again.
+
+---
+
 ## Physical LED layout
 
 The physical AniMe Matrix has 312 LEDs arranged as 24 staggered rows.

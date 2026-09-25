@@ -77,7 +77,7 @@ A ASUS só fornece a tela AniMe Matrix deste teclado no Windows (Armoury Crate).
 - **Playlists e favoritos**: GIFs, efeitos, relógio… cada um durante seu tempo, em loop; também no ícone da bandeja do sistema e na linha de comando.
 - **Controle remoto web**: uma página para controlar a tela a partir de um celular da rede local (QR code, token).
 - **Fim de comandos longos**: no terminal, « Concluído : make 2 min 05 » é exibido quando um comando longo termina.
-- **Cores do teclado via OpenRGB**: cor do tema nas teclas, ou pulsação sincronizada com a tela.
+- **Cores e efeitos das teclas**, sem OpenRGB: arco-íris, estático, respiração, ciclo, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva — executados pelo teclado e mantidos após desconectá-lo; ou a cor do tema, pulsar com a tela.
 - **Ícone na bandeja do sistema**: menu rápido (modos, brilho).
 
 **Conforto**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Ferramentas de sistema úteis: `imagemagick` (conversão clássica), `pulseaudio-utils` (`parec`, para áudio), `zenity` (seletores de arquivo), `libnotify-bin` (notificações), `python3-gi` e `gir1.2-ayatanaappindicator3-0.1` (ícone na bandeja do sistema), `openrgb` (cores das teclas), `ffmpeg` (vídeos, webcam, espelhamento de tela), `python3-evdev` (reação ao teclado no Wayland), `x11-utils` (janela ativa no X11), `python3-qrcode` (QR code do controle remoto), `tkdnd` (arrastar e soltar).
+Ferramentas de sistema úteis: `imagemagick` (conversão clássica), `pulseaudio-utils` (`parec`, para áudio), `zenity` (seletores de arquivo), `libnotify-bin` (notificações), `python3-gi` e `gir1.2-ayatanaappindicator3-0.1` (ícone na bandeja do sistema), `ffmpeg` (vídeos, webcam, espelhamento de tela), `python3-evdev` (reação ao teclado no Wayland), `x11-utils` (janela ativa no X11), `python3-qrcode` (QR code do controle remoto), `tkdnd` (arrastar e soltar).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Nas interfaces redondas, os botões redondos abrem os blocos *GIF*, *Efeitos*, *
 - **GIF / imagens**: *GIF/imagens…* ou *Pasta (galeria)…* (ou arrastar e soltar na janela); *Geometria fiel* mantém as proporções (o canto corta a imagem em vez de esticá-la); *👁 Prévia fiel (antes de enviar)* mostra a renderização sem enviar nada; *🎞 Criar uma animação (editor)*; *📚 Biblioteca de animações*; *★ Playlists e favoritos*; *🖼 Galeria de miniaturas* (clique: reproduzir, clique direito: favorito); *🎥 Webcam* e *🖥 Espelhamento de tela*; *Conversão inteligente* para converter GIFs.
 - **Efeitos** e **Áudio**: escolher, ajustar, *▶ Iniciar o efeito*. Os controles deslizantes agem em tempo real; *Ritmo* acelera ou desacelera toda a animação. O efeito *Texto* recebe sua mensagem e o sentido de rolagem. Os jogos se jogam com as setas, Espaço e Enter, com a janela do lançador em primeiro plano; Pong a dois: Z/W e S para o jogador da esquerda.
 - **Brilho**, **🕒 Relógio**, **■ Parar** (que apaga a tela) são comuns a todas as abas.
-- **Configurações**: início da sessão (Galeria de GIF, Relógio, Última reprodução ou Nada), mostrador do relógio, idioma, tema, interface, notificações da área de trabalho, cores do teclado (OpenRGB), *Programação…* (gatilhos, perfis por aplicativo, faixas horárias), *Indicadores…*, *Controle remoto web…*, ícone na bandeja do sistema, fim de comandos longos, pasta de extensões, atualizações.
+- **Configurações**: início da sessão (Galeria de GIF, Relógio, Última reprodução ou Nada), mostrador do relógio, idioma, tema, interface, notificações da área de trabalho, cores do teclado, *Programação…* (gatilhos, perfis por aplicativo, faixas horárias), *Indicadores…*, *Controle remoto web…*, ícone na bandeja do sistema, fim de comandos longos, pasta de extensões, atualizações.
 
 **Fechar o lançador não interrompe nada**: o daemon `animematrixd` continua exibindo. *■ Parar* apaga a tela.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Configurações* → *Exibir o fim de comandos longos (terminal)* adiciona uma linha ao `~/.bashrc` (e ao `~/.zshrc`): todo comando de mais de 30 segundos exibe ao terminar « Concluído : make 2 min 05 » ou « Falha (2) : … ». Limite: `ANIMEMATRIX_FIN_SECONDES`; os comandos interativos (editores, `ssh`, `less`…) são ignorados.
 
-### Cores do teclado (OpenRGB)
+### Cores do teclado
 
-*Configurações* → *Cores do teclado (OpenRGB)*: cor do tema ou pulsação sincronizada com a tela. O daemon inicia, se necessário, o `openrgb --server`. O OpenRGB não conhece a iluminação anterior do teclado: para recuperar o efeito salvo no teclado, desconecte-o e reconecte-o.
+*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Notebooks ROG (experimental)
 
@@ -262,7 +262,6 @@ As notas originais de engenharia reversa estão em **[../PROTOCOL.md](../PROTOCO
 | Webcam, vídeos ou espelhamento de tela inativos | `ffmpeg` ausente | `sudo apt install ffmpeg`; no Wayland, o espelhamento de tela passa pelo portal (`gstreamer1.0-pipewire`) |
 | Perfis por aplicativo ou tela cheia sem efeito no Wayland | janela ativa desconhecida pelo compositor | GNOME: extensão *Window Calls*; KDE: `kdotool`; Sway e Hyprland: nada a fazer |
 | A janela redonda aparece como um retângulo | extensão SHAPE ou `python3-xlib` ausente | `sudo apt install python3-xlib`, ou *Configurações* → *Interface:* → *Clássica* |
-| As teclas continuam com uma cor após o OpenRGB | o OpenRGB não restaura o efeito original | desconectar e reconectar o teclado |
 | Log do daemon | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ As notas originais de engenharia reversa estão em **[../PROTOCOL.md](../PROTOCO
 | `rog_flare2_effets.py`, `polywollywin/` | efeitos e visualizadores (motor PolyWollyWin, MIT), extensões |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor do sistema, música tocando, jogos |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notificações, programação horária e gatilhos |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | cores via OpenRGB, ícone na bandeja do sistema, notebooks (experimental) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | cores e efeitos das teclas, ícone na bandeja do sistema, notebooks (experimental) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | editor de animação, simulador, conversão |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | biblioteca de animações (catálogo, GIFs CC0) |
 | `rog_flare2_maj.py` | atualizações a partir das releases |

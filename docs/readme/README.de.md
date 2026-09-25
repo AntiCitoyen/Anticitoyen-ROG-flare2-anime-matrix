@@ -77,7 +77,7 @@ ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury 
 - **Wiedergabelisten und Favoriten**: GIFs, Effekte, Uhr… jeweils für ihre Dauer, in Schleife; auch im Symbol in der Systemleiste und auf der Kommandozeile.
 - **Web-Fernbedienung**: eine Seite, um das Display von einem Telefon im lokalen Netzwerk zu steuern (QR-Code, Token).
 - **Ende langer Befehle**: im Terminal wird „Fertig: make 2 min 05" angezeigt, wenn ein langer Befehl endet.
-- **Tastaturfarben über OpenRGB**: Designfarbe auf den Tasten, oder Pulsieren im Takt des Displays.
+- **Tastenfarben und -effekte**, ohne OpenRGB: Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen — von der Tastatur ausgeführt und nach dem Abstecken behalten; oder die Themenfarbe, Pulsieren mit dem Bildschirm.
 - **Symbol in der Systemleiste**: Schnellmenü (Modi, Helligkeit).
 
 **Komfort**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Nützliche Systemwerkzeuge: `imagemagick` (klassische Konvertierung), `pulseaudio-utils` (`parec`, für Audio), `zenity` (Dateiauswahl), `libnotify-bin` (Benachrichtigungen), `python3-gi` und `gir1.2-ayatanaappindicator3-0.1` (Symbol in der Systemleiste), `openrgb` (Tastenfarben), `ffmpeg` (Videos, Webcam, Bildschirmspiegel), `python3-evdev` (Tastaturreaktion unter Wayland), `x11-utils` (aktives Fenster unter X11), `python3-qrcode` (QR-Code der Fernbedienung), `tkdnd` (Drag & Drop).
+Nützliche Systemwerkzeuge: `imagemagick` (klassische Konvertierung), `pulseaudio-utils` (`parec`, für Audio), `zenity` (Dateiauswahl), `libnotify-bin` (Benachrichtigungen), `python3-gi` und `gir1.2-ayatanaappindicator3-0.1` (Symbol in der Systemleiste), `ffmpeg` (Videos, Webcam, Bildschirmspiegel), `python3-evdev` (Tastaturreaktion unter Wayland), `x11-utils` (aktives Fenster unter X11), `python3-qrcode` (QR-Code der Fernbedienung), `tkdnd` (Drag & Drop).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ In den runden Oberflächen öffnen die runden Schaltflächen die Blöcke *GIF*, 
 - **GIF / Bilder**: *GIF/Bilder…* oder *Ordner (Galerie)…* (oder Drag & Drop auf das Fenster); *Originalgetreue Geometrie* behält die Proportionen bei (die Ecke schneidet das Bild zu, statt es zu strecken); *👁 Originalgetreue Vorschau (vor dem Senden)* zeigt die Darstellung, ohne etwas zu senden; *🎞 Animation erstellen (Editor)*; *📚 Animationsbibliothek*; *★ Wiedergabelisten und Favoriten*; *🖼 Miniaturgalerie* (Klick: abspielen, Rechtsklick: Favorit); *🎥 Webcam* und *🖥 Bildschirmspiegel*; *Intelligente Umwandlung* zum Konvertieren von GIFs.
 - **Effekte** und **Audio**: auswählen, einstellen, *▶ Effekt starten*. Die Regler wirken live; *Takt* beschleunigt oder verlangsamt die gesamte Animation. Der Effekt *Text* nimmt Ihre Nachricht und ihre Laufrichtung entgegen. Die Spiele werden mit den Pfeiltasten, Leertaste und Eingabetaste gespielt, wobei das Fenster des Starters im Vordergrund sein muss; Pong zu zweit: Z/W und S für den linken Spieler.
 - **Helligkeit**, **🕒 Uhr**, **■ Stopp** (löscht das Display) sind allen Reitern gemeinsam.
-- **Einstellungen**: Sitzungsstart (GIF-Galerie, Uhr, Letzte Wiedergabe oder Nichts), Zifferblatt, Sprache, Design, Oberfläche, Desktop-Benachrichtigungen, Tastaturfarben (OpenRGB), *Zeitplan…* (Auslöser, Profile pro Anwendung, Zeitfenster), *Anzeigen…*, *Web-Fernbedienung…*, Symbol in der Systemleiste, Ende langer Befehle, Erweiterungsordner, Updates.
+- **Einstellungen**: Sitzungsstart (GIF-Galerie, Uhr, Letzte Wiedergabe oder Nichts), Zifferblatt, Sprache, Design, Oberfläche, Desktop-Benachrichtigungen, Tastaturfarben, *Zeitplan…* (Auslöser, Profile pro Anwendung, Zeitfenster), *Anzeigen…*, *Web-Fernbedienung…*, Symbol in der Systemleiste, Ende langer Befehle, Erweiterungsordner, Updates.
 
 **Das Schließen des Starters unterbricht nichts**: Der `animematrixd`-Dienst zeigt weiter an. *■ Stopp* schaltet das Display aus.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Einstellungen* → *Ende langer Befehle anzeigen (Terminal)* fügt `~/.bashrc` (und `~/.zshrc`) eine Zeile hinzu: jeder Befehl, der länger als 30 Sekunden dauert, zeigt an seinem Ende „Fertig: make 2 min 05" oder „Fehlgeschlagen (2): …". Schwelle: `ANIMEMATRIX_FIN_SECONDES`; interaktive Befehle (Editoren, `ssh`, `less`…) werden ignoriert.
 
-### Tastaturfarben (OpenRGB)
+### Tastaturfarben
 
-*Einstellungen* → *Tastaturfarben (OpenRGB)*: Designfarbe oder Pulsieren im Takt des Displays. Der Dienst startet bei Bedarf `openrgb --server`. OpenRGB kennt die vorherige Beleuchtung der Tastatur nicht: Um den in der Tastatur gespeicherten Effekt wiederzufinden, sie ab- und wieder anstecken.
+*Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### ROG-Laptops (experimentell)
 
@@ -262,7 +262,6 @@ Die ursprünglichen Reverse-Engineering-Notizen befinden sich in **[../PROTOCOL.
 | Webcam, Videos oder Bildschirmspiegel inaktiv | `ffmpeg` fehlt | `sudo apt install ffmpeg`; unter Wayland läuft der Bildschirmspiegel über das Portal (`gstreamer1.0-pipewire`) |
 | Profile pro Anwendung oder Vollbild ohne Wirkung unter Wayland | aktives Fenster dem Compositor unbekannt | GNOME: Erweiterung *Window Calls*; KDE: `kdotool`; Sway und Hyprland: nichts zu tun |
 | Das runde Fenster wird als Rechteck angezeigt | SHAPE-Erweiterung oder `python3-xlib` fehlt | `sudo apt install python3-xlib`, oder *Einstellungen* → *Oberfläche:* → *Klassisch* |
-| Die Tasten behalten nach OpenRGB eine Farbe | OpenRGB stellt die ursprüngliche Beleuchtung nicht wieder her | Tastatur ab- und wieder anstecken |
 | Protokoll des Dienstes | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Die ursprünglichen Reverse-Engineering-Notizen befinden sich in **[../PROTOCOL.
 | `rog_flare2_effets.py`, `polywollywin/` | Effekte und Visualizer (PolyWollyWin-Engine, MIT), Erweiterungen |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | Systemmonitor, aktueller Titel, Spiele |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | Benachrichtigungen, Zeitplanung und Auslöser |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | Farben über OpenRGB, Symbol in der Systemleiste, Laptops (experimentell) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | Tastenfarben und -effekte, Symbol in der Systemleiste, Laptops (experimentell) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | Animationseditor, Simulator, Konvertierung |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | Animationsbibliothek (Katalog, CC0-GIFs) |
 | `rog_flare2_maj.py` | Updates aus den Releases |

@@ -77,7 +77,7 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 - **Listes de lecture et favoris** : GIF, effets, horloge… chacun pendant sa durée, en boucle ; aussi dans l'icône de barre système et en ligne de commande.
 - **Télécommande web** : une page pour piloter l'écran depuis un téléphone du réseau local (QR code, jeton).
 - **Fin des commandes longues** : dans le terminal, « Terminé : make 2 min 05 » s'affiche quand une longue commande se termine.
-- **Couleurs du clavier via OpenRGB** : couleur du thème sur les touches, ou pulsation avec l'écran.
+- **Couleurs et effets des touches**, sans OpenRGB : arc-en-ciel, statique, respiration, cycle, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie — exécutés par le clavier et gardés après débranchement ; ou couleur du thème, pulsation avec l'écran.
 - **Icône de barre système** : menu rapide (modes, luminosité).
 
 **Confort**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Outils système utiles : `imagemagick` (conversion classique), `pulseaudio-utils` (`parec`, pour l'audio), `zenity` (sélecteurs de fichiers), `libnotify-bin` (notifications), `python3-gi` et `gir1.2-ayatanaappindicator3-0.1` (icône de barre système), `openrgb` (couleurs des touches), `ffmpeg` (vidéos, webcam, miroir d'écran), `python3-evdev` (réaction au clavier sous Wayland), `x11-utils` (fenêtre active sous X11), `python3-qrcode` (QR code de la télécommande), `tkdnd` (glisser-déposer).
+Outils système utiles : `imagemagick` (conversion classique), `pulseaudio-utils` (`parec`, pour l'audio), `zenity` (sélecteurs de fichiers), `libnotify-bin` (notifications), `python3-gi` et `gir1.2-ayatanaappindicator3-0.1` (icône de barre système), `ffmpeg` (vidéos, webcam, miroir d'écran), `python3-evdev` (réaction au clavier sous Wayland), `x11-utils` (fenêtre active sous X11), `python3-qrcode` (QR code de la télécommande), `tkdnd` (glisser-déposer).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Dans les interfaces rondes, les boutons ronds ouvrent les blocs *GIF*, *Effets*,
 - **GIF / images** : *GIF/images…* ou *Dossier (galerie)…* (ou glisser-déposer sur la fenêtre) ; *Géométrie fidèle* garde les proportions (le coin coupe l'image au lieu de l'étirer) ; *👁 Aperçu fidèle (avant envoi)* montre le rendu sans rien envoyer ; *🎞 Créer une animation (éditeur)* ; *📚 Bibliothèque d'animations* ; *★ Listes de lecture et favoris* ; *🖼 Galerie en vignettes* (clic : lire, clic droit : favori) ; *🎥 Webcam* et *🖥 Miroir d'écran* ; *Conversion intelligente* pour convertir des GIF.
 - **Effets** et **Audio** : choisir, régler, *▶ Lancer l'effet*. Les curseurs agissent en direct ; *Cadence* accélère ou ralentit toute l'animation. L'effet *Texte* prend votre message et son sens de défilement. Les jeux se jouent avec les flèches, Espace et Entrée, fenêtre du lanceur au premier plan ; Pong à deux : Z/W et S pour le joueur de gauche.
 - **Luminosité**, **🕒 Horloge**, **■ Arrêter** (qui efface l'écran) sont communs à tous les onglets.
-- **Réglages** : démarrage de session (Galerie GIF, Horloge, Dernière lecture ou Rien), cadran de l'horloge, langue, thème, interface, notifications du bureau, couleurs du clavier (OpenRGB), *Programmation…* (déclencheurs, profils par application, plages horaires), *Voyants…*, *Télécommande web…*, icône de barre système, fin des commandes longues, dossier des extensions, mises à jour.
+- **Réglages** : démarrage de session (Galerie GIF, Horloge, Dernière lecture ou Rien), cadran de l'horloge, langue, thème, interface, notifications du bureau, couleurs du clavier, *Programmation…* (déclencheurs, profils par application, plages horaires), *Voyants…*, *Télécommande web…*, icône de barre système, fin des commandes longues, dossier des extensions, mises à jour.
 
 **Fermer le lanceur ne coupe rien** : le démon `animematrixd` continue d'afficher. *■ Arrêter* éteint l'écran.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Réglages* → *Afficher la fin des commandes longues (terminal)* ajoute une ligne à `~/.bashrc` (et `~/.zshrc`) : toute commande de plus de 30 secondes affiche à sa fin « Terminé : make 2 min 05 » ou « Échec (2) : … ». Seuil : `ANIMEMATRIX_FIN_SECONDES` ; les commandes interactives (éditeurs, `ssh`, `less`…) sont ignorées.
 
-### Couleurs du clavier (OpenRGB)
+### Couleurs du clavier
 
-*Réglages* → *Couleurs du clavier (OpenRGB)* : couleur du thème ou pulsation avec l'écran. Le démon démarre au besoin `openrgb --server`. OpenRGB ne connaît pas l'éclairage précédent du clavier : pour retrouver l'effet enregistré dans le clavier, le débrancher puis le rebrancher.
+*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Portables ROG (expérimental)
 
@@ -262,7 +262,6 @@ Les notes de rétro-ingénierie d'origine sont dans **[docs/PROTOCOL.md](docs/PR
 | Webcam, vidéos ou miroir d'écran inactifs | `ffmpeg` absent | `sudo apt install ffmpeg` ; sous Wayland, le miroir d'écran passe par le portail (`gstreamer1.0-pipewire`) |
 | Profils par application ou plein écran sans effet sous Wayland | fenêtre active inconnue du compositeur | GNOME : extension *Window Calls* ; KDE : `kdotool` ; Sway et Hyprland : rien à faire |
 | La fenêtre ronde s'affiche en rectangle | extension SHAPE ou `python3-xlib` absente | `sudo apt install python3-xlib`, ou *Réglages* → *Interface :* → *Classique* |
-| Les touches restent d'une couleur après OpenRGB | OpenRGB ne rend pas l'effet d'origine | débrancher puis rebrancher le clavier |
 | Journal du démon | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Les notes de rétro-ingénierie d'origine sont dans **[docs/PROTOCOL.md](docs/PR
 | `rog_flare2_effets.py`, `polywollywin/` | effets et visualiseurs (moteur PolyWollyWin, MIT), extensions |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | moniteur système, morceau en cours, jeux |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifications, programmation horaire et déclencheurs |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | couleurs via OpenRGB, icône de barre système, portables (expérimental) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | couleurs et effets des touches, icône de barre système, portables (expérimental) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | éditeur d'animation, simulateur, conversion |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | bibliothèque d'animations (catalogue, GIF CC0) |
 | `rog_flare2_maj.py` | mises à jour depuis les releases |

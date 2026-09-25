@@ -77,7 +77,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 - **Danh sách phát và mục yêu thích**: GIF, hiệu ứng, đồng hồ… mỗi mục trong thời lượng của nó, phát lặp lại; cũng có trong biểu tượng khay hệ thống và dòng lệnh.
 - **Điều khiển từ xa qua web**: một trang để điều khiển màn hình từ điện thoại trong mạng nội bộ (mã QR, mã truy cập).
 - **Báo khi lệnh dài kết thúc**: trong terminal, "Xong: make 2 min 05" hiện ra khi một lệnh chạy lâu kết thúc.
-- **Màu bàn phím qua OpenRGB**: màu của giao diện áp lên phím, hoặc nhấp nháy theo màn hình.
+- **Màu và hiệu ứng phím**, không cần OpenRGB: cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa — do chính bàn phím chạy và vẫn giữ sau khi rút ra; hoặc màu chủ đề, nhịp theo màn hình.
 - **Biểu tượng khay hệ thống**: menu nhanh (chế độ, độ sáng).
 
 **Tiện lợi**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bản), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo), `python3-gi` và `gir1.2-ayatanaappindicator3-0.1` (biểu tượng khay hệ thống), `openrgb` (màu phím), `ffmpeg` (video, webcam, phản chiếu màn hình), `python3-evdev` (phản ứng theo bàn phím trên Wayland), `x11-utils` (cửa sổ đang hoạt động trên X11), `python3-qrcode` (mã QR của điều khiển từ xa), `tkdnd` (kéo thả).
+Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi cơ bản), `pulseaudio-utils` (`parec`, cho âm thanh), `zenity` (hộp thoại chọn tệp), `libnotify-bin` (thông báo), `python3-gi` và `gir1.2-ayatanaappindicator3-0.1` (biểu tượng khay hệ thống), `ffmpeg` (video, webcam, phản chiếu màn hình), `python3-evdev` (phản ứng theo bàn phím trên Wayland), `x11-utils` (cửa sổ đang hoạt động trên X11), `python3-qrcode` (mã QR của điều khiển từ xa), `tkdnd` (kéo thả).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Trong các giao diện tròn, các nút tròn mở khối *GIF*, *Hiệu ứng*,
 - **GIF / hình ảnh**: *GIF/hình ảnh…* hoặc *Thư mục (thư viện)…* (hoặc kéo thả vào cửa sổ); *Hình học chân thực* giữ nguyên tỉ lệ (góc bị cắt thay vì hình ảnh bị kéo giãn); *👁 Xem trước chân thực (trước khi gửi)* cho xem kết quả mà không gửi gì cả; *🎞 Tạo hoạt ảnh (trình chỉnh sửa)*; *📚 Thư viện hoạt ảnh*; *★ Danh sách phát và mục yêu thích*; *🖼 Thư viện hình thu nhỏ* (nhấp: phát, nhấp phải: yêu thích); *🎥 Webcam* và *🖥 Phản chiếu màn hình*; *Chuyển đổi thông minh* để chuyển đổi GIF.
 - **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm toàn bộ hoạt ảnh nhanh hơn hoặc chậm hơn. Hiệu ứng *Chữ* nhận thông điệp của bạn và hướng chạy chữ. Trò chơi được chơi bằng phím mũi tên, Space và Enter, với cửa sổ trình khởi chạy ở phía trước; Pong hai người: Z/W và S cho người chơi bên trái.
 - **Độ sáng**, **🕒 Đồng hồ**, **■ Dừng** (xóa màn hình) có ở mọi tab.
-- **Cài đặt**: khi khởi động phiên (Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có), mặt đồng hồ, ngôn ngữ, giao diện màu, giao diện, thông báo màn hình nền, màu bàn phím (OpenRGB), *Lịch hẹn…* (điều kiện kích hoạt, hồ sơ theo ứng dụng, khung giờ), *Đèn báo…*, *Điều khiển từ xa qua web…*, biểu tượng khay hệ thống, báo khi lệnh dài kết thúc, thư mục tiện ích mở rộng, cập nhật.
+- **Cài đặt**: khi khởi động phiên (Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có), mặt đồng hồ, ngôn ngữ, giao diện màu, giao diện, thông báo màn hình nền, màu bàn phím, *Lịch hẹn…* (điều kiện kích hoạt, hồ sơ theo ứng dụng, khung giờ), *Đèn báo…*, *Điều khiển từ xa qua web…*, biểu tượng khay hệ thống, báo khi lệnh dài kết thúc, thư mục tiện ích mở rộng, cập nhật.
 
 **Đóng trình khởi chạy không làm gián đoạn gì cả**: dịch vụ nền `animematrixd` vẫn tiếp tục hiển thị. *■ Dừng* sẽ tắt màn hình.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Cài đặt* → *Báo khi lệnh dài kết thúc (terminal)* thêm một dòng vào `~/.bashrc` (và `~/.zshrc`): mọi lệnh chạy quá 30 giây sẽ hiển thị khi kết thúc "Xong: make 2 min 05" hoặc "Thất bại (2): …". Ngưỡng: `ANIMEMATRIX_FIN_SECONDES`; các lệnh tương tác (trình soạn thảo, `ssh`, `less`…) được bỏ qua.
 
-### Màu bàn phím (OpenRGB)
+### Màu bàn phím
 
-*Cài đặt* → *Màu bàn phím (OpenRGB)*: màu của giao diện hoặc nhấp nháy theo màn hình. Dịch vụ nền sẽ khởi động `openrgb --server` khi cần. OpenRGB không biết ánh sáng trước đó của bàn phím: để lấy lại hiệu ứng đã lưu trong bàn phím, hãy rút rồi cắm lại.
+*Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Laptop ROG (thử nghiệm)
 
@@ -262,7 +262,6 @@ Các ghi chú reverse engineering gốc nằm trong **[docs/PROTOCOL.md](../PROT
 | Webcam, video hoặc phản chiếu màn hình không hoạt động | thiếu `ffmpeg` | `sudo apt install ffmpeg` ; trên Wayland, phản chiếu màn hình đi qua portal (`gstreamer1.0-pipewire`) |
 | Hồ sơ theo ứng dụng hoặc phát hiện toàn màn hình không có tác dụng trên Wayland | compositor không cho biết cửa sổ đang hoạt động | GNOME: tiện ích mở rộng *Window Calls* ; KDE: `kdotool` ; Sway và Hyprland: không cần làm gì |
 | Cửa sổ tròn hiển thị thành hình chữ nhật | thiếu tiện ích mở rộng SHAPE hoặc `python3-xlib` | `sudo apt install python3-xlib`, hoặc *Cài đặt* → *Giao diện:* → *Cổ điển* |
-| Các phím vẫn giữ một màu sau OpenRGB | OpenRGB không tái hiện được hiệu ứng gốc | rút rồi cắm lại bàn phím |
 | Nhật ký của dịch vụ nền | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Các ghi chú reverse engineering gốc nằm trong **[docs/PROTOCOL.md](../PROT
 | `rog_flare2_effets.py`, `polywollywin/` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin, MIT), tiện ích mở rộng |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | giám sát hệ thống, bài hát đang phát, trò chơi |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | thông báo, lên lịch theo khung giờ và các điều kiện kích hoạt |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | màu qua OpenRGB, biểu tượng khay hệ thống, laptop (thử nghiệm) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | màu và hiệu ứng phím, biểu tượng khay hệ thống, laptop (thử nghiệm) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | trình chỉnh sửa hoạt ảnh, trình mô phỏng, chuyển đổi |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | thư viện hoạt ảnh (danh mục, GIF CC0) |
 | `rog_flare2_maj.py` | cập nhật từ các bản phát hành |

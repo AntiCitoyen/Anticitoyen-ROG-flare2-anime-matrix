@@ -77,7 +77,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 - **Listy odtwarzania i ulubione**: GIF-y, efekty, zegar… każdy przez swój czas, w pętli; także w ikonie na pasku systemowym i w wierszu poleceń.
 - **Pilot przez przeglądarkę**: strona do sterowania ekranem z telefonu w sieci lokalnej (kod QR, token).
 - **Zakończenie długich poleceń**: w terminalu wyświetla się „Gotowe: make 2 min 05”, gdy długie polecenie się kończy.
-- **Kolory klawiatury przez OpenRGB**: kolor motywu na klawiszach lub pulsowanie zsynchronizowane z ekranem.
+- **Kolory i efekty klawiszy**, bez OpenRGB: tęcza, statyczny, oddychanie, cykl, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz — wykonywane przez klawiaturę i zachowane po odłączeniu; albo kolor motywu, pulsowanie z ekranem.
 - **Ikona na pasku systemowym**: szybkie menu (tryby, jasność).
 
 **Wygoda**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Przydatne narzędzia systemowe: `imagemagick` (klasyczna konwersja), `pulseaudio-utils` (`parec`, do audio), `zenity` (wybór plików), `libnotify-bin` (powiadomienia), `python3-gi` i `gir1.2-ayatanaappindicator3-0.1` (ikona na pasku systemowym), `openrgb` (kolory klawiszy), `ffmpeg` (filmy, kamera, lustro ekranu), `python3-evdev` (reakcja na klawiaturę pod Waylandem), `x11-utils` (aktywne okno pod X11), `python3-qrcode` (kod QR pilota), `tkdnd` (przeciągnij i upuść).
+Przydatne narzędzia systemowe: `imagemagick` (klasyczna konwersja), `pulseaudio-utils` (`parec`, do audio), `zenity` (wybór plików), `libnotify-bin` (powiadomienia), `python3-gi` i `gir1.2-ayatanaappindicator3-0.1` (ikona na pasku systemowym), `ffmpeg` (filmy, kamera, lustro ekranu), `python3-evdev` (reakcja na klawiaturę pod Waylandem), `x11-utils` (aktywne okno pod X11), `python3-qrcode` (kod QR pilota), `tkdnd` (przeciągnij i upuść).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ W okrągłych interfejsach okrągłe przyciski otwierają bloki *GIF*, *Efekty*,
 - **GIF / obrazy**: *GIF/obrazy…* lub *Folder (galeria)…* (lub przeciągnij i upuść na okno); *Wierna geometria* zachowuje proporcje (róg przycina obraz zamiast go rozciągać); *👁 Wierny podgląd (przed wysłaniem)* pokazuje wynik bez niczego wysyłania; *🎞 Utwórz animację (edytor)*; *📚 Biblioteka animacji*; *★ Listy odtwarzania i ulubione*; *🖼 Galeria miniatur* (klik: odtwórz, prawy klik: ulubione); *🎥 Kamera* i *🖥 Lustro ekranu*; *Inteligentna konwersja* do przekształcania GIF-ów.
 - **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia całą animację. Efekt *Tekst* przyjmuje Twoją wiadomość i kierunek przewijania. Gry gra się strzałkami, spacją i Enterem, gdy okno launchera jest na pierwszym planie; Pong we dwóch: Z/W i S dla lewego gracza.
 - **Jasność**, **🕒 Zegar**, **■ Zatrzymaj** (co czyści ekran) są wspólne dla wszystkich zakładek.
-- **Ustawienia**: start sesji (Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic), tarcza zegara, język, motyw, interfejs, powiadomienia pulpitu, kolory klawiatury (OpenRGB), *Harmonogram…* (wyzwalacze, profile aplikacji, przedziały czasu), *Wskaźniki (mikrofon, kamera, OBS)…*, *Pilot przez przeglądarkę…*, ikona na pasku systemowym, zakończenie długich poleceń, folder rozszerzeń, aktualizacje.
+- **Ustawienia**: start sesji (Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic), tarcza zegara, język, motyw, interfejs, powiadomienia pulpitu, kolory klawiatury, *Harmonogram…* (wyzwalacze, profile aplikacji, przedziały czasu), *Wskaźniki (mikrofon, kamera, OBS)…*, *Pilot przez przeglądarkę…*, ikona na pasku systemowym, zakończenie długich poleceń, folder rozszerzeń, aktualizacje.
 
 **Zamknięcie launchera niczego nie przerywa**: demon `animematrixd` kontynuuje wyświetlanie. *■ Zatrzymaj* wyłącza ekran.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Ustawienia* → *Pokazuj zakończenie długich poleceń (terminal)* dodaje wiersz do `~/.bashrc` (i `~/.zshrc`): każde polecenie trwające ponad 30 sekund wyświetla po zakończeniu „Gotowe: make 2 min 05” lub „Niepowodzenie (2): …”. Próg: `ANIMEMATRIX_FIN_SECONDES`; polecenia interaktywne (edytory, `ssh`, `less`…) są pomijane.
 
-### Kolory klawiatury (OpenRGB)
+### Kolory klawiatury
 
-*Ustawienia* → *Kolory klawiatury (OpenRGB)*: kolor motywu lub pulsowanie zsynchronizowane z ekranem. Demon uruchamia w razie potrzeby `openrgb --server`. OpenRGB nie zna poprzedniego podświetlenia klawiatury: aby przywrócić efekt zapisany w klawiaturze, odłącz ją i podłącz ponownie.
+*Ustawienia* → *🌈 Kolory klawiatury…*: efekt (tęcza, statyczny, oddychanie, cykl kolorów, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz), kolory, szybkość, jasność, kierunek. *Wypróbuj* go stosuje, *Zapisz w klawiaturze* zachowuje po odłączeniu. *Kolor motywu* i *Pulsowanie z ekranem* demon wysyła klawisz po klawiszu; po ich wyłączeniu wraca zapisany efekt. W wierszu poleceń: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Laptopy ROG (eksperymentalne)
 
@@ -262,7 +262,6 @@ Oryginalne notatki z inżynierii wstecznej znajdują się w **[../PROTOCOL.md](.
 | Kamera, filmy lub lustro ekranu nie działają | brak `ffmpeg` | `sudo apt install ffmpeg`; pod Waylandem lustro ekranu przechodzi przez portal (`gstreamer1.0-pipewire`) |
 | Profile aplikacji lub pełny ekran bez efektu pod Waylandem | kompozytor nie podaje aktywnego okna | GNOME: rozszerzenie *Window Calls*; KDE: `kdotool`; Sway i Hyprland: nic do zrobienia |
 | Okrągłe okno wyświetla się jako prostokąt | brak rozszerzenia SHAPE lub `python3-xlib` | `sudo apt install python3-xlib`, albo *Ustawienia* → *Interfejs:* → *Klasyczny* |
-| Klawisze pozostają w jednym kolorze po OpenRGB | OpenRGB nie odtwarza oryginalnego efektu | odłącz i podłącz ponownie klawiaturę |
 | Dziennik demona | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Oryginalne notatki z inżynierii wstecznej znajdują się w **[../PROTOCOL.md](.
 | `rog_flare2_effets.py`, `polywollywin/` | efekty i wizualizatory (silnik PolyWollyWin, MIT), rozszerzenia |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor systemu, aktualnie odtwarzany utwór, gry |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | powiadomienia, harmonogram i wyzwalacze |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | kolory przez OpenRGB, ikona na pasku systemowym, laptopy (eksperymentalne) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | kolory i efekty klawiszy, ikona na pasku systemowym, laptopy (eksperymentalne) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | edytor animacji, symulator, konwersja |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | biblioteka animacji (katalog, GIF CC0) |
 | `rog_flare2_maj.py` | aktualizacje z wydań |

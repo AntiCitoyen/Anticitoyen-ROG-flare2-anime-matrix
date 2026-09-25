@@ -77,7 +77,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 - **Oynatma listeleri ve favoriler**: GIF'ler, efektler, saat… her biri kendi süresince, döngü halinde; sistem tepsisi simgesinde ve komut satırında da.
 - **Web kumandası**: yerel ağdaki bir telefondan ekranı yönetmek için bir sayfa (QR kod, belirteç).
 - **Uzun komutların bitişi**: terminalde uzun bir komut bittiğinde « Tamamlandı: make 2 min 05 » gösterilir.
-- **OpenRGB üzerinden klavye renkleri**: tuşlarda tema rengi, ya da ekranla birlikte nabız gibi atma.
+- **Tuş renkleri ve efektleri**, OpenRGB olmadan: gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur — klavyenin kendisi çalıştırır ve çıkarıldıktan sonra da kalır; ya da tema rengi, ekranla nabız.
 - **Sistem tepsisi simgesi**: hızlı menü (modlar, parlaklık).
 
 **Kullanım kolaylığı**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (bildirimler), `python3-gi` ve `gir1.2-ayatanaappindicator3-0.1` (sistem tepsisi simgesi), `openrgb` (tuş renkleri), `ffmpeg` (videolar, web kamerası, ekran yansıtma), `python3-evdev` (Wayland altında klavye tepkisi), `x11-utils` (X11 altında etkin pencere), `python3-qrcode` (kumandanın QR kodu), `tkdnd` (sürükle-bırak).
+Faydalı sistem araçları: `imagemagick` (klasik dönüştürme), `pulseaudio-utils` (`parec`, ses için), `zenity` (dosya seçiciler), `libnotify-bin` (bildirimler), `python3-gi` ve `gir1.2-ayatanaappindicator3-0.1` (sistem tepsisi simgesi), `ffmpeg` (videolar, web kamerası, ekran yansıtma), `python3-evdev` (Wayland altında klavye tepkisi), `x11-utils` (X11 altında etkin pencere), `python3-qrcode` (kumandanın QR kodu), `tkdnd` (sürükle-bırak).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Yuvarlak arayüzlerde, yuvarlak düğmeler *GIF*, *Efektler*, *Ses* ve *Ayarlar*
 - **GIF / görüntüler**: seçim için *GIF/görüntüler…* veya tüm klasör için *Klasör (galeri)…* (veya pencereye sürükle-bırak); *Gerçek geometri* oranları korur (köşe, görüntüyü uzatmak yerine keser); *👁 Gerçekçi önizleme (göndermeden önce)* hiçbir şey göndermeden görüntüyü gösterir; *🎞 Animasyon oluştur (düzenleyici)*; *📚 Animasyon kitaplığı*; *★ Oynatma listeleri ve favoriler*; *🖼 Küçük resim galerisi* (tıkla: oynat, sağ tık: favori); *🎥 Web kamerası* ve *🖥 Ekran yansıtma*; GIF'leri dönüştürmek için *Akıllı dönüştürme*.
 - **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anında etki eder; *Tempo* tüm animasyonu hızlandırır veya yavaşlatır. *Metin* efekti mesajınızı ve kayma yönünü alır. Oyunlar ok tuşları, Boşluk ve Enter ile oynanır, başlatıcı penceresi önde olmalıdır; iki kişilik Pong: sol oyuncu için Z/W ve S.
 - **Parlaklık**, **🕒 Saat**, **■ Durdur** (ekranı temizler) tüm sekmelerde ortaktır.
-- **Ayarlar**: oturum başlangıcı (GIF galerisi, Saat, Son oynatma veya Hiçbiri), saat kadranı, dil, tema, arayüz, masaüstü bildirimleri, klavye renkleri (OpenRGB), *Zamanlama…* (tetikleyiciler, uygulama profilleri, zaman aralıkları), *Göstergeler (mikrofon, web kamerası, OBS)…*, *Web kumandası…*, sistem tepsisi simgesi, uzun komutların bitişi, eklentiler klasörü, güncellemeler.
+- **Ayarlar**: oturum başlangıcı (GIF galerisi, Saat, Son oynatma veya Hiçbiri), saat kadranı, dil, tema, arayüz, masaüstü bildirimleri, klavye renkleri, *Zamanlama…* (tetikleyiciler, uygulama profilleri, zaman aralıkları), *Göstergeler (mikrofon, web kamerası, OBS)…*, *Web kumandası…*, sistem tepsisi simgesi, uzun komutların bitişi, eklentiler klasörü, güncellemeler.
 
 **Başlatıcıyı kapatmak hiçbir şeyi durdurmaz**: `animematrixd` arka plan servisi göstermeye devam eder. *■ Durdur*, ekranı kapatır.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Ayarlar* → *Uzun komutların bitişini göster (terminal)*, `~/.bashrc` (ve `~/.zshrc`) dosyasına bir satır ekler: 30 saniyeden uzun süren her komut bittiğinde « Tamamlandı: make 2 min 05 » veya « Başarısız (2): … » gösterir. Eşik: `ANIMEMATRIX_FIN_SECONDES`; etkileşimli komutlar (düzenleyiciler, `ssh`, `less`…) yok sayılır.
 
-### Klavye renkleri (OpenRGB)
+### Klavye renkleri
 
-*Ayarlar* → *Klavye renkleri (OpenRGB)*: tema rengi veya ekranla birlikte nabız gibi atma. Arka plan servisi gerektiğinde `openrgb --server`'ı başlatır. OpenRGB, klavyenin önceki aydınlatmasını bilmez: klavyenin belleğindeki kayıtlı efekti geri almak için klavyeyi çıkarıp yeniden takın.
+*Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### ROG dizüstü bilgisayarlar (deneysel)
 
@@ -262,7 +262,6 @@ Orijinal tersine mühendislik notları **[docs/PROTOCOL.md](../PROTOCOL.md)** i�
 | Web kamerası, videolar veya ekran yansıtma çalışmıyor | `ffmpeg` eksik | `sudo apt install ffmpeg`; Wayland altında ekran yansıtma portal üzerinden geçer (`gstreamer1.0-pipewire`) |
 | Uygulama profilleri veya tam ekran Wayland altında etkisiz | etkin pencere bileşikleyici tarafından bilinmiyor | GNOME: *Window Calls* uzantısı; KDE: `kdotool`; Sway ve Hyprland: yapılacak bir şey yok |
 | Yuvarlak pencere dikdörtgen görünüyor | SHAPE uzantısı veya `python3-xlib` eksik | `sudo apt install python3-xlib`, veya *Ayarlar* → *Arayüz:* → *Klasik* |
-| OpenRGB'den sonra tuşlar tek renkte kalıyor | OpenRGB, orijinal efekti yeniden oluşturamıyor | klavyeyi çıkarıp yeniden takın |
 | Arka plan servisinin günlüğü | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Orijinal tersine mühendislik notları **[docs/PROTOCOL.md](../PROTOCOL.md)** i�
 | `rog_flare2_effets.py`, `polywollywin/` | efektler ve görselleştiriciler (PolyWollyWin motoru, MIT), eklentiler |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | sistem monitörü, çalan parça, oyunlar |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | bildirimler, zaman programlama ve tetikleyiciler |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | OpenRGB üzerinden renkler, sistem tepsisi simgesi, dizüstü bilgisayarlar (deneysel) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | tuş renkleri ve efektleri, sistem tepsisi simgesi, dizüstü bilgisayarlar (deneysel) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | animasyon düzenleyici, simülatör, dönüştürme |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | animasyon kitaplığı (katalog, CC0 GIF'ler) |
 | `rog_flare2_maj.py` | sürümlerden güncellemeler |

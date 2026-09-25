@@ -31,7 +31,6 @@ from rog_flare2_i18n import LANG, LANGUAGES, _, save_language
 import rog_flare2_ctl as ctl
 import rog_flare2_maj as maj
 import rog_flare2_notifs as notifs
-import rog_flare2_openrgb as openrgb
 import rog_flare2_tray as tray
 from rog_flare2_demon import START_FILE
 from rog_flare2_matrix_paint import FB_OFFSET
@@ -418,16 +417,7 @@ class LauncherApp(tk.Tk):
         entry.pack(side="left", fill="x", expand=True, padx=(6, 0))
         entry.bind("<Return>", lambda _e: self._save_notifications())
         entry.bind("<FocusOut>", lambda _e: self._save_notifications())
-        rgb = ttk.Frame(tab)
-        rgb.pack(fill="x", pady=4)
-        ttk.Label(rgb, text=_("Couleurs du clavier (OpenRGB) :")).pack(side="left")
-        rgb_modes = {_("Désactivées"): "off", _("Couleur du thème"): "theme", _("Pulsation avec l'écran"): "pulsation"}
-        current = openrgb.load_config().get("mode", "off")
-        self.rgb_var = tk.StringVar(value=next(k for k, v in rgb_modes.items() if v == current))
-        rcb = ttk.Combobox(rgb, textvariable=self.rgb_var, values=list(rgb_modes), state="readonly", width=20)
-        rcb.pack(side="left", padx=8)
-        rcb.bind("<<ComboboxSelected>>", lambda _e: (
-            openrgb.save_config({**openrgb.load_config(), "mode": rgb_modes[self.rgb_var.get()]}), self._send("config")))
+        ttk.Button(tab, text=_("🌈 Couleurs du clavier…"), command=self.open_rgb).pack(fill="x", pady=4)
         ttk.Label(tab, text=_("La galerie de fond lit le dernier dossier choisi dans l'onglet GIF."),
                   style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w")
         ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
@@ -889,6 +879,10 @@ class LauncherApp(tk.Tk):
     def open_badges(self):
         from rog_flare2_ui_programme import BadgesWindow
         BadgesWindow(self, lambda: self._send("config"))
+
+    def open_rgb(self):
+        from rog_flare2_ui_rgb import RGBWindow
+        RGBWindow(self, self._send)
 
     def open_lists(self):
         from rog_flare2_listes import ListsWindow

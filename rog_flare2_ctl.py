@@ -13,6 +13,8 @@
     animematrix-ctl memoire FICHIER [--reduire couper|alterner] [--fidele]
                                                  (enregistre dans le clavier : affichée sans logiciel)
     animematrix-ctl clavier                      (affiche l'animation enregistrée dans le clavier)
+    animematrix-ctl rgb arc-en-ciel [--vitesse 50] [--luminosite 100] [--direction gauche]
+    animematrix-ctl rgb statique --couleur "#ff0000"    (touches : effets du clavier, theme, pulsation)
 """
 from __future__ import annotations
 
@@ -137,6 +139,15 @@ def main(argv=None):
                    help="au-delà de 196 images : garder le début, ou retirer une image sur deux")
     m.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
     sub.add_parser("clavier", help="affiche l'animation enregistrée dans le clavier")
+    from rog_flare2_rgb import DIRECTIONS, EFFECTS
+    r = sub.add_parser("rgb", help="couleurs des touches : effet du clavier, ou theme / pulsation")
+    r.add_argument("effet", choices=[*EFFECTS, "theme", "pulsation", "off"])
+    r.add_argument("--couleur", action="append", default=[], metavar="#rrggbb", help="répétable (dégradés)")
+    r.add_argument("--vitesse", type=int, help="0 (lent) à 100 (rapide)")
+    r.add_argument("--luminosite", type=int, help="0 à 100, par crans de 25")
+    r.add_argument("--direction", choices=list(DIRECTIONS))
+    r.add_argument("--aleatoire", action="store_true", help="couleurs aléatoires")
+    r.add_argument("--sans-enregistrer", action="store_true", help="perdu au débranchement")
     sub.add_parser("quitter")
     args = ap.parse_args(argv)
 
@@ -161,6 +172,15 @@ def main(argv=None):
         show = {"type": "horloge"}
     elif args.cmd == "clavier":
         show = {"type": "clavier"}
+    elif args.cmd == "rgb":
+        if args.effet in ("theme", "pulsation", "off"):
+            config = {"mode": args.effet}
+        else:
+            config = {"mode": "clavier", "effet": args.effet, "couleurs": args.couleur, "aleatoire": args.aleatoire}
+            config.update({k: v for k, v in (("vitesse", args.vitesse), ("luminosite", args.luminosite),
+                                             ("direction", args.direction)) if v is not None})
+        request("rgb", timeout=10, config=config, save=not args.sans_enregistrer)
+        return
     elif args.cmd == "memoire":
         r = request("memoire", timeout=60, file=str(Path(args.fichier).expanduser().resolve()),
                     reduire=args.reduire, fidele=args.fidele)

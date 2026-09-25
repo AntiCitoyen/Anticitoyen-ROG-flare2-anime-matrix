@@ -1,5 +1,10 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Couleurs et effets des touches sans OpenRGB : arc-en-ciel, statique,
+    respiration, ondulation… enregistrés dans le clavier ; couleur du thème,
+    pulsation avec l'écran.
+  * Mémoire du clavier : animation enregistrée, affichée sans logiciel ;
+    luminosité matérielle.
   * Wayland : réaction au clavier par evdev, fenêtre active (Sway, Hyprland,
     KDE, GNOME), plein écran.
   * Profils par application, listes de lecture et favoris, télécommande web.

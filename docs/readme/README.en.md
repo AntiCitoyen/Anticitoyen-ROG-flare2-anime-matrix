@@ -77,7 +77,7 @@ ASUS only provides this keyboard's AniMe Matrix display on Windows (Armoury Crat
 - **Playlists and favourites**: GIFs, effects, clock… each for its own duration, looping; also in the system tray icon and on the command line.
 - **Web remote**: a page to control the display from a phone on the local network (QR code, token).
 - **Long commands finishing**: in the terminal, "Done: make 2 min 05" is shown when a long command finishes.
-- **Keyboard colours via OpenRGB**: theme colour on the keys, or pulsing in sync with the display.
+- **Key colours and effects**, without OpenRGB: rainbow, static, breathing, cycle, reactive, ripple, starry night, quicksand, current, rain — run by the keyboard and kept after unplugging; or the theme colour, pulse with the screen.
 - **System tray icon**: quick menu (modes, brightness).
 
 **Comfort**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Useful system tools: `imagemagick` (classic conversion), `pulseaudio-utils` (`parec`, for audio), `zenity` (file pickers), `libnotify-bin` (notifications), `python3-gi` and `gir1.2-ayatanaappindicator3-0.1` (system tray icon), `openrgb` (key colours), `ffmpeg` (videos, webcam, screen mirror), `python3-evdev` (keyboard reaction under Wayland), `x11-utils` (active window under X11), `python3-qrcode` (remote's QR code), `tkdnd` (drag and drop).
+Useful system tools: `imagemagick` (classic conversion), `pulseaudio-utils` (`parec`, for audio), `zenity` (file pickers), `libnotify-bin` (notifications), `python3-gi` and `gir1.2-ayatanaappindicator3-0.1` (system tray icon), `ffmpeg` (videos, webcam, screen mirror), `python3-evdev` (keyboard reaction under Wayland), `x11-utils` (active window under X11), `python3-qrcode` (remote's QR code), `tkdnd` (drag and drop).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ In the round interfaces, the round buttons open the *GIF*, *Effects*, *Audio* an
 - **GIF / images**: *GIF/images…* or *Folder (gallery)…* (or drag and drop onto the window); *Faithful geometry* keeps the proportions (the corner crops the image instead of stretching it); *👁 Faithful preview (before sending)* shows the render without sending anything; *🎞 Create an animation (editor)*; *📚 Animation library*; *★ Playlists and favourites*; *🖼 Thumbnail gallery* (click: play, right-click: favourite); *🎥 Webcam* and *🖥 Screen mirror*; *Smart conversion* to convert GIFs.
 - **Effects** and **Audio**: choose, adjust, *▶ Run effect*. The sliders act live; *Tempo* speeds up or slows down the whole animation. The *Text* effect takes your message and its scrolling direction. Games are played with the arrow keys, Space and Enter, with the launcher window in the foreground; two-player Pong: Z/W and S for the left player.
 - **Brightness**, **🕒 Clock**, **■ Stop** (which clears the screen) are common to all tabs.
-- **Settings**: session start-up (GIF gallery, Clock, Last playback or None), clock face, language, theme, interface, desktop notifications, keyboard colours (OpenRGB), *Schedule…* (triggers, per-application profiles, time slots), *Indicators…*, *Web remote…*, system tray icon, long commands finishing, extensions folder, updates.
+- **Settings**: session start-up (GIF gallery, Clock, Last playback or None), clock face, language, theme, interface, desktop notifications, keyboard colours, *Schedule…* (triggers, per-application profiles, time slots), *Indicators…*, *Web remote…*, system tray icon, long commands finishing, extensions folder, updates.
 
 **Closing the launcher does not stop anything**: the `animematrixd` daemon keeps displaying. *■ Stop* turns off the screen.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Settings* → *Show when long commands finish (terminal)* adds a line to `~/.bashrc` (and `~/.zshrc`): any command lasting more than 30 seconds shows "Done: make 2 min 05" or "Failed (2): …" when it ends. Threshold: `ANIMEMATRIX_FIN_SECONDES`; interactive commands (editors, `ssh`, `less`…) are ignored.
 
-### Keyboard colours (OpenRGB)
+### Keyboard colours
 
-*Settings* → *Keyboard colours (OpenRGB)*: theme colour or pulsing with the display. The daemon starts `openrgb --server` as needed. OpenRGB does not know the keyboard's previous lighting: to get back the effect stored in the keyboard, unplug it then replug it.
+*Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### ROG laptops (experimental)
 
@@ -262,7 +262,6 @@ The original reverse-engineering notes are in **[../PROTOCOL.md](../PROTOCOL.md)
 | Webcam, videos or screen mirror not working | `ffmpeg` missing | `sudo apt install ffmpeg`; under Wayland, the screen mirror goes through the portal (`gstreamer1.0-pipewire`) |
 | Per-application profiles or fullscreen have no effect under Wayland | active window unknown to the compositor | GNOME: *Window Calls* extension; KDE: `kdotool`; Sway and Hyprland: nothing to do |
 | The round window shows as a rectangle | SHAPE extension or `python3-xlib` missing | `sudo apt install python3-xlib`, or *Settings* → *Interface:* → *Classic* |
-| The keys stay one colour after OpenRGB | OpenRGB does not restore the keyboard's original lighting | unplug then replug the keyboard |
 | Daemon log | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ The original reverse-engineering notes are in **[../PROTOCOL.md](../PROTOCOL.md)
 | `rog_flare2_effets.py`, `polywollywin/` | effects and visualizers (PolyWollyWin engine, MIT), extensions |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | system monitor, now playing, games |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifications, scheduling and triggers |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | colours via OpenRGB, system tray icon, laptops (experimental) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | key colours and effects, system tray icon, laptops (experimental) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | animation editor, simulator, conversion |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | animation library (catalogue, CC0 GIFs) |
 | `rog_flare2_maj.py` | updates from releases |

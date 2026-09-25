@@ -16,6 +16,8 @@ JSON par ligne, une réponse JSON par ligne :
     {"cmd": "brightness", "value": 60}      {"cmd": "params", "params": {"speed": 250}}
     {"cmd": "speed", "value": 1.5}          {"cmd": "stop"}      {"cmd": "status"}
     {"cmd": "frame"}  (dernière trame, base64)   {"cmd": "release"} / {"cmd": "resume"}
+    {"cmd": "rgb", "config": {"mode": "clavier", "effet": "arc-en-ciel", "vitesse": 50}, "save": true}
+        (touches : effet du clavier, ou « theme » / « pulsation » envoyés par le démon)
     {"cmd": "memoire", "file": "a.gif", "reduire": "couper" | "alterner", "fidele": false}
         (enregistrée dans le clavier, puis affichée : lecture {"type": "clavier"})
 
@@ -217,9 +219,9 @@ class Daemon:
         self.lock = threading.RLock()
         self.server = None  # serveur du socket (commande quit)
         from rog_flare2_notifs import NotificationWatcher
-        from rog_flare2_openrgb import KeyboardSync
+        from rog_flare2_rgb import KeyboardLights
         self.notifs = NotificationWatcher(lambda text: self.notify(text, 0))
-        self.rgb = KeyboardSync(self._screen_level, self._accent)
+        self.rgb = KeyboardLights(self._screen_level, self._accent)
         from rog_flare2_programme import Programme
         self.manual: dict | None = None  # dernière lecture demandée par un client (reprise après une règle)
         self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold)
@@ -457,7 +459,7 @@ class Daemon:
             return {"ok": True, "version": VERSION}
         if cmd == "status":
             return {"ok": True, "version": VERSION, "show": self.show, "brightness": self.brightness(),
-                    "openrgb": self.rgb.status, "hold": sorted(self.screen.holds),
+                    "rgb": self.rgb.status, "hold": sorted(self.screen.holds),
                     "regle": (self.programme.current or {}).get("contenu"),
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
                     "overlay": self.screen.overlay_active, "skipped": self.screen.skipped,
@@ -469,6 +471,19 @@ class Daemon:
         if cmd == "stop":
             self.stop()
             return {"ok": True}
+        if cmd == "rgb":  # couleurs des touches (rog_flare2_rgb)
+            from rog_flare2_rgb import EFFECTS, load_config as rgb_config, save_config as rgb_save
+            cfg = {**rgb_config(), **req.get("config", {})}
+            if cfg.get("effet") not in EFFECTS or cfg.get("mode") not in ("clavier", "theme", "pulsation", "off"):
+                return {"ok": False, "error": f"réglage inconnu : {cfg.get('mode')!r} / {cfg.get('effet')!r}"}
+            rgb_save(cfg)
+            self.rgb.start(cfg)
+            if cfg["mode"] == "clavier":
+                try:
+                    self.rgb.apply(cfg, save=bool(req.get("save", True)))
+                except OSError as exc:
+                    return {"ok": False, "error": str(exc)}
+            return {"ok": True, "rgb": cfg}
         if cmd == "memoire":
             try:
                 return self.write_memory(req)
@@ -512,7 +527,7 @@ class Daemon:
             return {"ok": True, "hold": sorted(self.screen.holds)}
         if cmd == "config":  # réglages relus (notifications du bureau)
             from rog_flare2_notifs import load_config
-            from rog_flare2_openrgb import load_config as rgb_config
+            from rog_flare2_rgb import load_config as rgb_config
             from rog_flare2_programme import load_config as prog_config
             self.rgb.start(rgb_config())
             self.programme.start(prog_config())
@@ -651,7 +666,7 @@ def main():
     signal.signal(signal.SIGINT, shutdown)
     daemon.start_mode()
     from rog_flare2_notifs import load_config
-    from rog_flare2_openrgb import load_config as rgb_config
+    from rog_flare2_rgb import load_config as rgb_config
     daemon.notifs.start(load_config())
     daemon.rgb.start(rgb_config())
     from rog_flare2_programme import load_config as prog_config

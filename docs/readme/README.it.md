@@ -77,7 +77,7 @@ ASUS fornisce lo schermo AniMe Matrix di questa tastiera solo su Windows (Armour
 - **Playlist e preferiti**: GIF, effetti, orologio… ciascuno per la sua durata, in ciclo; anche nell'icona della barra di sistema e da riga di comando.
 - **Telecomando web**: una pagina per controllare lo schermo da un telefono della rete locale (codice QR, token).
 - **Fine dei comandi lunghi**: nel terminale, « Completato : make 2 min 05 » viene mostrato quando un comando lungo termina.
-- **Colori della tastiera tramite OpenRGB**: colore del tema sui tasti, oppure pulsazione sincronizzata con lo schermo.
+- **Colori ed effetti dei tasti**, senza OpenRGB: arcobaleno, statico, respiro, ciclo, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia — eseguiti dalla tastiera e conservati dopo averla scollegata; oppure il colore del tema, pulsazione con lo schermo.
 - **Icona nella barra di sistema**: menu rapido (modalità, luminosità).
 
 **Comodità**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Strumenti di sistema utili: `imagemagick` (conversione classica), `pulseaudio-utils` (`parec`, per l'audio), `zenity` (selettori di file), `libnotify-bin` (notifiche), `python3-gi` e `gir1.2-ayatanaappindicator3-0.1` (icona nella barra di sistema), `openrgb` (colori dei tasti), `ffmpeg` (video, webcam, mirroring dello schermo), `python3-evdev` (reazione alla tastiera su Wayland), `x11-utils` (finestra attiva su X11), `python3-qrcode` (codice QR del telecomando), `tkdnd` (trascinamento).
+Strumenti di sistema utili: `imagemagick` (conversione classica), `pulseaudio-utils` (`parec`, per l'audio), `zenity` (selettori di file), `libnotify-bin` (notifiche), `python3-gi` e `gir1.2-ayatanaappindicator3-0.1` (icona nella barra di sistema), `ffmpeg` (video, webcam, mirroring dello schermo), `python3-evdev` (reazione alla tastiera su Wayland), `x11-utils` (finestra attiva su X11), `python3-qrcode` (codice QR del telecomando), `tkdnd` (trascinamento).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Nelle interfacce rotonde, i pulsanti rotondi aprono i blocchi *GIF*, *Effetti*, 
 - **GIF / immagini**: *GIF/immagini…* o *Cartella (galleria)…* (oppure trascinare e rilasciare sulla finestra); *Geometria fedele* mantiene le proporzioni (l'angolo taglia l'immagine invece di deformarla); *👁 Anteprima fedele (prima dell'invio)* mostra il rendering senza inviare nulla; *🎞 Crea un'animazione (editor)*; *📚 Libreria di animazioni*; *★ Playlist e preferiti*; *🖼 Galleria di miniature* (clic: riproduci, clic destro: preferito); *🎥 Webcam* e *🖥 Mirroring dello schermo*; *Conversione intelligente* per convertire le GIF.
 - **Effetti** e **Audio**: scegliere, regolare, *▶ Avvia l'effetto*. I cursori agiscono in tempo reale; *Ritmo* accelera o rallenta l'intera animazione. L'effetto *Testo* accetta il tuo messaggio e la sua direzione di scorrimento. I giochi si giocano con le frecce, Spazio e Invio, con la finestra del lanciatore in primo piano; Pong in due: Z/W e S per il giocatore di sinistra.
 - **Luminosità**, **🕒 Orologio**, **■ Ferma** (che cancella lo schermo) sono comuni a tutte le schede.
-- **Impostazioni**: avvio della sessione (Galleria GIF, Orologio, Ultima riproduzione o Niente), quadrante dell'orologio, lingua, tema, interfaccia, notifiche del desktop, colori della tastiera (OpenRGB), *Programmazione…* (trigger, profili per applicazione, fasce orarie), *Indicatori…*, *Telecomando web…*, icona nella barra di sistema, fine dei comandi lunghi, cartella delle estensioni, aggiornamenti.
+- **Impostazioni**: avvio della sessione (Galleria GIF, Orologio, Ultima riproduzione o Niente), quadrante dell'orologio, lingua, tema, interfaccia, notifiche del desktop, colori della tastiera, *Programmazione…* (trigger, profili per applicazione, fasce orarie), *Indicatori…*, *Telecomando web…*, icona nella barra di sistema, fine dei comandi lunghi, cartella delle estensioni, aggiornamenti.
 
 **Chiudere il lanciatore non interrompe nulla**: il demone `animematrixd` continua a visualizzare. *■ Ferma* spegne lo schermo.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Impostazioni* → *Mostra la fine dei comandi lunghi (terminale)* aggiunge una riga a `~/.bashrc` (e `~/.zshrc`): ogni comando di oltre 30 secondi mostra alla fine « Completato : make 2 min 05 » o « Non riuscito (2) : … ». Soglia: `ANIMEMATRIX_FIN_SECONDES`; i comandi interattivi (editor, `ssh`, `less`…) vengono ignorati.
 
-### Colori della tastiera (OpenRGB)
+### Colori della tastiera
 
-*Impostazioni* → *Colori della tastiera (OpenRGB)*: colore del tema oppure pulsazione sincronizzata con lo schermo. Il demone avvia se necessario `openrgb --server`. OpenRGB non conosce l'illuminazione precedente della tastiera: per ritrovare l'effetto salvato nella tastiera, scollegarla e ricollegarla.
+*Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Portatili ROG (sperimentale)
 
@@ -262,7 +262,6 @@ Le note originali di reverse engineering sono in **[../PROTOCOL.md](../PROTOCOL.
 | Webcam, video o mirroring dello schermo inattivi | `ffmpeg` assente | `sudo apt install ffmpeg`; su Wayland, il mirroring dello schermo passa dal portale (`gstreamer1.0-pipewire`) |
 | Profili per applicazione o schermo intero senza effetto su Wayland | finestra attiva sconosciuta al compositor | GNOME: estensione *Window Calls*; KDE: `kdotool`; Sway e Hyprland: niente da fare |
 | La finestra rotonda viene mostrata come un rettangolo | estensione SHAPE o `python3-xlib` mancante | `sudo apt install python3-xlib`, oppure *Impostazioni* → *Interfaccia:* → *Classica* |
-| I tasti restano di un colore dopo OpenRGB | OpenRGB non ripristina l'effetto originale | scollegare e ricollegare la tastiera |
 | Log del demone | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Le note originali di reverse engineering sono in **[../PROTOCOL.md](../PROTOCOL.
 | `rog_flare2_effets.py`, `polywollywin/` | effetti e visualizzatori (motore PolyWollyWin, MIT), estensioni |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor di sistema, brano in riproduzione, giochi |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifiche, programmazione oraria e trigger |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | colori tramite OpenRGB, icona nella barra di sistema, portatili (sperimentale) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | colori ed effetti dei tasti, icona nella barra di sistema, portatili (sperimentale) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | editor di animazioni, simulatore, conversione |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | libreria di animazioni (catalogo, GIF CC0) |
 | `rog_flare2_maj.py` | aggiornamenti dalle release |

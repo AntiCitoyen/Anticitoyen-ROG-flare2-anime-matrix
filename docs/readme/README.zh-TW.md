@@ -77,7 +77,7 @@ ASUS 僅在 Windows(透過 Armoury Crate)提供這款鍵盤 AniMe Matrix 螢幕�
 - **播放清單與我的最愛**:GIF、特效、時鐘……各依設定的時長輪流循環播放;也可從系統匣圖示與命令列使用。
 - **網頁遙控**:透過一個網頁,用區域網路內的手機控制螢幕(QR 碼、權杖)。
 - **長時間指令的結束**:在終端機中,長時間執行的指令結束時會顯示「完成：make 2 min 05」。
-- **透過 OpenRGB 同步鍵盤顏色**:使用主題顏色,或與螢幕同步呼吸效果。
+- **按鍵顏色與效果**，無需 OpenRGB：彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴——由鍵盤本身執行，拔除後仍保留；或主題顏色、隨螢幕脈動。
 - **系統匣圖示**:快速選單(模式、亮度)。
 
 **便利性**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-有用的系統工具:`imagemagick`(經典轉換)、`pulseaudio-utils`(`parec`,用於音訊)、`zenity`(檔案選擇對話框)、`libnotify-bin`(通知)、`python3-gi` 與 `gir1.2-ayatanaappindicator3-0.1`(系統匣圖示)、`openrgb`(鍵盤顏色)、`ffmpeg`(影片、網路攝影機、螢幕鏡像)、`python3-evdev`(Wayland 下的鍵盤反應)、`x11-utils`(X11 下的作用中視窗)、`python3-qrcode`(遙控的 QR 碼)、`tkdnd`(拖放)。
+有用的系統工具:`imagemagick`(經典轉換)、`pulseaudio-utils`(`parec`,用於音訊)、`zenity`(檔案選擇對話框)、`libnotify-bin`(通知)、`python3-gi` 與 `gir1.2-ayatanaappindicator3-0.1`(系統匣圖示)、`ffmpeg`(影片、網路攝影機、螢幕鏡像)、`python3-evdev`(Wayland 下的鍵盤反應)、`x11-utils`(X11 下的作用中視窗)、`python3-qrcode`(遙控的 QR 碼)、`tkdnd`(拖放)。
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 圖片**:*GIF/圖片…* 或 *資料夾（圖庫）…*(或拖放到視窗上);*真實幾何* 會保持比例(裁切邊角而非拉伸圖片);*👁 真實預覽（傳送前）* 在不傳送任何內容的情況下呈現渲染效果;*🎞 建立動畫（編輯器）*;*📚 動畫庫*;*★ 播放清單與我的最愛*;*🖼 縮圖圖庫*(點擊:播放,右鍵:我的最愛);*🎥 網路攝影機* 與 *🖥 螢幕鏡像*;*智慧轉換* 用於轉換 GIF。
 - **特效** 與 **音訊**:選擇、調整參數,再按下 *▶ 啟動效果*。滑桿會即時生效;*節奏* 用來加快或放慢整段動畫。*文字* 特效可輸入你的訊息並設定捲動方向。遊戲以方向鍵、空白鍵與 Enter 操作,需將啟動器視窗置於最上層;雙人乒乓:左側玩家使用 Z/W 與 S。
 - **亮度**、**🕒 時鐘**、**■ 停止**(會清空螢幕)在所有分頁中都是共通的。
-- **設定**:工作階段啟動內容(GIF 圖庫、時鐘、上次播放或無)、時鐘錶盤、語言、主題、介面、桌面通知、鍵盤顏色(OpenRGB)、*排程…*(觸發條件、依應用程式設定檔、時段)、*指示燈…*、*網頁遙控…*、系統匣圖示、長時間指令的結束、擴充資料夾、更新。
+- **設定**:工作階段啟動內容(GIF 圖庫、時鐘、上次播放或無)、時鐘錶盤、語言、主題、介面、桌面通知、鍵盤顏色、*排程…*(觸發條件、依應用程式設定檔、時段)、*指示燈…*、*網頁遙控…*、系統匣圖示、長時間指令的結束、擴充資料夾、更新。
 
 **關閉啟動器不會中斷任何內容**:`animematrixd` 守護程式會繼續顯示。*■ 停止* 會關閉螢幕。
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *設定* → *顯示長時間指令的結束（終端機）* 會在 `~/.bashrc`(以及 `~/.zshrc`)中加入一行:任何執行超過 30 秒的指令結束時都會顯示「完成：make 2 min 05」或「失敗（2）：…」。門檻:`ANIMEMATRIX_FIN_SECONDES`;互動式指令(編輯器、`ssh`、`less` 等)會被忽略。
 
-### 鍵盤顏色(OpenRGB)
+### 鍵盤顏色
 
-*設定* → *鍵盤顏色（OpenRGB）*:使用主題顏色,或與螢幕同步呼吸效果。守護程式會在需要時啟動 `openrgb --server`。OpenRGB 無法得知鍵盤先前的燈效:要恢復鍵盤中儲存的原始效果,需拔除鍵盤後重新插上。
+*設定* → *🌈 鍵盤顏色…*：效果（彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴）、顏色、速度、亮度、方向。*試用* 立即套用，*儲存到鍵盤* 拔除後仍保留。*主題顏色* 與 *隨螢幕脈動* 由常駐程式逐鍵傳送；離開後恢復已儲存的效果。命令列：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。
 
 ### ROG 筆記型電腦(實驗性)
 
@@ -262,7 +262,6 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | 網路攝影機、影片或螢幕鏡像無法使用 | 缺少 `ffmpeg` | `sudo apt install ffmpeg`;在 Wayland 下,螢幕鏡像透過入口網站(`gstreamer1.0-pipewire`)運作 |
 | 在 Wayland 下依應用程式設定檔或全螢幕偵測無效 | 合成器無法提供作用中視窗 | GNOME:*Window Calls* 擴充功能;KDE:`kdotool`;Sway 與 Hyprland:無需任何操作 |
 | 圓形視窗顯示為矩形 | 缺少 SHAPE 擴充功能或 `python3-xlib` | `sudo apt install python3-xlib`,或 *設定* → *介面：* → *經典* |
-| 使用 OpenRGB 後按鍵一直維持同一種顏色 | OpenRGB 無法還原原始效果 | 拔除鍵盤後重新插上 |
 | 守護程式紀錄 | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | `rog_flare2_effets.py`、`polywollywin/` | 特效與視覺化效果(PolyWollyWin 引擎,MIT 授權)、擴充功能 |
 | `rog_flare2_infos.py`、`rog_flare2_mpris.py`、`rog_flare2_jeux.py` | 系統監視器、目前播放的曲目、遊戲 |
 | `rog_flare2_notifs.py`、`rog_flare2_programme.py`、`rog_flare2_ui_programme.py` | 通知、定時排程與觸發條件 |
-| `rog_flare2_openrgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | 透過 OpenRGB 同步顏色、系統匣圖示、筆記型電腦(實驗性) |
+| `rog_flare2_rgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | 按鍵顏色與效果、系統匣圖示、筆記型電腦(實驗性) |
 | `rog_flare2_animation.py`、`rog_flare2_simulateur.py`、`rog_flare2_convertir.py` | 動畫編輯器、模擬器、轉換 |
 | `rog_flare2_bibliotheque.py`、`bibliotheque/` | 動畫庫(目錄、CC0 授權的 GIF) |
 | `rog_flare2_maj.py` | 從 release 取得更新 |

@@ -43,6 +43,7 @@
   <supports><control>pointing</control><control>keyboard</control></supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="1.7.0" date="2026-09-25"><description><p>Key colours and effects without OpenRGB: rainbow, static, breathing, ripple and more, saved in the keyboard; theme colour and pulse with the screen.</p></description></release>
     <release version="1.6.0" date="2026-09-25"><description><p>On-board memory: save an animation in the keyboard, shown without any software; hardware brightness.</p></description></release>
     <release version="1.5.0" date="2026-09-25"><description><p>Wayland, playlists, profiles, status lights, videos, webcam, screen mirror, web remote, new clock faces and games.</p></description></release>
     <release version="1.4.1" date="2026-09-25"><description><p>System monitor and games reachable again.</p></description></release>

@@ -77,7 +77,7 @@ ASUS はこのキーボードの AniMe Matrix ディスプレイを Windows(Armo
 - **プレイリストとお気に入り**:GIF、エフェクト、時計などを、それぞれ設定した時間ずつループ再生。システムトレイアイコンやコマンドラインからも利用可能。
 - **Webリモコン**:ローカルネットワーク上のスマートフォンから画面を操作できるページ(QR コード、トークン)。
 - **長いコマンドの終了**:ターミナルで長いコマンドが終わると「完了：make 2 min 05」と表示。
-- **OpenRGB によるキーボードの色**:テーマカラーをキーに反映、または画面と同期して明滅。
+- **キーの色と効果**（OpenRGB 不要）：レインボー、スタティック、ブリージング、カラーサイクル、リアクティブ、リップル、星空、流砂、カレント、レイン。キーボード自身が実行し、取り外した後も残ります。テーマの色や画面と連動した点滅も可能です。
 - **システムトレイアイコン**:クイックメニュー(モード、輝度)。
 
 **快適性**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-役立つシステムツール:`imagemagick`(従来型の変換用)、`pulseaudio-utils`(オーディオ用の `parec`)、`zenity`(ファイル選択ダイアログ)、`libnotify-bin`(通知)、`python3-gi` と `gir1.2-ayatanaappindicator3-0.1`(システムトレイアイコン)、`openrgb`(キーボードの色)、`ffmpeg`(動画、Webカメラ、画面ミラー)、`python3-evdev`(Wayland でのキーボード反応)、`x11-utils`(X11 でのアクティブウィンドウ)、`python3-qrcode`(リモコンの QR コード)、`tkdnd`(ドラッグ＆ドロップ)。
+役立つシステムツール:`imagemagick`(従来型の変換用)、`pulseaudio-utils`(オーディオ用の `parec`)、`zenity`(ファイル選択ダイアログ)、`libnotify-bin`(通知)、`python3-gi` と `gir1.2-ayatanaappindicator3-0.1`(システムトレイアイコン)、`ffmpeg`(動画、Webカメラ、画面ミラー)、`python3-evdev`(Wayland でのキーボード反応)、`x11-utils`(X11 でのアクティブウィンドウ)、`python3-qrcode`(リモコンの QR コード)、`tkdnd`(ドラッグ＆ドロップ)。
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 - **GIF / 画像**:*GIF/画像…* または *フォルダー（ギャラリー）…*(またはウィンドウにドラッグ＆ドロップ);*忠実なジオメトリ* は比率を保ちます(引き伸ばす代わりに角を切り取ります);*👁 忠実なプレビュー（送信前）* は何も送信せずに表示を確認できます;*🎞 アニメーションを作成（エディター）*;*📚 アニメーションライブラリ*;*★ プレイリストとお気に入り*;*🖼 サムネイルギャラリー*(クリック:再生、右クリック:お気に入り);*🎥 Webカメラ* と *🖥 画面ミラー*;*スマート変換* で GIF を変換します。
 - **エフェクト**と **オーディオ**:選択・調整して *▶ エフェクトを開始*。スライダーはリアルタイムに反映され、*テンポ*でアニメーション全体を速く/遅くできます。*テキスト* エフェクトでは、メッセージとスクロール方向を指定できます。ゲームは矢印キー、スペース、Enter で操作し、ランチャーのウィンドウを最前面にする必要があります。2 人ポンでは、左のプレイヤーは Z/W と S で操作します。
 - **輝度**、**🕒 時計**、**■ 停止**(画面を消去)はすべてのタブに共通です。
-- **設定**:セッション開始時の表示内容(GIF ギャラリー、時計、前回の再生、なし)、時計の文字盤、言語、テーマ、インターフェース、デスクトップ通知、キーボードの色(OpenRGB)、*スケジュール…*(トリガー、アプリ別プロファイル、時間帯)、*インジケーター…*、*Webリモコン…*、システムトレイアイコン、長いコマンドの終了、拡張機能フォルダー、アップデート。
+- **設定**:セッション開始時の表示内容(GIF ギャラリー、時計、前回の再生、なし)、時計の文字盤、言語、テーマ、インターフェース、デスクトップ通知、キーボードの色、*スケジュール…*(トリガー、アプリ別プロファイル、時間帯)、*インジケーター…*、*Webリモコン…*、システムトレイアイコン、長いコマンドの終了、拡張機能フォルダー、アップデート。
 
 **ランチャーを閉じても、表示は途切れません**:`animematrixd` デーモンが表示を継続します。*■ 停止* を押すと画面が消灯します。
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *設定* → *長いコマンドの終了を表示（ターミナル）* は `~/.bashrc`(および `~/.zshrc`)に 1 行を追加します:30 秒を超えるコマンドは、終了時に「完了：make 2 min 05」または「失敗（2）：…」と表示します。しきい値:`ANIMEMATRIX_FIN_SECONDES`;対話型コマンド(エディター、`ssh`、`less` など)は対象外です。
 
-### キーボードの色(OpenRGB)
+### キーボードの色
 
-*設定* → *キーボードの色（OpenRGB）*:テーマカラーをキーに反映、または画面と同期して明滅。デーモンは必要に応じて `openrgb --server` を起動します。OpenRGB はキーボードの以前のライティングを把握していません。キーボードに保存されたエフェクトを取り戻すには、抜き差ししてください。
+*設定* → *🌈 キーボードの色…*：効果（レインボー、スタティック、ブリージング、カラーサイクル、リアクティブ、リップル、星空、流砂、カレント、レイン）、色、速度、明るさ、方向。*試す* で適用、*キーボードに保存* で取り外した後も保持します。*テーマの色* と *画面と連動して点滅* はデーモンがキーごとに送信し、終了すると保存した効果に戻ります。コマンドライン：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。
 
 ### ROG ノート PC(実験的)
 
@@ -262,7 +262,6 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | Webカメラ、動画、画面ミラーが動作しない | `ffmpeg` がない | `sudo apt install ffmpeg`;Wayland では画面ミラーはポータル(`gstreamer1.0-pipewire`)経由 |
 | Wayland でアプリ別プロファイルやフルスクリーン検出が効かない | コンポジターからアクティブウィンドウを取得できない | GNOME:*Window Calls* 拡張機能;KDE:`kdotool`;Sway と Hyprland:設定不要 |
 | 丸いウィンドウが長方形で表示される | SHAPE 拡張または `python3-xlib` が未導入 | `sudo apt install python3-xlib`、または *設定* → *インターフェース：* → *クラシック* |
-| OpenRGB 使用後にキーが同じ色のまま | OpenRGB が元のエフェクトを再現できない | キーボードを抜き差しする |
 | デーモンのログ | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 | `rog_flare2_effets.py`、`polywollywin/` | エフェクトとビジュアライザー(PolyWollyWin のエンジン、MIT)、拡張機能 |
 | `rog_flare2_infos.py`、`rog_flare2_mpris.py`、`rog_flare2_jeux.py` | システムモニター、再生中の曲、ゲーム |
 | `rog_flare2_notifs.py`、`rog_flare2_programme.py`、`rog_flare2_ui_programme.py` | 通知、スケジュール機能とトリガー |
-| `rog_flare2_openrgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | OpenRGB 経由の色、システムトレイアイコン、ノート PC(実験的) |
+| `rog_flare2_rgb.py`、`rog_flare2_tray.py`、`rog_flare2_portable.py` | キーの色と効果、システムトレイアイコン、ノート PC(実験的) |
 | `rog_flare2_animation.py`、`rog_flare2_simulateur.py`、`rog_flare2_convertir.py` | アニメーションエディター、シミュレーター、変換 |
 | `rog_flare2_bibliotheque.py`、`bibliotheque/` | アニメーションライブラリ(カタログ、CC0 の GIF) |
 | `rog_flare2_maj.py` | リリースからのアップデート |

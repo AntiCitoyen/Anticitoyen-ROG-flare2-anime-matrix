@@ -77,7 +77,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 - **Daftar putar dan favorit**: GIF, efek, jam… masing-masing selama durasinya, berulang; juga tersedia di ikon baki sistem dan baris perintah.
 - **Remote web**: halaman untuk mengendalikan layar dari ponsel di jaringan lokal (kode QR, token).
 - **Akhir perintah panjang**: di terminal, "Selesai: make 2 min 05" ditampilkan saat perintah yang lama selesai.
-- **Warna keyboard melalui OpenRGB**: warna tema pada tombol, atau berdenyut mengikuti layar.
+- **Warna dan efek tombol**, tanpa OpenRGB: pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan — dijalankan oleh keyboard sendiri dan tetap ada setelah dicabut; atau warna tema, berdenyut dengan layar.
 - **Ikon baki sistem**: menu cepat (mode, kecerahan).
 
 **Kenyamanan**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi), `python3-gi` dan `gir1.2-ayatanaappindicator3-0.1` (ikon baki sistem), `openrgb` (warna tombol), `ffmpeg` (video, webcam, cermin layar), `python3-evdev` (reaksi keyboard di Wayland), `x11-utils` (jendela aktif di X11), `python3-qrcode` (kode QR remote), `tkdnd` (seret dan lepas).
+Alat sistem yang berguna: `imagemagick` (konversi standar), `pulseaudio-utils` (`parec`, untuk audio), `zenity` (pemilih berkas), `libnotify-bin` (notifikasi), `python3-gi` dan `gir1.2-ayatanaappindicator3-0.1` (ikon baki sistem), `ffmpeg` (video, webcam, cermin layar), `python3-evdev` (reaksi keyboard di Wayland), `x11-utils` (jendela aktif di X11), `python3-qrcode` (kode QR remote), `tkdnd` (seret dan lepas).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ Pada antarmuka bulat, tombol bulat membuka blok *GIF*, *Efek*, *Audio*, dan *Pen
 - **GIF / gambar**: *GIF/gambar…* atau *Folder (galeri)…* (atau seret dan lepas ke jendela); *Geometri akurat* mempertahankan proporsi (sudut gambar terpotong, bukan gambar yang diregangkan); *👁 Pratinjau akurat (sebelum dikirim)* menampilkan hasilnya tanpa mengirim apa pun; *🎞 Buat animasi (editor)*; *📚 Pustaka animasi*; *★ Daftar putar dan favorit*; *🖼 Galeri gambar mini* (klik: putar, klik kanan: favorit); *🎥 Webcam* dan *🖥 Cermin layar*; *Konversi pintar* untuk mengonversi GIF.
 - **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser bekerja secara langsung; *Tempo* mempercepat atau memperlambat seluruh animasi. Efek *Teks* menerima pesan Anda dan arah gulirnya. Permainan dimainkan dengan tombol panah, Spasi, dan Enter, dengan jendela peluncur di posisi terdepan; Pong berdua: Z/W dan S untuk pemain kiri.
 - **Kecerahan**, **🕒 Jam**, **■ Berhenti** (menghapus layar) tersedia di semua tab.
-- **Pengaturan**: saat sesi dimulai (Galeri GIF, Jam, Putar terakhir, atau Tidak ada), muka jam, bahasa, tema, antarmuka, notifikasi desktop, warna keyboard (OpenRGB), *Jadwal…* (pemicu, profil per aplikasi, rentang waktu), *Indikator…*, *Remote web…*, ikon baki sistem, akhir perintah panjang, folder ekstensi, pembaruan.
+- **Pengaturan**: saat sesi dimulai (Galeri GIF, Jam, Putar terakhir, atau Tidak ada), muka jam, bahasa, tema, antarmuka, notifikasi desktop, warna keyboard, *Jadwal…* (pemicu, profil per aplikasi, rentang waktu), *Indikator…*, *Remote web…*, ikon baki sistem, akhir perintah panjang, folder ekstensi, pembaruan.
 
 **Menutup peluncur tidak menghentikan apa pun**: daemon `animematrixd` terus menampilkan konten. *■ Berhenti* akan mematikan layar.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Pengaturan* → *Tampilkan akhir perintah panjang (terminal)* menambahkan satu baris ke `~/.bashrc` (dan `~/.zshrc`): setiap perintah yang berjalan lebih dari 30 detik menampilkan "Selesai: make 2 min 05" atau "Gagal (2): …" saat berakhir. Ambang: `ANIMEMATRIX_FIN_SECONDES`; perintah interaktif (editor, `ssh`, `less`…) diabaikan.
 
-### Warna keyboard (OpenRGB)
+### Warna keyboard
 
-*Pengaturan* → *Warna keyboard (OpenRGB)*: warna tema atau berdenyut mengikuti layar. Daemon akan menjalankan `openrgb --server` bila diperlukan. OpenRGB tidak mengetahui pencahayaan keyboard sebelumnya: untuk mendapatkan kembali efek yang tersimpan di keyboard, cabut lalu pasang kembali.
+*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### Laptop ROG (eksperimental)
 
@@ -262,7 +262,6 @@ Catatan reverse engineering aslinya ada di **[docs/PROTOCOL.md](../PROTOCOL.md)*
 | Webcam, video, atau cermin layar tidak berfungsi | `ffmpeg` tidak ada | `sudo apt install ffmpeg`; di Wayland, cermin layar melalui portal (`gstreamer1.0-pipewire`) |
 | Profil per aplikasi atau layar penuh tidak berpengaruh di Wayland | jendela aktif tidak diketahui oleh compositor | GNOME: ekstensi *Window Calls*; KDE: `kdotool`; Sway dan Hyprland: tidak perlu apa-apa |
 | Jendela bulat ditampilkan sebagai persegi panjang | ekstensi SHAPE atau `python3-xlib` tidak ada | `sudo apt install python3-xlib`, atau *Pengaturan* → *Antarmuka:* → *Klasik* |
-| Tombol tetap satu warna setelah OpenRGB | OpenRGB tidak menampilkan efek aslinya | cabut lalu pasang kembali keyboard |
 | Log daemon | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ Catatan reverse engineering aslinya ada di **[docs/PROTOCOL.md](../PROTOCOL.md)*
 | `rog_flare2_effets.py`, `polywollywin/` | efek dan visualizer (engine PolyWollyWin, MIT), ekstensi |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | monitor sistem, lagu yang sedang diputar, permainan |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | notifikasi, penjadwalan waktu dan pemicunya |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | warna melalui OpenRGB, ikon baki sistem, laptop (eksperimental) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | warna dan efek tombol, ikon baki sistem, laptop (eksperimental) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | editor animasi, simulator, konversi |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | pustaka animasi (katalog, GIF CC0) |
 | `rog_flare2_maj.py` | pembaruan dari rilis |

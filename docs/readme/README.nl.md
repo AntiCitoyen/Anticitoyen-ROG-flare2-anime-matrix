@@ -77,7 +77,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 - **Afspeellijsten en favorieten**: GIF's, effecten, klok… elk gedurende zijn eigen tijd, in een lus; ook in het pictogram in het systeemvak en via de opdrachtregel.
 - **Webafstandsbediening**: een pagina om het scherm te bedienen vanaf een telefoon in het lokale netwerk (QR-code, token).
 - **Einde van lange opdrachten**: in de terminal verschijnt « Klaar : make 2 min 05 » wanneer een lange opdracht klaar is.
-- **Toetsenbordkleuren via OpenRGB**: themakleur op de toetsen, of pulserend synchroon met het scherm.
+- **Toetskleuren en -effecten**, zonder OpenRGB: regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen — uitgevoerd door het toetsenbord en behouden na loskoppelen; of de themakleur, pulseren met het scherm.
 - **Pictogram in het systeemvak**: snelmenu (modi, helderheid).
 
 **Comfort**
@@ -145,7 +145,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 .venv/bin/python rog_flare2_launcher.py
 ```
 
-Nuttige systeemtools: `imagemagick` (klassieke conversie), `pulseaudio-utils` (`parec`, voor audio), `zenity` (bestandskiezers), `libnotify-bin` (meldingen), `python3-gi` en `gir1.2-ayatanaappindicator3-0.1` (pictogram in het systeemvak), `openrgb` (kleuren van de toetsen), `ffmpeg` (video's, webcam, schermspiegeling), `python3-evdev` (reactie op het toetsenbord onder Wayland), `x11-utils` (actief venster onder X11), `python3-qrcode` (QR-code van de afstandsbediening), `tkdnd` (slepen en neerzetten).
+Nuttige systeemtools: `imagemagick` (klassieke conversie), `pulseaudio-utils` (`parec`, voor audio), `zenity` (bestandskiezers), `libnotify-bin` (meldingen), `python3-gi` en `gir1.2-ayatanaappindicator3-0.1` (pictogram in het systeemvak), `ffmpeg` (video's, webcam, schermspiegeling), `python3-evdev` (reactie op het toetsenbord onder Wayland), `x11-utils` (actief venster onder X11), `python3-qrcode` (QR-code van de afstandsbediening), `tkdnd` (slepen en neerzetten).
 
 <a id="utilisation"></a>
 
@@ -160,7 +160,7 @@ In de ronde interfaces openen de ronde knoppen de blokken *GIF*, *Effecten*, *Au
 - **GIF / afbeeldingen**: *GIF's/afbeeldingen…* of *Map (galerij)…* (of slepen en neerzetten op het venster); *Getrouwe geometrie* behoudt de verhoudingen (de hoek snijdt de afbeelding bij in plaats van ze uit te rekken); *👁 Getrouwe voorvertoning (vóór verzenden)* toont de weergave zonder iets te verzenden; *🎞 Animatie maken (editor)*; *📚 Animatiebibliotheek*; *★ Afspeellijsten en favorieten*; *🖼 Miniaturengalerij* (klik: afspelen, rechtsklik: favoriet); *🎥 Webcam* en *🖥 Schermspiegeling*; *Slimme conversie* om GIF's te converteren.
 - **Effecten** en **Audio**: kiezen, instellen, *▶ Effect starten*. De schuifregelaars werken live; *Tempo* versnelt of vertraagt de hele animatie. Het effect *Tekst* neemt je bericht en de looprichting. De spellen worden bediend met de pijltjestoetsen, spatie en enter, met het launchervenster op de voorgrond; Pong met z'n tweeën: Z/W en S voor de linkerspeler.
 - **Helderheid**, **🕒 Klok**, **■ Stoppen** (wat het scherm wist) zijn gemeenschappelijk voor alle tabbladen.
-- **Instellingen**: opstarten van de sessie (GIF-galerij, Klok, Laatste weergave of Niets), klokweergave, taal, thema, interface, bureaubladmeldingen, toetsenbordkleuren (OpenRGB), *Planning…* (triggers, profielen per app, tijdvakken), *Indicatoren…*, *Webafstandsbediening…*, pictogram in het systeemvak, einde van lange opdrachten, map met extensies, updates.
+- **Instellingen**: opstarten van de sessie (GIF-galerij, Klok, Laatste weergave of Niets), klokweergave, taal, thema, interface, bureaubladmeldingen, toetsenbordkleuren, *Planning…* (triggers, profielen per app, tijdvakken), *Indicatoren…*, *Webafstandsbediening…*, pictogram in het systeemvak, einde van lange opdrachten, map met extensies, updates.
 
 **Als je de launcher sluit, wordt niets onderbroken**: de daemon `animematrixd` blijft weergeven. *■ Stoppen* schakelt het scherm uit.
 
@@ -217,9 +217,9 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Instellingen* → *Einde van lange opdrachten tonen (terminal)* voegt een regel toe aan `~/.bashrc` (en `~/.zshrc`): elke opdracht van meer dan 30 seconden toont na afloop « Klaar : make 2 min 05 » of « Mislukt (2) : … ». Drempel: `ANIMEMATRIX_FIN_SECONDES`; interactieve opdrachten (editors, `ssh`, `less`…) worden genegeerd.
 
-### Toetsenbordkleuren (OpenRGB)
+### Toetsenbordkleuren
 
-*Instellingen* → *Toetsenbordkleuren (OpenRGB)*: themakleur of pulserend synchroon met het scherm. De daemon start indien nodig `openrgb --server`. OpenRGB kent de vorige verlichting van het toetsenbord niet: om het in het toetsenbord opgeslagen effect terug te vinden, koppel je het los en sluit je het opnieuw aan.
+*Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`.
 
 ### ROG-laptops (experimenteel)
 
@@ -262,7 +262,6 @@ De oorspronkelijke reverse-engineeringnotities staan in **[../PROTOCOL.md](../PR
 | Webcam, video's of schermspiegeling werken niet | `ffmpeg` ontbreekt | `sudo apt install ffmpeg`; onder Wayland loopt schermspiegeling via de portal (`gstreamer1.0-pipewire`) |
 | Profielen per app of volledig scherm zonder effect onder Wayland | actief venster onbekend bij de compositor | GNOME: extensie *Window Calls*; KDE: `kdotool`; Sway en Hyprland: niets te doen |
 | Het ronde venster wordt als een rechthoek weergegeven | SHAPE-extensie of `python3-xlib` ontbreekt | `sudo apt install python3-xlib`, of *Instellingen* → *Interface:* → *Klassiek* |
-| De toetsen behouden een kleur na OpenRGB | OpenRGB herstelt het oorspronkelijke effect niet | het toetsenbord loskoppelen en opnieuw aansluiten |
 | Logboek van de daemon | — | `journalctl --user -u animematrixd.service -f` |
 
 <a id="depot"></a>
@@ -283,7 +282,7 @@ De oorspronkelijke reverse-engineeringnotities staan in **[../PROTOCOL.md](../PR
 | `rog_flare2_effets.py`, `polywollywin/` | effecten en visualisaties (PolyWollyWin-engine, MIT), extensies |
 | `rog_flare2_infos.py`, `rog_flare2_mpris.py`, `rog_flare2_jeux.py` | systeemmonitor, nu spelend, spellen |
 | `rog_flare2_notifs.py`, `rog_flare2_programme.py`, `rog_flare2_ui_programme.py` | meldingen, tijdgebonden planning en triggers |
-| `rog_flare2_openrgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | kleuren via OpenRGB, pictogram in het systeemvak, laptops (experimenteel) |
+| `rog_flare2_rgb.py`, `rog_flare2_tray.py`, `rog_flare2_portable.py` | toetskleuren en -effecten, pictogram in het systeemvak, laptops (experimenteel) |
 | `rog_flare2_animation.py`, `rog_flare2_simulateur.py`, `rog_flare2_convertir.py` | animatie-editor, simulator, conversie |
 | `rog_flare2_bibliotheque.py`, `bibliotheque/` | animatiebibliotheek (catalogus, CC0-GIF's) |
 | `rog_flare2_maj.py` | updates vanuit de releases |
