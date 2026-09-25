@@ -78,6 +78,10 @@ def show_label(show: dict | None) -> str:
         return _("Horloge")
     if kind == "liste":
         return _("Liste : {nom}").format(nom=show.get("name", ""))
+    if kind == "webcam":
+        return _("Webcam")
+    if kind == "ecran":
+        return _("Miroir d'écran")
     return str(kind)
 
 

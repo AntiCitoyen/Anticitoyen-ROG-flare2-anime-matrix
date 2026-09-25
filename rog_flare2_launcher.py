@@ -194,6 +194,20 @@ class LauncherApp(tk.Tk):
         ttk.Button(tab, text=_("🎞 Créer une animation (éditeur)"), command=self.open_animation).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("📚 Bibliothèque d'animations"), command=self.open_library).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("★ Listes de lecture et favoris"), command=self.open_lists).pack(fill="x", pady=(0, 4))
+        live = ttk.Frame(tab)
+        live.pack(fill="x", pady=(0, 4))
+        ttk.Button(live, text=_("🎥 Webcam"), command=self.start_webcam).pack(side="left", expand=True, fill="x")
+        ttk.Button(live, text=_("🖥 Miroir d'écran"), command=self.start_screen).pack(
+            side="left", expand=True, fill="x", padx=(4, 0))
+        live_opts = ttk.Frame(tab)
+        live_opts.pack(fill="x", pady=(0, 4))
+        self.silhouette_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(live_opts, text=_("Silhouette"), variable=self.silhouette_var).pack(side="left")
+        self.screen_modes = {_("Écran entier"): "ecran", _("Autour de la souris"): "souris",
+                             _("Fenêtre active"): "fenetre"}
+        self.screen_mode = tk.StringVar(value=next(iter(self.screen_modes)))
+        ttk.Combobox(live_opts, textvariable=self.screen_mode, values=list(self.screen_modes), state="readonly",
+                     width=18).pack(side="right")
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
         ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
@@ -474,7 +488,8 @@ class LauncherApp(tk.Tk):
                 [
                     "zenity", "--file-selection", "--multiple", "--separator=\n",
                     "--title=" + _("Choisir un ou plusieurs GIF/images"),
-                    f"--file-filter={_('Images et GIF')} | *.gif *.png *.jpg *.jpeg *.bmp *.webp",
+                    f"--file-filter={_('Images, GIF et vidéos')} | *.gif *.png *.jpg *.jpeg *.bmp *.webp "
+                    "*.mp4 *.webm *.mkv *.mov *.avi *.m4v",
                     f"--file-filter={_('Tous les fichiers')} | *",
                 ],
                 capture_output=True, text=True, timeout=300,
@@ -483,7 +498,8 @@ class LauncherApp(tk.Tk):
         except (FileNotFoundError, subprocess.SubprocessError):
             paths = filedialog.askopenfilenames(
                 title=_("Choisir un ou plusieurs GIF/images"),
-                filetypes=[(_("Images et GIF"), "*.gif *.png *.jpg *.jpeg *.bmp *.webp"), (_("Tous les fichiers"), "*.*")],
+                filetypes=[(_("Images, GIF et vidéos"), "*.gif *.png *.jpg *.jpeg *.bmp *.webp *.mp4 *.webm *.mkv *.mov "
+                                                          "*.avi *.m4v"), (_("Tous les fichiers"), "*.*")],
             )
         if paths:
             self.set_files([Path(p) for p in paths], _("sélection"))
@@ -545,6 +561,13 @@ class LauncherApp(tk.Tk):
 
     def start_clock(self):
         self._play({"type": "horloge"}, _("Horloge"))
+
+    def start_webcam(self):
+        self._play({"type": "webcam", "silhouette": self.silhouette_var.get()}, _("Webcam"))
+
+    def start_screen(self):
+        mode = self.screen_modes.get(self.screen_mode.get(), "ecran")
+        self._play({"type": "ecran", "mode": mode}, _("Miroir d'écran"))
 
     def set_face(self, face: str):
         """Cadran mémorisé ; l'horloge en cours change tout de suite."""

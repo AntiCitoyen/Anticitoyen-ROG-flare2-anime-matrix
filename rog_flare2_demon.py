@@ -10,6 +10,8 @@ JSON par ligne, une réponse JSON par ligne :
     {"cmd": "play", "show": {"type": "effet", "name": "Plasma", "params": {...}, "speed": 1.0}}
     {"cmd": "play", "show": {"type": "horloge"}}
     {"cmd": "play", "show": {"type": "liste", "name": "Soirée"}}   (listes : rog_flare2_listes)
+    {"cmd": "play", "show": {"type": "webcam", "silhouette": false}}
+    {"cmd": "play", "show": {"type": "ecran", "mode": "ecran" | "souris" | "fenetre"}}   (miroir d'écran)
     {"cmd": "notify", "text": "Nouveau mail", "duration": 6}
     {"cmd": "brightness", "value": 60}      {"cmd": "params", "params": {"speed": 250}}
     {"cmd": "speed", "value": 1.5}          {"cmd": "stop"}      {"cmd": "status"}
@@ -269,6 +271,13 @@ class Daemon:
             if effect_name:  # cadran analogique, binaire, en mots, stylisé
                 return self._job({"type": "effet", "name": effect_name, "params": {}, "speed": 1.0})
             return lambda stop: play_clock(layer, stop, self.brightness)
+        if kind == "webcam":
+            from rog_flare2_video import play_webcam
+            return lambda stop: play_webcam(layer, stop, self.brightness, show.get("device", "/dev/video0"),
+                                            bool(show.get("silhouette")))
+        if kind == "ecran":
+            from rog_flare2_video import play_screen
+            return lambda stop: play_screen(layer, stop, self.brightness, show.get("mode", "ecran"))
         if kind == "liste":
             from rog_flare2_listes import DEFAULT_SECONDS, item_show, load_lists
             items = show.get("items") or load_lists().get(show.get("name", ""), [])

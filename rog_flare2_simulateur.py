@@ -120,8 +120,13 @@ class PreviewWindow:
         src = self.pick(self.files[self.index])
         self.name.config(text=f"{src.name}  ({self.index + 1}/{len(self.files)})")
         try:
-            self.frames = [(self.image_to_frame(img, self.brightness(), self.fidele), d)
-                           for img, d in self.iter_gif_frames(src)]
+            from rog_flare2_core import VIDEO_EXTENSIONS
+            if src.suffix.lower() in VIDEO_EXTENSIONS:
+                from rog_flare2_video import preview_frames
+                self.frames = preview_frames(src, brightness=self.brightness())
+            else:
+                self.frames = [(self.image_to_frame(img, self.brightness(), self.fidele), d)
+                               for img, d in self.iter_gif_frames(src)]
         except OSError as exc:
             self.name.config(text=f"{src.name} : {exc}")
             self.frames = []

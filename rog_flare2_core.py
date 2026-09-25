@@ -31,7 +31,8 @@ except ImportError:
 VERSION = "1.4.1"  # version unique du projet (paquet, lanceur, démon, mises à jour)
 MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
-MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
+VIDEO_EXTENSIONS = {".mp4", ".webm", ".mkv", ".mov", ".avi", ".m4v"}  # lues par ffmpeg (rog_flare2_video)
+MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"} | VIDEO_EXTENSIONS
 STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
 CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2"
 GALLERY_FILE = CONFIG_DIR / "galerie"  # dossier lu par la galerie (lanceur et service)
@@ -217,6 +218,10 @@ def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event
     Les trames converties (pleine luminosité) sont gardées dans ~/.cache/animematrix/trames :
     à la lecture suivante, ni décodage ni conversion.
     """
+    if Path(path).suffix.lower() in VIDEO_EXTENSIONS:
+        from rog_flare2_video import play_video
+        play_video(path, transport, stop_event, brightness)
+        return
     fidele = fidele or is_faithful(path)
     cache = _cache_path(path, fidele)
     frames = _read_cache(cache)
