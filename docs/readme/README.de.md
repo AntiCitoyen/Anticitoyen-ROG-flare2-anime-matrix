@@ -18,9 +18,11 @@ Die grafische Benutzeroberfläche der Anwendung ist in 19 Sprachen verfügbar un
 
 </div>
 
-| GIF / Bilder | Effekte | Audio | Einstellungen |
-|---|---|---|---|
-| ![Reiter GIF](../captures/de/gif.png) | ![Reiter Effekte](../captures/de/effets.png) | ![Reiter Audio](../captures/de/audio.png) | ![Reiter Einstellungen](../captures/de/reglages.png) |
+<p align="center"><img src="../captures/de/interface-drawer.png" alt="Drehrad + Schublade" width="760"><br><em>Drehrad + Schublade (Standardoberfläche)</em></p>
+
+| Drehrad | Abgerundet | Klassisch |
+|:---:|:---:|:---:|
+| <img src="../captures/de/interface-dial.png" alt="Drehrad" width="260"> | <img src="../captures/de/interface-rounded.png" alt="Abgerundet" width="190"> | <img src="../captures/de/interface-classic.png" alt="Klassisch" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ Die grafische Benutzeroberfläche der Anwendung ist in 19 Sprachen verfügbar un
 
 ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury Crate) an. Dieses Projekt spricht die Tastatur direkt über USB-HID an und bringt:
 
-- **Einen grafischen Starter** (`animematrix`) mit vier Reitern:
+- **Einen grafischen Starter** (`animematrix`), wahlweise mit **4 Oberflächen**: *Drehrad + Schublade* (rundes Fenster mit einem Einstellungspanel, das rechts herausfährt, die Standardeinstellung), *Drehrad* (alles im Kreis), *Abgerundet* (sehr runde Ecken, Helligkeitsrad) und *Klassisch* (Reiter). Die runden Oberflächen zeigen **die 312 LEDs live**, genau wie sie an die Tastatur gesendet werden. Vier Bedienblöcke:
   - **GIF / Bilder**: eine oder mehrere Dateien abspielen, oder einen ganzen Ordner als Endlos-Galerie; GIFs für die Matrix konvertieren.
   - **Effekte**: 19 Animationen (Matrix-artiger Regen, Plasma, Feuer, Sterne, Feuerwerk, Blitze, Metaballs, Welle, Schlange, Lauftext, stilisierte Uhr, Reaktion auf die Tastatur…), während des Laufens einstellbar.
   - **Audio**: 7 Visualizer, die auf den vom PC wiedergegebenen Ton reagieren (Spektrum, KITT/KARR, Starburst, Oszilloskop, Audio-Feuer…).
-  - **Einstellungen**: was beim Sitzungsstart angezeigt wird, Zeicheneditor, Projekt-Links.
+  - **Einstellungen**: was beim Sitzungsstart angezeigt wird, Sprache, Design und Oberfläche, Zeicheneditor, Projekt-Links.
 - **Eine Uhr**, HH:MM, aus dem Starter oder als Hintergrunddienst.
 - **Eine Hintergrundgalerie**: ein `systemd --user`-Dienst, der einen GIF-Ordner ab dem Sitzungsstart durchläuft.
 - **Ein Ein-Klick-Umschalter** (`animematrix-bascule`): das Symbol im Menü schaltet das Display ein oder aus; Rechtsklick wählt GIF-Galerie, Uhr oder Aus.
@@ -106,7 +108,7 @@ Deinstallation: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # Zugriff auf die Tastatur ohne root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Für die Hintergrunddienste bei Ausführung aus den Quellen `systemd/*.service` 
 
 `animematrix` (oder der Eintrag **AniMe Matrix** im Menü).
 
+In den runden Oberflächen öffnen die runden Schaltflächen die Blöcke *GIF*, *Effekte*, *Audio* und *Einstellungen* (in der Schublade oder im Kreis); *Uhr* und *Stopp* wirken sofort; der untere Bogen regelt die Helligkeit; das Fenster wird durch Ziehen am Hintergrund verschoben; die kleinen Schaltflächen oben verkleinern oder schließen es. Die runde Form nutzt die X11-Erweiterung SHAPE (Paket `python3-xlib`); ohne sie wird dieselbe Oberfläche in einem rechteckigen Fenster angezeigt.
+
 - **GIF / Bilder**: *GIF/Bilder…* für eine Auswahl, *Ordner (Galerie)…* für einen ganzen Ordner. Der gewählte Ordner wird auch zum Ordner der Hintergrundgalerie. *Konvertierte Versionen bevorzugen* liest `dossier/matrix/nom.gif`, wenn vorhanden (durch die Konvertierung erzeugt).
-- **Effekte** und **Audio**: auswählen, einstellen, *▶ Effekt starten*. Die Regler wirken live; *Tempo* beschleunigt oder verlangsamt die Animation.
+- **Effekte** und **Audio**: auswählen, einstellen, *▶ Effekt starten*. Die Regler wirken live; *Takt* beschleunigt oder verlangsamt die Animation.
 - **Helligkeit**, **🕒 Uhr**, **■ Stopp** (löscht das Display) sind allen Reitern gemeinsam.
-- **Einstellungen**: *Beim Sitzungsstart* = GIF-Galerie, Uhr, Letzte Wiedergabe oder Nichts.
+- **Einstellungen**: *Beim Sitzungsstart* = GIF-Galerie, Uhr, Letzte Wiedergabe oder Nichts; *Oberfläche:* wählt eine der 4 Oberflächen (der Starter startet neu, die aktuelle Anzeige läuft weiter).
 
 **Beim Schließen des Starters läuft die Anzeige weiter** (GIF, Effekt mit seinen aktuellen Einstellungen, Audio-Visualizer oder Uhr): Der Starter übergibt sie an den Hintergrunddienst `animematrix-lecture.service`. Beim nächsten Start übernimmt er wieder, sobald etwas anderes gestartet wird (nur ein Programm kann auf die Tastatur schreiben). *■ Stopp* vor dem Schließen lässt das Display aus.
 
@@ -200,6 +204,7 @@ Die ursprünglichen Reverse-Engineering-Notizen (USBPcap-Mitschnitte, LED-Reihen
 | Die Visualizer bleiben im Demo-Modus | kein `parec` oder kein Ton | `pulseaudio-utils` installieren, Ton abspielen |
 | „Keyboard React" reagiert nicht | Wayland-Sitzung oder `pynput` fehlt | X11-Sitzung, `sudo apt install python3-pynput` |
 | Die Hintergrundgalerie startet nicht | Ordner leer oder fehlt | Ordner im Starter wählen (Reiter GIF) |
+| Das runde Fenster wird als Rechteck angezeigt | SHAPE-Erweiterung oder `python3-xlib` fehlt | `sudo apt install python3-xlib`, oder *Einstellungen* → *Oberfläche:* → *Klassisch* |
 | Log eines Dienstes | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ Die ursprünglichen Reverse-Engineering-Notizen (USBPcap-Mitschnitte, LED-Reihen
 | Datei | Funktion |
 |---|---|
 | `rog_flare2_launcher.py` | grafischer Starter (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | Übersetzung der Oberfläche (19 Sprachen, ein JSON-Katalog pro Sprache) |
+| `rog_flare2_themes.py` | Designs der Oberfläche (ROG und Rosa) |
+| `rog_flare2_ui_ronde.py` | runde Oberflächen (Drehrad + Schublade, Drehrad, abgerundet): Zeichnen, Fensterform, LED-Vorschau |
 | `rog_flare2_effets.py` | Effekte und Audio-Visualizer (PolyWollyWin-Engine für Linux angepasst) |
 | `polywollywin/` | Effekt-Engine von PolyWollyWin, unverändert kopiert (MIT) |
 | `rog_flare2_folder_player.py` | Hintergrundgalerie (Dienst) |

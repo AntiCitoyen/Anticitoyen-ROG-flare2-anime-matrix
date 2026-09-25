@@ -18,9 +18,11 @@
 
 *Not: Arayüz 19 dilde mevcuttur, sistem dilini otomatik olarak izler ve **Ayarlar** sekmesindeki **Dil:** ile değiştirilebilir.*
 
-| GIF / Görseller | Efektler | Ses | Ayarlar |
-|---|---|---|---|
-| ![GIF sekmesi](../captures/tr/gif.png) | ![Efektler sekmesi](../captures/tr/effets.png) | ![Ses sekmesi](../captures/tr/audio.png) | ![Ayarlar sekmesi](../captures/tr/reglages.png) |
+<p align="center"><img src="../captures/tr/interface-drawer.png" alt="Kadran + çekmece" width="760"><br><em>Kadran + çekmece (varsayılan arayüz)</em></p>
+
+| Kadran | Yuvarlatılmış | Klasik |
+|:---:|:---:|:---:|
+| <img src="../captures/tr/interface-dial.png" alt="Kadran" width="260"> | <img src="../captures/tr/interface-rounded.png" alt="Yuvarlatılmış" width="190"> | <img src="../captures/tr/interface-classic.png" alt="Klasik" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@
 
 ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows altında (Armoury Crate) sunar. Bu proje klavyeyle doğrudan USB HID üzerinden konuşur ve şunları sağlar:
 
-- **Bir grafik başlatıcı** (`animematrix`), dört sekmeli:
+- **Bir grafik başlatıcı** (`animematrix`), **4 arayüz** arasından seçilebilir: *Kadran + çekmece* (yuvarlak pencere ve sağdan açılan ayarlar paneli, varsayılan), *Kadran* (her şey çemberin içinde), *Yuvarlatılmış* (çok yuvarlak köşeler, parlaklık çarkı) ve *Klasik* (sekmeler). Yuvarlak arayüzler, klavyeye gönderilen **312 LED'i canlı olarak** gösterir. Dört komut bloğu:
   - **GIF / görüntüler**: bir veya birden fazla dosyayı, ya da tüm bir klasörü galeri olarak döngüde oynatma; matris için GIF dönüştürme.
   - **Efektler**: 19 animasyon (Matrix tarzı yağmur, plazma, ateş, yıldızlar, havai fişekler, şimşekler, metaball'lar, dalga, yılan, kayan yazı, stilize saat, klavyeye tepki…), çalışırken ayarlanabilir.
   - **Ses**: PC'de çalan sese tepki veren 7 görselleştirici (spektrum, KITT/KARR, starburst, osiloskop, ses ateşi…).
-  - **Ayarlar**: oturum açılışında görüntülenecek olan, çizim düzenleyici, proje bağlantıları.
+  - **Ayarlar**: oturum açılışında görüntülenecek olan, dil, tema ve arayüz, çizim düzenleyici, proje bağlantıları.
 - HH:MM biçiminde **bir saat**, başlatıcıdan veya arka plan servisi olarak.
 - **Bir arka plan galerisi**: oturum açılır açılmaz bir GIF klasöründe gezinen bir `systemd --user` servisi.
 - **Tek tıkla geçiş** (`animematrix-bascule`): menü simgesi ekranı açar veya kapatır; sağ tık **GIF galerisi**, **Saat** veya **Kapat** seçeneklerini sunar.
@@ -106,7 +108,7 @@ Kaldırma: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # root olmadan klavyeye erişim
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Kaynak koddan arka plan servisleri için, `systemd/*.service` dosyalarını `~/.
 
 `animematrix` (veya menüdeki **AniMe Matrix** girişi).
 
+Yuvarlak arayüzlerde, yuvarlak düğmeler *GIF / görüntüler*, *Efektler*, *Ses* ve *Ayarlar* bloklarını açar (çekmecede veya çemberin içinde); *Saat* ve *Durdur* hemen etkili olur; alttaki yay parlaklığı ayarlar; pencere, arka planından tutularak taşınır; üstteki küçük düğmeler küçültür veya kapatır. Yuvarlak biçim X11 SHAPE uzantısını kullanır (`python3-xlib` paketi); bu uzantı yoksa, aynı arayüz dikdörtgen bir pencerede görüntülenir.
+
 - **GIF / görüntüler**: seçim için *GIF/görüntüler…*, tüm bir klasör için *Klasör (galeri)…*. Seçilen klasör aynı zamanda arka plan galerisinin klasörü olur. *Dönüştürülmüş sürümleri tercih et (matrix/)*, varsa `dossier/matrix/nom.gif` dosyasını okur (dönüştürme tarafından üretilir).
 - **Efektler** ve **Ses**: seçin, ayarlayın, *▶ Efekti başlat*. Kaydırıcılar anlık etki eder; *Tempo* animasyonu hızlandırır veya yavaşlatır.
 - **Parlaklık**, **🕒 Saat**, **■ Durdur** (ekranı temizler) tüm sekmelerde ortaktır.
-- **Ayarlar**: *Oturum başlangıcında* = **GIF galerisi**, **Saat**, **Son oynatma** veya **Hiçbiri**.
+- **Ayarlar**: *Oturum başlangıcında* = **GIF galerisi**, **Saat**, **Son oynatma** veya **Hiçbiri**; *Arayüz:* 4 arayüzden birini seçer (başlatıcı yeniden başlar, o anda gösterilen içerik oynamaya devam eder).
 
 **Başlatıcı kapatıldığında, o an gösterilen şey görüntülenmeye devam eder** (GIF, o anki ayarlarıyla bir efekt, ses görselleştirici veya saat): başlatıcı bunu arka plan servisi olan `animematrix-lecture.service`'e devreder. Bir sonraki başlatmada, başka bir şey başlatılır başlatılmaz kontrolü geri alır (klavyeye yalnızca tek bir program yazabilir). Kapatmadan önce *■ Durdur* ekranı kapalı bırakır.
 
@@ -200,6 +204,7 @@ Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalib
 | Görselleştiriciler demo modunda kalıyor | `parec` yok veya ses yok | `pulseaudio-utils` kurun, ses çalın |
 | « Keyboard React » tepki vermiyor | Wayland oturumu veya `pynput` eksik | X11 oturumu, `sudo apt install python3-pynput` |
 | Arka plan galerisi başlamıyor | klasör boş veya yok | başlatıcıda (GIF sekmesi) bir klasör seçin |
+| Yuvarlak pencere dikdörtgen görünüyor | SHAPE uzantısı veya `python3-xlib` eksik | `sudo apt install python3-xlib`, veya *Ayarlar* → *Arayüz:* → *Klasik* |
 | Bir servisin günlüğü | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ Orijinal tersine mühendislik notları (USBPcap kayıtları, LED sırası, kalib
 | Dosya | İşlev |
 |---|---|
 | `rog_flare2_launcher.py` | grafik başlatıcı (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | arayüz çevirisi (19 dil, her dil için bir JSON kataloğu) |
+| `rog_flare2_themes.py` | arayüz temaları (ROG ve pembe) |
+| `rog_flare2_ui_ronde.py` | yuvarlak arayüzler (kadran + çekmece, kadran, yuvarlatılmış): çizim, pencere biçimi, LED önizlemesi |
 | `rog_flare2_effets.py` | efektler ve ses görselleştiricileri (Linux'a uyarlanmış PolyWollyWin motoru) |
 | `polywollywin/` | PolyWollyWin efekt motoru, değiştirilmeden kopyalanmıştır (MIT) |
 | `rog_flare2_folder_player.py` | arka plan galerisi (servis) |

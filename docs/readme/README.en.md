@@ -18,9 +18,11 @@ The application's graphical interface is available in 19 languages and follows t
 
 </div>
 
-| GIF / images | Effects | Audio | Settings |
-|---|---|---|---|
-| ![GIF tab](../captures/en/gif.png) | ![Effects tab](../captures/en/effets.png) | ![Audio tab](../captures/en/audio.png) | ![Settings tab](../captures/en/reglages.png) |
+<p align="center"><img src="../captures/en/interface-drawer.png" alt="Dial + drawer" width="760"><br><em>Dial + drawer (default interface)</em></p>
+
+| Dial | Rounded | Classic |
+|:---:|:---:|:---:|
+| <img src="../captures/en/interface-dial.png" alt="Dial" width="260"> | <img src="../captures/en/interface-rounded.png" alt="Rounded" width="190"> | <img src="../captures/en/interface-classic.png" alt="Classic" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ The application's graphical interface is available in 19 languages and follows t
 
 ASUS only provides the AniMe Matrix display of this keyboard on Windows (Armoury Crate). This project talks to the keyboard directly over USB HID and brings:
 
-- **A graphical launcher** (`animematrix`) with four tabs:
+- **A graphical launcher** (`animematrix`), with a choice of **4 interfaces**: *Dial + drawer* (round window with a settings panel that slides out to the right, the default), *Dial* (everything in the circle), *Rounded* (very rounded corners, brightness wheel) and *Classic* (tabs). The round interfaces show **the 312 LEDs live**, exactly as sent to the keyboard. Four control blocks:
   - **GIF / images**: play one or more files, or a whole folder as a looping gallery; convert GIFs for the matrix.
   - **Effects**: 19 animations (Matrix-style rain, plasma, fire, stars, fireworks, lightning, metaballs, wave, snake, scrolling text, styled clock, keyboard reaction…), adjustable while they run.
   - **Audio**: 7 visualizers that react to the sound played by the PC (spectrum, KITT/KARR, starburst, oscilloscope, audio fire…).
-  - **Settings**: what is shown at session start, drawing editor, project links.
+  - **Settings**: what is shown at session start, language, theme and interface, drawing editor, project links.
 - **A clock**, HH:MM, from the launcher or as a background service.
 - **A background gallery**: a `systemd --user` service that cycles through a GIF folder as soon as the session opens.
 - **A one-click toggle** (`animematrix-bascule`): the tray icon turns the screen on or off; right-click picks GIF Gallery, Clock, or Off.
@@ -106,7 +108,7 @@ Uninstall: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # access to the keyboard without root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ For the background services when running from source, copy `systemd/*.service` i
 
 `animematrix` (or the **AniMe Matrix** entry in the applications menu).
 
+In the round interfaces, the round buttons open the *GIF*, *Effects*, *Audio* and *Settings* blocks (in the drawer or in the circle); *Clock* and *Stop* act immediately; the bottom arc sets the brightness; drag the window by its background to move it; the small buttons at the top minimize or close it. The round shape uses the X11 SHAPE extension (`python3-xlib` package); without it, the same interface is shown in a rectangular window.
+
 - **GIF / images**: *GIF/images…* for a selection, *Folder (gallery)…* for a whole folder. The chosen folder also becomes the background gallery's folder. *Prefer converted versions* reads `dossier/matrix/nom.gif` when it exists (produced by the conversion).
 - **Effects** and **Audio**: choose, adjust, *▶ Run effect*. The sliders act live; *Tempo* speeds up or slows down the animation.
 - **Brightness**, **🕒 Clock**, **■ Stop** (which clears the screen) are common to all tabs.
-- **Settings**: *At session start* = GIF gallery, Clock, Last playback or None.
+- **Settings**: *At session start* = GIF gallery, Clock, Last playback or None; *Interface:* chooses one of the 4 interfaces (the launcher restarts, what is displayed keeps playing).
 
 **When you close the launcher, whatever is displayed keeps playing** (GIF, effect with its current settings, audio visualizer or clock): the launcher hands it off to the background service `animematrix-lecture.service`. On the next launch, it takes back control as soon as something else starts (only one program can write to the keyboard). *■ Stop* before closing leaves the screen off.
 
@@ -200,6 +204,7 @@ The original reverse-engineering notes (USBPcap captures, LED order, calibration
 | Visualizers stay in demo mode | no `parec` or no sound | install `pulseaudio-utils`, play some sound |
 | "Keyboard React" does not respond | Wayland session or `pynput` missing | X11 session, `sudo apt install python3-pynput` |
 | The background gallery does not start | empty or missing folder | choose a folder in the launcher (GIF tab) |
+| The round window shows as a rectangle | SHAPE extension or `python3-xlib` missing | `sudo apt install python3-xlib`, or *Settings* → *Interface:* → *Classic* |
 | A service's log | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ The original reverse-engineering notes (USBPcap captures, LED order, calibration
 | File | Role |
 |---|---|
 | `rog_flare2_launcher.py` | graphical launcher (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | interface translation (19 languages, one JSON catalogue per language) |
+| `rog_flare2_themes.py` | interface themes (ROG and pink) |
+| `rog_flare2_ui_ronde.py` | round interfaces (dial + drawer, dial, rounded): drawing, window shape, LED preview |
 | `rog_flare2_effets.py` | effects and audio visualizers (PolyWollyWin engine adapted for Linux) |
 | `polywollywin/` | PolyWollyWin's effects engine, copied unmodified (MIT) |
 | `rog_flare2_folder_player.py` | background gallery (service) |

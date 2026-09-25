@@ -18,9 +18,11 @@ Antarmuka aplikasi tersedia dalam 19 bahasa, mengikuti bahasa sistem secara otom
 
 </div>
 
-| GIF / gambar | Efek | Audio | Pengaturan |
-|---|---|---|---|
-| ![Tab GIF](../captures/id/gif.png) | ![Tab Efek](../captures/id/effets.png) | ![Tab Audio](../captures/id/audio.png) | ![Tab Pengaturan](../captures/id/reglages.png) |
+<p align="center"><img src="../captures/id/interface-drawer.png" alt="Dial + laci" width="760"><br><em>Dial + laci (antarmuka bawaan)</em></p>
+
+| Dial | Membulat | Klasik |
+|:---:|:---:|:---:|
+| <img src="../captures/id/interface-dial.png" alt="Dial" width="260"> | <img src="../captures/id/interface-rounded.png" alt="Membulat" width="190"> | <img src="../captures/id/interface-classic.png" alt="Klasik" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ Antarmuka aplikasi tersedia dalam 19 bahasa, mengikuti bahasa sistem secara otom
 
 ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armoury Crate). Proyek ini berkomunikasi langsung dengan keyboard melalui USB HID dan menghadirkan:
 
-- **Peluncur grafis** (`animematrix`) dengan empat tab:
+- **Peluncur grafis** (`animematrix`), dapat memilih di antara **4 antarmuka**: *Dial + laci* (jendela bulat dan panel pengaturan yang keluar dari kanan, bawaan), *Dial* (semuanya di dalam lingkaran), *Membulat* (sudut sangat membulat, roda kecerahan) dan *Klasik* (tab). Antarmuka bulat menampilkan **312 LED secara langsung**, persis seperti yang dikirim ke keyboard. Empat blok kendali:
   - **GIF / gambar**: memutar satu atau beberapa berkas, atau seluruh folder sebagai galeri, secara berulang (loop); mengonversi GIF untuk matriks LED.
   - **Efek**: 19 animasi (Hujan Matriks V2, Plasma, Api, bintang, Kembang Api, Petir, Metaball, Gelombang, Ular, Teks Bergulir, Jam Bergaya, Reaksi Keyboard…), dapat diatur saat sedang berjalan.
   - **Audio**: 7 visualizer yang bereaksi terhadap suara yang diputar oleh PC (Batang Spektrum, KITT / KARR, Ledakan Bintang Tengah, Osiloskop, Api Audio…).
-  - **Pengaturan**: apa yang ditampilkan saat sesi dibuka, editor gambar, tautan proyek.
+  - **Pengaturan**: apa yang ditampilkan saat sesi dibuka, bahasa, tema dan antarmuka, editor gambar, tautan proyek.
 - **Jam** HH:MM, dari peluncur atau sebagai layanan latar belakang.
 - **Galeri latar belakang**: layanan `systemd --user` yang memutar folder GIF secara otomatis begitu sesi dibuka.
 - **Sakelar sekali klik** (`animematrix-bascule`): ikon di menu menyalakan atau mematikan layar; klik kanan untuk memilih Galeri GIF, Jam, atau Matikan.
@@ -106,7 +108,7 @@ Uninstal: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # akses keyboard tanpa root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Untuk layanan latar belakang dari sumber, salin `systemd/*.service` ke `~/.confi
 
 `animematrix` (atau entri **AniMe Matrix** pada menu).
 
+Pada antarmuka bulat, tombol bulat membuka blok *GIF / gambar*, *Efek*, *Audio*, dan *Pengaturan* (di laci atau di dalam lingkaran); *Jam* dan *Berhenti* langsung bereaksi; busur di bagian bawah mengatur kecerahan; jendela dipindahkan dengan menarik bagian latarnya; tombol-tombol kecil di bagian atas untuk meminimalkan atau menutup. Bentuk bulat menggunakan ekstensi X11 SHAPE (paket `python3-xlib`); tanpanya, antarmuka yang sama ditampilkan dalam jendela persegi panjang.
+
 - **GIF / gambar**: *GIF/gambar…* untuk memilih berkas, *Folder (galeri)…* untuk memilih seluruh folder. Folder yang dipilih juga menjadi folder galeri latar belakang. *Utamakan versi hasil konversi* akan membaca `dossier/matrix/nom.gif` jika berkas tersebut ada (dihasilkan oleh proses konversi).
 - **Efek** dan **Audio**: pilih, atur, lalu *▶ Jalankan efek*. Penggeser (slider) bekerja secara langsung; *Tempo* mempercepat atau memperlambat animasi.
 - **Kecerahan**, **🕒 Jam**, **■ Berhenti** (menghapus layar) tersedia di semua tab.
-- **Pengaturan**: *Saat sesi dimulai* = Galeri GIF, Jam, Putar terakhir, atau Tidak ada.
+- **Pengaturan**: *Saat sesi dimulai* = Galeri GIF, Jam, Putar terakhir, atau Tidak ada; *Antarmuka:* memilih salah satu dari 4 antarmuka (peluncur akan mulai ulang, apa yang sedang ditampilkan tetap berjalan).
 
 **Saat peluncur ditutup, apa yang sedang ditampilkan tetap berjalan** (GIF, efek dengan pengaturannya saat itu, visualizer audio, atau jam): peluncur menyerahkannya ke layanan latar belakang `animematrix-lecture.service`. Pada peluncuran berikutnya, ia mengambil alih kendali begitu ada program lain yang dijalankan (hanya satu program yang dapat menulis ke keyboard). Menekan *■ Berhenti* sebelum menutup akan membuat layar tetap padam.
 
@@ -200,6 +204,7 @@ Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibr
 | Visualizer tetap dalam mode demo | tidak ada `parec` atau tidak ada suara | instal `pulseaudio-utils`, putar suara |
 | "Keyboard React" tidak bereaksi | sesi Wayland atau `pynput` tidak ada | gunakan sesi X11, `sudo apt install python3-pynput` |
 | Galeri latar belakang tidak berjalan | folder kosong atau tidak ada | pilih folder di peluncur (tab GIF) |
+| Jendela bulat ditampilkan sebagai persegi panjang | ekstensi SHAPE atau `python3-xlib` tidak ada | `sudo apt install python3-xlib`, atau *Pengaturan* → *Antarmuka:* → *Klasik* |
 | Log sebuah layanan | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ Catatan reverse engineering aslinya (tangkapan USBPcap, urutan LED, titik kalibr
 | Berkas | Fungsi |
 |---|---|
 | `rog_flare2_launcher.py` | peluncur grafis (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | terjemahan antarmuka (19 bahasa, satu katalog JSON per bahasa) |
+| `rog_flare2_themes.py` | tema antarmuka (ROG dan merah muda) |
+| `rog_flare2_ui_ronde.py` | antarmuka bulat (dial + laci, dial, membulat): menggambar, bentuk jendela, pratinjau LED |
 | `rog_flare2_effets.py` | efek dan visualizer audio (engine PolyWollyWin yang disesuaikan untuk Linux) |
 | `polywollywin/` | engine efek dari PolyWollyWin, disalin tanpa modifikasi (MIT) |
 | `rog_flare2_folder_player.py` | galeri latar belakang (layanan) |

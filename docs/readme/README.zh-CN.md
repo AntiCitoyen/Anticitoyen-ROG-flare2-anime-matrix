@@ -18,9 +18,11 @@
 
 </div>
 
-| GIF / 图片 | 效果 | 音频 | 设置 |
-|---|---|---|---|
-| ![GIF 标签页](../captures/zh-CN/gif.png) | ![效果标签页](../captures/zh-CN/effets.png) | ![音频标签页](../captures/zh-CN/audio.png) | ![设置标签页](../captures/zh-CN/reglages.png) |
+<p align="center"><img src="../captures/zh-CN/interface-drawer.png" alt="表盘 + 抽屉" width="760"><br><em>表盘 + 抽屉 (默认界面)</em></p>
+
+| 表盘 | 圆角 | 经典 |
+|:---:|:---:|:---:|
+| <img src="../captures/zh-CN/interface-dial.png" alt="表盘" width="260"> | <img src="../captures/zh-CN/interface-rounded.png" alt="圆角" width="190"> | <img src="../captures/zh-CN/interface-classic.png" alt="经典" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@
 
 ASUS 仅在 Windows(通过 Armoury Crate)下为该键盘的 AniMe Matrix 屏幕提供官方支持。本项目通过 USB HID 直接与键盘通信,提供:
 
-- **图形启动器**(`animematrix`),包含四个标签页:
+- **图形启动器**(`animematrix`),可在 **4 种界面**中选择:*表盘 + 抽屉*(圆形窗口,设置面板从右侧滑出,默认)、*表盘*(全部内容都在圆圈中)、*圆角*(圆角很大,带亮度旋钮)以及*经典*(标签页)。圆形界面会**实时显示发送给键盘的 312 颗 LED**。四个功能模块:
   - **GIF / 图片**:播放一个或多个文件,或将整个文件夹作为图库循环播放;将 GIF 转换为适配矩阵屏的格式。
   - **效果**:19 种动画效果(矩阵雨、等离子、火焰、星空、烟花、闪电、融球、波浪、贪吃蛇、滚动文字、花式时钟、按键律动等),运行期间可实时调节。
   - **音频**:7 种随电脑播放声音而变化的可视化效果(频谱条、KITT / KARR、中心爆闪、示波器、音频火焰等)。
-  - **设置**:会话开始时显示的内容、界面语言、绘图编辑器、项目相关链接。
+  - **设置**:会话开始时显示的内容、语言、主题与界面、绘图编辑器、项目相关链接。
 - **HH:MM 时钟**,可从启动器打开,也可作为后台服务运行。
 - **背景图库**:一个 `systemd --user` 服务,在会话开始时自动循环播放指定文件夹中的 GIF。
 - **一键切换**(`animematrix-bascule`):菜单图标点击可开关屏幕;右键点击可选择 GIF 图库、时钟或关闭屏幕。
@@ -106,7 +108,7 @@ ROG **笔记本电脑**(如 Zephyrus G14 等)上的 AniMe Matrix 屏幕使用不
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # 无需 root 权限即可访问键盘
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 `animematrix`(或菜单中的 **AniMe Matrix** 项)。
 
+在圆形界面中,圆形按钮用于打开 *GIF / 图片*、*效果*、*音频*、*设置* 模块(在抽屉中或圆圈内);*时钟* 和 *停止* 立即生效;底部的弧形用于调节亮度;拖动背景可移动窗口;顶部的小按钮用于最小化或关闭。圆形外观依赖 X11 SHAPE 扩展(`python3-xlib` 包);若没有该扩展,则以矩形窗口显示同一界面。
+
 - **GIF / 图片**:*GIF/图片…*用于选择单个或多个文件,*文件夹（图库）…*用于选择整个文件夹。所选文件夹同时会成为背景图库使用的文件夹。*优先使用已转换版本*会在存在 `dossier/matrix/nom.gif`(由转换功能生成)时优先读取该文件。
 - **效果**与 **音频**:选择、调节参数,然后点击 *▶ 启动效果*。滑块参数为实时生效;*节奏*用于加快或减慢动画播放。
 - **亮度**、**🕒 时钟**、**■ 停止**(会清空屏幕)在所有标签页中通用。
-- **设置**:*会话启动时*可设为 GIF 图库、时钟、上次播放或无。
+- **设置**:*会话启动时*可设为 GIF 图库、时钟、上次播放或无;*界面：*在 4 种界面中选择(启动器会重启,当前显示的内容会继续播放)。
 
 **关闭启动器后,当前显示的内容会继续播放**(GIF、带当前参数的效果、音频可视化或时钟):启动器会将其交给后台服务 `animematrix-lecture.service`。下次启动时,只要开始运行其他内容(同一时间只能有一个程序写入键盘),它就会重新接管。关闭前点击 *■ 停止* 会让屏幕保持熄灭。
 
@@ -200,6 +204,7 @@ animematrix-bascule etat       # 显示当前模式
 | 可视化器一直处于演示模式 | 没有 `parec` 或没有声音输出 | 安装 `pulseaudio-utils`,播放一些声音 |
 | “Keyboard React” 无反应 | Wayland 会话或缺少 `pynput` | 改用 X11 会话,`sudo apt install python3-pynput` |
 | 背景图库不启动 | 文件夹为空或不存在 | 在启动器的 GIF 标签页中选择一个文件夹 |
+| 圆形窗口显示为矩形 | 缺少 SHAPE 扩展或 `python3-xlib` | `sudo apt install python3-xlib`,或在 *设置* → *界面：* → *经典* |
 | 查看某个服务的日志 | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ animematrix-bascule etat       # 显示当前模式
 | 文件 | 作用 |
 |---|---|
 | `rog_flare2_launcher.py` | 图形启动器(Tk) |
+| `rog_flare2_i18n.py`, `locale/` | 界面翻译（19 种语言，每种语言一个 JSON 目录） |
+| `rog_flare2_themes.py` | 界面主题（ROG 与粉色） |
+| `rog_flare2_ui_ronde.py` | 圆形界面(表盘 + 抽屉、表盘、圆角):绘制、窗口形状、LED 预览 |
 | `rog_flare2_effets.py` | 效果与音频可视化器(移植自 PolyWollyWin 的引擎) |
 | `polywollywin/` | PolyWollyWin 的效果引擎,原样复制(MIT 许可) |
 | `rog_flare2_folder_player.py` | 背景图库(服务) |

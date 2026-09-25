@@ -16,9 +16,11 @@ Piloter sous Linux l'écran **AniMe Matrix** (312 mini-LED) du clavier **ASUS RO
 
 </div>
 
-| GIF / images | Effets | Audio | Réglages |
-|---|---|---|---|
-| ![Onglet GIF](docs/captures/fr/gif.png) | ![Onglet Effets](docs/captures/fr/effets.png) | ![Onglet Audio](docs/captures/fr/audio.png) | ![Onglet Réglages](docs/captures/fr/reglages.png) |
+<p align="center"><img src="docs/captures/fr/interface-drawer.png" alt="Cadran + tiroir" width="760"><br><em>Cadran + tiroir (interface par défaut)</em></p>
+
+| Cadran | Arrondie | Classique |
+|:---:|:---:|:---:|
+| <img src="docs/captures/fr/interface-dial.png" alt="Cadran" width="260"> | <img src="docs/captures/fr/interface-rounded.png" alt="Arrondie" width="190"> | <img src="docs/captures/fr/interface-classic.png" alt="Classique" width="220"> |
 
 <p align="center"><img src="docs/captures/themes-fr.png" alt="Themes" width="100%"></p>
 
@@ -47,11 +49,11 @@ Piloter sous Linux l'écran **AniMe Matrix** (312 mini-LED) du clavier **ASUS RO
 
 ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Crate). Ce projet parle directement au clavier en USB HID et apporte :
 
-- **Un lanceur graphique** (`animematrix`) en quatre onglets :
+- **Un lanceur graphique** (`animematrix`), au choix parmi **4 interfaces** : *Cadran + tiroir* (fenêtre ronde et panneau de réglages qui sort à droite, par défaut), *Cadran* (tout dans le cercle), *Arrondie* (coins très arrondis, molette de luminosité) et *Classique* (onglets). Les interfaces rondes montrent **en direct les 312 LED** telles qu'elles sont envoyées au clavier. Quatre blocs de commandes :
   - **GIF / images** : lire un ou plusieurs fichiers, ou tout un dossier en galerie, en boucle ; convertir des GIF pour la matrice.
   - **Effets** : 19 animations (pluie façon Matrix, plasma, feu, étoiles, feux d'artifice, éclairs, métaballes, vague, serpent, texte défilant, horloge stylisée, réaction au clavier…), réglables pendant qu'elles tournent.
   - **Audio** : 7 visualiseurs qui réagissent au son joué par le PC (spectre, KITT/KARR, starburst, oscilloscope, feu audio…).
-  - **Réglages** : ce qui s'affiche à l'ouverture de session, langue de l'interface, éditeur de dessin, liens du projet.
+  - **Réglages** : ce qui s'affiche à l'ouverture de session, langue, thème et interface, éditeur de dessin, liens du projet.
 - **Une horloge** HH:MM, depuis le lanceur ou en service de fond.
 - **Une galerie de fond** : un service `systemd --user` qui fait défiler un dossier de GIF dès l'ouverture de session.
 - **Une bascule en un clic** (`animematrix-bascule`) : l'icône du menu allume ou éteint l'écran ; le clic droit choisit Galerie GIF, Horloge ou Éteindre.
@@ -105,7 +107,7 @@ Désinstallation : `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # accès au clavier sans root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -125,10 +127,12 @@ Pour les services de fond depuis les sources, copier `systemd/*.service` dans `~
 
 `animematrix` (ou l'entrée **AniMe Matrix** du menu).
 
+Dans les interfaces rondes, les boutons ronds ouvrent les blocs *GIF*, *Effets*, *Audio* et *Réglages* (dans le tiroir ou dans le cercle) ; *Horloge* et *Arrêter* agissent tout de suite ; l'arc du bas règle la luminosité ; on déplace la fenêtre en la tirant par le fond ; les petits boutons du haut réduisent ou ferment. La forme ronde utilise l'extension X11 SHAPE (paquet `python3-xlib`) ; sans elle, la même interface s'affiche dans une fenêtre rectangulaire.
+
 - **GIF / images** : *GIF/images…* pour une sélection, *Dossier (galerie)…* pour tout un dossier. Le dossier choisi devient aussi celui de la galerie de fond. *Préférer les versions converties* lit `dossier/matrix/nom.gif` quand il existe (produit par la conversion).
 - **Effets** et **Audio** : choisir, régler, *▶ Lancer l'effet*. Les curseurs agissent en direct ; *Cadence* accélère ou ralentit toute l'animation.
 - **Luminosité**, **🕒 Horloge**, **■ Arrêter** (qui efface l'écran) sont communs à tous les onglets.
-- **Réglages** : *Au démarrage de session* = Galerie GIF, Horloge, Dernière lecture ou Rien ; *Langue :* change la langue de l'interface (le lanceur redémarre).
+- **Réglages** : *Au démarrage de session* = Galerie GIF, Horloge, Dernière lecture ou Rien ; *Langue :* change la langue de l'interface (le lanceur redémarre) ; *Interface :* choisit l'une des 4 interfaces (le lanceur redémarre, l'affichage en cours continue).
 
 **Quand on ferme le lanceur, ce qui est affiché continue** (GIF, effet avec ses réglages du moment, visualiseur audio ou horloge) : le lanceur le confie au service de fond `animematrix-lecture.service`. Au prochain lancement, il reprend la main dès qu'on démarre autre chose (un seul programme peut écrire sur le clavier). *■ Arrêter* avant de fermer laisse l'écran éteint.
 
@@ -199,6 +203,7 @@ Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, poin
 | Les visualiseurs restent en mode démo | pas de `parec` ou pas de son | installer `pulseaudio-utils`, jouer du son |
 | « Keyboard React » ne réagit pas | session Wayland ou `pynput` absent | session X11, `sudo apt install python3-pynput` |
 | La galerie de fond ne démarre pas | dossier vide ou absent | choisir un dossier dans le lanceur (onglet GIF) |
+| La fenêtre ronde s'affiche en rectangle | extension SHAPE ou `python3-xlib` absente | `sudo apt install python3-xlib`, ou *Réglages* → *Interface :* → *Classique* |
 | Journal d'un service | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -210,6 +215,7 @@ Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, poin
 | `rog_flare2_launcher.py` | lanceur graphique (Tk) |
 | `rog_flare2_i18n.py`, `locale/` | traduction de l'interface (19 langues, un catalogue JSON par langue) |
 | `rog_flare2_themes.py` | thèmes de l'interface (ROG et roses) |
+| `rog_flare2_ui_ronde.py` | interfaces rondes (cadran + tiroir, cadran, arrondie) : dessin, forme de fenêtre, aperçu LED |
 | `rog_flare2_effets.py` | effets et visualiseurs audio (moteur PolyWollyWin adapté à Linux) |
 | `polywollywin/` | moteur d'effets de PolyWollyWin, copié sans modification (MIT) |
 | `rog_flare2_folder_player.py` | galerie de fond (service) |

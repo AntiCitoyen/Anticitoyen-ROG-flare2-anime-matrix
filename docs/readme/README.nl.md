@@ -18,9 +18,11 @@ De interface van de toepassing is beschikbaar in 19 talen: ze volgt automatisch 
 
 </div>
 
-| GIF / afbeeldingen | Effecten | Audio | Instellingen |
-|---|---|---|---|
-| ![Tabblad GIF](../captures/nl/gif.png) | ![Tabblad Effecten](../captures/nl/effets.png) | ![Tabblad Audio](../captures/nl/audio.png) | ![Tabblad Instellingen](../captures/nl/reglages.png) |
+<p align="center"><img src="../captures/nl/interface-drawer.png" alt="Draaiknop + lade" width="760"><br><em>Draaiknop + lade (standaardinterface)</em></p>
+
+| Draaiknop | Afgerond | Klassiek |
+|:---:|:---:|:---:|
+| <img src="../captures/nl/interface-dial.png" alt="Draaiknop" width="260"> | <img src="../captures/nl/interface-rounded.png" alt="Afgerond" width="190"> | <img src="../captures/nl/interface-classic.png" alt="Klassiek" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ De interface van de toepassing is beschikbaar in 19 talen: ze volgt automatisch 
 
 ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Armoury Crate). Dit project communiceert rechtstreeks met het toetsenbord via USB HID en biedt:
 
-- **Een grafische launcher** (`animematrix`) met vier tabbladen:
+- **Een grafische launcher** (`animematrix`), naar keuze uit **4 interfaces**: *Draaiknop + lade* (rond venster met een instellingenpaneel dat naar rechts uitschuift, de standaard), *Draaiknop* (alles in de cirkel), *Afgerond* (zeer afgeronde hoeken, helderheidswieltje) en *Klassiek* (tabbladen). De ronde interfaces tonen **live de 312 leds**, precies zoals ze naar het toetsenbord worden verzonden. Vier bedieningsblokken:
   - **GIF / afbeeldingen**: een of meerdere bestanden afspelen, of een hele map als galerij, in lus; GIF's converteren voor de matrix.
   - **Effecten**: 19 animaties (regen in Matrix-stijl, plasma, vuur, sterren, vuurwerk, bliksem, metaballs, golf, slang, lopende tekst, gestileerde klok, reactie op het toetsenbord…), aanpasbaar terwijl ze lopen.
   - **Audio**: 7 visualisaties die reageren op het geluid dat de pc afspeelt (spectrum, KITT/KARR, starburst, oscilloscoop, audiovuur…).
-  - **Instellingen**: wat wordt weergegeven bij het openen van de sessie, tekeneditor, links van het project.
+  - **Instellingen**: wat wordt weergegeven bij het openen van de sessie, taal, thema en interface, tekeneditor, links van het project.
 - **Een klok** UU:MM, vanuit de launcher of als achtergrondservice.
 - **Een achtergrondgalerij**: een `systemd --user`-service die vanaf het openen van de sessie een map met GIF's laat doorlopen.
 - **Een schakelaar met één klik** (`animematrix-bascule`): het menupictogram zet het scherm aan of uit; met de rechtermuisknop kies je GIF-galerij, Klok of Scherm uit.
@@ -106,7 +108,7 @@ Verwijderen: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # toegang tot het toetsenbord zonder root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Voor de achtergrondservices vanuit de broncode kopieer je `systemd/*.service` na
 
 `animematrix` (of het item **AniMe Matrix** in het menu).
 
+In de ronde interfaces openen de ronde knoppen de blokken *GIF*, *Effecten*, *Audio* en *Instellingen* (in de lade of in de cirkel); *Klok* en *Stoppen* werken meteen; de boog onderaan regelt de helderheid; het venster wordt verplaatst door het aan de achtergrond te slepen; de kleine knoppen bovenaan minimaliseren of sluiten het. De ronde vorm gebruikt de X11 SHAPE-extensie (pakket `python3-xlib`); zonder deze wordt dezelfde interface in een rechthoekig venster weergegeven.
+
 - **GIF / afbeeldingen**: *GIF's/afbeeldingen…* voor een selectie, *Map (galerij)…* voor een hele map. De gekozen map wordt ook die van de achtergrondgalerij. *Geconverteerde versies verkiezen* leest `dossier/matrix/nom.gif` indien aanwezig (geproduceerd door de conversie).
 - **Effecten** en **Audio**: kiezen, instellen, *▶ Effect starten*. De schuifregelaars werken live; *Tempo* versnelt of vertraagt de animatie.
 - **Helderheid**, **🕒 Klok**, **■ Stoppen** (wat het scherm wist) zijn gemeenschappelijk voor alle tabbladen.
-- **Instellingen**: *Bij het opstarten van de sessie:* = GIF-galerij, Klok, Laatste weergave of Niets.
+- **Instellingen**: *Bij het opstarten van de sessie:* = GIF-galerij, Klok, Laatste weergave of Niets; *Interface:* kiest een van de 4 interfaces (de launcher herstart, wat wordt weergegeven blijft doorspelen).
 
 **Wanneer je de launcher sluit, blijft wat wordt weergegeven doorspelen** (GIF, effect met de huidige instellingen, audiovisualisatie of klok): de launcher draagt het over aan de achtergrondservice `animematrix-lecture.service`. Bij de volgende start neemt hij het weer over zodra er iets anders wordt gestart (slechts één programma kan naar het toetsenbord schrijven). *■ Stoppen* voor het sluiten laat het scherm uit.
 
@@ -200,6 +204,7 @@ De oorspronkelijke reverse-engineeringnotities (USBPcap-captures, ledvolgorde, k
 | De visualisaties blijven in demomodus | geen `parec` of geen geluid | `pulseaudio-utils` installeren, geluid afspelen |
 | « Keyboard React » reageert niet | Wayland-sessie of `pynput` ontbreekt | X11-sessie, `sudo apt install python3-pynput` |
 | De achtergrondgalerij start niet | map leeg of ontbreekt | een map kiezen in de launcher (tabblad GIF) |
+| Het ronde venster wordt als een rechthoek weergegeven | SHAPE-extensie of `python3-xlib` ontbreekt | `sudo apt install python3-xlib`, of *Instellingen* → *Interface:* → *Klassiek* |
 | Logboek van een service | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ De oorspronkelijke reverse-engineeringnotities (USBPcap-captures, ledvolgorde, k
 | Bestand | Functie |
 |---|---|
 | `rog_flare2_launcher.py` | grafische launcher (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | vertaling van de interface (19 talen, één JSON-catalogus per taal) |
+| `rog_flare2_themes.py` | thema's van de interface (ROG en roze) |
+| `rog_flare2_ui_ronde.py` | ronde interfaces (draaiknop + lade, draaiknop, afgerond): tekenen, vorm van het venster, ledvoorbeeld |
 | `rog_flare2_effets.py` | effecten en audiovisualisaties (PolyWollyWin-engine aangepast voor Linux) |
 | `polywollywin/` | effectenengine van PolyWollyWin, ongewijzigd overgenomen (MIT) |
 | `rog_flare2_folder_player.py` | achtergrondgalerij (service) |

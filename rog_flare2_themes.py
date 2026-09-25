@@ -109,3 +109,11 @@ def apply(root, name: str) -> None:
     for opt, val in (("background", p["field"]), ("foreground", p["fg"]),
                      ("selectBackground", p["accent"]), ("selectForeground", p["accent_fg"])):
         root.option_add(f"*TCombobox*Listbox.{opt}", val)
+
+# Couleurs de dessin (interfaces rondes) quand le thème « System » garde le ttk d'origine
+SYSTEM_PALETTE = dict(bg="#dcdad5", surface="#eeede9", field="#ffffff", fg="#1f1f1f", muted="#6b6b6b",
+                      accent="#4a6984", accent_fg="#ffffff", trough="#bab5ab")
+
+
+def palette(name: str | None = None) -> dict[str, str]:
+    return THEMES.get(name or saved()) or SYSTEM_PALETTE

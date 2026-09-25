@@ -18,9 +18,11 @@ A interface do aplicativo está disponível em 19 idiomas: ela segue automaticam
 
 </div>
 
-| GIF / imagens | Efeitos | Áudio | Configurações |
-|---|---|---|---|
-| ![Aba GIF](../captures/pt-BR/gif.png) | ![Aba Efeitos](../captures/pt-BR/effets.png) | ![Aba Áudio](../captures/pt-BR/audio.png) | ![Aba Configurações](../captures/pt-BR/reglages.png) |
+<p align="center"><img src="../captures/pt-BR/interface-drawer.png" alt="Mostrador + gaveta" width="760"><br><em>Mostrador + gaveta (interface padrão)</em></p>
+
+| Mostrador | Arredondada | Clássica |
+|:---:|:---:|:---:|
+| <img src="../captures/pt-BR/interface-dial.png" alt="Mostrador" width="260"> | <img src="../captures/pt-BR/interface-rounded.png" alt="Arredondada" width="190"> | <img src="../captures/pt-BR/interface-classic.png" alt="Clássica" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ A interface do aplicativo está disponível em 19 idiomas: ela segue automaticam
 
 A ASUS só fornece a tela AniMe Matrix deste teclado no Windows (Armoury Crate). Este projeto fala diretamente com o teclado via USB HID e traz:
 
-- **Um lançador gráfico** (`animematrix`) com quatro abas:
+- **Um lançador gráfico** (`animematrix`), à escolha entre **4 interfaces**: *Mostrador + gaveta* (janela redonda com um painel de configurações que desliza para a direita, a padrão), *Mostrador* (tudo dentro do círculo), *Arredondada* (cantos bem arredondados, roda de brilho) e *Clássica* (abas). As interfaces redondas mostram **ao vivo os 312 LEDs**, exatamente como são enviados ao teclado. Quatro blocos de comandos:
   - **GIF / imagens**: reproduzir um ou vários arquivos, ou uma pasta inteira em galeria, em loop; converter GIFs para a matriz.
   - **Efeitos**: 19 animações (chuva estilo Matrix, plasma, fogo, estrelas, fogos de artifício, raios, metaballs, onda, cobra, texto rolante, relógio estilizado, reação ao teclado…), ajustáveis enquanto estão em execução.
   - **Áudio**: 7 visualizadores que reagem ao som reproduzido pelo PC (espectro, KITT/KARR, starburst, osciloscópio, fogo de áudio…).
-  - **Configurações**: o que é exibido ao abrir a sessão, editor de desenho, links do projeto.
+  - **Configurações**: o que é exibido ao abrir a sessão, idioma, tema e interface, editor de desenho, links do projeto.
 - **Um relógio** HH:MM, pelo lançador ou como serviço em segundo plano.
 - **Uma galeria de fundo**: um serviço `systemd --user` que percorre uma pasta de GIFs desde a abertura da sessão.
 - **Um alternador de um clique** (`animematrix-bascule`): o ícone do menu liga ou desliga a tela; o clique direito permite escolher Galeria de GIF, Relógio ou Tela desligada.
@@ -106,7 +108,7 @@ Desinstalação: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # acesso ao teclado sem root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Para os serviços em segundo plano a partir do código-fonte, copiar `systemd/*.
 
 `animematrix` (ou a entrada **AniMe Matrix** do menu).
 
+Nas interfaces redondas, os botões redondos abrem os blocos *GIF*, *Efeitos*, *Áudio* e *Configurações* (na gaveta ou no círculo); *Relógio* e *Parar* agem imediatamente; o arco inferior ajusta o brilho; a janela é movida arrastando-a pelo fundo; os pequenos botões no topo minimizam ou fecham. A forma redonda usa a extensão X11 SHAPE (pacote `python3-xlib`); sem ela, a mesma interface é exibida em uma janela retangular.
+
 - **GIF / imagens**: *GIF/imagens…* para uma seleção, *Pasta (galeria)…* para uma pasta inteira. A pasta escolhida também se torna a da galeria de fundo. *Preferir as versões convertidas* lê `dossier/matrix/nom.gif` quando existe (gerado pela conversão).
 - **Efeitos** e **Áudio**: escolher, ajustar, *▶ Iniciar o efeito*. Os controles deslizantes agem em tempo real; *Ritmo* acelera ou desacelera a animação.
 - **Brilho**, **🕒 Relógio**, **■ Parar** (que apaga a tela) são comuns a todas as abas.
-- **Configurações**: *Ao iniciar a sessão:* = Galeria de GIF, Relógio, Última reprodução ou Nada.
+- **Configurações**: *Ao iniciar a sessão:* = Galeria de GIF, Relógio, Última reprodução ou Nada; *Interface:* escolhe uma das 4 interfaces (o lançador reinicia, o que está sendo exibido continua).
 
 **Ao fechar o lançador, o que está sendo exibido continua** (GIF, efeito com seus ajustes do momento, visualizador de áudio ou relógio): o lançador o entrega ao serviço em segundo plano `animematrix-lecture.service`. No próximo início, ele retoma o controle assim que outra coisa é iniciada (apenas um programa pode escrever no teclado). *■ Parar* antes de fechar deixa a tela apagada.
 
@@ -200,6 +204,7 @@ As notas originais de engenharia reversa (capturas USBPcap, ordem dos LEDs, pont
 | Os visualizadores ficam em modo demonstração | sem `parec` ou sem som | instalar `pulseaudio-utils`, reproduzir som |
 | « Keyboard React » não reage | sessão Wayland ou `pynput` ausente | sessão X11, `sudo apt install python3-pynput` |
 | A galeria de fundo não inicia | pasta vazia ou ausente | escolher uma pasta no lançador (aba GIF) |
+| A janela redonda aparece como um retângulo | extensão SHAPE ou `python3-xlib` ausente | `sudo apt install python3-xlib`, ou *Configurações* → *Interface:* → *Clássica* |
 | Log de um serviço | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ As notas originais de engenharia reversa (capturas USBPcap, ordem dos LEDs, pont
 | Arquivo | Função |
 |---|---|
 | `rog_flare2_launcher.py` | lançador gráfico (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | tradução da interface (19 idiomas, um catálogo JSON por idioma) |
+| `rog_flare2_themes.py` | temas da interface (ROG e rosa) |
+| `rog_flare2_ui_ronde.py` | interfaces redondas (mostrador + gaveta, mostrador, arredondada): desenho, forma da janela, pré-visualização dos LEDs |
 | `rog_flare2_effets.py` | efeitos e visualizadores de áudio (motor PolyWollyWin adaptado para Linux) |
 | `polywollywin/` | motor de efeitos do PolyWollyWin, copiado sem modificações (MIT) |
 | `rog_flare2_folder_player.py` | galeria de fundo (serviço) |

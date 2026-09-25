@@ -18,9 +18,11 @@ Giao diện ứng dụng có sẵn bằng 19 ngôn ngữ, tự động theo ngô
 
 </div>
 
-| GIF / hình ảnh | Hiệu ứng | Âm thanh | Cài đặt |
-|---|---|---|---|
-| ![Tab GIF](../captures/vi/gif.png) | ![Tab Hiệu ứng](../captures/vi/effets.png) | ![Tab Âm thanh](../captures/vi/audio.png) | ![Tab Cài đặt](../captures/vi/reglages.png) |
+<p align="center"><img src="../captures/vi/interface-drawer.png" alt="Mặt số + ngăn kéo" width="760"><br><em>Mặt số + ngăn kéo (giao diện mặc định)</em></p>
+
+| Mặt số | Bo tròn | Cổ điển |
+|:---:|:---:|:---:|
+| <img src="../captures/vi/interface-dial.png" alt="Mặt số" width="260"> | <img src="../captures/vi/interface-rounded.png" alt="Bo tròn" width="190"> | <img src="../captures/vi/interface-classic.png" alt="Cổ điển" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ Giao diện ứng dụng có sẵn bằng 19 ngôn ngữ, tự động theo ngô
 
 ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Windows (Armoury Crate). Dự án này giao tiếp trực tiếp với bàn phím qua USB HID và mang lại:
 
-- **Một trình khởi chạy đồ họa** (`animematrix`) với bốn tab:
+- **Một trình khởi chạy đồ họa** (`animematrix`), có thể chọn trong số **4 giao diện**: *Mặt số + ngăn kéo* (cửa sổ tròn và bảng cài đặt trượt ra bên phải, mặc định), *Mặt số* (mọi thứ nằm trong vòng tròn), *Bo tròn* (góc bo rất tròn, bánh xe chỉnh độ sáng) và *Cổ điển* (tab). Các giao diện tròn hiển thị **trực tiếp 312 LED** đúng như dữ liệu gửi tới bàn phím. Bốn khối điều khiển:
   - **GIF / hình ảnh**: phát một hoặc nhiều tệp, hoặc toàn bộ thư mục dưới dạng thư viện ảnh, theo vòng lặp; chuyển đổi GIF cho ma trận LED.
   - **Hiệu ứng**: 19 hiệu ứng động (Mưa Ma Trận V2, Plasma, Lửa, sao, Pháo hoa, Sét, Metaball, Sóng, Rắn, Chữ chạy, Đồng hồ cách điệu, Phản ứng bàn phím…), có thể điều chỉnh khi đang chạy.
   - **Âm thanh**: 7 bộ hiển thị phản ứng theo âm thanh phát ra từ máy tính (Dải phổ, KITT / KARR, Tia sáng trung tâm, Dao động ký, Lửa âm thanh…).
-  - **Cài đặt**: những gì hiển thị khi mở phiên làm việc, trình chỉnh sửa hình vẽ, liên kết của dự án.
+  - **Cài đặt**: những gì hiển thị khi mở phiên làm việc, ngôn ngữ, chủ đề và giao diện, trình chỉnh sửa hình vẽ, liên kết của dự án.
 - **Đồng hồ** HH:MM, từ trình khởi chạy hoặc chạy như dịch vụ nền.
 - **Thư viện ảnh nền**: một dịch vụ `systemd --user` tự động phát các GIF trong một thư mục ngay khi mở phiên làm việc.
 - **Chuyển đổi bằng một cú nhấp** (`animematrix-bascule`): biểu tượng trên menu bật hoặc tắt màn hình; nhấp chuột phải để chọn Thư viện GIF, Đồng hồ hoặc Tắt.
@@ -106,7 +108,7 @@ Gỡ cài đặt: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # truy cập bàn phím không cần root
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Các công cụ hệ thống hữu ích: `imagemagick` (chuyển đổi), `pulse
 
 `animematrix` (hoặc mục **AniMe Matrix** trong menu).
 
+Trong các giao diện tròn, các nút tròn mở khối *GIF / hình ảnh*, *Hiệu ứng*, *Âm thanh* và *Cài đặt* (trong ngăn kéo hoặc trong vòng tròn); *Đồng hồ* và *Dừng* tác động ngay lập tức; cung ở phía dưới điều chỉnh độ sáng; kéo phần nền để di chuyển cửa sổ; các nút nhỏ phía trên để thu nhỏ hoặc đóng. Hình dạng tròn sử dụng tiện ích mở rộng X11 SHAPE (gói `python3-xlib`); nếu không có, cùng một giao diện sẽ hiển thị trong một cửa sổ hình chữ nhật.
+
 - **GIF / hình ảnh**: *GIF/hình ảnh…* để chọn tệp, *Thư mục (thư viện)…* để chọn cả một thư mục. Thư mục đã chọn cũng trở thành thư mục của thư viện ảnh nền. *Ưu tiên bản đã chuyển đổi* sẽ đọc `dossier/matrix/nom.gif` nếu tệp này tồn tại (được tạo ra bởi bước chuyển đổi).
 - **Hiệu ứng** và **Âm thanh**: chọn, điều chỉnh, rồi nhấn *▶ Chạy hiệu ứng*. Các thanh trượt tác động trực tiếp; *Nhịp độ* làm hoạt ảnh nhanh hơn hoặc chậm hơn.
 - **Độ sáng**, **🕒 Đồng hồ**, **■ Dừng** (xóa màn hình) có ở mọi tab.
-- **Cài đặt**: *Khi khởi động phiên* = Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có.
+- **Cài đặt**: *Khi khởi động phiên* = Thư viện GIF, Đồng hồ, Lần phát gần nhất hoặc Không có; *Giao diện:* chọn một trong 4 giao diện (trình khởi chạy sẽ khởi động lại, nội dung đang hiển thị vẫn tiếp tục phát).
 
 **Khi đóng trình khởi chạy, nội dung đang hiển thị vẫn tiếp tục** (GIF, hiệu ứng với các thiết lập hiện tại, trình hiển thị âm thanh hoặc đồng hồ): trình khởi chạy giao nó lại cho dịch vụ nền `animematrix-lecture.service`. Ở lần khởi chạy tiếp theo, nó giành lại quyền điều khiển ngay khi có thứ khác được khởi động (chỉ một chương trình được ghi vào bàn phím tại một thời điểm). Nhấn *■ Dừng* trước khi đóng sẽ để màn hình tắt.
 
@@ -200,6 +204,7 @@ Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, c�
 | Bộ hiển thị vẫn ở chế độ demo | không có `parec` hoặc không có âm thanh | cài `pulseaudio-utils`, phát âm thanh |
 | "Keyboard React" không phản ứng | phiên Wayland hoặc thiếu `pynput` | dùng phiên X11, `sudo apt install python3-pynput` |
 | Thư viện ảnh nền không khởi động | thư mục trống hoặc không tồn tại | chọn một thư mục trong trình khởi chạy (tab GIF) |
+| Cửa sổ tròn hiển thị thành hình chữ nhật | thiếu tiện ích mở rộng SHAPE hoặc `python3-xlib` | `sudo apt install python3-xlib`, hoặc *Cài đặt* → *Giao diện:* → *Cổ điển* |
 | Nhật ký của một dịch vụ | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ Các ghi chú rétro-engineering gốc (bản chụp USBPcap, thứ tự LED, c�
 | Tệp | Vai trò |
 |---|---|
 | `rog_flare2_launcher.py` | trình khởi chạy đồ họa (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | bản dịch giao diện (19 ngôn ngữ, mỗi ngôn ngữ một danh mục JSON) |
+| `rog_flare2_themes.py` | giao diện màu (ROG và hồng) |
+| `rog_flare2_ui_ronde.py` | các giao diện tròn (mặt số + ngăn kéo, mặt số, bo tròn): vẽ, hình dạng cửa sổ, xem trước LED |
 | `rog_flare2_effets.py` | hiệu ứng và bộ hiển thị âm thanh (engine PolyWollyWin được chuyển sang Linux) |
 | `polywollywin/` | engine hiệu ứng của PolyWollyWin, sao chép nguyên bản không chỉnh sửa (MIT) |
 | `rog_flare2_folder_player.py` | thư viện ảnh nền (dịch vụ) |

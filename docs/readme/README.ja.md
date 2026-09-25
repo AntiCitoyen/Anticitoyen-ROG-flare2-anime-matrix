@@ -18,9 +18,11 @@
 
 </div>
 
-| GIF / 画像 | エフェクト | オーディオ | 設定 |
-|---|---|---|---|
-| ![GIF タブ](../captures/ja/gif.png) | ![エフェクトタブ](../captures/ja/effets.png) | ![オーディオタブ](../captures/ja/audio.png) | ![設定タブ](../captures/ja/reglages.png) |
+<p align="center"><img src="../captures/ja/interface-drawer.png" alt="ダイヤル＋ドロワー" width="760"><br><em>ダイヤル＋ドロワー (既定のインターフェース)</em></p>
+
+| ダイヤル | 角丸 | クラシック |
+|:---:|:---:|:---:|
+| <img src="../captures/ja/interface-dial.png" alt="ダイヤル" width="260"> | <img src="../captures/ja/interface-rounded.png" alt="角丸" width="190"> | <img src="../captures/ja/interface-classic.png" alt="クラシック" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@
 
 ASUS はこのキーボードの AniMe Matrix ディスプレイを Windows(Armoury Crate)専用としてしか提供していません。本プロジェクトは USB HID 経由でキーボードと直接通信し、次を提供します。
 
-- **グラフィカルランチャー**(`animematrix`)、4 つのタブで構成:
+- **グラフィカルランチャー**(`animematrix`)、**4 種類のインターフェース**から選択可能:*ダイヤル＋ドロワー*(丸いウィンドウと右から出てくる設定パネル、デフォルト)、*ダイヤル*(すべて円の中に収まる)、*角丸*(非常に丸い角、輝度ホイール)、*クラシック*(タブ)。丸いインターフェースは、キーボードに送信される **312 個の LED をライブ表示**します。4 つのコマンドブロック:
   - **GIF / 画像**:1 つまたは複数のファイル、あるいはフォルダー全体をギャラリーとしてループ再生。GIF をマトリクス用に変換。
   - **エフェクト**:19 種類のアニメーション(マトリックスレイン、プラズマ、炎、星空、花火、稲妻、メタボール、波、スネーク、テキストスクロール、装飾時計、キーボード連動など)、実行中でも調整可能。
   - **オーディオ**:PC が再生する音に反応する 7 種類のビジュアライザー(スペクトラムバー、KITT / KARR、中心スターバースト、オシロスコープ、オーディオファイアなど)。
-  - **設定**:セッション開始時の表示内容、インターフェースの言語、描画エディター、プロジェクト関連リンク。
+  - **設定**:セッション開始時の表示内容、言語・テーマ・インターフェース、描画エディター、プロジェクト関連リンク。
 - **HH:MM 表示の時計**、ランチャーから、またはバックグラウンドサービスとして。
 - **背景ギャラリー**:セッション開始時からフォルダー内の GIF を自動的に切り替える `systemd --user` サービス。
 - **ワンクリック切り替え**(`animematrix-bascule`):メニューアイコンのクリックでディスプレイのオン/オフを切り替え、右クリックで GIF ギャラリー、時計、画面を消すのいずれかを選択。
@@ -106,7 +108,7 @@ Ubuntu 26.04(X11、PipeWire)で動作確認済み。Python ≥ 3.10、hidapi、T
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # root 権限なしでキーボードにアクセスできるようにする
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 `animematrix`(またはメニューの **AniMe Matrix** 項目)。
 
+丸いインターフェースでは、丸いボタンで *GIF / 画像*、*エフェクト*、*オーディオ*、*設定* の各ブロックを開きます(ドロワー内、または円の中)。*時計* と *停止* はすぐに反映されます。下部のアークで輝度を調整します。背景をドラッグしてウィンドウを移動します。上部の小さなボタンで最小化・終了します。丸い形状は X11 SHAPE 拡張(`python3-xlib` パッケージ)を利用します。これがない場合は、同じインターフェースが長方形のウィンドウで表示されます。
+
 - **GIF / 画像**:*GIF/画像…*で個別選択、*フォルダー（ギャラリー）…*でフォルダー全体を選択。選んだフォルダーは背景ギャラリーのフォルダーにもなります。*変換済みバージョンを優先*は、`dossier/matrix/nom.gif`(変換機能で生成)が存在する場合にそちらを読み込みます。
 - **エフェクト**と **オーディオ**:選択・調整して *▶ エフェクトを開始*。スライダーはリアルタイムに反映され、*テンポ*でアニメーションを速く/遅くできます。
 - **輝度**、**🕒 時計**、**■ 停止**(画面を消去)はすべてのタブに共通です。
-- **設定**:*セッション開始時*を GIF ギャラリー、時計、前回の再生、なしから選択。
+- **設定**:*セッション開始時*を GIF ギャラリー、時計、前回の再生、なしから選択;*インターフェース：*4 種類のインターフェースから 1 つを選択(ランチャーが再起動し、現在の表示はそのまま続きます)。
 
 **ランチャーを閉じても、表示していた内容はそのまま続きます**(GIF、そのときの設定のエフェクト、オーディオビジュアライザー、または時計):ランチャーはそれをバックグラウンドサービス `animematrix-lecture.service` に引き継ぎます。次回起動時は、他の何かを起動した時点で制御を取り戻します(キーボードへの書き込みは同時に1つのプログラムしかできません)。閉じる前に *■ 停止* を押すと、画面は消灯したままになります。
 
@@ -200,6 +204,7 @@ animematrix-bascule etat       # 現在のモードを表示
 | ビジュアライザーがデモモードのまま | `parec` がない、または音が鳴っていない | `pulseaudio-utils` をインストール、音を再生する |
 | 「Keyboard React」が反応しない | Wayland セッション、または `pynput` がない | X11 セッションを使用、`sudo apt install python3-pynput` |
 | 背景ギャラリーが起動しない | フォルダーが空、または存在しない | ランチャーの GIF タブでフォルダーを選択 |
+| 丸いウィンドウが長方形で表示される | SHAPE 拡張または `python3-xlib` が未導入 | `sudo apt install python3-xlib`、または *設定* → *インターフェース：* → *クラシック* |
 | サービスのログを見る | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ animematrix-bascule etat       # 現在のモードを表示
 | ファイル | 役割 |
 |---|---|
 | `rog_flare2_launcher.py` | グラフィカルランチャー(Tk) |
+| `rog_flare2_i18n.py`, `locale/` | インターフェースの翻訳（19 言語、言語ごとに JSON カタログ 1 つ） |
+| `rog_flare2_themes.py` | インターフェースのテーマ（ROG とピンク） |
+| `rog_flare2_ui_ronde.py` | 丸いインターフェース(ダイヤル＋ドロワー、ダイヤル、角丸):描画、ウィンドウ形状、LED プレビュー |
 | `rog_flare2_effets.py` | エフェクトとオーディオビジュアライザー(PolyWollyWin のエンジンを Linux 用に移植) |
 | `polywollywin/` | PolyWollyWin のエフェクトエンジン、無改変でコピー(MIT) |
 | `rog_flare2_folder_player.py` | 背景ギャラリー(サービス) |

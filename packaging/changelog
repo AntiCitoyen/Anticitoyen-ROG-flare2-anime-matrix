@@ -1,11 +1,24 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * 4 interfaces au choix (Réglages → Interface) : Cadran + tiroir (par
+    défaut), Cadran, Arrondie, Classique. Fenêtres réellement rondes
+    (extension X11 SHAPE), boutons ronds, luminosité en arc ou en molette,
+    aperçu en direct des 312 LED, déplacement en tirant le fond.
+  * Changer de langue ou d'interface relance le lanceur sans couper
+    l'affichage en cours.
+  * Dépendance python3-pil.imagetk ; python3-xlib recommandé.
+  * README : captures des 4 interfaces dans les 19 langues.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.1.1) stable; urgency=medium
+
   * Fermer le lanceur n'arrête plus l'affichage : GIF, effet (avec ses
     réglages du moment), visualiseur audio ou horloge continuent via le
     nouveau service animematrix-lecture (commande animematrix-lecture).
   * Démarrage de session et bascule : nouveau choix « Dernière lecture ».
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 10:40:00 +0200
 
 anticitoyen-rog-flare2-anime-matrix (1.1.0) stable; urgency=medium
 

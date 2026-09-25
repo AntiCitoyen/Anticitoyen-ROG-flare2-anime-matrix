@@ -18,9 +18,11 @@
 
 </div>
 
-| GIF / 圖片 | 特效 | 音訊 | 設定 |
-|---|---|---|---|
-| ![GIF 分頁](../captures/zh-TW/gif.png) | ![特效分頁](../captures/zh-TW/effets.png) | ![音訊分頁](../captures/zh-TW/audio.png) | ![設定分頁](../captures/zh-TW/reglages.png) |
+<p align="center"><img src="../captures/zh-TW/interface-drawer.png" alt="錶盤 + 抽屜" width="760"><br><em>錶盤 + 抽屜 (預設介面)</em></p>
+
+| 錶盤 | 圓角 | 經典 |
+|:---:|:---:|:---:|
+| <img src="../captures/zh-TW/interface-dial.png" alt="錶盤" width="260"> | <img src="../captures/zh-TW/interface-rounded.png" alt="圓角" width="190"> | <img src="../captures/zh-TW/interface-classic.png" alt="經典" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@
 
 ASUS 僅在 Windows(透過 Armoury Crate)提供這款鍵盤 AniMe Matrix 螢幕的官方支援。本專案以 USB HID 直接與鍵盤通訊,提供:
 
-- **圖形啟動器**(`animematrix`),共有四個分頁:
+- **圖形啟動器**(`animematrix`),可在 **4 種介面**中選擇:*錶盤 + 抽屜*(圓形視窗,設定面板從右側滑出,預設)、*錶盤*(全部內容都在圓圈中)、*圓角*(圓角非常大,附亮度轉盤)以及*經典*(分頁)。圓形介面會**即時顯示送往鍵盤的 312 顆 LED**。四個功能區塊:
   - **GIF / 圖片**:播放單一或多個檔案,或將整個資料夾作為圖庫循環播放;將 GIF 轉換為適合矩陣螢幕的格式。
   - **效果**:19 種動畫特效(矩陣雨、電漿、火焰、星空、煙火、閃電、融球、波浪、貪食蛇、捲動文字、花式時鐘、按鍵反應等),執行時可即時調整。
   - **音訊**:7 種會隨電腦播放的聲音變化的視覺化效果(頻譜條、KITT / KARR、中心爆閃、示波器、音訊火焰等)。
-  - **設定**:工作階段開始時要顯示的內容、介面語言、繪圖編輯器、專案相關連結。
+  - **設定**:工作階段開始時要顯示的內容、語言、主題與介面、繪圖編輯器、專案相關連結。
 - **HH:MM 時鐘**,可從啟動器開啟,也可作為背景服務執行。
 - **背景圖庫**:一個 `systemd --user` 服務,會在工作階段開始時自動循環播放指定資料夾中的 GIF。
 - **一鍵切換**(`animematrix-bascule`):點選選單圖示可開關螢幕;按右鍵可選擇 GIF 圖庫、時鐘或關閉螢幕。
@@ -106,7 +108,7 @@ ROG **筆記型電腦**(如 Zephyrus G14 等)上的 AniMe Matrix 螢幕使用不
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # 讓一般使用者(無需 root)也能存取鍵盤
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 `animematrix`(或選單中的 **AniMe Matrix** 項目)。
 
+在圓形介面中,圓形按鈕用於開啟 *GIF / 圖片*、*效果*、*音訊*、*設定* 區塊(在抽屜中或圓圈內);*時鐘* 與 *停止* 會立即生效;底部弧形用於調整亮度;拖曳背景可移動視窗;頂部的小按鈕用於最小化或關閉。圓形外觀依賴 X11 SHAPE 擴充功能(`python3-xlib` 套件);若無此擴充功能,則以矩形視窗顯示相同介面。
+
 - **GIF / 圖片**:*GIF/圖片…*用於選取單一或多個檔案,*資料夾（圖庫）…*用於選取整個資料夾。所選的資料夾同時會成為背景圖庫使用的資料夾。*優先使用已轉換版本*會在存在 `dossier/matrix/nom.gif`(由轉換功能產生)時優先讀取該檔案。
 - **效果**與 **音訊**:選擇、調整參數,再按下 *▶ 啟動效果*。滑桿參數會即時生效;*節奏*用來加快或放慢動畫播放。
 - **亮度**、**🕒 時鐘**、**■ 停止**(會清空螢幕)在所有分頁中都是共通的。
-- **設定**:*工作階段啟動時*可設定為 GIF 圖庫、時鐘、上次播放或無。
+- **設定**:*工作階段啟動時*可設定為 GIF 圖庫、時鐘、上次播放或無;*介面：*在 4 種介面中選擇(啟動器會重新啟動,目前顯示的內容會繼續播放)。
 
 **關閉啟動器後,目前顯示的內容會繼續播放**(GIF、帶目前參數的效果、音訊視覺化或時鐘):啟動器會將其交給背景服務 `animematrix-lecture.service`。下次啟動時,只要開始執行其他內容(同一時間只能有一個程式寫入鍵盤),它就會重新接管。關閉前按下 *■ 停止* 會讓螢幕保持熄滅。
 
@@ -200,6 +204,7 @@ animematrix-bascule etat       # 顯示目前模式
 | 視覺化效果一直停留在展示模式 | 沒有 `parec` 或沒有聲音輸出 | 安裝 `pulseaudio-utils`,播放一些聲音 |
 | 「Keyboard React」沒有反應 | Wayland 工作階段或缺少 `pynput` | 改用 X11 工作階段,`sudo apt install python3-pynput` |
 | 背景圖庫無法啟動 | 資料夾為空或不存在 | 在啟動器的 GIF 分頁中選擇一個資料夾 |
+| 圓形視窗顯示為矩形 | 缺少 SHAPE 擴充功能或 `python3-xlib` | `sudo apt install python3-xlib`,或在 *設定* → *介面：* → *經典* |
 | 查看某個服務的紀錄 | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ animematrix-bascule etat       # 顯示目前模式
 | 檔案 | 作用 |
 |---|---|
 | `rog_flare2_launcher.py` | 圖形啟動器(Tk) |
+| `rog_flare2_i18n.py`, `locale/` | 介面翻譯（19 種語言，每種語言一個 JSON 目錄） |
+| `rog_flare2_themes.py` | 介面主題（ROG 與粉色） |
+| `rog_flare2_ui_ronde.py` | 圓形介面(錶盤 + 抽屜、錶盤、圓角):繪製、視窗形狀、LED 預覽 |
 | `rog_flare2_effets.py` | 特效與音訊視覺化效果(移植自 PolyWollyWin 的引擎) |
 | `polywollywin/` | PolyWollyWin 的特效引擎,原樣複製(MIT 授權) |
 | `rog_flare2_folder_player.py` | 背景圖庫(服務) |

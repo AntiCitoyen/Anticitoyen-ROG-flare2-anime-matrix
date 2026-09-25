@@ -18,9 +18,11 @@ Interfejs jest dostępny w 19 językach — automatycznie dopasowuje się do ję
 
 </div>
 
-| GIF / obrazy | Efekty | Audio | Ustawienia |
-|---|---|---|---|
-| ![Zakładka GIF](../captures/pl/gif.png) | ![Zakładka Efekty](../captures/pl/effets.png) | ![Zakładka Audio](../captures/pl/audio.png) | ![Zakładka Ustawienia](../captures/pl/reglages.png) |
+<p align="center"><img src="../captures/pl/interface-drawer.png" alt="Tarcza + szuflada" width="760"><br><em>Tarcza + szuflada (interfejs domyślny)</em></p>
+
+| Tarcza | Zaokrąglony | Klasyczny |
+|:---:|:---:|:---:|
+| <img src="../captures/pl/interface-dial.png" alt="Tarcza" width="260"> | <img src="../captures/pl/interface-rounded.png" alt="Zaokrąglony" width="190"> | <img src="../captures/pl/interface-classic.png" alt="Klasyczny" width="220"> |
 
 <p align="center"><img src="../captures/themes-en.png" alt="Themes" width="100%"></p>
 
@@ -49,11 +51,11 @@ Interfejs jest dostępny w 19 językach — automatycznie dopasowuje się do ję
 
 ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armoury Crate). Ten projekt komunikuje się bezpośrednio z klawiaturą przez USB HID i dostarcza:
 
-- **Graficzny launcher** (`animematrix`) z czterema zakładkami:
+- **Graficzny launcher** (`animematrix`), do wyboru spośród **4 interfejsów**: *Tarcza + szuflada* (okrągłe okno z panelem ustawień wysuwanym w prawo, domyślny), *Tarcza* (wszystko w kole), *Zaokrąglony* (bardzo zaokrąglone rogi, pokrętło jasności) i *Klasyczny* (zakładki). Okrągłe interfejsy pokazują **na żywo 312 diod LED**, dokładnie tak, jak są wysyłane do klawiatury. Cztery bloki sterowania:
   - **GIF / obrazy** (*GIF/obrazy…*): odtwarzanie jednego lub kilku plików albo całego folderu jako galerii, w pętli; konwersja GIF-ów pod matrycę.
   - **Efekty**: 19 animacji (deszcz w stylu Matrix, plazma, ogień, gwiazdy, fajerwerki, błyskawice, metaballe, fala, wąż, przewijany tekst, stylizowany zegar, reakcja na klawiaturę…), regulowanych w trakcie działania.
   - **Audio**: 7 wizualizatorów reagujących na dźwięk odtwarzany przez komputer (widmo, KITT/KARR, starburst, oscyloskop, ogień audio…).
-  - **Ustawienia**: co wyświetla się przy otwarciu sesji, język interfejsu, edytor rysunku, linki projektu.
+  - **Ustawienia**: co wyświetla się przy otwarciu sesji, język, motyw i interfejs, edytor rysunku, linki projektu.
 - **Zegar** HH:MM, z poziomu launchera lub jako usługa w tle.
 - **Galeria tła**: usługa `systemd --user`, która przewija folder z GIF-ami od razu po otwarciu sesji.
 - **Przełącznik jednym kliknięciem** (`animematrix-bascule`): ikona w menu włącza lub wyłącza ekran; kliknięcie prawym przyciskiem pozwala wybrać Galeria GIF, Zegar lub Wyłącz.
@@ -106,7 +108,7 @@ Odinstalowanie: `sudo apt remove anticitoyen-rog-flare2-anime-matrix`.
 git clone https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git
 cd Anticitoyen-ROG-flare2-anime-matrix
 python3 -m venv .venv
-.venv/bin/pip install hidapi pillow numpy pynput
+.venv/bin/pip install hidapi pillow numpy pynput python-xlib
 # dostęp do klawiatury bez roota
 sudo cp packaging/72-rog-flare2-animate.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -126,10 +128,12 @@ Dla usług w tle uruchamianych ze źródeł: skopiuj `systemd/*.service` do `~/.
 
 `animematrix` (lub wpis **AniMe Matrix** w menu).
 
+W okrągłych interfejsach okrągłe przyciski otwierają bloki *GIF*, *Efekty*, *Audio* i *Ustawienia* (w szufladzie lub w kole); *Zegar* i *Zatrzymaj* działają natychmiast; dolny łuk reguluje jasność; okno przesuwa się, przeciągając je za tło; małe przyciski u góry minimalizują lub zamykają. Okrągły kształt wykorzystuje rozszerzenie X11 SHAPE (pakiet `python3-xlib`); bez niego ten sam interfejs wyświetla się w prostokątnym oknie.
+
 - **GIF / obrazy**: *GIF/obrazy…* dla wyboru pojedynczych plików, *Folder (galeria)…* dla całego folderu. Wybrany folder staje się też folderem galerii tła. *Preferuj wersje przekonwertowane* odczytuje `folder/matrix/nazwa.gif`, jeśli istnieje (powstały w wyniku konwersji).
 - **Efekty** i **Audio**: wybierz, ustaw, *▶ Uruchom efekt*. Suwaki działają na żywo; *Tempo* przyspiesza lub spowalnia animację.
 - **Jasność**, **🕒 Zegar**, **■ Zatrzymaj** (co czyści ekran) są wspólne dla wszystkich zakładek.
-- **Ustawienia**: *Przy starcie sesji* = Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic; *Język:* zmienia język interfejsu (launcher uruchamia się ponownie).
+- **Ustawienia**: *Przy starcie sesji* = Galeria GIF, Zegar, Ostatnie odtwarzanie lub Nic; *Język:* zmienia język interfejsu (launcher uruchamia się ponownie); *Interfejs:* wybiera jeden z 4 interfejsów (launcher uruchamia się ponownie, to, co jest wyświetlane, gra dalej).
 
 **Po zamknięciu launchera to, co jest wyświetlane, gra dalej** (GIF, efekt z bieżącymi ustawieniami, wizualizator audio lub zegar): launcher przekazuje go usłudze w tle `animematrix-lecture.service`. Przy następnym uruchomieniu przejmuje kontrolę z powrotem, gdy tylko uruchomi się coś innego (tylko jeden program może zapisywać do klawiatury). *■ Zatrzymaj* przed zamknięciem zostawia ekran wyłączony.
 
@@ -200,6 +204,7 @@ Oryginalne notatki z inżynierii wstecznej (przechwyty USBPcap, kolejność diod
 | Wizualizatory pozostają w trybie demo | brak `parec` lub brak dźwięku | zainstaluj `pulseaudio-utils`, odtwórz dźwięk |
 | „Reakcja na klawiaturę” nie reaguje | sesja Wayland lub brak `pynput` | sesja X11, `sudo apt install python3-pynput` |
 | Galeria tła się nie uruchamia | pusty lub nieistniejący folder | wybierz folder w launcherze (zakładka GIF) |
+| Okrągłe okno wyświetla się jako prostokąt | brak rozszerzenia SHAPE lub `python3-xlib` | `sudo apt install python3-xlib`, albo *Ustawienia* → *Interfejs:* → *Klasyczny* |
 | Dziennik usługi | — | `journalctl --user -u animematrix-galerie.service -f` |
 
 <a id="depot"></a>
@@ -209,6 +214,9 @@ Oryginalne notatki z inżynierii wstecznej (przechwyty USBPcap, kolejność diod
 | Plik | Rola |
 |---|---|
 | `rog_flare2_launcher.py` | launcher graficzny (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | tłumaczenie interfejsu (19 języków, jeden katalog JSON na język) |
+| `rog_flare2_themes.py` | motywy interfejsu (ROG i różowe) |
+| `rog_flare2_ui_ronde.py` | okrągłe interfejsy (tarcza + szuflada, tarcza, zaokrąglony): rysowanie, kształt okna, podgląd LED |
 | `rog_flare2_effets.py` | efekty i wizualizatory audio (silnik PolyWollyWin dostosowany do Linuksa) |
 | `polywollywin/` | silnik efektów PolyWollyWin, skopiowany bez zmian (MIT) |
 | `rog_flare2_folder_player.py` | galeria tła (usługa) |

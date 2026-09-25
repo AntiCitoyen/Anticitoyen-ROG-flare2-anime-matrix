@@ -51,7 +51,7 @@ MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
 MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
 SUPPORT_URL = "https://buymeacoffee.com/anticitoyen"
 # Services de fond (rog_flare2_bascule.sh) ; un seul peut tenir le HID.
@@ -62,6 +62,9 @@ BOOT_MODES = {"Galerie GIF": SERVICES["gif"], "Horloge": SERVICES["horloge"],
 CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2"
 MODE_FILE = CONFIG_DIR / "mode"
 GALLERY_FILE = CONFIG_DIR / "galerie"  # dossier lu par la galerie (lanceur et service)
+INTERFACE_FILE = CONFIG_DIR / "interface"
+# Interfaces : cadran + tiroir (défaut), cadran seul, fenêtre arrondie, onglets classiques
+INTERFACES = {"drawer": "Cadran + tiroir", "dial": "Cadran", "rounded": "Arrondie", "classic": "Classique"}
 SHOW_FILE = CONFIG_DIR / "lecture.json"  # ce que la lecture de fond rejoue (rog_flare2_lecture.py)
 SHOW_PID = CONFIG_DIR / "lecture.pid"  # lecture de fond lancée sans systemd
 
@@ -80,6 +83,16 @@ def gallery_dir() -> Path:
     except (OSError, subprocess.SubprocessError):
         pictures = ""
     return Path(pictures or Path.home() / "Pictures") / "AniMe-Matrix"
+
+
+def interface_saved() -> str:
+    try:
+        code = INTERFACE_FILE.read_text().strip()
+        if code in INTERFACES:
+            return code
+    except OSError:
+        pass
+    return "drawer"
 
 
 def save_gallery_dir(folder: Path) -> None:
@@ -223,33 +236,28 @@ class LauncherApp(tk.Tk):
         self.live_params: dict = {}
         self._pending_status: str | None = None
         self.running_effect = None
-
-        ttk.Label(self, text="AniMe Matrix", font=("Sans", 16, "bold")).pack(pady=(16, 4))
-        ttk.Label(self, text="ROG Strix Flare II Animate").pack(pady=(0, 8))
-
-        tabs = ttk.Notebook(self)
-        tabs.pack(fill="both", expand=True, padx=12, pady=4)
-        self._build_gif_tab(tabs)
-        self.effect_panel = self._build_effect_tab(tabs, "Effets", list(EFFECTS), "Plasma")
-        self.audio_panel = self._build_effect_tab(tabs, "Audio", list(AUDIO_EFFECTS), "Spectrum Bars")
-        self._build_settings_tab(tabs)
-
-        frm = ttk.Frame(self)
-        frm.pack(fill="x", padx=24, pady=(10, 4))
-        ttk.Label(frm, text=_("Luminosité :")).pack(side="left")
         self.brightness = tk.IntVar(value=60)
-        ttk.Scale(frm, from_=5, to=100, variable=self.brightness, orient="horizontal").pack(
-            side="left", fill="x", expand=True, padx=8)
+        self.last_frame: bytes | None = None  # dernière trame envoyée (aperçu des interfaces rondes)
+        send = self.transport.write
 
-        btns = ttk.Frame(self)
-        btns.pack(fill="x", padx=24, pady=4)
-        ttk.Button(btns, text=_("🕒 Horloge"), command=self.start_clock).pack(
-            side="left", expand=True, fill="x", padx=(0, 4))
-        ttk.Button(btns, text=_("■ Arrêter"), command=self.stop_and_clear).pack(
-            side="left", expand=True, fill="x", padx=(4, 0))
+        def write_and_keep(frame: bytes) -> int:
+            self.last_frame = frame
+            return send(frame)
 
-        self.status = ttk.Label(self, text="", style="Muted.TLabel")
-        self.status.pack(pady=(8, 12))
+        self.transport.write = write_and_keep
+
+        self.interface = interface_saved()
+        if self.interface == "classic":
+            self._build_classic()
+        else:
+            try:
+                from rog_flare2_ui_ronde import RoundUI
+            except ImportError as exc:  # PIL.ImageTk absent (paquet python3-pil.imagetk) : onglets
+                print(f"interface ronde indisponible : {exc}", file=sys.stderr)
+                self.interface = "classic"
+                self._build_classic()
+            else:
+                self.round_ui = RoundUI(self, self.interface)
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self._poll_status()
@@ -263,9 +271,43 @@ class LauncherApp(tk.Tk):
         elif gallery_dir().is_dir():
             self.set_files(media_files(gallery_dir()), gallery_dir().name)
 
-    def _build_gif_tab(self, tabs: ttk.Notebook):
-        tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text=_("GIF / images"))
+    def _build_classic(self):
+        """Interface classique : onglets."""
+        ttk.Label(self, text="AniMe Matrix", font=("Sans", 16, "bold")).pack(pady=(16, 4))
+        ttk.Label(self, text="ROG Strix Flare II Animate").pack(pady=(0, 8))
+
+        tabs = ttk.Notebook(self)
+        tabs.pack(fill="both", expand=True, padx=12, pady=4)
+        for frame, title in self.build_sections(tabs, padding=12):
+            tabs.add(frame, text=title)
+
+        frm = ttk.Frame(self)
+        frm.pack(fill="x", padx=24, pady=(10, 4))
+        ttk.Label(frm, text=_("Luminosité :")).pack(side="left")
+        ttk.Scale(frm, from_=5, to=100, variable=self.brightness, orient="horizontal").pack(
+            side="left", fill="x", expand=True, padx=8)
+
+        btns = ttk.Frame(self)
+        btns.pack(fill="x", padx=24, pady=4)
+        ttk.Button(btns, text=_("🕒 Horloge"), command=self.start_clock).pack(
+            side="left", expand=True, fill="x", padx=(0, 4))
+        ttk.Button(btns, text=_("■ Arrêter"), command=self.stop_and_clear).pack(
+            side="left", expand=True, fill="x", padx=(4, 0))
+
+        self.status = ttk.Label(self, text="", style="Muted.TLabel")
+        self.status.pack(pady=(8, 12))
+
+    def build_sections(self, parent, padding=12, wrap=380) -> list[tuple[ttk.Frame, str]]:
+        """Les quatre blocs de commandes (GIF, Effets, Audio, Réglages), communs à toutes les interfaces."""
+        self.wrap = wrap
+        gif = self._build_gif_tab(parent, padding)
+        eff, self.effect_panel = self._build_effect_tab(parent, "Effets", list(EFFECTS), "Plasma", padding)
+        aud, self.audio_panel = self._build_effect_tab(parent, "Audio", list(AUDIO_EFFECTS), "Spectrum Bars", padding)
+        sett = self._build_settings_tab(parent, padding)
+        return [(gif, _("GIF / images")), (eff, _("Effets")), (aud, _("Audio")), (sett, _("Réglages"))]
+
+    def _build_gif_tab(self, parent, padding=12) -> ttk.Frame:
+        tab = ttk.Frame(parent, padding=padding)
         src = ttk.Frame(tab)
         src.pack(fill="x", pady=4)
         ttk.Button(src, text=_("GIF/images…"), command=self.choose_files).pack(
@@ -282,18 +324,20 @@ class LauncherApp(tk.Tk):
         self.play_btn.pack(fill="x", pady=(8, 4))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
-        ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)")).pack()
+        ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
+                  wraplength=self.wrap, justify="center").pack()
         conv = ttk.Frame(tab)
         conv.pack(fill="x", pady=(4, 0))
         ttk.Button(conv, text=_("Convertir des GIF…"), command=self.convert_files).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
         ttk.Button(conv, text=_("Convertir un dossier…"), command=self.convert_folder).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
+        return tab
 
-    def _build_effect_tab(self, tabs: ttk.Notebook, title: str, names: list[str], default: str) -> dict:
-        """Onglet d'effets PolyWollyWin : choix, réglages de l'effet (PARAMS), vitesse, lancement."""
-        tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text=_(title))
+    def _build_effect_tab(self, parent, title: str, names: list[str], default: str,
+                          padding=12) -> tuple[ttk.Frame, dict]:
+        """Bloc d'effets PolyWollyWin : choix, réglages de l'effet (PARAMS), cadence, lancement."""
+        tab = ttk.Frame(parent, padding=padding)
         # Noms internes (anglais, PolyWollyWin) <-> noms affichés (traduits)
         panel = {"labels": {_(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
         panel["name"] = tk.StringVar(value=_(default))
@@ -308,13 +352,13 @@ class LauncherApp(tk.Tk):
             side="left", fill="x", expand=True)
         if title == "Audio":
             ttk.Label(tab, text=_("Source : moniteur de la sortie son par défaut (parec)"),
-                      style="Muted.TLabel").pack(anchor="w", pady=(6, 0))
+                      style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w", pady=(6, 0))
         ttk.Button(tab, text=_("▶ Lancer l'effet"), command=lambda: self.start_effect(panel)).pack(
             fill="x", pady=(10, 0))
         ttk.Label(tab, text=_("Effets : PolyWollyWin (MIT, Mike Opitz)"), style="Muted.TLabel").pack(pady=(6, 0))
         cb.bind("<<ComboboxSelected>>", lambda _e: self._fill_params(panel))
         self._fill_params(panel)
-        return panel
+        return tab, panel
 
     def _fill_params(self, panel: dict):
         for w in panel["params"].winfo_children():
@@ -350,9 +394,8 @@ class LauncherApp(tk.Tk):
             except (tk.TclError, ValueError):
                 pass
 
-    def _build_settings_tab(self, tabs: ttk.Notebook):
-        tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text=_("Réglages"))
+    def _build_settings_tab(self, parent, padding=12) -> ttk.Frame:
+        tab = ttk.Frame(parent, padding=padding)
         boot = ttk.Frame(tab)
         boot.pack(fill="x", pady=4)
         ttk.Label(boot, text=_("Au démarrage de session :")).pack(side="left")
@@ -379,8 +422,17 @@ class LauncherApp(tk.Tk):
         tcb = ttk.Combobox(thm, textvariable=self.theme_var, values=list(theme_labels), state="readonly", width=18)
         tcb.pack(side="left", padx=8)
         tcb.bind("<<ComboboxSelected>>", lambda _e: self.change_theme(theme_labels[self.theme_var.get()]))
+
+        itf = ttk.Frame(tab)
+        itf.pack(fill="x", pady=4)
+        ttk.Label(itf, text=_("Interface :")).pack(side="left")
+        itf_labels = {_(label): code for code, label in INTERFACES.items()}
+        self.itf_var = tk.StringVar(value=_(INTERFACES[self.interface]))
+        icb = ttk.Combobox(itf, textvariable=self.itf_var, values=list(itf_labels), state="readonly", width=18)
+        icb.pack(side="left", padx=8)
+        icb.bind("<<ComboboxSelected>>", lambda _e: self.change_interface(itf_labels[self.itf_var.get()]))
         ttk.Label(tab, text=_("La galerie de fond lit le dernier dossier choisi dans l'onglet GIF."),
-                  style="Muted.TLabel").pack(anchor="w")
+                  style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w")
         ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
                    command=self.open_paint_editor).pack(fill="x", pady=(12, 0))
 
@@ -390,6 +442,7 @@ class LauncherApp(tk.Tk):
                    command=lambda: webbrowser.open(SUPPORT_URL)).pack(fill="x", pady=(8, 4))
         ttk.Button(tab, text=_("Page du projet (GitHub)"),
                    command=lambda: webbrowser.open(PROJECT_URL)).pack(fill="x")
+        return tab
 
     def set_status(self, text: str):
         """Appelable depuis un fil : le texte est posé ici et affiché par _poll_status."""
@@ -621,15 +674,31 @@ class LauncherApp(tk.Tk):
     def change_theme(self, name: str):
         themes.save(name)
         themes.apply(self, name)
+        if getattr(self, "round_ui", None) is not None:
+            self.round_ui.retheme()
+
+    def change_interface(self, code: str):
+        if code == self.interface:
+            return
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        INTERFACE_FILE.write_text(code + "\n")
+        self.restart()
+
+    def restart(self):
+        """Relance le lanceur (langue ou interface changée) ; l'affichage en cours passe au fond puis revient."""
+        show = self.current_show()
+        self.stop_playback()
+        self.transport.close()
+        if show is not None:
+            hand_off(show)
+        os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
 
     def change_language(self, code: str):
         """Enregistre la langue et relance le lanceur pour l'appliquer."""
         if code == LANG:
             return
         save_language(code)
-        self.stop_playback()
-        self.transport.close()
-        os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
+        self.restart()
 
     def open_paint_editor(self):
         self.stop_playback()
