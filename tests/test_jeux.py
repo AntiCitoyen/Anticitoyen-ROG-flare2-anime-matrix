@@ -4,6 +4,7 @@ import numpy as np
 import rog_flare2_effets as E
 import rog_flare2_jeux as J
 from rog_flare2_matrix_paint import LED_COUNT
+from rog_flare2_jeux import ROWS
 
 
 def play(game, steps):
@@ -95,3 +96,45 @@ def test_daemon_forwards_keys(monkeypatch):
         assert d.effect.next_dir == (-1, 0)
     finally:
         d.stop()
+
+
+def test_pong_duo_points_and_winner():
+    g = J.PongDuoGame()
+    g.key("z")
+    assert g.player == 1
+    g.key("Down")
+    assert g.cpu == 3
+    for _ in range(g.WIN):
+        g.ball, g.vel = [3.0, float(g.RIGHT)], [0.0, 1.0]  # balle qui sort à droite : point au joueur 1
+        g.cpu = 0 if g.ball[0] > 2 else 4
+        g.step()
+    assert g.over and g.points[0] == g.WIN and "PLAYER 1 WINS" in g._over_text.message
+
+
+def test_invaders_shot_kills_an_alien():
+    g = J.InvadersGame()
+    target = max(g.aliens)  # rangée la plus basse
+    g.ship = target[1]
+    g.key("space")
+    for _ in range(ROWS):
+        g.step()
+        if g.score:
+            break
+    assert g.score == 10 and target not in g.aliens
+
+
+def test_flappy_falls_without_flapping():
+    g = J.FlappyGame()
+    for _ in range(200):
+        g.step()
+        if g.over:
+            break
+    assert g.over
+
+
+def test_flappy_flap_goes_up():
+    g = J.FlappyGame()
+    y0 = g.y
+    g.key("space")
+    g.step()
+    assert g.y < y0

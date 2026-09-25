@@ -229,7 +229,7 @@ class LauncherApp(tk.Tk):
         ttk.Scale(spd, from_=0.2, to=3.0, variable=panel["speed"], orient="horizontal").pack(
             side="left", fill="x", expand=True)
         if title == "Effets":
-            self.game_hint = ttk.Label(tab, text=_("Jeux : flèches et Espace, Entrée pour rejouer (fenêtre au premier plan)"),
+            self.game_hint = ttk.Label(tab, text=_("Jeux : flèches et Espace, Entrée pour rejouer (fenêtre au premier plan) ; Pong à deux : Z/W et S pour le joueur de gauche"),
                                        style="Muted.TLabel", wraplength=self.wrap)
             self.game_hint.pack(anchor="w", pady=(6, 0))
         if title == "Audio":
@@ -566,7 +566,7 @@ class LauncherApp(tk.Tk):
             return
         if isinstance(event.widget, (tk.Entry, ttk.Entry, ttk.Combobox)):
             return
-        if event.keysym in ("Up", "Down", "Left", "Right", "space", "Return", "KP_Enter"):
+        if event.keysym in ("Up", "Down", "Left", "Right", "space", "Return", "KP_Enter", "w", "z", "s", "W", "Z", "S"):
             self._send("key", key=event.keysym)
             return "break"
 

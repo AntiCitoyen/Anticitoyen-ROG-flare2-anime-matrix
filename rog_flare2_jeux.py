@@ -1,4 +1,4 @@
-"""Jeux jouables sur l'AniMe Matrix : Snake, Pong, Tetris, casse-briques.
+"""Jeux jouables sur l'AniMe Matrix : Snake, Pong (seul ou à deux), Tetris, casse-briques, Invaders, Flappy.
 
 Chaque jeu est un effet (moteur PolyWollyWin) qui tourne dans le démon ; le
 lanceur lui transmet les touches (flèches, espace, Entrée) quand sa fenêtre a le
@@ -309,4 +309,185 @@ class BreakoutGame(GameEffect):
         frame[min(ROWS - 1, max(0, int(round(self.ball[0])))), int(round(self.ball[1]))] = FULL
 
 
-GAMES = [SnakeGame, PongGame, TetrisGame, BreakoutGame]
+class PongDuoGame(PongGame):
+    """Pong à deux sur le même clavier : joueur 1 à gauche (Z/W et S), joueur 2 à droite (flèches)."""
+    name = "Pong 2P (game)"
+    game = "pong2"
+    WIN = 5
+
+    def reset(self):
+        GameEffect.reset(self)
+        self.player = self.cpu = 2
+        self.points = [0, 0]
+        self._serve(1)
+
+    def key(self, key):
+        k = key.lower()
+        if k in ("w", "z"):
+            self.player = max(self.TOP, self.player - 1)
+        elif k == "s":
+            self.player = min(self.BOTTOM - 1, self.player + 1)
+        elif key == "Up":
+            self.cpu = max(self.TOP, self.cpu - 1)
+        elif key == "Down":
+            self.cpu = min(self.BOTTOM - 1, self.cpu + 1)
+
+    def step(self):
+        b, v = self.ball, self.vel
+        b[0] += v[0]
+        b[1] += v[1]
+        if b[0] < self.TOP or b[0] > self.BOTTOM:
+            v[0] = -v[0]
+            b[0] += 2 * v[0]
+        for paddle_col, row, sign in ((self.LEFT + 1, self.player, 1), (self.RIGHT - 1, self.cpu, -1)):
+            if round(b[1]) == paddle_col and row - 0.5 <= b[0] <= row + 1.5 and v[1] * sign < 0:
+                v[1] = -v[1] * 1.05  # un peu plus vite à chaque renvoi
+                v[0] = max(-1.0, min(1.0, v[0] + (b[0] - row - 0.5) * 0.5))
+        if b[1] < self.LEFT or b[1] > self.RIGHT:
+            winner = 1 if b[1] < self.LEFT else 0
+            self.points[winner] += 1
+            if self.points[winner] >= self.WIN:
+                self.over = True
+                from rog_flare2_effets import make_effect
+                self._over_text = make_effect("Scroll Text", {
+                    "message": f"PLAYER {winner + 1} WINS {max(self.points)}-{min(self.points)}"})
+                return
+            self._serve(1 if winner == 0 else -1)
+
+    def draw(self, frame):
+        super().draw(frame)
+        for i in range(self.points[0]):  # points : petits traits sous le terrain
+            frame[self.BOTTOM + 3, 14 + i * 2] = FULL
+        for i in range(self.points[1]):
+            frame[self.BOTTOM + 3, 36 - i * 2] = FULL
+
+
+class InvadersGame(GameEffect):
+    """Envahisseurs dans le rectangle de droite (colonnes 22-36) : canon en bas, flèches et Espace."""
+    name = "Invaders (game)"
+    game = "invaders"
+    STEP = 0.05
+    PARAMS = {"speed": {"label": "Speed", "min": 50, "max": 200, "default": 100, "scale": 100.0}}
+    LEFT, RIGHT = 22, 36
+
+    def reset(self):
+        super().reset()
+        self.wave = 0
+        self._wave()
+
+    def _wave(self):
+        self.aliens = {(r, c) for r in (0, 2, 4) for c in range(self.LEFT + 1, self.RIGHT - 3, 2)}
+        self.dir = 1
+        self.ship = 29
+        self.shots: list[list[int]] = []
+        self.bombs: list[list[int]] = []
+        self.ticks = 0
+        self.march = max(4, 12 - 2 * self.wave)  # pas de jeu entre deux mouvements des envahisseurs
+
+    def key(self, key):
+        if key == "Left":
+            self.ship = max(self.LEFT, self.ship - 1)
+        elif key == "Right":
+            self.ship = min(self.RIGHT, self.ship + 1)
+        elif key in ("space", "Up") and len(self.shots) < 2:
+            self.shots.append([ROWS - 2, self.ship])
+
+    def step(self):
+        self.ticks += 1
+        for shot in self.shots:
+            shot[0] -= 1
+        for bomb in self.bombs:
+            if self.ticks % 3 == 0:
+                bomb[0] += 1
+        for shot in list(self.shots):
+            hit = (shot[0], shot[1])
+            if hit in self.aliens:
+                self.aliens.discard(hit)
+                self.shots.remove(shot)
+                self.score += 10
+            elif shot[0] < 0:
+                self.shots.remove(shot)
+        self.bombs = [b for b in self.bombs if b[0] < ROWS]
+        if any(b[0] == ROWS - 1 and b[1] == self.ship for b in self.bombs):
+            self.game_over()
+            return
+        if not self.aliens:
+            self.wave += 1
+            self.score += 50
+            self._wave()
+            return
+        if self.ticks % self.march == 0:
+            cols = [c for _r, c in self.aliens]
+            if (self.dir > 0 and max(cols) >= self.RIGHT) or (self.dir < 0 and min(cols) <= self.LEFT):
+                self.aliens = {(r + 1, c) for r, c in self.aliens}
+                self.dir = -self.dir
+            else:
+                self.aliens = {(r, c + self.dir) for r, c in self.aliens}
+            if max(r for r, _c in self.aliens) >= ROWS - 2:
+                self.game_over()
+                return
+            if random.random() < 0.5:
+                r, c = random.choice(sorted(self.aliens))
+                self.bombs.append([r + 1, c])
+
+    def draw(self, frame):
+        for r, c in self.aliens:
+            frame[r, c] = MID
+        for r, c in self.shots:
+            if 0 <= r < ROWS:
+                frame[r, c] = FULL
+        for r, c in self.bombs:
+            frame[r, c] = DIM + 40
+        frame[ROWS - 1, max(self.LEFT, self.ship - 1):self.ship + 2] = FULL
+        frame[ROWS - 2, self.ship] = FULL
+
+
+class FlappyGame(GameEffect):
+    """Oiseau qui bat des ailes (Espace ou flèche haut) entre des tuyaux, rectangle de droite."""
+    name = "Flappy (game)"
+    game = "flappy"
+    STEP = 0.05
+    PARAMS = {"speed": {"label": "Speed", "min": 50, "max": 200, "default": 100, "scale": 100.0}}
+    LEFT, RIGHT, BIRD, GAP = 22, 36, 26, 4
+
+    def reset(self):
+        super().reset()
+        self.y, self.vy = 5.0, 0.0
+        self.pipes: list[list[int]] = []  # [colonne, rangée du haut de l'ouverture]
+        self.ticks = 0
+
+    def key(self, key):
+        if key in ("space", "Up"):
+            self.vy = -0.55
+
+    def step(self):
+        self.ticks += 1
+        self.vy = min(0.6, self.vy + 0.07)
+        self.y += self.vy
+        if self.ticks % 3 == 0:
+            for pipe in self.pipes:
+                pipe[0] -= 1
+            if pipe_passed := [p for p in self.pipes if p[0] == self.BIRD - 1]:
+                self.score += len(pipe_passed)
+            self.pipes = [p for p in self.pipes if p[0] >= self.LEFT]
+            if not self.pipes or self.pipes[-1][0] <= self.RIGHT - 7:
+                self.pipes.append([self.RIGHT, random.randint(1, ROWS - self.GAP - 1)])
+        row = int(round(self.y))
+        if row < 0 or row >= ROWS:
+            self.game_over()
+            return
+        for col, top in self.pipes:
+            if col == self.BIRD and not top <= row < top + self.GAP:
+                self.game_over()
+                return
+
+    def draw(self, frame):
+        for col, top in self.pipes:
+            for r in range(ROWS):
+                if not top <= r < top + self.GAP:
+                    frame[r, col] = MID
+        frame[max(0, min(ROWS - 1, int(round(self.y)))), self.BIRD] = FULL
+        frame[max(0, min(ROWS - 1, int(round(self.y)))), self.BIRD - 1] = DIM + 60
+
+
+GAMES = [SnakeGame, PongGame, PongDuoGame, TetrisGame, BreakoutGame, InvadersGame, FlappyGame]
