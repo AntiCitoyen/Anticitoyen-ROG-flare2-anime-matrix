@@ -12,7 +12,8 @@ DEPOT="$(dirname "$(readlink -f "$0")")"
 PY="$DEPOT/.venv/bin/python"; [ -x "$PY" ] || PY=/usr/bin/python3
 ETAT="${XDG_CONFIG_HOME:-$HOME/.config}/rog-flare2/mode"
 declare -A SERVICE=([gif]=animematrix-galerie.service [horloge]=animematrix-horloge.service)
-declare -A NOM=([gif]="Galerie GIF" [horloge]="Horloge" [off]="Écran éteint")
+t() { "$PY" "$DEPOT/rog_flare2_i18n.py" "$1" 2>/dev/null || echo "$1"; }  # texte traduit
+declare -A NOM=([gif]="$(t "Galerie GIF")" [horloge]="$(t "Horloge")" [off]="$(t "Écran éteint")")
 
 mode_actif() {
     for m in gif horloge; do
@@ -32,7 +33,7 @@ passer_a() {
     local m=$1
     eteindre
     if [ "$m" != off ]; then
-        systemctl --user enable --now "${SERVICE[$m]}" || { avertir "Échec : ${NOM[$m]}"; exit 1; }
+        systemctl --user enable --now "${SERVICE[$m]}" || { avertir "$(t "Échec : {mode}" | sed "s|{mode}|${NOM[$m]}|")"; exit 1; }
         mkdir -p "$(dirname "$ETAT")" && echo "$m" > "$ETAT"
     fi
     avertir "${NOM[$m]}"

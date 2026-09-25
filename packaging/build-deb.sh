@@ -16,10 +16,12 @@ install -d "$ROOT/DEBIAN" "$ROOT/usr/bin" "$ROOT$SHARE/polywollywin" "$ROOT/usr/
     "$ROOT/usr/share/icons/hicolor/scalable/apps" "$ROOT/usr/share/doc/$PKG"
 
 for f in rog_flare2_launcher.py rog_flare2_matrix_paint.py rog_flare2_clock_v3.py rog_flare2_convertir.py \
-         rog_flare2_folder_player.py rog_flare2_effets.py; do
+         rog_flare2_folder_player.py rog_flare2_effets.py rog_flare2_i18n.py rog_flare2_themes.py; do
     install -m 644 "$DEPOT/$f" "$ROOT$SHARE/$f"
 done
 install -m 755 "$DEPOT/rog_flare2_bascule.sh" "$ROOT$SHARE/rog_flare2_bascule.sh"
+install -d "$ROOT$SHARE/locale"
+install -m 644 "$DEPOT"/locale/*.json "$ROOT$SHARE/locale/"
 install -m 644 "$DEPOT"/polywollywin/{effects.py,renderer.py,LICENSE,ORIGINE.md} "$ROOT$SHARE/polywollywin/"
 
 commande() {  # commande <nom> <script>
@@ -36,6 +38,7 @@ ln -s "../share/$PKG/rog_flare2_bascule.sh" "$ROOT/usr/bin/animematrix-bascule"
 
 install -m 644 "$DEPOT"/systemd/*.service "$ROOT/usr/lib/systemd/user/"
 install -m 644 "$DEPOT/packaging/72-rog-flare2-animate.rules" "$ROOT/usr/lib/udev/rules.d/"
+/usr/bin/python3 "$DEPOT/packaging/gen-desktop.py"
 install -m 644 "$DEPOT/packaging/animematrix.desktop" "$ROOT/usr/share/applications/"
 install -m 644 "$DEPOT/packaging/animematrix.svg" "$ROOT/usr/share/icons/hicolor/scalable/apps/"
 install -m 644 "$DEPOT/packaging/copyright" "$ROOT/usr/share/doc/$PKG/copyright"

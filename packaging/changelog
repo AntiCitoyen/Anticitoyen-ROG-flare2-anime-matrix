@@ -1,5 +1,15 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Interface traduite en 19 langues (langue du système, ou choix dans
+    Réglages) ; éditeur de dessin et entrée de menu traduits aussi.
+  * 11 thèmes : 5 inspirés de ROG, 5 roses, et celui du système.
+  * Curseur « Cadence » distinct du réglage de vitesse propre à l'effet.
+  * README en 19 langues avec menu, captures d'écran par langue.
+
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+
+anticitoyen-rog-flare2-anime-matrix (1.0.0) stable; urgency=medium
+
   * Première version publique :
     - lanceur en onglets : GIF/images, galerie d'un dossier, horloge,
       effets et visualiseurs audio (moteur PolyWollyWin), réglages ;
@@ -10,4 +20,4 @@ anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
     - capture audio par parec (PipeWire/PulseAudio), sans PortAudio ;
     - règle udev, entrée de menu, icône.
 
- -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  @DATE@
+ -- AntiCitoyen <anticitoyen@users.noreply.gitlab.com>  Fri, 25 Sep 2026 09:30:00 +0200

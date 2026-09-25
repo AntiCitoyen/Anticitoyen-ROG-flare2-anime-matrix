@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="packaging/animematrix.svg" alt="AniMe Matrix" width="160">
+</p>
+
 # AniMe Matrix pour Linux — ROG Strix Flare II Animate
 
 [![Release](https://img.shields.io/github/v/release/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix)](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest)
@@ -6,31 +10,38 @@
 
 Piloter sous Linux l'écran **AniMe Matrix** (312 mini-LED) du clavier **ASUS ROG Strix Flare II Animate**, sans Armoury Crate ni Windows : GIF et images, galerie de fond, horloge, 19 effets animés, 7 visualiseurs audio, dessin LED par LED.
 
-*English summary [at the bottom](#english-summary).*
+<div align="center">
+
+**🇫🇷 Français** · [🇬🇧 English](docs/readme/README.en.md) · [🇪🇸 Español](docs/readme/README.es.md) · [🇩🇪 Deutsch](docs/readme/README.de.md) · [🇮🇹 Italiano](docs/readme/README.it.md) · [🇧🇷 Português](docs/readme/README.pt-BR.md) · [🇳🇱 Nederlands](docs/readme/README.nl.md) · [🇵🇱 Polski](docs/readme/README.pl.md) · [🇷🇺 Русский](docs/readme/README.ru.md) · [🇺🇦 Українська](docs/readme/README.uk.md) · [🇹🇷 Türkçe](docs/readme/README.tr.md) · [🇸🇦 العربية](docs/readme/README.ar.md) · [🇮🇳 हिन्दी](docs/readme/README.hi.md) · [🇨🇳 简体中文](docs/readme/README.zh-CN.md) · [🇹🇼 繁體中文](docs/readme/README.zh-TW.md) · [🇯🇵 日本語](docs/readme/README.ja.md) · [🇰🇷 한국어](docs/readme/README.ko.md) · [🇻🇳 Tiếng Việt](docs/readme/README.vi.md) · [🇮🇩 Bahasa Indonesia](docs/readme/README.id.md)
+
+</div>
 
 | GIF / images | Effets | Audio | Réglages |
 |---|---|---|---|
-| ![Onglet GIF](docs/lanceur-gif.png) | ![Onglet Effets](docs/lanceur-effets.png) | ![Onglet Audio](docs/lanceur-audio.png) | ![Onglet Réglages](docs/lanceur-reglages.png) |
+| ![Onglet GIF](docs/captures/fr/gif.png) | ![Onglet Effets](docs/captures/fr/effets.png) | ![Onglet Audio](docs/captures/fr/audio.png) | ![Onglet Réglages](docs/captures/fr/reglages.png) |
+
+<p align="center"><img src="docs/captures/themes-fr.png" alt="Themes" width="100%"></p>
 
 ---
 
 ## Sommaire
 
-- [Ce que fait le projet](#ce-que-fait-le-projet)
-- [Matériel pris en charge](#matériel-pris-en-charge)
+- [Ce que fait le projet](#projet)
+- [Matériel pris en charge](#materiel)
 - [Installation](#installation)
 - [Utilisation](#utilisation)
-- [Préparer de bons GIF](#préparer-de-bons-gif)
-- [Comment ça marche](#comment-ça-marche)
-- [Dépannage](#dépannage)
-- [Organisation du dépôt](#organisation-du-dépôt)
-- [Construire le paquet .deb](#construire-le-paquet-deb)
-- [Crédits](#crédits)
+- [Préparer de bons GIF](#gif)
+- [Comment ça marche](#fonctionnement)
+- [Dépannage](#depannage)
+- [Organisation du dépôt](#depot)
+- [Construire le paquet .deb](#deb)
+- [Crédits](#credits)
 - [Licence](#licence)
-- [Soutenir le projet](#soutenir-le-projet)
-- [English summary](#english-summary)
+- [Soutenir le projet](#soutien)
 
 ---
+
+<a id="projet"></a>
 
 ## Ce que fait le projet
 
@@ -40,13 +51,17 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
   - **GIF / images** : lire un ou plusieurs fichiers, ou tout un dossier en galerie, en boucle ; convertir des GIF pour la matrice.
   - **Effets** : 19 animations (pluie façon Matrix, plasma, feu, étoiles, feux d'artifice, éclairs, métaballes, vague, serpent, texte défilant, horloge stylisée, réaction au clavier…), réglables pendant qu'elles tournent.
   - **Audio** : 7 visualiseurs qui réagissent au son joué par le PC (spectre, KITT/KARR, starburst, oscilloscope, feu audio…).
-  - **Réglages** : ce qui s'affiche à l'ouverture de session, éditeur de dessin, liens du projet.
+  - **Réglages** : ce qui s'affiche à l'ouverture de session, langue de l'interface, éditeur de dessin, liens du projet.
 - **Une horloge** HH:MM, depuis le lanceur ou en service de fond.
 - **Une galerie de fond** : un service `systemd --user` qui fait défiler un dossier de GIF dès l'ouverture de session.
 - **Une bascule en un clic** (`animematrix-bascule`) : l'icône du menu allume ou éteint l'écran ; le clic droit choisit Galerie GIF, Horloge ou Éteindre.
 - **Une conversion de GIF adaptée à la matrice** (`animematrix-convertir`) : 19×24, gris, 3 niveaux, sans tramage — voir [docs/GUIDE-GIF.md](docs/GUIDE-GIF.md).
 - **Un éditeur de dessin** LED par LED (`animematrix-dessin`).
+- **11 thèmes** : 5 inspirés de ROG (Classic, Strix, Glitch, Gold, Carbon), 5 roses (Sakura, Barbe à papa, Or rose, Rose lavande, Nuit rose) et celui du système, au choix dans *Réglages* → *Thème :*.
+- **Une interface en 19 langues** : elle suit la langue du système et se change dans *Réglages* → *Langue :*.
 - **Une faible consommation** : les GIF sont décodés image par image ; une galerie de 400 GIF tourne en ~25 Mo de mémoire.
+
+<a id="materiel"></a>
 
 ## Matériel pris en charge
 
@@ -57,6 +72,8 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 Les écrans AniMe Matrix des **portables** ROG (Zephyrus G14, etc.) utilisent un autre protocole : ils ne sont **pas** pris en charge ici (voir plutôt `asusctl`).
 
 Testé sur Ubuntu 26.04 (X11, PipeWire). Toute distribution avec Python ≥ 3.10, hidapi, Tk et systemd doit convenir.
+
+<a id="installation"></a>
 
 ## Installation
 
@@ -100,6 +117,8 @@ Outils système utiles : `imagemagick` (conversion), `pulseaudio-utils` (`parec`
 
 Pour les services de fond depuis les sources, copier `systemd/*.service` dans `~/.config/systemd/user/` en remplaçant les lignes `ExecStart=` par le chemin de `.venv/bin/python` et du script (`rog_flare2_folder_player.py`, `rog_flare2_clock_v3.py`), puis `systemctl --user daemon-reload`.
 
+<a id="utilisation"></a>
+
 ## Utilisation
 
 ### Le lanceur
@@ -107,9 +126,9 @@ Pour les services de fond depuis les sources, copier `systemd/*.service` dans `~
 `animematrix` (ou l'entrée **AniMe Matrix** du menu).
 
 - **GIF / images** : *GIF/images…* pour une sélection, *Dossier (galerie)…* pour tout un dossier. Le dossier choisi devient aussi celui de la galerie de fond. *Préférer les versions converties* lit `dossier/matrix/nom.gif` quand il existe (produit par la conversion).
-- **Effets** et **Audio** : choisir, régler, *▶ Lancer l'effet*. Les curseurs agissent en direct ; *Vitesse* accélère ou ralentit l'animation.
+- **Effets** et **Audio** : choisir, régler, *▶ Lancer l'effet*. Les curseurs agissent en direct ; *Cadence* accélère ou ralentit toute l'animation.
 - **Luminosité**, **🕒 Horloge**, **■ Arrêter** (qui efface l'écran) sont communs à tous les onglets.
-- **Réglages** : *Au démarrage de session* = Galerie GIF, Horloge ou Rien.
+- **Réglages** : *Au démarrage de session* = Galerie GIF, Horloge ou Rien ; *Langue :* change la langue de l'interface (le lanceur redémarre).
 
 Pendant qu'il affiche quelque chose, le lanceur met en pause le service de fond (un seul programme peut écrire sur le clavier) et le relance à sa fermeture.
 
@@ -144,11 +163,15 @@ Les visualiseurs écoutent le **moniteur de la sortie son par défaut** avec `pa
 
 Il allume l'écran au rythme de la frappe grâce à `pynput`, qui lit les touches de toute la session tant que l'effet tourne. Il fonctionne sous X11 ; sous Wayland, il ne reçoit pas les touches.
 
+<a id="gif"></a>
+
 ## Préparer de bons GIF
 
 L'écran n'est pas un rectangle : 24 rangées décalées, de 19 LED en haut à 7 en bas, 3 niveaux de gris vraiment distincts, un halo entre LED voisines. Les silhouettes, pictogrammes, textes courts et mouvements lents rendent bien ; les photos et vidéos, non.
 
 Le guide complet (taille de toile, niveaux, cadence, luminosité, commande ImageMagick) : **[docs/GUIDE-GIF.md](docs/GUIDE-GIF.md)**.
+
+<a id="fonctionnement"></a>
 
 ## Comment ça marche
 
@@ -162,6 +185,8 @@ Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, poin
 
 ⚠️ N'envoyez pas au clavier les paquets des AniMe Matrix de portables (`0x5E …`, `0xEC …`) : ce n'est pas le bon protocole et cela peut bloquer le clavier (débrancher/rebrancher, ou maintenir **Fn + Échap** 10–15 s).
 
+<a id="depannage"></a>
+
 ## Dépannage
 
 | Symptôme | Cause probable | Solution |
@@ -174,11 +199,15 @@ Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, poin
 | La galerie de fond ne démarre pas | dossier vide ou absent | choisir un dossier dans le lanceur (onglet GIF) |
 | Journal d'un service | — | `journalctl --user -u animematrix-galerie.service -f` |
 
+<a id="depot"></a>
+
 ## Organisation du dépôt
 
 | Fichier | Rôle |
 |---|---|
 | `rog_flare2_launcher.py` | lanceur graphique (Tk) |
+| `rog_flare2_i18n.py`, `locale/` | traduction de l'interface (19 langues, un catalogue JSON par langue) |
+| `rog_flare2_themes.py` | thèmes de l'interface (ROG et roses) |
 | `rog_flare2_effets.py` | effets et visualiseurs audio (moteur PolyWollyWin adapté à Linux) |
 | `polywollywin/` | moteur d'effets de PolyWollyWin, copié sans modification (MIT) |
 | `rog_flare2_folder_player.py` | galerie de fond (service) |
@@ -191,6 +220,8 @@ Les notes de rétro-ingénierie d'origine (captures USBPcap, ordre des LED, poin
 | `packaging/` | règle udev, entrée de menu, icône, fichiers et script du paquet .deb |
 | `docs/` | guide GIF, notes de protocole, captures d'écran |
 
+<a id="deb"></a>
+
 ## Construire le paquet .deb
 
 ```bash
@@ -200,6 +231,8 @@ packaging/build-deb.sh
 
 Seuls `dpkg-deb` et `bash` sont nécessaires ; la version est lue dans `rog_flare2_launcher.py` (`VERSION`).
 
+<a id="credits"></a>
+
 ## Crédits
 
 - **NicRoss512** — rétro-ingénierie du protocole, horloge et éditeur d'origine : [ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol](https://github.com/NicRoss512/ASUS-ROG-Strix-Flare-II-Animate-AniMe-Matrix-Protocol). Ce dépôt en part ; son historique est conservé.
@@ -208,9 +241,13 @@ Seuls `dpkg-deb` et `bash` sont nécessaires ; la version est lue dans `rog_flar
 
 Projet indépendant, non affilié à ASUS. « ROG », « AniMe Matrix » et « Armoury Crate » sont des marques d'ASUSTeK.
 
+<a id="licence"></a>
+
 ## Licence
 
 [MIT](LICENSE) pour le code de ce dépôt. `polywollywin/` reste sous la licence MIT de son auteur ([polywollywin/LICENSE](polywollywin/LICENSE)). Les fichiers d'origine de NicRoss512 (`rog_flare2_clock_v3.py`, `rog_flare2_matrix_paint.py`, `parse_usbpcap.py`, `rog_flare2_replay_capture.py`, `docs/PROTOCOL.md`, captures) ont été publiés sans licence explicite et restent à leur auteur ; ils sont redistribués avec attribution.
+
+<a id="soutien"></a>
 
 ## Soutenir le projet
 
@@ -221,22 +258,3 @@ Si ce projet vous rend service, un café aide à le maintenir :
 **https://buymeacoffee.com/anticitoyen** — le lien est aussi dans l'onglet *Réglages* du lanceur.
 
 Rapports de bugs et idées : [Issues](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/issues).
-
----
-
-## English summary
-
-Linux tools for the 312-LED **AniMe Matrix** display of the **ASUS ROG Strix Flare II Animate** keyboard (USB `0b05:19fc`), no Armoury Crate needed:
-
-- a graphical launcher (`animematrix`): GIFs/images, folder gallery, clock, 19 animated effects, 7 audio visualizers (desktop audio via `parec`), GIF conversion, drawing editor, start-up mode;
-- a background gallery or clock as `systemd --user` services, toggled from the menu icon or `animematrix-bascule gif|horloge|off`;
-- streaming GIF decoding (≈25 MB for a 400-GIF gallery);
-- a udev rule for non-root access.
-
-**Install:** download the `.deb` from [Releases](https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix/releases/latest), run `sudo apt install ./anticitoyen-rog-flare2-anime-matrix_*_all.deb`, replug the keyboard, start **AniMe Matrix** from the menu.
-
-**Protocol:** hidapi, HID interface 4, 1024-byte writes: `60 81 00 00` + 312 LED brightness bytes (hardware order) + zero padding. Details in [docs/PROTOCOL.md](docs/PROTOCOL.md).
-
-The UI is in French. Credits: protocol reverse engineering by NicRoss512, effects engine from PolyWollyWin by Mike Opitz (MIT).
-
-**Support:** [buymeacoffee.com/anticitoyen](https://buymeacoffee.com/anticitoyen)

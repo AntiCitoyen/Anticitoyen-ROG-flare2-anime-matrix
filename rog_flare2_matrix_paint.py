@@ -26,6 +26,10 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
+sys.path.insert(0, str(Path(__file__).parent))
+from rog_flare2_i18n import _  # noqa: E402
+import rog_flare2_themes as themes  # noqa: E402
+
 try:
     import tkinter as tk
     from tkinter import filedialog, messagebox, ttk
@@ -148,7 +152,8 @@ class FlareTransport:
 class MatrixPaintApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("ROG Flare II Animate AniMe Matrix Paint")
+        themes.apply(self, themes.saved())
+        self.title(_("ROG Flare II Animate AniMe Matrix Paint"))
         self.geometry("980x720")
         self.minsize(850, 560)
 
@@ -166,7 +171,7 @@ class MatrixPaintApp(tk.Tk):
         self.mode_var = tk.StringVar(value="Physical calibrated")
         self.brightness_var = tk.IntVar(value=35)
         self.auto_send_var = tk.BooleanVar(value=True)
-        self.status_var = tk.StringVar(value="Not connected")
+        self.status_var = tk.StringVar(value=_("Not connected"))
         self.raw_index_var = tk.StringVar(value="0")
         self.scan_delay_var = tk.IntVar(value=80)
 
@@ -180,7 +185,7 @@ class MatrixPaintApp(tk.Tk):
         top = ttk.Frame(self, padding=8)
         top.pack(side=tk.TOP, fill=tk.X)
 
-        ttk.Label(top, text="Mode:").pack(side=tk.LEFT)
+        ttk.Label(top, text=_("Mode:")).pack(side=tk.LEFT)
         mode = ttk.Combobox(
             top,
             textvariable=self.mode_var,
@@ -191,7 +196,7 @@ class MatrixPaintApp(tk.Tk):
         mode.pack(side=tk.LEFT, padx=(4, 12))
         mode.bind("<<ComboboxSelected>>", lambda _e: self.redraw_grid())
 
-        ttk.Label(top, text="Brightness:").pack(side=tk.LEFT)
+        ttk.Label(top, text=_("Brightness:")).pack(side=tk.LEFT)
         bright = ttk.Scale(
             top,
             from_=0,
@@ -205,33 +210,33 @@ class MatrixPaintApp(tk.Tk):
         self.brightness_label = ttk.Label(top, width=5, text="35%")
         self.brightness_label.pack(side=tk.LEFT, padx=(0, 12))
 
-        ttk.Checkbutton(top, text="Auto send", variable=self.auto_send_var).pack(side=tk.LEFT, padx=(0, 12))
-        ttk.Button(top, text="Connect", command=self.connect).pack(side=tk.LEFT, padx=2)
-        ttk.Button(top, text="Send", command=self.send_current).pack(side=tk.LEFT, padx=2)
-        ttk.Button(top, text="Clear", command=self.clear).pack(side=tk.LEFT, padx=2)
-        ttk.Button(top, text="Fill", command=self.fill).pack(side=tk.LEFT, padx=2)
-        ttk.Button(top, text="Invert", command=self.invert).pack(side=tk.LEFT, padx=2)
+        ttk.Checkbutton(top, text=_("Auto send"), variable=self.auto_send_var).pack(side=tk.LEFT, padx=(0, 12))
+        ttk.Button(top, text=_("Connect"), command=self.connect).pack(side=tk.LEFT, padx=2)
+        ttk.Button(top, text=_("Send"), command=self.send_current).pack(side=tk.LEFT, padx=2)
+        ttk.Button(top, text=_("Clear"), command=self.clear).pack(side=tk.LEFT, padx=2)
+        ttk.Button(top, text=_("Fill"), command=self.fill).pack(side=tk.LEFT, padx=2)
+        ttk.Button(top, text=_("Invert"), command=self.invert).pack(side=tk.LEFT, padx=2)
 
         second = ttk.Frame(self, padding=(8, 0, 8, 8))
         second.pack(side=tk.TOP, fill=tk.X)
-        ttk.Button(second, text="Checker", command=self.checker).pack(side=tk.LEFT, padx=2)
-        ttk.Button(second, text="Diagonal", command=self.diagonal).pack(side=tk.LEFT, padx=2)
-        ttk.Label(second, text="Raw index:").pack(side=tk.LEFT, padx=(18, 4))
+        ttk.Button(second, text=_("Checker"), command=self.checker).pack(side=tk.LEFT, padx=2)
+        ttk.Button(second, text=_("Diagonal"), command=self.diagonal).pack(side=tk.LEFT, padx=2)
+        ttk.Label(second, text=_("Raw index:")).pack(side=tk.LEFT, padx=(18, 4))
         ttk.Entry(second, textvariable=self.raw_index_var, width=6).pack(side=tk.LEFT)
-        ttk.Button(second, text="Light only", command=self.light_raw_index).pack(side=tk.LEFT, padx=2)
-        ttk.Label(second, text="Scan ms:").pack(side=tk.LEFT, padx=(18, 4))
+        ttk.Button(second, text=_("Light only"), command=self.light_raw_index).pack(side=tk.LEFT, padx=2)
+        ttk.Label(second, text=_("Scan ms:")).pack(side=tk.LEFT, padx=(18, 4))
         ttk.Entry(second, textvariable=self.scan_delay_var, width=5).pack(side=tk.LEFT)
-        ttk.Button(second, text="Scan raw", command=self.start_scan).pack(side=tk.LEFT, padx=2)
-        ttk.Button(second, text="Stop scan", command=self.stop_scan).pack(side=tk.LEFT, padx=2)
-        ttk.Button(second, text="Save", command=self.save_pattern).pack(side=tk.RIGHT, padx=2)
-        ttk.Button(second, text="Load", command=self.load_pattern).pack(side=tk.RIGHT, padx=2)
+        ttk.Button(second, text=_("Scan raw"), command=self.start_scan).pack(side=tk.LEFT, padx=2)
+        ttk.Button(second, text=_("Stop scan"), command=self.stop_scan).pack(side=tk.LEFT, padx=2)
+        ttk.Button(second, text=_("Save"), command=self.save_pattern).pack(side=tk.RIGHT, padx=2)
+        ttk.Button(second, text=_("Load"), command=self.load_pattern).pack(side=tk.RIGHT, padx=2)
 
         help_frame = ttk.Frame(self, padding=(8, 0, 8, 4))
         help_frame.pack(side=tk.TOP, fill=tk.X)
         ttk.Label(
             help_frame,
-            text="Left click/drag = draw, right click/drag = erase, middle click = toggle. "
-                 "Logical mode uses idx=y*32+x. Physical calibrated uses the scan-derived raw index mapping.",
+            text=_("Left click/drag = draw, right click/drag = erase, middle click = toggle. "
+                   "Logical mode uses idx=y*32+x. Physical calibrated uses the scan-derived raw index mapping."),
         ).pack(side=tk.LEFT)
 
         self.canvas = tk.Canvas(self, bg="#151515", highlightthickness=0)
@@ -376,9 +381,9 @@ class MatrixPaintApp(tk.Tk):
         self.pending_send = None
         try:
             n = self.transport.write(self.build_frame())
-            self.status_var.set(f"Sent {n} bytes, active LEDs: {len(self.active)}, brightness: {self.brightness_var.get()}%")
+            self.status_var.set(_("Sent {n} bytes, active LEDs: {active}, brightness: {brightness}%").format(n=n, active=len(self.active), brightness=self.brightness_var.get()))
         except Exception as exc:
-            self.status_var.set(f"Send failed: {exc}")
+            self.status_var.set(_("Send failed: {err}").format(err=exc))
 
     def schedule_send(self) -> None:
         if not self.auto_send_var.get():
@@ -392,10 +397,10 @@ class MatrixPaintApp(tk.Tk):
     def connect(self) -> None:
         try:
             path = self.transport.connect()
-            self.status_var.set(f"Connected: {path}")
+            self.status_var.set(_("Connected: {path}").format(path=path))
         except Exception as exc:
-            self.status_var.set(f"Connect failed: {exc}")
-            messagebox.showerror("Connect failed", str(exc))
+            self.status_var.set(_("Connect failed: {err}").format(err=exc))
+            messagebox.showerror(_("Connect failed"), str(exc))
 
     def clear(self) -> None:
         self.stop_scan(restore=False)
@@ -447,10 +452,10 @@ class MatrixPaintApp(tk.Tk):
         try:
             idx = int(self.raw_index_var.get(), 0)
         except ValueError:
-            messagebox.showerror("Bad index", "Raw index must be integer, e.g. 42 or 0x2a")
+            messagebox.showerror(_("Bad index"), _("Raw index must be integer, e.g. 42 or 0x2a"))
             return
         if not (0 <= idx < LED_COUNT):
-            messagebox.showerror("Bad index", f"Index must be 0..{LED_COUNT - 1}")
+            messagebox.showerror(_("Bad index"), _("Index must be 0..{max}").format(max=LED_COUNT - 1))
             return
         self.active = {idx}
         self.refresh_cells()
@@ -493,9 +498,9 @@ class MatrixPaintApp(tk.Tk):
 
     def save_pattern(self) -> None:
         path = filedialog.asksaveasfilename(
-            title="Save pattern",
+            title=_("Save pattern"),
             defaultextension=".json",
-            filetypes=[("JSON", "*.json"), ("All files", "*.*")],
+            filetypes=[("JSON", "*.json"), (_("All files"), "*.*")],
         )
         if not path:
             return
@@ -506,12 +511,12 @@ class MatrixPaintApp(tk.Tk):
             "protocol": "rog-flare2-60-81-offset4",
         }
         Path(path).write_text(json.dumps(data, indent=2), encoding="utf-8")
-        self.status_var.set(f"Saved {path}")
+        self.status_var.set(_("Saved {path}").format(path=path))
 
     def load_pattern(self) -> None:
         path = filedialog.askopenfilename(
-            title="Load pattern",
-            filetypes=[("JSON", "*.json"), ("All files", "*.*")],
+            title=_("Load pattern"),
+            filetypes=[("JSON", "*.json"), (_("All files"), "*.*")],
         )
         if not path:
             return

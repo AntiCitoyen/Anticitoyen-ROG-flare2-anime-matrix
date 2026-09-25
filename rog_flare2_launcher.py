@@ -27,6 +27,8 @@ from tkinter import filedialog, messagebox, ttk
 sys.path.insert(0, str(Path(__file__).parent))
 from rog_flare2_clock_v3 import brightness_to_raw, make_frame
 from rog_flare2_convertir import convertir_tout
+from rog_flare2_i18n import LANG, LANGUAGES, _, save_language
+import rog_flare2_themes as themes
 from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_class, make_effect, param_value, run_effect
 from rog_flare2_matrix_paint import (
     FlareTransport,
@@ -48,7 +50,7 @@ MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
 NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
 MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
 SUPPORT_URL = "https://buymeacoffee.com/anticitoyen"
 # Services de fond (rog_flare2_bascule.sh) ; un seul peut tenir le HID.
@@ -183,6 +185,7 @@ class LauncherApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("AniMe Matrix - ROG Strix Flare II Animate")
+        themes.apply(self, themes.saved())
         self.resizable(False, False)
 
         self.transport = FlareTransport()
@@ -205,19 +208,19 @@ class LauncherApp(tk.Tk):
 
         frm = ttk.Frame(self)
         frm.pack(fill="x", padx=24, pady=(10, 4))
-        ttk.Label(frm, text="Luminosité :").pack(side="left")
+        ttk.Label(frm, text=_("Luminosité :")).pack(side="left")
         self.brightness = tk.IntVar(value=60)
         ttk.Scale(frm, from_=5, to=100, variable=self.brightness, orient="horizontal").pack(
             side="left", fill="x", expand=True, padx=8)
 
         btns = ttk.Frame(self)
         btns.pack(fill="x", padx=24, pady=4)
-        ttk.Button(btns, text="🕒 Horloge", command=self.start_clock).pack(
+        ttk.Button(btns, text=_("🕒 Horloge"), command=self.start_clock).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
-        ttk.Button(btns, text="■ Arrêter", command=self.stop_and_clear).pack(
+        ttk.Button(btns, text=_("■ Arrêter"), command=self.stop_and_clear).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
 
-        self.status = ttk.Label(self, text="", foreground="gray")
+        self.status = ttk.Label(self, text="", style="Muted.TLabel")
         self.status.pack(pady=(8, 12))
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -225,60 +228,62 @@ class LauncherApp(tk.Tk):
 
         if Image is None:
             messagebox.showwarning(
-                "Pillow manquant",
-                "Le module Pillow n'est pas installé dans cet environnement.\n"
-                "La lecture de GIF/images sera indisponible."
+                _("Pillow manquant"),
+                _("Le module Pillow n'est pas installé dans cet environnement.\n"
+                  "La lecture de GIF/images sera indisponible.")
             )
         elif gallery_dir().is_dir():
             self.set_files(media_files(gallery_dir()), gallery_dir().name)
 
     def _build_gif_tab(self, tabs: ttk.Notebook):
         tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text="GIF / images")
+        tabs.add(tab, text=_("GIF / images"))
         src = ttk.Frame(tab)
         src.pack(fill="x", pady=4)
-        ttk.Button(src, text="GIF/images…", command=self.choose_files).pack(
+        ttk.Button(src, text=_("GIF/images…"), command=self.choose_files).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
-        ttk.Button(src, text="Dossier (galerie)…", command=self.choose_folder).pack(
+        ttk.Button(src, text=_("Dossier (galerie)…"), command=self.choose_folder).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
 
         self.loop_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(tab, text="Boucler / enchaîner les fichiers", variable=self.loop_var).pack(anchor="w")
+        ttk.Checkbutton(tab, text=_("Boucler / enchaîner les fichiers"), variable=self.loop_var).pack(anchor="w")
         self.converted_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(tab, text="Préférer les versions converties (matrix/)",
+        ttk.Checkbutton(tab, text=_("Préférer les versions converties (matrix/)"),
                         variable=self.converted_var).pack(anchor="w")
-        self.play_btn = ttk.Button(tab, text="▶ Lancer les GIF", command=self.start_playback, state="disabled")
+        self.play_btn = ttk.Button(tab, text=_("▶ Lancer les GIF"), command=self.start_playback, state="disabled")
         self.play_btn.pack(fill="x", pady=(8, 4))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
-        ttk.Label(tab, text="Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)").pack()
+        ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)")).pack()
         conv = ttk.Frame(tab)
         conv.pack(fill="x", pady=(4, 0))
-        ttk.Button(conv, text="Convertir des GIF…", command=self.convert_files).pack(
+        ttk.Button(conv, text=_("Convertir des GIF…"), command=self.convert_files).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
-        ttk.Button(conv, text="Convertir un dossier…", command=self.convert_folder).pack(
+        ttk.Button(conv, text=_("Convertir un dossier…"), command=self.convert_folder).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
 
     def _build_effect_tab(self, tabs: ttk.Notebook, title: str, names: list[str], default: str) -> dict:
         """Onglet d'effets PolyWollyWin : choix, réglages de l'effet (PARAMS), vitesse, lancement."""
         tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text=title)
-        panel = {"name": tk.StringVar(value=default), "values": {}, "speed": tk.DoubleVar(value=1.0)}
-        cb = ttk.Combobox(tab, textvariable=panel["name"], values=names, state="readonly")
+        tabs.add(tab, text=_(title))
+        # Noms internes (anglais, PolyWollyWin) <-> noms affichés (traduits)
+        panel = {"labels": {_(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
+        panel["name"] = tk.StringVar(value=_(default))
+        cb = ttk.Combobox(tab, textvariable=panel["name"], values=list(panel["labels"]), state="readonly")
         cb.pack(fill="x", pady=(0, 8))
         panel["params"] = ttk.Frame(tab)
         panel["params"].pack(fill="x")
         spd = ttk.Frame(tab)
         spd.pack(fill="x", pady=(8, 0))
-        ttk.Label(spd, text="Vitesse", width=14).pack(side="left")
+        ttk.Label(spd, text=_("Cadence"), width=14).pack(side="left")
         ttk.Scale(spd, from_=0.2, to=3.0, variable=panel["speed"], orient="horizontal").pack(
             side="left", fill="x", expand=True)
         if title == "Audio":
-            ttk.Label(tab, text="Source : moniteur de la sortie son par défaut (parec)",
-                      foreground="gray").pack(anchor="w", pady=(6, 0))
-        ttk.Button(tab, text="▶ Lancer l'effet", command=lambda: self.start_effect(panel)).pack(
+            ttk.Label(tab, text=_("Source : moniteur de la sortie son par défaut (parec)"),
+                      style="Muted.TLabel").pack(anchor="w", pady=(6, 0))
+        ttk.Button(tab, text=_("▶ Lancer l'effet"), command=lambda: self.start_effect(panel)).pack(
             fill="x", pady=(10, 0))
-        ttk.Label(tab, text="Effets : PolyWollyWin (MIT, Mike Opitz)", foreground="gray").pack(pady=(6, 0))
+        ttk.Label(tab, text=_("Effets : PolyWollyWin (MIT, Mike Opitz)"), style="Muted.TLabel").pack(pady=(6, 0))
         cb.bind("<<ComboboxSelected>>", lambda _e: self._fill_params(panel))
         self._fill_params(panel)
         return panel
@@ -287,10 +292,10 @@ class LauncherApp(tk.Tk):
         for w in panel["params"].winfo_children():
             w.destroy()
         panel["values"] = {}
-        for attr, spec in effect_class(panel["name"].get()).PARAMS.items():
+        for attr, spec in effect_class(self._effect_name(panel)).PARAMS.items():
             row = ttk.Frame(panel["params"])
             row.pack(fill="x", pady=1)
-            ttk.Label(row, text=spec.get("label", attr), width=14).pack(side="left")
+            ttk.Label(row, text=_(spec.get("label", attr)), width=14).pack(side="left")
             if spec.get("type") == "text":
                 var = tk.StringVar(value=spec.get("default", ""))
                 ttk.Entry(row, textvariable=var).pack(side="left", fill="x", expand=True)
@@ -303,6 +308,10 @@ class LauncherApp(tk.Tk):
             var.trace_add("write", lambda *_a, a=attr, s=spec, v=var: self._apply_param(a, s, v))
             panel["values"][attr] = var
 
+    @staticmethod
+    def _effect_name(panel: dict) -> str:
+        return panel["labels"].get(panel["name"].get(), panel["name"].get())
+
     def _apply_param(self, attr: str, spec: dict, var: tk.Variable):
         """Réglage appliqué en direct à l'effet en cours s'il possède cet attribut."""
         effect = self.running_effect
@@ -314,24 +323,43 @@ class LauncherApp(tk.Tk):
 
     def _build_settings_tab(self, tabs: ttk.Notebook):
         tab = ttk.Frame(tabs, padding=12)
-        tabs.add(tab, text="Réglages")
+        tabs.add(tab, text=_("Réglages"))
         boot = ttk.Frame(tab)
         boot.pack(fill="x", pady=4)
-        ttk.Label(boot, text="Au démarrage de session :").pack(side="left")
-        self.boot_var = tk.StringVar(value=self.boot_mode())
-        cb = ttk.Combobox(boot, textvariable=self.boot_var, values=list(BOOT_MODES), state="readonly", width=12)
+        ttk.Label(boot, text=_("Au démarrage de session :")).pack(side="left")
+        boot_labels = {_(m): m for m in BOOT_MODES}
+        self.boot_var = tk.StringVar(value=_(self.boot_mode()))
+        cb = ttk.Combobox(boot, textvariable=self.boot_var, values=list(boot_labels), state="readonly", width=14)
         cb.pack(side="left", padx=8)
-        cb.bind("<<ComboboxSelected>>", lambda _e: self.set_boot_mode(self.boot_var.get()))
-        ttk.Label(tab, text="La galerie de fond lit le dernier dossier choisi dans l'onglet GIF.",
-                  foreground="gray").pack(anchor="w")
-        ttk.Button(tab, text="✎ Dessiner mon propre motif (éditeur)",
+        cb.bind("<<ComboboxSelected>>", lambda _e: self.set_boot_mode(boot_labels[self.boot_var.get()]))
+
+        lang = ttk.Frame(tab)
+        lang.pack(fill="x", pady=4)
+        ttk.Label(lang, text=_("Langue :")).pack(side="left")
+        codes = {name: code for code, name in LANGUAGES.items()}
+        self.lang_var = tk.StringVar(value=LANGUAGES[LANG])
+        lcb = ttk.Combobox(lang, textvariable=self.lang_var, values=list(codes), state="readonly", width=18)
+        lcb.pack(side="left", padx=8)
+        lcb.bind("<<ComboboxSelected>>", lambda _e: self.change_language(codes[self.lang_var.get()]))
+
+        thm = ttk.Frame(tab)
+        thm.pack(fill="x", pady=4)
+        ttk.Label(thm, text=_("Thème :")).pack(side="left")
+        theme_labels = {_(t): t for t in themes.THEMES}
+        self.theme_var = tk.StringVar(value=_(themes.saved()))
+        tcb = ttk.Combobox(thm, textvariable=self.theme_var, values=list(theme_labels), state="readonly", width=18)
+        tcb.pack(side="left", padx=8)
+        tcb.bind("<<ComboboxSelected>>", lambda _e: self.change_theme(theme_labels[self.theme_var.get()]))
+        ttk.Label(tab, text=_("La galerie de fond lit le dernier dossier choisi dans l'onglet GIF."),
+                  style="Muted.TLabel").pack(anchor="w")
+        ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
                    command=self.open_paint_editor).pack(fill="x", pady=(12, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
-        ttk.Label(tab, text=f"AniMe Matrix pour Linux {VERSION}").pack()
-        ttk.Button(tab, text="☕ Soutenir le projet (Buy Me a Coffee)",
+        ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
+        ttk.Button(tab, text=_("☕ Soutenir le projet (Buy Me a Coffee)"),
                    command=lambda: webbrowser.open(SUPPORT_URL)).pack(fill="x", pady=(8, 4))
-        ttk.Button(tab, text="Page du projet (GitHub)",
+        ttk.Button(tab, text=_("Page du projet (GitHub)"),
                    command=lambda: webbrowser.open(PROJECT_URL)).pack(fill="x")
 
     def set_status(self, text: str):
@@ -346,7 +374,7 @@ class LauncherApp(tk.Tk):
 
     def set_files(self, files: list[Path], label: str):
         self.gif_files = files
-        self.status.config(text=f"{len(files)} fichier(s) : {label}")
+        self.status.config(text=_("{n} fichier(s) : {label}").format(n=len(files), label=label))
         self.play_btn.config(state="normal" if files and Image is not None else "disabled")
 
     def choose_files(self):
@@ -354,30 +382,30 @@ class LauncherApp(tk.Tk):
             result = subprocess.run(
                 [
                     "zenity", "--file-selection", "--multiple", "--separator=\n",
-                    "--title=Choisir un ou plusieurs GIF/images",
-                    "--file-filter=Images et GIF | *.gif *.png *.jpg *.jpeg *.bmp *.webp",
-                    "--file-filter=Tous les fichiers | *",
+                    "--title=" + _("Choisir un ou plusieurs GIF/images"),
+                    f"--file-filter={_('Images et GIF')} | *.gif *.png *.jpg *.jpeg *.bmp *.webp",
+                    f"--file-filter={_('Tous les fichiers')} | *",
                 ],
                 capture_output=True, text=True, timeout=300,
             )
             paths = [p for p in result.stdout.strip().split("\n") if p]
         except (FileNotFoundError, subprocess.SubprocessError):
             paths = filedialog.askopenfilenames(
-                title="Choisir un ou plusieurs GIF/images",
-                filetypes=[("Images et GIF", "*.gif *.png *.jpg *.jpeg *.bmp *.webp"), ("Tous les fichiers", "*.*")],
+                title=_("Choisir un ou plusieurs GIF/images"),
+                filetypes=[(_("Images et GIF"), "*.gif *.png *.jpg *.jpeg *.bmp *.webp"), (_("Tous les fichiers"), "*.*")],
             )
         if paths:
-            self.set_files([Path(p) for p in paths], "sélection")
+            self.set_files([Path(p) for p in paths], _("sélection"))
 
     def choose_folder(self):
         try:
             result = subprocess.run(
-                ["zenity", "--file-selection", "--directory", "--title=Dossier de GIF à lire en galerie",
+                ["zenity", "--file-selection", "--directory", "--title=" + _("Dossier de GIF à lire en galerie"),
                  f"--filename={gallery_dir()}/"],
                 capture_output=True, text=True, timeout=300)
             path = result.stdout.strip()
         except (FileNotFoundError, subprocess.SubprocessError):
-            path = filedialog.askdirectory(title="Dossier de GIF à lire en galerie", initialdir=gallery_dir())
+            path = filedialog.askdirectory(title=_("Dossier de GIF à lire en galerie"), initialdir=gallery_dir())
         if path:
             save_gallery_dir(Path(path))
             self.set_files(media_files(Path(path)), Path(path).name)
@@ -401,9 +429,9 @@ class LauncherApp(tk.Tk):
                 self.transport.connect()
                 job(stop)
             except Exception as exc:
-                self.set_status(f"Erreur : {exc}")
+                self.set_status(_("Erreur : {err}").format(err=exc))
                 return
-            self.set_status("Arrêté")
+            self.set_status(_("Arrêté"))
 
         self.play_thread = threading.Thread(target=worker, daemon=True)
         self.play_thread.start()
@@ -421,11 +449,11 @@ class LauncherApp(tk.Tk):
                     if stop.is_set():
                         break
                     src = pick_version(f) if converted else f
-                    self.set_status(f"Lecture : {src.name}")
+                    self.set_status(_("Lecture : {name}").format(name=src.name))
                     try:
                         play_file(src, self.transport, stop, self.brightness.get)
                     except OSError as exc:
-                        self.set_status(f"Sauté {src.name} : {exc}")
+                        self.set_status(_("Sauté {name} : {err}").format(name=src.name, err=exc))
                 if not loop():
                     break
 
@@ -433,20 +461,20 @@ class LauncherApp(tk.Tk):
 
     def start_clock(self):
         def job(stop):
-            self.set_status("Horloge")
+            self.set_status(_("Horloge"))
             play_clock(self.transport, stop, self.brightness.get)
 
         self._start(job)
 
     def start_effect(self, panel: dict):
-        name = panel["name"].get()
+        name = self._effect_name(panel)
         raw = {a: v.get() for a, v in panel["values"].items()}
         speed = panel["speed"].get
 
         def job(stop):
             effect = make_effect(name, raw)
             self.running_effect = effect
-            self.set_status(f"Effet : {name}")
+            self.set_status(_("Effet : {name}").format(name=_(name)))
             try:
                 run_effect(effect, self.transport, stop, self.brightness.get, speed)
             finally:
@@ -462,7 +490,7 @@ class LauncherApp(tk.Tk):
             # (sinon ecritures HID concurrentes -> erreurs et ecran noir).
             self.play_thread.join(timeout=10.0)
             if self.play_thread.is_alive():
-                self.status.config(text="Ancien thread bloqué, réessaie dans un instant")
+                self.status.config(text=_("Ancien thread bloqué, réessaie dans un instant"))
                 return
         self.play_thread = None
 
@@ -489,59 +517,75 @@ class LauncherApp(tk.Tk):
             mode = next(k for k, v in SERVICES.items() if v == wanted)
             CONFIG_DIR.mkdir(parents=True, exist_ok=True)
             MODE_FILE.write_text(mode + "\n")
-        self.status.config(text=f"Au démarrage : {label}")
+        self.status.config(text=_("Au démarrage : {mode}").format(mode=_(label)))
 
     # --- Conversion ImageMagick (rog_flare2_convertir.py) -------------------
     def convert_files(self):
         try:
             result = subprocess.run(
                 ["zenity", "--file-selection", "--multiple", "--separator=\n",
-                 "--title=GIF/images à convertir pour la matrice",
-                 "--file-filter=Images et GIF | *.gif *.png *.jpg *.jpeg *.bmp *.webp",
-                 "--file-filter=Tous les fichiers | *"],
+                 "--title=" + _("GIF/images à convertir pour la matrice"),
+                 f"--file-filter={_('Images et GIF')} | *.gif *.png *.jpg *.jpeg *.bmp *.webp",
+                 f"--file-filter={_('Tous les fichiers')} | *"],
                 capture_output=True, text=True, timeout=300)
             paths = [p for p in result.stdout.strip().split("\n") if p]
         except (FileNotFoundError, subprocess.SubprocessError):
             paths = filedialog.askopenfilenames(
-                title="GIF/images à convertir pour la matrice",
-                filetypes=[("Images et GIF", "*.gif *.png *.jpg *.jpeg *.bmp *.webp"), ("Tous les fichiers", "*.*")])
+                title=_("GIF/images à convertir pour la matrice"),
+                filetypes=[(_("Images et GIF"), "*.gif *.png *.jpg *.jpeg *.bmp *.webp"), (_("Tous les fichiers"), "*.*")])
         if paths:
             self._convert([Path(p) for p in paths])
 
     def convert_folder(self):
         try:
             result = subprocess.run(
-                ["zenity", "--file-selection", "--directory", "--title=Dossier de GIF à convertir"],
+                ["zenity", "--file-selection", "--directory", "--title=" + _("Dossier de GIF à convertir")],
                 capture_output=True, text=True, timeout=300)
             path = result.stdout.strip()
         except (FileNotFoundError, subprocess.SubprocessError):
-            path = filedialog.askdirectory(title="Dossier de GIF à convertir")
+            path = filedialog.askdirectory(title=_("Dossier de GIF à convertir"))
         if path:
             self._convert([Path(path)])
 
     def _convert(self, chemins: list[Path]):
         """Conversion dans un fil ; sortie dans <dossier>/matrix/ ; propose ensuite de charger le résultat."""
         def rappel(i, n, src, etat):
-            self.after(0, lambda: self.status.config(text=f"Conversion {i}/{n} : {src.name} — {etat}"))
+            etat = {"ok": _("converti"), "saute": _("déjà à jour")}.get(etat, etat.replace("erreur", _("erreur"), 1))
+            self.after(0, lambda: self.status.config(text=_("Conversion {i}/{n} : {name} — {state}").format(
+                i=i, n=n, name=src.name, state=etat)))
 
         def worker():
             produits = convertir_tout(chemins, None, False, rappel)
 
             def fin():
                 if not produits:
-                    self.status.config(text="Conversion : aucun fichier produit")
+                    self.status.config(text=_("Conversion : aucun fichier produit"))
                     return
                 dossier = produits[0].parent
-                self.status.config(text=f"{len(produits)} GIF prêt(s) dans {dossier}")
-                if messagebox.askyesno("Conversion terminée",
-                                       f"{len(produits)} GIF convertis dans\n{dossier}\n\nLes charger pour lecture ?"):
+                self.status.config(text=_("{n} GIF prêt(s) dans {folder}").format(n=len(produits), folder=dossier))
+                if messagebox.askyesno(_("Conversion terminée"),
+                                       _("{n} GIF convertis dans\n{folder}\n\nLes charger pour lecture ?").format(
+                                           n=len(produits), folder=dossier)):
                     self.gif_files = list(produits)
                     self.play_btn.config(state="normal" if Image is not None else "disabled")
             self.after(0, fin)
 
-        self.status.config(text="Conversion en cours…")
+        self.status.config(text=_("Conversion en cours…"))
         threading.Thread(target=worker, daemon=True).start()
 
+
+    def change_theme(self, name: str):
+        themes.save(name)
+        themes.apply(self, name)
+
+    def change_language(self, code: str):
+        """Enregistre la langue et relance le lanceur pour l'appliquer."""
+        if code == LANG:
+            return
+        save_language(code)
+        self.stop_playback()
+        self.transport.close()
+        os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
 
     def resume_services(self):
         """Rend l'écran au service du démarrage de session s'il a été arrêté par le lanceur."""
