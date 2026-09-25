@@ -882,7 +882,7 @@ class LauncherApp(tk.Tk):
 
     def open_rgb(self):
         from rog_flare2_ui_rgb import RGBWindow
-        RGBWindow(self, self._send)
+        RGBWindow(self, ctl.request)
 
     def open_lists(self):
         from rog_flare2_listes import ListsWindow

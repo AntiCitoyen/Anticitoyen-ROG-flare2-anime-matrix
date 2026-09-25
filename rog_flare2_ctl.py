@@ -54,10 +54,19 @@ def request(cmd: str, timeout: float = 5, **kw) -> dict:
 
 
 def ensure_daemon(wait: float = 4.0) -> bool:
-    """Démon joignable ; sinon le démarre (service systemd --user, sinon processus détaché)."""
+    """Démon joignable et de la même version ; sinon le (re)démarre (service systemd --user, sinon
+    processus détaché). Après une mise à jour du paquet, l'ancien démon tourne encore l'ancien code."""
+    from rog_flare2_core import VERSION
     try:
-        request("ping", timeout=1)
-        return True
+        if request("ping", timeout=1).get("version") == VERSION:
+            return True
+        request("quit", timeout=1)
+        for _ in range(30):  # attend que l'ancien démon libère le socket
+            time.sleep(0.1)
+            try:
+                request("ping", timeout=0.5)
+            except (OSError, DaemonError, ValueError):
+                break
     except (OSError, DaemonError, ValueError):
         pass
     # Service systemd seulement pour le socket standard (pas pour un environnement de test isolé)

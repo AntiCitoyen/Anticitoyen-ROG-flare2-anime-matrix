@@ -141,13 +141,18 @@ class RGBWindow:
         result = []
 
         def job():  # Tk n'est touché que depuis le fil principal (sondage ci-dessous)
-            result.append(self.send("rgb", timeout=10, config=cfg, save=save) is not None)
+            try:
+                self.send("rgb", timeout=10, config=cfg, save=save)
+                result.append(None)
+            except Exception as exc:  # démon absent, ancien démon, clavier débranché : le dire tel quel
+                result.append(str(exc) or type(exc).__name__)
 
         def poll():
             if not result:
                 self.win.after(100, poll)
                 return
             done = _("Enregistré dans le clavier") if save and cfg["mode"] == "clavier" else _("Appliqué")
-            self.status.configure(text=done if result[0] else _("Clavier injoignable"))
+            self.status.configure(text=done if result[0] is None else
+                                  _("Clavier injoignable") + " : " + result[0])
         threading.Thread(target=job, daemon=True).start()
         poll()

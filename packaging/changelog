@@ -1,5 +1,7 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Après une mise à jour, le démon encore lancé est relancé avec la nouvelle
+    version (les couleurs du clavier le disaient injoignable).
   * Couleurs et effets des touches sans OpenRGB : arc-en-ciel, statique,
     respiration, ondulation… enregistrés dans le clavier ; couleur du thème,
     pulsation avec l'écran.

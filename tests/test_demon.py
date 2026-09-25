@@ -147,3 +147,26 @@ def test_identical_frames_are_not_resent(daemon, monkeypatch):
     monkeypatch.setattr(D, "KEEPALIVE", 0.0)  # au-delà du délai, la même trame repart
     screen.write(frame)
     assert screen.transport.frames.count(frame) == 2
+
+
+def test_old_daemon_is_replaced_after_an_update(monkeypatch):
+    """Après une mise à jour du paquet, l'ancien démon (autre version) est arrêté puis relancé."""
+    monkeypatch.setattr(D, "FlareTransport", FakeTransport)
+    import rog_flare2_ctl as ctl
+    D.RUNTIME.mkdir(parents=True, exist_ok=True)
+    d = D.Daemon()
+    monkeypatch.setattr(D, "VERSION", "0.0.1")  # le démon en cours se présente comme ancien
+    server = D.UnixServer(str(D.SOCKET_PATH), D.Handler)
+    server.daemon_ref, d.server = d, server
+    t = threading.Thread(target=server.serve_forever, daemon=True)
+    t.start()
+    started = []
+    monkeypatch.setattr(ctl.subprocess, "Popen", lambda *a, **kw: started.append(a))
+    try:
+        assert ctl.ensure_daemon(wait=0.5) is False  # nouveau démon « lancé » (factice) mais muet
+        t.join(3)
+        assert not t.is_alive() and started  # l'ancien a reçu quit, un nouveau a été lancé
+    finally:
+        d.stop()
+        server.server_close()
+        D.SOCKET_PATH.unlink(missing_ok=True)
