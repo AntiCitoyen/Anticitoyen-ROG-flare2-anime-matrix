@@ -74,6 +74,7 @@ class Screen:
         self.released = False  # rendu à un autre programme (éditeur de dessin)
         self.last = BLANK
         self.overlay_active = False
+        self.holds: set[str] = set()  # raisons d'écran noir (verrouillage, veille, plein écran…)
 
     def _ensure(self) -> bool:
         if self.released:
@@ -90,6 +91,8 @@ class Screen:
         """Écrit une trame ; celles de la base sont gardées mais pas envoyées sous une surimpression."""
         if layer == "base" and self.overlay_active:
             return
+        if self.holds:
+            return
         with self.lock:
             self.last = frame
             if not self._ensure():
@@ -99,6 +102,18 @@ class Screen:
             except Exception:
                 self.connected = False
                 self.transport.close()
+
+    def hold(self, reason: str, on: bool):
+        """Écran noir tant qu'une raison est active ; la lecture reprend quand il n'en reste aucune."""
+        if on and not self.holds:
+            with self.lock:
+                self.last = BLANK
+                if self._ensure():
+                    try:
+                        self.transport.write(BLANK)
+                    except Exception:
+                        self.connected = False
+        (self.holds.add if on else self.holds.discard)(reason)
 
     def release(self):
         with self.lock:
@@ -139,6 +154,9 @@ class Daemon:
         from rog_flare2_openrgb import KeyboardSync
         self.notifs = NotificationWatcher(lambda text: self.notify(text, 0))
         self.rgb = KeyboardSync(self._screen_level, self._accent)
+        from rog_flare2_programme import Programme
+        self.manual: dict | None = None  # dernière lecture demandée par un client (reprise après une règle)
+        self.programme = Programme(self._play_rule, self._end_rule, self.screen.hold)
 
     # ---------- état ----------
     @staticmethod
@@ -202,8 +220,10 @@ class Daemon:
             return lambda stop: play_clock(layer, stop, self.brightness)
         raise ValueError(f"lecture inconnue : {kind!r}")
 
-    def play(self, show: dict):
+    def play(self, show: dict, manual: bool = True):
         job = self._job(show)
+        if manual:
+            self.manual = show
         with self.lock:
             self._stop_base()
             self.show = show
@@ -211,8 +231,22 @@ class Daemon:
             stop = self.stop_event
             self.thread = threading.Thread(target=self._run, args=(job, stop), daemon=True)
             self.thread.start()
-        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-        SHOW_FILE.write_text(json.dumps(show, ensure_ascii=False, indent=1), encoding="utf-8")
+        if manual:
+            CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            SHOW_FILE.write_text(json.dumps(show, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    def _play_rule(self, show: dict | None):
+        self.manual = self.show
+        if show is None:
+            self.stop(manual=False)
+        else:
+            self.play(show, manual=False)
+
+    def _end_rule(self):
+        if self.manual is None:
+            self.stop(manual=False)
+        else:
+            self.play(self.manual, manual=False)
 
     def _run(self, job, stop):
         while not stop.is_set():
@@ -229,10 +263,12 @@ class Daemon:
             self.thread.join(timeout=5)
         self.thread = None
 
-    def stop(self):
+    def stop(self, manual: bool = True):
         with self.lock:
             self._stop_base()
             self.show = None
+            if manual:
+                self.manual = None
         self.screen.write(BLANK, "base")
 
     # ---------- surimpression ----------
@@ -270,7 +306,8 @@ class Daemon:
             return {"ok": True, "version": VERSION}
         if cmd == "status":
             return {"ok": True, "version": VERSION, "show": self.show, "brightness": self.brightness(),
-                    "openrgb": self.rgb.status,
+                    "openrgb": self.rgb.status, "hold": sorted(self.screen.holds),
+                    "regle": (self.programme.current or {}).get("contenu"),
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
                     "overlay": self.screen.overlay_active}
         if cmd == "play":
@@ -305,10 +342,15 @@ class Daemon:
                 return {"ok": False, "error": "aucun jeu en cours"}
             on_key(str(req.get("key", "")))
             return {"ok": True}
+        if cmd == "hold":  # écran noir pour une raison donnée (déclencheurs, tests)
+            self.screen.hold(str(req.get("reason", "manuel")), bool(req.get("on", True)))
+            return {"ok": True, "hold": sorted(self.screen.holds)}
         if cmd == "config":  # réglages relus (notifications du bureau)
             from rog_flare2_notifs import load_config
             from rog_flare2_openrgb import load_config as rgb_config
+            from rog_flare2_programme import load_config as prog_config
             self.rgb.start(rgb_config())
+            self.programme.start(prog_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
@@ -437,12 +479,15 @@ def main():
     from rog_flare2_openrgb import load_config as rgb_config
     daemon.notifs.start(load_config())
     daemon.rgb.start(rgb_config())
+    from rog_flare2_programme import load_config as prog_config
+    daemon.programme.start(prog_config())
     try:
         server.serve_forever()
     finally:
         daemon.stop_event.set()
         daemon.notifs.stop()
         daemon.rgb.stop()
+        daemon.programme.stop()
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

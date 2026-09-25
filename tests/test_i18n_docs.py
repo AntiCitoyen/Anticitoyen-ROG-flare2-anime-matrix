@@ -23,7 +23,8 @@ def test_every_ui_string_is_in_the_catalogue():
     """Tout _("…") littéral du code doit figurer dans locale/_cles.json."""
     import ast
     missing = set()
-    for f in ["rog_flare2_launcher.py", "rog_flare2_matrix_paint.py", "rog_flare2_ui_ronde.py", "rog_flare2_maj.py"]:
+    for f in ["rog_flare2_launcher.py", "rog_flare2_matrix_paint.py", "rog_flare2_ui_ronde.py", "rog_flare2_maj.py",
+              "rog_flare2_ui_programme.py"]:
         for node in ast.walk(ast.parse((ROOT / f).read_text(encoding="utf-8"))):
             if (isinstance(node, ast.Call) and getattr(node.func, "id", None) == "_" and node.args
                     and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str)):

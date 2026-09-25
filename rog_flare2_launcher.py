@@ -337,6 +337,7 @@ class LauncherApp(tk.Tk):
                    command=self.open_paint_editor).pack(fill="x", pady=(12, 0))
         ttk.Button(tab, text=_("Dossier des extensions (effets)"),
                    command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
+        ttk.Button(tab, text=_("Programmation…"), command=self.open_schedule).pack(fill="x", pady=(4, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
@@ -662,6 +663,10 @@ class LauncherApp(tk.Tk):
                           pick=pick_version if self.converted_var.get() else (lambda f: f))
         except ImportError as exc:  # PIL.ImageTk absent
             self.set_status(_("Erreur : {err}").format(err=exc))
+
+    def open_schedule(self):
+        from rog_flare2_ui_programme import ScheduleWindow
+        ScheduleWindow(self, lambda: self._send("config"))
 
     def open_plugin_dir(self):
         """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""
