@@ -1,9 +1,9 @@
 [Unit]
-Description=AniMe Matrix - horloge (ROG Strix Flare II Animate)
+Description=AniMe Matrix - démon de l'écran du ROG Strix Flare II Animate
 After=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/animematrix-horloge -b 25
+ExecStart=/usr/bin/animematrixd
 Restart=on-failure
 RestartSec=5
 

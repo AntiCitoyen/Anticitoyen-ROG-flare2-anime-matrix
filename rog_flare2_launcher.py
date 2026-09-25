@@ -13,8 +13,7 @@ implémenté).
 """
 from __future__ import annotations
 
-import datetime
-import json
+import base64
 import os
 import subprocess
 import webbrowser
@@ -27,64 +26,29 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
 sys.path.insert(0, str(Path(__file__).parent))
-from rog_flare2_clock_v3 import brightness_to_raw, make_frame
 from rog_flare2_convertir import convertir_tout
 from rog_flare2_i18n import LANG, LANGUAGES, _, save_language
+import rog_flare2_ctl as ctl
 import rog_flare2_maj as maj
+from rog_flare2_demon import START_FILE
+from rog_flare2_matrix_paint import FB_OFFSET
 import rog_flare2_themes as themes
-from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_class, make_effect, param_value, run_effect
-from rog_flare2_matrix_paint import (
-    FlareTransport,
-    PHYSICAL_CALIBRATED_ORDER,
-    PREFIX,
-    FB_OFFSET,
-    FRAME_SIZE,
-    LED_COUNT,
-    PHYSICAL_ROW_COUNTS,
-    physical_row_offset,
+from rog_flare2_core import (  # noqa: F401  (réexportés pour les autres modules)
+    VERSION, CONFIG_DIR, GALLERY_FILE, MEDIA_EXTENSIONS, STILL_SECONDS, Image, gallery_dir, image_to_frame,
+    iter_gif_frames, media_files, pick_version, play_clock, play_file, save_gallery_dir,
 )
+from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_class
 
-try:
-    from PIL import Image, ImageSequence
-except ImportError:
-    Image = None
 
-MAX_ROW_WIDTH = max(PHYSICAL_ROW_COUNTS)
-NUM_ROWS = len(PHYSICAL_ROW_COUNTS)
-MEDIA_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".webp"}
-STILL_SECONDS = 5.0  # durée d'affichage d'une image fixe dans une galerie
-VERSION = "1.3.0"
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
 SUPPORT_URL = "https://buymeacoffee.com/anticitoyen"
-# Services de fond (rog_flare2_bascule.sh) ; un seul peut tenir le HID.
-SERVICES = {"gif": "animematrix-galerie.service", "horloge": "animematrix-horloge.service",
-            "lecture": "animematrix-lecture.service"}
-BOOT_MODES = {"Galerie GIF": SERVICES["gif"], "Horloge": SERVICES["horloge"],
-              "Dernière lecture": SERVICES["lecture"], "Rien": None}
-CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2"
-MODE_FILE = CONFIG_DIR / "mode"
-GALLERY_FILE = CONFIG_DIR / "galerie"  # dossier lu par la galerie (lanceur et service)
+# Mode rejoué par le démon à l'ouverture de session (rog_flare2_demon.START_FILE)
+BOOT_MODES = {"Galerie GIF": "gif", "Horloge": "horloge", "Dernière lecture": "derniere", "Rien": "rien"}
 INTERFACE_FILE = CONFIG_DIR / "interface"
 # Interfaces : cadran + tiroir (défaut), cadran seul, fenêtre arrondie, onglets classiques
 INTERFACES = {"drawer": "Cadran + tiroir", "dial": "Cadran", "rounded": "Arrondie", "classic": "Classique"}
-SHOW_FILE = CONFIG_DIR / "lecture.json"  # ce que la lecture de fond rejoue (rog_flare2_lecture.py)
-SHOW_PID = CONFIG_DIR / "lecture.pid"  # lecture de fond lancée sans systemd
-
-
-def gallery_dir() -> Path:
-    """Dossier de la galerie : celui choisi en dernier, sinon <Images>/AniMe-Matrix."""
-    try:
-        saved = GALLERY_FILE.read_text().strip()
-        if saved:
-            return Path(saved)
-    except OSError:
-        pass
-    try:
-        pictures = subprocess.run(["xdg-user-dir", "PICTURES"], capture_output=True, text=True,
-                                  timeout=5).stdout.strip()
-    except (OSError, subprocess.SubprocessError):
-        pictures = ""
-    return Path(pictures or Path.home() / "Pictures") / "AniMe-Matrix"
+# Anciens services (≤ 1.3) qui tenaient le HID eux-mêmes : arrêtés pour laisser la place au démon
+LEGACY_SERVICES = ("animematrix-galerie.service", "animematrix-horloge.service", "animematrix-lecture.service")
 
 
 def interface_saved() -> str:
@@ -97,129 +61,14 @@ def interface_saved() -> str:
     return "drawer"
 
 
-def save_gallery_dir(folder: Path) -> None:
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    GALLERY_FILE.write_text(f"{folder}\n")
-
-
-def image_to_frame(img: "Image.Image", brightness: int = 100) -> bytes:
-    """Convertit une image PIL en trame 1024 octets pour la matrice.
-
-    Le panneau physique est un triangle/coin (19 LED de large en haut,
-    7 en bas), pas un rectangle. Pour montrer l'image ENTIERE (pas juste
-    une fenêtre fixe qui coupe la partie gauche des lignes étroites), on
-    échantillonne chaque ligne sur toute la largeur de l'image source,
-    proportionnellement au nombre réel de LED de cette ligne.
-    """
-    scale = brightness / 100.0
-    # Hauteur fixée au nombre de lignes physiques ; largeur gardée haute
-    # résolution pour un échantillonnage précis par ligne.
-    src_w, src_h = img.size
-    sample_w = max(MAX_ROW_WIDTH, src_w)
-    gray = img.convert("L").resize((sample_w, NUM_ROWS), Image.LANCZOS)
-    pixels = gray.load()
-
-    frame = bytearray(FRAME_SIZE)
-    frame[0:2] = PREFIX
-
-    for raw_idx, (row, col) in enumerate(PHYSICAL_CALIBRATED_ORDER):
-        row_count = PHYSICAL_ROW_COUNTS[row]
-        if row_count > 1:
-            gcol = round(col * (sample_w - 1) / (row_count - 1))
-        else:
-            gcol = 0
-        gcol = max(0, min(sample_w - 1, gcol))
-        val = int(pixels[gcol, row] * scale)
-        frame[FB_OFFSET + raw_idx] = max(0, min(255, val))
-
-    return bytes(frame)
-
-
-def iter_gif_frames(path: Path):
-    """Itère les frames d'un GIF recomposées sur un canevas complet.
-
-    De nombreux GIF (surtout optimisés pour le web) ne stockent, à partir de
-    la 2e frame, que la zone modifiée depuis la frame précédente. Itérer
-    directement sur ImageSequence sans recomposer ne donne que ce fragment,
-    pas l'image entière.
-
-    Le canevas est réutilisé : le consommateur doit le convertir avant de
-    demander la frame suivante (garder les canevas pleine taille coûtait
-    ~470 Mo pour un GIF 512x720 de 318 frames).
-    """
-    with Image.open(path) as im:
-        canvas = Image.new("RGBA", im.size, (0, 0, 0, 255))
-        for frame in ImageSequence.Iterator(im):
-            rgba = frame.convert("RGBA")
-            canvas.paste(rgba, (0, 0), rgba)
-            duration_ms = frame.info.get("duration", 100)
-            yield canvas, max(20, duration_ms) / 1000.0
-
-
-def pick_version(f: Path) -> Path:
-    """Version convertie <dossier>/matrix/<nom>.gif si elle existe et n'est pas plus vieille que la source."""
-    converted = f.parent / "matrix" / f.with_suffix(".gif").name
-    if converted.exists() and converted.stat().st_mtime >= f.stat().st_mtime:
-        return converted
-    return f
-
-
-def media_files(folder: Path) -> list[Path]:
-    return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in MEDIA_EXTENSIONS)
-
-
-def play_file(path: Path, transport: FlareTransport, stop_event: threading.Event, brightness) -> None:
-    """Joue une fois un GIF/image en flux ; brightness() est relue à chaque frame."""
-    n = 0
-    for img, delay in iter_gif_frames(path):
-        if stop_event.is_set():
-            return
-        transport.write(image_to_frame(img, brightness()))
-        n += 1
-        stop_event.wait(delay)
-    if n == 1:
-        stop_event.wait(STILL_SECONDS)
-
-
-def play_clock(transport: FlareTransport, stop_event: threading.Event, brightness) -> None:
-    while not stop_event.is_set():
-        now = datetime.datetime.now()
-        transport.write(make_frame(now.strftime("%H:%M"), preset="flare", val=brightness_to_raw(brightness()),
-                                   y=0, blink_colon=now.second % 2 == 0, overrides={}))
-        stop_event.wait(0.5)
-
-
 def systemctl(*args: str) -> int:
     return subprocess.run(["systemctl", "--user", *args], capture_output=True).returncode
 
 
-def stop_services() -> list[str]:
-    """Arrête les services de fond qui tiennent le HID ; renvoie ceux qui tournaient."""
-    active = [s for s in SERVICES.values() if systemctl("is-active", "--quiet", s) == 0]
+def stop_legacy_services() -> None:
+    active = [s for s in LEGACY_SERVICES if systemctl("is-active", "--quiet", s) == 0]
     if active:
         systemctl("stop", *active)
-    try:  # lecture de fond détachée (sans systemd)
-        pid = int(SHOW_PID.read_text())
-        if "rog_flare2_lecture.py" in Path(f"/proc/{pid}/cmdline").read_text():
-            os.kill(pid, 15)
-            active.append(f"pid {pid}")
-        SHOW_PID.unlink()
-    except (OSError, ValueError):
-        pass
-    return active
-
-
-def hand_off(show: dict) -> None:
-    """Confie l'affichage en cours à la lecture de fond, qui survit au lanceur."""
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    SHOW_FILE.write_text(json.dumps(show, ensure_ascii=False, indent=1), encoding="utf-8")
-    MODE_FILE.write_text("lecture\n")
-    if systemctl("restart", SERVICES["lecture"]) == 0:
-        return
-    proc = subprocess.Popen([sys.executable, str(Path(__file__).with_name("rog_flare2_lecture.py"))],
-                            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                            start_new_session=True)
-    SHOW_PID.write_text(f"{proc.pid}\n")
 
 
 class LauncherApp(tk.Tk):
@@ -229,28 +78,25 @@ class LauncherApp(tk.Tk):
         themes.apply(self, themes.saved())
         self.resizable(False, False)
 
-        self.transport = FlareTransport()
-        self.play_thread: threading.Thread | None = None
-        self.stop_event = threading.Event()
         self.gif_files: list[Path] = []
-        self.show: dict | None = None  # ce qui est affiché, pour la lecture de fond à la fermeture
+        self.show: dict | None = None  # ce que le démon affiche à la demande du lanceur
         self.show_panel: dict | None = None
-        self.live_params: dict = {}
         self._pending_status: str | None = None
         self._pending_update: tuple[dict, bool] | None = None  # résultat d'une vérification (fil)
         self._pending_install: tuple[bool, str] | None = None
         self.update_info: dict | None = None
         self.update_btn: ttk.Button | None = None
-        self.running_effect = None
         self.brightness = tk.IntVar(value=60)
-        self.last_frame: bytes | None = None  # dernière trame envoyée (aperçu des interfaces rondes)
-        send = self.transport.write
-
-        def write_and_keep(frame: bytes) -> int:
-            self.last_frame = frame
-            return send(frame)
-
-        self.transport.write = write_and_keep
+        self.last_frame: bytes | None = None  # dernière trame du démon (aperçu des interfaces rondes)
+        # Le démon animematrixd est le seul à écrire sur le clavier ; le lanceur le commande.
+        stop_legacy_services()
+        self.daemon_ok = ctl.ensure_daemon()
+        if self.daemon_ok:
+            st = self._send("status") or {}
+            self.brightness.set(st.get("brightness", 60))
+            self.show = st.get("show")
+        self._brightness_job = None
+        self.brightness.trace_add("write", lambda *_a: self._brightness_changed())
 
         self.interface = interface_saved()
         if self.interface == "classic":
@@ -267,6 +113,10 @@ class LauncherApp(tk.Tk):
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self._poll_status()
+        if getattr(self, "round_ui", None) is not None:
+            self._poll_frame()
+        if not self.daemon_ok:
+            self.status.config(text=_("Service animematrixd injoignable"))
 
         if Image is None:
             messagebox.showwarning(
@@ -349,6 +199,7 @@ class LauncherApp(tk.Tk):
         # Noms internes (anglais, PolyWollyWin) <-> noms affichés (traduits)
         panel = {"labels": {_(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
         panel["name"] = tk.StringVar(value=_(default))
+        panel["speed"].trace_add("write", lambda *_a: self._speed_changed(panel))
         cb = ttk.Combobox(tab, textvariable=panel["name"], values=list(panel["labels"]), state="readonly")
         cb.pack(fill="x", pady=(0, 8))
         panel["params"] = ttk.Frame(tab)
@@ -394,13 +245,13 @@ class LauncherApp(tk.Tk):
 
     def _apply_param(self, attr: str, spec: dict, var: tk.Variable):
         """Réglage appliqué en direct à l'effet en cours s'il possède cet attribut."""
-        effect = self.running_effect
-        if effect is not None and attr in type(effect).PARAMS:
-            try:
-                setattr(effect, attr, param_value(spec, var.get()))
-                self.live_params[attr] = var.get()
-            except (tk.TclError, ValueError):
-                pass
+        show = self.show
+        if not show or show.get("type") != "effet" or attr not in effect_class(show["name"]).PARAMS:
+            return
+        try:
+            self._send("params", params={attr: var.get()})
+        except tk.TclError:
+            pass
 
     def _build_settings_tab(self, parent, padding=12) -> ttk.Frame:
         tab = ttk.Frame(parent, padding=padding)
@@ -584,127 +435,83 @@ class LauncherApp(tk.Tk):
             self.set_files(media_files(Path(path)), Path(path).name)
 
     # --- Lecture sur le clavier ---------------------------------------------
-    def _start(self, job):
-        """Lance job(stop_event) dans un fil, seul à écrire sur le HID."""
-        self.stop_playback()
-        if self.play_thread is not None:
-            # stop_playback a echoue a arreter l'ancien thread : ne pas en
-            # lancer un second par-dessus.
-            return
-        stop_services()
-        self.stop_event = threading.Event()
-        stop = self.stop_event
+    # --- Commandes au démon ------------------------------------------------
+    def _send(self, cmd: str, **kw) -> dict | None:
+        try:
+            return ctl.request(cmd, **kw)
+        except (OSError, ValueError, ctl.DaemonError) as exc:
+            self.set_status(_("Erreur : {err}").format(err=exc))
+            return None
 
-        def worker():
-            try:
-                self.transport.connect()
-                job(stop)
-            except Exception as exc:
-                self.set_status(_("Erreur : {err}").format(err=exc))
-                return
-            self.set_status(_("Arrêté"))
+    def _play(self, show: dict, status: str):
+        if self._send("play", show=show) is not None:
+            self.show = show
+            self.set_status(status)
 
-        self.play_thread = threading.Thread(target=worker, daemon=True)
-        self.play_thread.start()
+    def _brightness_changed(self):
+        """Luminosité envoyée au démon, au plus toutes les 60 ms pendant un glissement."""
+        if self._brightness_job is None:
+            self._brightness_job = self.after(60, self._send_brightness)
+
+    def _send_brightness(self):
+        self._brightness_job = None
+        self._send("brightness", value=int(self.brightness.get()))
+
+    def _poll_frame(self):
+        """Aperçu : dernière trame envoyée par le démon."""
+        try:
+            leds = base64.b64decode(ctl.request("frame", timeout=0.3)["frame"])
+            self.last_frame = bytes(FB_OFFSET) + leds
+        except (OSError, ValueError, KeyError, ctl.DaemonError):
+            pass
+        self.after(80, self._poll_frame)
 
     def start_playback(self):
         if not self.gif_files or Image is None:
             return
-        files = list(self.gif_files)
-        loop = self.loop_var.get
-        converted = self.converted_var.get()
+        show = {"type": "gif", "files": [str(f) for f in self.gif_files], "loop": bool(self.loop_var.get()),
+                "converted": bool(self.converted_var.get())}
+        self._play(show, _("Lecture : {name}").format(name=self.status_label_for_files()))
 
-        def job(stop):
-            while not stop.is_set():
-                for f in files:
-                    if stop.is_set():
-                        break
-                    src = pick_version(f) if converted else f
-                    self.set_status(_("Lecture : {name}").format(name=src.name))
-                    try:
-                        play_file(src, self.transport, stop, self.brightness.get)
-                    except OSError as exc:
-                        self.set_status(_("Sauté {name} : {err}").format(name=src.name, err=exc))
-                if not loop():
-                    break
-
-        self.show = {"type": "gif", "files": [str(f) for f in files], "converted": converted}
-        self._start(job)
+    def status_label_for_files(self) -> str:
+        return self.gif_files[0].parent.name if len(self.gif_files) > 1 else self.gif_files[0].name
 
     def start_clock(self):
-        def job(stop):
-            self.set_status(_("Horloge"))
-            play_clock(self.transport, stop, self.brightness.get)
-
-        self.show = {"type": "horloge"}
-        self._start(job)
+        self._play({"type": "horloge"}, _("Horloge"))
 
     def start_effect(self, panel: dict):
         name = self._effect_name(panel)
-        raw = {a: v.get() for a, v in panel["values"].items()}
-        speed = panel["speed"].get
+        show = {"type": "effet", "name": name, "params": {a: v.get() for a, v in panel["values"].items()},
+                "speed": float(panel["speed"].get())}
+        self.show_panel = panel
+        self._play(show, _("Effet : {name}").format(name=_(name)))
 
-        def job(stop):
-            effect = make_effect(name, raw)
-            self.running_effect = effect
-            self.set_status(_("Effet : {name}").format(name=_(name)))
-            try:
-                run_effect(effect, self.transport, stop, self.brightness.get, speed)
-            finally:
-                self.running_effect = None
-
-        self.show = {"type": "effet", "name": name}
-        self.show_panel, self.live_params = panel, dict(raw)
-        self._start(job)
+    def _speed_changed(self, panel: dict):
+        if self.show and self.show.get("type") == "effet" and self.show_panel is panel:
+            self._send("speed", value=float(panel["speed"].get()))
 
     def stop_playback(self):
-        self.stop_event.set()
-        if self.play_thread is not None:
-            # Attendre reellement la fin du thread precedent : deux threads
-            # ne doivent jamais ecrire en meme temps sur le meme peripherique
-            # (sinon ecritures HID concurrentes -> erreurs et ecran noir).
-            self.play_thread.join(timeout=10.0)
-            if self.play_thread.is_alive():
-                self.status.config(text=_("Ancien thread bloqué, réessaie dans un instant"))
-                return
-        self.play_thread = None
-
-    def current_show(self) -> dict | None:
-        """Description JSON de ce qui s'affiche, avec les réglages du moment ; None si rien."""
-        if self.show is None or self.play_thread is None or not self.play_thread.is_alive():
-            return None
-        show = dict(self.show, brightness=int(self.brightness.get()))
-        if show["type"] == "gif":
-            show["loop"] = bool(self.loop_var.get())
-        elif show["type"] == "effet":
-            show["params"] = dict(self.live_params)
-            show["speed"] = float(self.show_panel["speed"].get())
-        return show
+        """Rien à arrêter localement : la lecture est dans le démon."""
 
     def stop_and_clear(self):
-        self.show = None
-        self.stop_playback()
-        if self.play_thread is None:
-            try:
-                self.transport.write(bytes(PREFIX) + bytes(FRAME_SIZE - len(PREFIX)))
-            except Exception:
-                pass
+        if self._send("stop") is not None:
+            self.show = None
+            self.set_status(_("Arrêté"))
 
     # --- Démarrage de session (services systemd --user) ---------------------
     def boot_mode(self) -> str:
-        for label, service in BOOT_MODES.items():
-            if service and systemctl("is-enabled", "--quiet", service) == 0:
-                return label
-        return "Rien"
+        try:
+            mode = START_FILE.read_text().strip()
+        except OSError:
+            mode = "rien"
+        return next((label for label, m in BOOT_MODES.items() if m == mode), "Rien")
 
     def set_boot_mode(self, label: str):
-        wanted = BOOT_MODES[label]
-        for service in SERVICES.values():
-            systemctl("enable" if service == wanted else "disable", service)
-        if wanted:
-            mode = next(k for k, v in SERVICES.items() if v == wanted)
-            CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-            MODE_FILE.write_text(mode + "\n")
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        START_FILE.write_text(BOOT_MODES[label] + "\n")
+        systemctl("enable", "animematrixd.service")  # le démon démarre avec la session
+        for service in LEGACY_SERVICES:
+            systemctl("disable", service)
         self.status.config(text=_("Au démarrage : {mode}").format(mode=_(label)))
 
     # --- Conversion ImageMagick (rog_flare2_convertir.py) -------------------
@@ -776,12 +583,7 @@ class LauncherApp(tk.Tk):
         self.restart()
 
     def restart(self):
-        """Relance le lanceur (langue ou interface changée) ; l'affichage en cours passe au fond puis revient."""
-        show = self.current_show()
-        self.stop_playback()
-        self.transport.close()
-        if show is not None:
-            hand_off(show)
+        """Relance le lanceur (langue ou interface changée) ; le démon continue d'afficher."""
         os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]])
 
     def change_language(self, code: str):
@@ -792,20 +594,13 @@ class LauncherApp(tk.Tk):
         self.restart()
 
     def open_paint_editor(self):
-        self.stop_playback()
-        self.transport.close()
-        stop_services()
+        self._send("release")  # l'éditeur écrit lui-même ; il rend la main au démon en fermant
         script = Path(__file__).parent / "rog_flare2_matrix_paint.py"
         subprocess.Popen([sys.executable, str(script)])
         self.destroy()
 
     def on_close(self):
-        """Ce qui est affiché continue après la fermeture, par la lecture de fond."""
-        show = self.current_show()
-        self.stop_playback()
-        self.transport.close()
-        if show is not None:
-            hand_off(show)
+        """Ce qui est affiché continue après la fermeture : le démon garde la main."""
         self.destroy()
 
 

@@ -135,7 +135,7 @@ def due() -> bool:
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).parent))
-    from rog_flare2_launcher import VERSION
+    from rog_flare2_core import VERSION
     info = latest(VERSION)
     print(f"installée {VERSION} · dernière {info['version']} · {'plus récente' if is_newer(info, VERSION) else 'à jour'}")
     print(info["page"])

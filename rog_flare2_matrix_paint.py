@@ -533,9 +533,20 @@ class MatrixPaintApp(tk.Tk):
     def on_close(self) -> None:
         self.stop_scan(restore=False)
         self.transport.close()
+        daemon("resume")  # le démon animematrixd reprend l'affichage
         self.destroy()
 
 
+def daemon(cmd: str) -> None:
+    """Prévient le démon animematrixd (s'il tourne) : release avant d'écrire, resume à la fermeture."""
+    try:
+        from rog_flare2_ctl import request
+        request(cmd, timeout=2)
+    except Exception:
+        pass
+
+
 if __name__ == "__main__":
+    daemon("release")
     app = MatrixPaintApp()
     app.mainloop()
