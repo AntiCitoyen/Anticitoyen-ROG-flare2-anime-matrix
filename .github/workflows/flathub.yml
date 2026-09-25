@@ -28,20 +28,25 @@ jobs:
               --output packaging/flathub/python3-modules \
               hidapi pillow numpy python-xlib pynput evdev qrcode
           fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python3-modules
+          path: packaging/flathub/python3-modules.json
       - name: Build without network
         run: |
-          flatpak-builder --user --force-clean --sandbox --repo=repo build \
-            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml
+          # copie à la racine : en mode --sandbox, les sources doivent être dans le dossier du manifeste
+          sed -e 's#path: \.\./\.\.#path: .#' -e 's#^  - python3-modules.json#  - packaging/flathub/python3-modules.json#' \
+            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml > io.github.anticitoyen.AniMeMatrix.yml
+          flatpak-builder --user --force-clean --sandbox --repo=repo build io.github.anticitoyen.AniMeMatrix.yml
           flatpak build-bundle repo AniMeMatrix-flathub.flatpak io.github.anticitoyen.AniMeMatrix
       - name: Lint (manifest, metainfo, build)
         run: |
           flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest \
-            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml | tee lint-manifest.txt || true
+            io.github.anticitoyen.AniMeMatrix.yml | tee lint-manifest.txt || true
           flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo | tee lint-repo.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: flathub
           path: |
-            packaging/flathub/python3-modules.json
             lint-*.txt
             AniMeMatrix-flathub.flatpak
