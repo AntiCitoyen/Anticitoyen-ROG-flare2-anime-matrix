@@ -144,8 +144,9 @@ class KeyboardReactEffect(pww.KeyboardReactEffect):
 
 EFFECTS[KeyboardReactEffect.name] = KeyboardReactEffect
 
-from rog_flare2_texte import ScrollTextEffect  # noqa: E402  (texte défilant, toutes écritures)
+from rog_flare2_texte import ScrollTextEffect, TextEffect  # noqa: E402  (texte, toutes écritures)
 EFFECTS[ScrollTextEffect.name] = ScrollTextEffect
+EFFECTS[TextEffect.name] = TextEffect
 from rog_flare2_horloges import CLOCK_EFFECTS  # noqa: E402  (cadrans d'horloge)
 for _clock in CLOCK_EFFECTS:
     EFFECTS[_clock.name] = _clock
@@ -195,7 +196,7 @@ def effect_class(name: str) -> type[pww.BaseEffect]:
 
 def param_value(spec: dict, raw):
     """Valeur de curseur (entier) -> valeur d'attribut, comme app.py."""
-    if spec.get("type") == "text":
+    if spec.get("type") in ("text", "choice"):
         return str(raw)
     return float(raw) / float(spec.get("scale", 1.0))
 

@@ -270,6 +270,13 @@ class LauncherApp(tk.Tk):
             if spec.get("type") == "text":
                 var = tk.StringVar(value=spec.get("default", ""))
                 ttk.Entry(row, textvariable=var).pack(side="left", fill="x", expand=True)
+            elif spec.get("type") == "choice":  # liste de choix : clé gardée, libellé traduit affiché
+                var = tk.StringVar(value=spec.get("default", ""))
+                labels = {_(label): key for key, label in spec["choices"]}
+                shown = tk.StringVar(value=next((lb for lb, k in labels.items() if k == var.get()), ""))
+                box = ttk.Combobox(row, textvariable=shown, values=list(labels), state="readonly")
+                box.pack(side="left", fill="x", expand=True)
+                box.bind("<<ComboboxSelected>>", lambda _e, v=var, s=shown, lb=labels: v.set(lb[s.get()]))
             else:
                 var = tk.IntVar(value=int(spec["default"]))
                 ttk.Scale(row, from_=spec["min"], to=spec["max"], variable=var, orient="horizontal",
