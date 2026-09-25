@@ -193,6 +193,7 @@ class LauncherApp(tk.Tk):
         ttk.Button(tab, text=_("👁 Aperçu fidèle (avant envoi)"), command=self.open_preview).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("🎞 Créer une animation (éditeur)"), command=self.open_animation).pack(fill="x", pady=(0, 4))
         ttk.Button(tab, text=_("📚 Bibliothèque d'animations"), command=self.open_library).pack(fill="x", pady=(0, 4))
+        ttk.Button(tab, text=_("★ Listes de lecture et favoris"), command=self.open_lists).pack(fill="x", pady=(0, 4))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
         ttk.Label(tab, text=_("Convertir pour la matrice (19×24, gris, 3 niveaux, sans tramage)"),
@@ -688,6 +689,10 @@ class LauncherApp(tk.Tk):
     def open_schedule(self):
         from rog_flare2_ui_programme import ScheduleWindow
         ScheduleWindow(self, lambda: self._send("config"))
+
+    def open_lists(self):
+        from rog_flare2_listes import ListsWindow
+        ListsWindow(self, self._play, lambda: (self._send("status") or {}).get("show"))
 
     def open_library(self):
         from rog_flare2_bibliotheque import LibraryWindow

@@ -9,6 +9,7 @@ JSON par ligne, une réponse JSON par ligne :
     {"cmd": "play", "show": {"type": "gif", "files": [...], "loop": true}}
     {"cmd": "play", "show": {"type": "effet", "name": "Plasma", "params": {...}, "speed": 1.0}}
     {"cmd": "play", "show": {"type": "horloge"}}
+    {"cmd": "play", "show": {"type": "liste", "name": "Soirée"}}   (listes : rog_flare2_listes)
     {"cmd": "notify", "text": "Nouveau mail", "duration": 6}
     {"cmd": "brightness", "value": 60}      {"cmd": "params", "params": {"speed": 250}}
     {"cmd": "speed", "value": 1.5}          {"cmd": "stop"}      {"cmd": "status"}
@@ -235,6 +236,33 @@ class Daemon:
             return job
         if kind == "horloge":
             return lambda stop: play_clock(layer, stop, self.brightness)
+        if kind == "liste":
+            from rog_flare2_listes import DEFAULT_SECONDS, item_show, load_lists
+            items = show.get("items") or load_lists().get(show.get("name", ""), [])
+            if not items:
+                raise ValueError(f"liste vide ou inconnue : {show.get('name')!r}")
+
+            def job(stop):
+                while not stop.is_set():
+                    for item in items:
+                        if stop.is_set():
+                            return
+                        sub_show = item_show(item)
+                        if sub_show is not None and sub_show.get("type") == "liste":
+                            continue  # pas de liste dans une liste
+                        inner = threading.Event()
+                        if sub_show is None:
+                            self.screen.write(BLANK, "base")
+                            worker = None
+                        else:
+                            sub_job = self._job(sub_show)
+                            worker = threading.Thread(target=self._run, args=(sub_job, inner), daemon=True)
+                            worker.start()
+                        stop.wait(max(1.0, float(item.get("duree", DEFAULT_SECONDS))))
+                        inner.set()
+                        if worker is not None:
+                            worker.join(timeout=5)
+            return job
         raise ValueError(f"lecture inconnue : {kind!r}")
 
     def play(self, show: dict, manual: bool = True):

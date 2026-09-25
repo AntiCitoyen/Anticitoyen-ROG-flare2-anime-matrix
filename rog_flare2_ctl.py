@@ -96,6 +96,10 @@ def main(argv=None):
     e.add_argument("--param", action="append", default=[], metavar="clé=valeur")
     e.add_argument("--cadence", type=float, default=1.0)
     sub.add_parser("horloge")
+    li = sub.add_parser("liste", help="joue une liste de lecture (sans nom : les affiche)")
+    li.add_argument("nom", nargs="?")
+    fa = sub.add_parser("favori", help="joue le favori numéro N (sans numéro : les affiche)")
+    fa.add_argument("numero", nargs="?", type=int)
     t = sub.add_parser("texte")
     t.add_argument("message")
     n = sub.add_parser("notifier")
@@ -127,6 +131,22 @@ def main(argv=None):
                 "speed": args.cadence}
     elif args.cmd == "horloge":
         show = {"type": "horloge"}
+    elif args.cmd in ("liste", "favori"):
+        from rog_flare2_listes import load_favorites, load_lists
+        if args.cmd == "liste":
+            names = sorted(load_lists())
+            if not args.nom:
+                print("\n".join(names))
+                return
+            show = {"type": "liste", "name": args.nom}
+        else:
+            favorites = load_favorites()
+            if args.numero is None:
+                print("\n".join(f"{i}. {f.get('label', '?')}" for i, f in enumerate(favorites, 1)))
+                return
+            if not 1 <= args.numero <= len(favorites):
+                sys.exit(f"favori {args.numero} introuvable")
+            show = favorites[args.numero - 1]["show"]
     elif args.cmd == "texte":
         show = {"type": "effet", "name": "Scroll Text", "params": {"message": args.message}, "speed": 1.0}
     elif args.cmd == "derniere":

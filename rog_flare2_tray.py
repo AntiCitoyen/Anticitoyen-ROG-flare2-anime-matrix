@@ -85,6 +85,20 @@ def build_menu():
     item(_("System Monitor"), lambda: act(show_for("moniteur")))
     item(_("Now Playing"), lambda: act(show_for("morceau")))
     item(_("Dernière lecture"), lambda: act(ctl_last()))
+    from rog_flare2_listes import load_favorites, load_lists
+    for title, entries in ((_("Favoris"), [(f.get("label", "?"), f.get("show")) for f in load_favorites()]),
+                           (_("Listes de lecture"), [(name, {"type": "liste", "name": name})
+                                                     for name in sorted(load_lists())])):
+        if not entries:
+            continue
+        parent = Gtk.MenuItem(label=title)
+        sub = Gtk.Menu()
+        for label, show in entries:
+            mi = Gtk.MenuItem(label=label)
+            mi.connect("activate", lambda _w, show=show: act(show))
+            sub.append(mi)
+        parent.set_submenu(sub)
+        menu.append(parent)
     item(_("Éteindre l'écran"), lambda: act(cmd="stop"))
     menu.append(Gtk.SeparatorMenuItem())
     bright = Gtk.MenuItem(label=_("Luminosité :").rstrip(" :："))
@@ -116,6 +130,7 @@ def main():
     if running():
         return
     menu = build_menu()
+    ind = None
     try:
         gi.require_version("AyatanaAppIndicator3", "0.1")
         from gi.repository import AyatanaAppIndicator3 as AI
@@ -128,6 +143,21 @@ def main():
         status.set_tooltip_text("AniMe Matrix")
         status.connect("popup-menu", lambda _i, b, t: menu.popup(None, None, None, None, b, t))
         status.connect("activate", lambda _i: menu.popup(None, None, None, None, 0, Gtk.get_current_event_time()))
+    from rog_flare2_listes import FAVORITES_FILE, LISTS_FILE
+
+    def stamp():
+        return tuple(f.stat().st_mtime if f.exists() else 0 for f in (FAVORITES_FILE, LISTS_FILE))
+    seen = [stamp()]
+
+    def refresh():  # favoris ou listes modifiés dans le lanceur : menu refait
+        nonlocal menu
+        if stamp() != seen[0]:
+            seen[0] = stamp()
+            menu = build_menu()
+            if ind is not None:
+                ind.set_menu(menu)
+        return True
+    GLib.timeout_add_seconds(5, refresh)
     GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, 15, Gtk.main_quit)
     # PID écrit une fois l'arrêt propre en place : un SIGTERM plus tôt ne laisserait pas de PID périmé
     PID_FILE.parent.mkdir(parents=True, exist_ok=True)
