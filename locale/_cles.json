@@ -180,5 +180,8 @@
  "pas de paquet .deb dans cette release": "message d'erreur de la mise à jour",
  "empreinte SHA-256 différente de celle publiée : paquet rejeté": "message d'erreur de la mise à jour",
  "Dossier des extensions (effets)": "bouton Réglages : ouvre le dossier des extensions d'effets",
- "Service animematrixd injoignable": "barre d'état : le démon ne répond pas"
+ "Service animematrixd injoignable": "barre d'état : le démon ne répond pas",
+ "System Monitor": "effet écran d'infos système (nom et curseurs)",
+ "Page (0 = auto)": "effet écran d'infos système (nom et curseurs)",
+ "Period": "effet écran d'infos système (nom et curseurs)"
 }

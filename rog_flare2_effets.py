@@ -109,6 +109,9 @@ pww._SHARED_AUDIO_CAPTURE = AUDIO  # lu en global par les effets audio à chaque
 EFFECTS: dict[str, type[pww.BaseEffect]] = {cls.name: cls for cls in pww.ALL_EFFECTS}
 AUDIO_EFFECTS: dict[str, type[pww.BaseEffect]] = dict(pww.AUDIO_VISUALIZERS)
 
+from rog_flare2_infos import SystemMonitorEffect  # noqa: E402  (écran d'infos système)
+EFFECTS[SystemMonitorEffect.name] = SystemMonitorEffect
+
 # Extensions : tout fichier .py de ce dossier peut définir des effets (sous-classes de BaseEffect
 # avec un attribut name). Voir docs/EXTENSIONS.md et examples/effets/.
 PLUGIN_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2" / "effets"
