@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AniMe Matrix APT repository</title>
+<style>
+  :root { --bg: #0e0f12; --fg: #eceef2; --muted: #8a8f99; --accent: #e0263a; --code: #1c1e24; }
+  @media (prefers-color-scheme: light) { :root { --bg: #fafafa; --fg: #16181d; --muted: #5a5f69; --code: #eceef2; } }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, sans-serif; max-width: 760px; margin: 0 auto; padding: 32px 16px; }
+  h1 { color: var(--accent); font-size: 1.6em; }
+  pre { background: var(--code); padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<h1>AniMe Matrix — APT repository</h1>
+<p>Linux tools for the AniMe Matrix display of the ASUS ROG Strix Flare II Animate keyboard.
+<a href="https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix">Project page</a>.</p>
+
+<h2>🇬🇧 Install and get updates with apt</h2>
+<pre>curl -fsSL https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix/animematrix.gpg \
+  | sudo tee /usr/share/keyrings/animematrix.gpg &gt;/dev/null
+echo "deb [signed-by=/usr/share/keyrings/animematrix.gpg] https://anticitoyen.github.io/Anticitoyen-ROG-flare2-anime-matrix stable main" \
+  | sudo tee /etc/apt/sources.list.d/animematrix.list
+sudo apt update &amp;&amp; sudo apt install anticitoyen-rog-flare2-anime-matrix</pre>
+
+<h2>🇫🇷 Installer et recevoir les mises à jour avec apt</h2>
+<p>Mêmes commandes que ci-dessus ; ensuite <code>sudo apt upgrade</code> installe les nouvelles versions.</p>
+
+<p class="muted">☕ <a href="https://buymeacoffee.com/anticitoyen">buymeacoffee.com/anticitoyen</a></p>
+</body>
+</html>
