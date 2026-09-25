@@ -341,5 +341,13 @@
  "Stylisée": "Стилізований",
  "Désactivé": "Вимкнено",
  "Quand il est coupé": "Коли вимкнено",
- "Quand une application l'utilise": "Коли його використовує програма"
+ "Quand une application l'utilise": "Коли його використовує програма",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Пам'ять клавіатури: анімація показується без програм, одразу після підключення",
+ "💾 Enregistrer dans le clavier…": "💾 Записати в клавіатуру…",
+ "⌨ Afficher l'animation du clavier": "⌨ Показати анімацію клавіатури",
+ "Animation du clavier": "Анімація клавіатури",
+ "Animation à enregistrer dans le clavier": "Анімація для запису в клавіатуру",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} кадрів: клавіатура зберігає щонайбільше {max}.\n\nТак: прибрати кожен другий кадр (уся анімація, менш плавно)\nНі: залишити перші {max}",
+ "Enregistrement dans le clavier…": "Запис у клавіатуру…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Записано в клавіатуру: {name} ({n} кадрів)"
 }

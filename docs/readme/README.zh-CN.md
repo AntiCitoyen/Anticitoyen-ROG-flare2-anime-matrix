@@ -61,6 +61,7 @@ ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matr
 - **桌面通知**：以「应用：标题」的形式叠加显示，随后恢复播放（默认关闭，可设置允许通知的应用列表）。
 - **可玩的键盘游戏**：贪吃蛇、乒乓（单人或双人）、俄罗斯方块、打砖块、太空侵略者、Flappy，附带记录。
 - **指示灯**：麦克风静音或正在使用、摄像头运行、OBS 直播或录制时，屏幕上会亮起小光块。
+- **键盘内存**：保存在键盘中的动画（GIF、图片）插上即可播放，无需任何软件，换一台电脑也一样；亮度可调（GIF 选项卡，`animematrix-ctl memoire`）。
 
 **创建**
 - **逐帧动画编辑器**，基于屏幕的真实几何结构：3 级灰阶、时间轴、幽灵图层、平移、复制粘贴、预览、发送至键盘、导出 GIF。
@@ -125,7 +126,7 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | 项目 | 位置 |
 |---|---|
 | 程序文件 | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| 命令 | `animematrix`、`animematrixd`、`animematrix-ctl`、`animematrix-bascule`、`animematrix-animation`、`animematrix-apercu`、`animematrix-convertir`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-dessin`、`animematrix-tray` |
+| 命令 | `animematrix`、`animematrixd`、`animematrix-ctl`、`animematrix-bascule`、`animematrix-animation`、`animematrix-apercu`、`animematrix-convertir`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-dessin`、`animematrix-tray`, `animematrix-memoire` |
 | 用户服务 | `/usr/lib/systemd/user/animematrixd.service`（对所有会话启用） |
 | udev 规则 | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | 菜单与图标 | `animematrix.desktop`，图标 `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # 播放列表（不带名称：列出所有列表）
 animematrix-ctl favori 2                           # 第 2 个收藏（不带编号：列出所有收藏）
 animematrix-ctl notifier "Café prêt" --duree 5     # 叠加显示后恢复
+animematrix-ctl memoire anim.gif                   # 保存到键盘（最多 196 帧）
+animematrix-ctl clavier                            # 显示已保存的动画
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

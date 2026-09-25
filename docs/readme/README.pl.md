@@ -61,6 +61,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 - **Powiadomienia pulpitu**: „APLIKACJA: TYTUŁ” wyświetla się jako nakładka, po czym odtwarzanie wraca do poprzedniego stanu (domyślnie wyłączone, lista dozwolonych aplikacji).
 - **Grywalne gry** na klawiaturze: Snake, Pong (w pojedynkę lub we dwóch), Tetris, Breakout, Invaders, Flappy, z rekordami.
 - **Wskaźniki**: małe świecące bloki, gdy mikrofon jest wyciszony lub używany, gdy kamera działa, gdy OBS nadaje lub nagrywa.
+- **Pamięć klawiatury**: animacja (GIF, obraz) zapisana w klawiaturze wyświetla się bez żadnego oprogramowania, zaraz po podłączeniu, nawet na innym komputerze; regulowana jasność (karta GIF, `animematrix-ctl memoire`).
 
 **Tworzenie**
 - **Edytor animacji** klatka po klatce, na rzeczywistej geometrii ekranu: 3 poziomy, oś czasu, warstwa-widmo, przesunięcie, kopiuj-wklej, podgląd, wysyłanie do klawiatury, eksport GIF.
@@ -125,7 +126,7 @@ Pakiet instaluje:
 | Element | Lokalizacja |
 |---|---|
 | Programy | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Polecenia | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Polecenia | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Usługa użytkownika | `/usr/lib/systemd/user/animematrixd.service` (włączona dla wszystkich sesji) |
 | Reguła udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu i ikona | `animematrix.desktop`, ikona `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # lista odtwarzania (bez nazwy: wyświetla listy)
 animematrix-ctl favori 2                           # ulubiony nr 2 (bez numeru: wyświetla ulubione)
 animematrix-ctl notifier "Café prêt" --duree 5     # nakładka, potem powrót
+animematrix-ctl memoire anim.gif                   # zapisana w klawiaturze (najwyżej 196 klatek)
+animematrix-ctl clavier                            # pokazuje zapisaną animację
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

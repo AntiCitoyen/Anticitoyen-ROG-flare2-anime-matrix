@@ -61,6 +61,7 @@ ASUS इस कीबोर्ड की AniMe Matrix स्क्रीन क�
 - **डेस्कटॉप नोटिफ़िकेशन**: « ऐप: शीर्षक » ओवरले के रूप में दिखता है फिर प्लेबैक फिर से शुरू होता है (डिफ़ॉल्ट रूप से बंद, अनुमति प्राप्त ऐप्स की सूची के साथ)।
 - कीबोर्ड पर **खेले जाने योग्य गेम्स**: Snake, Pong (अकेले या दो खिलाड़ी), Tetris, ब्रेकआउट, Invaders, Flappy, रिकॉर्ड्स के साथ।
 - **संकेतक**: माइक म्यूट या उपयोग में होने पर, वेबकैम चलने पर, OBS के स्ट्रीम या रिकॉर्ड करने पर जलने वाले छोटे चमकदार ब्लॉक।
+- **कीबोर्ड मेमोरी**: कीबोर्ड में सहेजा गया एनिमेशन (GIF, छवि) कीबोर्ड लगाते ही बिना किसी सॉफ़्टवेयर के चलता है, दूसरे पीसी पर भी; चमक समायोज्य (GIF टैब, `animematrix-ctl memoire`)।
 
 **बनाना**
 - स्क्रीन की वास्तविक ज्यामिति पर, फ़्रेम-दर-फ़्रेम **एनिमेशन एडिटर**: 3 स्तर, टाइमलाइन, घोस्ट लेयर, शिफ़्ट, कॉपी-पेस्ट, पूर्वावलोकन, कीबोर्ड को भेजना, GIF एक्सपोर्ट।
@@ -125,7 +126,7 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | तत्व | स्थान |
 |---|---|
 | प्रोग्राम | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| कमांड | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| कमांड | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | यूज़र सर्विस | `/usr/lib/systemd/user/animematrixd.service` (सभी सेशन के लिए सक्रिय) |
 | udev रूल | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | मेनू और आइकन | `animematrix.desktop`, आइकन `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # प्लेलिस्ट (बिना नाम: सभी प्लेलिस्ट दिखाता है)
 animematrix-ctl favori 2                           # पसंदीदा नं. 2 (बिना नंबर: सभी पसंदीदा दिखाता है)
 animematrix-ctl notifier "Café prêt" --duree 5     # ओवरले फिर वापसी
+animematrix-ctl memoire anim.gif                   # कीबोर्ड में सहेजा जाता है (अधिकतम 196 फ़्रेम)
+animematrix-ctl clavier                            # सहेजा गया एनिमेशन दिखाता है
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

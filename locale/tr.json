@@ -341,5 +341,13 @@
  "Stylisée": "Stilize",
  "Désactivé": "Kapalı",
  "Quand il est coupé": "Kapalıyken",
- "Quand une application l'utilise": "Bir uygulama kullanırken"
+ "Quand une application l'utilise": "Bir uygulama kullanırken",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Klavye belleği: animasyon, klavye takılır takılmaz yazılımsız oynar",
+ "💾 Enregistrer dans le clavier…": "💾 Klavyeye kaydet…",
+ "⌨ Afficher l'animation du clavier": "⌨ Klavyenin animasyonunu göster",
+ "Animation du clavier": "Klavye animasyonu",
+ "Animation à enregistrer dans le clavier": "Klavyeye kaydedilecek animasyon",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} kare: klavye en fazla {max} kare tutar.\n\nEvet: her iki kareden birini çıkar (animasyonun tamamı, daha az akıcı)\nHayır: ilk {max} kareyi tut",
+ "Enregistrement dans le clavier…": "Klavyeye kaydediliyor…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Klavyeye kaydedildi: {name} ({n} kare)"
 }

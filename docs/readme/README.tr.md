@@ -61,6 +61,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 - **Masaüstü bildirimleri**: « UYGULAMA: BAŞLIK » ekranın üzerinde belirir, ardından oynatma kaldığı yerden devam eder (varsayılan olarak kapalı, izin verilen uygulamalar listesiyle).
 - Klavyeyle **oynanabilir oyunlar**: Snake, Pong (tek başına veya iki kişi), Tetris, kırma oyunu, Invaders, Flappy, en yüksek skorlarla.
 - **Göstergeler**: mikrofon kapatıldığında veya kullanıldığında, web kamerası çalıştığında, OBS yayın yaptığında veya kayıt aldığında yanan küçük ışıklı bloklar.
+- **Klavye belleği**: klavyeye kaydedilen bir animasyon (GIF, görüntü), takılır takılmaz hiçbir yazılım olmadan, başka bir bilgisayarda bile oynar; ayarlanabilir parlaklık (GIF sekmesi, `animematrix-ctl memoire`).
 
 **Oluşturma**
 - Ekranın gerçek geometrisi üzerinde kare kare çalışan **animasyon düzenleyici**: 3 seviye, zaman çizelgesi, hayalet katman, kaydırma, kopyala-yapıştır, önizleme, klavyeye gönderme, GIF olarak dışa aktarma.
@@ -125,7 +126,7 @@ Paket şunları kurar:
 | Öğe | Konum |
 |---|---|
 | Programlar | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Komutlar | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Komutlar | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Kullanıcı servisi | `/usr/lib/systemd/user/animematrixd.service` (tüm oturumlar için etkin) |
 | udev kuralı | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menü ve simge | `animematrix.desktop`, `animematrix` simgesi |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # oynatma listesi (adsız: listeleri gösterir)
 animematrix-ctl favori 2                           # 2 numaralı favori (numarasız: favorileri gösterir)
 animematrix-ctl notifier "Café prêt" --duree 5     # üstte gösterilir sonra geri döner
+animematrix-ctl memoire anim.gif                   # klavyeye kaydedilir (en fazla 196 kare)
+animematrix-ctl clavier                            # kayıtlı animasyonu gösterir
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

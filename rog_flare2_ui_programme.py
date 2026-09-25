@@ -10,7 +10,7 @@ from rog_flare2_i18n import _
 
 CONTENT_LABELS = {  # contenu -> texte source déjà traduit ailleurs dans l'interface
     "horloge": "Horloge", "galerie": "Galerie GIF", "moniteur": "System Monitor", "morceau": "Now Playing",
-    "eteint": "Écran éteint",
+    "eteint": "Écran éteint", "clavier": "Animation du clavier",
 }
 HHMM = re.compile(r"^([01]?\d|2[0-3]):[0-5]\d$")
 

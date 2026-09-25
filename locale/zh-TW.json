@@ -341,5 +341,13 @@
  "Stylisée": "花式",
  "Désactivé": "關閉",
  "Quand il est coupé": "靜音時",
- "Quand une application l'utilise": "有應用程式使用時"
+ "Quand une application l'utilise": "有應用程式使用時",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "鍵盤記憶體：插上鍵盤即可播放動畫，無需任何軟體",
+ "💾 Enregistrer dans le clavier…": "💾 儲存到鍵盤…",
+ "⌨ Afficher l'animation du clavier": "⌨ 顯示鍵盤中的動畫",
+ "Animation du clavier": "鍵盤動畫",
+ "Animation à enregistrer dans le clavier": "要儲存到鍵盤的動畫",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} 格：鍵盤最多儲存 {max} 格。\n\n是：每兩格刪除一格（完整動畫，流暢度降低）\n否：保留前 {max} 格",
+ "Enregistrement dans le clavier…": "正在儲存到鍵盤…",
+ "Enregistré dans le clavier : {name} ({n} images)": "已儲存到鍵盤：{name}（{n} 格）"
 }

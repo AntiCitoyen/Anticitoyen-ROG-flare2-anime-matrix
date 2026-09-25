@@ -63,6 +63,7 @@
 - **إشعارات سطح المكتب**: يظهر « التطبيق: العنوان » فوق المحتوى الحالي ثم يستأنف العرض (معطّلة افتراضيًا، بقائمة تطبيقات مسموح بها).
 - **ألعاب قابلة للّعب** على لوحة المفاتيح: Snake وPong (فرديًا أو للاعبَين) وTetris ولعبة كسر الطوب وInvaders وFlappy، مع أرقام قياسية.
 - **المؤشرات**: كتل مضيئة صغيرة عندما يكون الميكروفون مكتومًا أو قيد الاستخدام، وعندما تعمل كاميرا الويب، وعندما يبثّ OBS أو يسجّل.
+- **ذاكرة لوحة المفاتيح**: رسوم متحركة (GIF، صورة) محفوظة في لوحة المفاتيح تُعرض دون أي برنامج فور التوصيل، حتى على حاسوب آخر؛ سطوع قابل للضبط (تبويب GIF، `animematrix-ctl memoire`).
 
 **الإنشاء**
 - **محرر رسوم متحركة** صورة تلو الأخرى، على الهندسة الحقيقية للشاشة: 3 مستويات، شريط زمني، طبقة شبح، إزاحة، نسخ ولصق، معاينة، إرسال إلى لوحة المفاتيح، تصدير كـGIF.
@@ -127,7 +128,7 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | العنصر | الموقع |
 |---|---|
 | البرامج | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| الأوامر | `animematrix`، `animematrixd`، `animematrix-ctl`، `animematrix-bascule`، `animematrix-animation`، `animematrix-apercu`، `animematrix-convertir`، `animematrix-effet`، `animematrix-galerie`، `animematrix-horloge`، `animematrix-dessin`، `animematrix-tray` |
+| الأوامر | `animematrix`، `animematrixd`، `animematrix-ctl`، `animematrix-bascule`، `animematrix-animation`، `animematrix-apercu`، `animematrix-convertir`، `animematrix-effet`، `animematrix-galerie`، `animematrix-horloge`، `animematrix-dessin`، `animematrix-tray`, `animematrix-memoire` |
 | خدمة المستخدم | `/usr/lib/systemd/user/animematrixd.service` (مُفعَّلة لجميع الجلسات) |
 | قاعدة udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | القائمة والأيقونة | `animematrix.desktop`، أيقونة `animematrix` |
@@ -177,6 +178,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # قائمة تشغيل (بدون اسم: يعرض القوائم)
 animematrix-ctl favori 2                           # المفضلة رقم 2 (بدون رقم: يعرض المفضلة)
 animematrix-ctl notifier "Café prêt" --duree 5     # يظهر فوق المحتوى ثم يعود
+animematrix-ctl memoire anim.gif                   # تُحفظ في لوحة المفاتيح (196 إطارًا على الأكثر)
+animematrix-ctl clavier                            # يعرض الرسوم المحفوظة
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

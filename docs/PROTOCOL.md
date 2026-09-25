@@ -21,12 +21,13 @@ Working:
 - Control brightness by per-pixel intensity.
 - Paint/test individual LEDs in a Tkinter GUI.
 - Full 312 LED framebuffer access, including the leftmost/top-left LEDs.
+- Import GIF/image files (launcher, daemon, `animematrix-ctl gif`).
+- On-board memory: store an animation in the keyboard, shown without any software
+  (see [On-board memory](#on-board-memory)).
 
 Not implemented yet:
 
-- Import GIF/image files directly in the Linux tool.
-- Exact replication of Armoury Crate animation editor features.
-- Any persistent/on-board storage programming.
+- Selecting the built-in effects 1-6 (`60 A8 8n …` assumed, not captured).
 
 ---
 
@@ -234,6 +235,28 @@ frame[4:4+312] = b"\xff" * 312
 h.write(bytes(frame))
 h.close()
 ```
+
+---
+
+## On-board memory
+
+Captured with USBPcap from Armoury Crate 6.5.7 (firmware 3.00.14), then replayed from Linux
+(`rog_flare2_memoire.py`). Same interface and 1024-byte frames as above; the keyboard echoes
+every frame unchanged on the IN endpoint, and each frame waits for its echo.
+
+| Frame | Meaning |
+|---|---|
+| `60 A8 07 64 N 00` + zeros | start: effect 7 (custom animation), `N` blocks follow |
+| `60 A0 i 00` + 1020 data bytes | `N` blocks, `i` counting down `N-1 … 0`; data = `.bin` file, zero-padded |
+| `60 A8 87 L FF 00` + zeros | show effect 7 (`0x80 + 7`) at brightness `L` = 0…100 (0 = screen off) |
+
+- Every few blocks the echo takes ~170 ms (flash write); otherwise under 1 ms. If an echo never
+  comes, Armoury Crate restarts from the start frame. A 97-frame animation (30 blocks) takes ~1.5 s.
+- `60 A8 87 L FF 00` alone changes the brightness of the stored animation without re-sending it,
+  and brings it back after live `60 81` frames.
+- `.bin` layout: frame count `F` (u16 LE), `F` durations in milliseconds (u16 LE), then `F` × 312
+  grey levels in the `60 81` framebuffer order. Armoury Crate stops at 196 frames (61 blocks).
+- The stored animation survives unplugging and is shown by the keyboard alone.
 
 ---
 

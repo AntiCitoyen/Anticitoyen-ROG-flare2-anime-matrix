@@ -341,5 +341,13 @@
  "Stylisée": "Gestileerd",
  "Désactivé": "Uit",
  "Quand il est coupé": "Wanneer gedempt",
- "Quand une application l'utilise": "Wanneer een app hem gebruikt"
+ "Quand une application l'utilise": "Wanneer een app hem gebruikt",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Toetsenbordgeheugen: de animatie speelt zonder software, zodra het toetsenbord is aangesloten",
+ "💾 Enregistrer dans le clavier…": "💾 Opslaan in het toetsenbord…",
+ "⌨ Afficher l'animation du clavier": "⌨ Animatie van het toetsenbord tonen",
+ "Animation du clavier": "Toetsenbordanimatie",
+ "Animation à enregistrer dans le clavier": "Animatie om in het toetsenbord op te slaan",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} beelden: het toetsenbord bewaart er hoogstens {max}.\n\nJa: elk tweede beeld weglaten (hele animatie, minder vloeiend)\nNee: de eerste {max} houden",
+ "Enregistrement dans le clavier…": "Opslaan in het toetsenbord…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Opgeslagen in het toetsenbord: {name} ({n} beelden)"
 }

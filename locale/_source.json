@@ -341,5 +341,13 @@
  "Stylisée": "Stylisée",
  "Désactivé": "Désactivé",
  "Quand il est coupé": "Quand il est coupé",
- "Quand une application l'utilise": "Quand une application l'utilise"
+ "Quand une application l'utilise": "Quand une application l'utilise",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement",
+ "💾 Enregistrer dans le clavier…": "💾 Enregistrer dans le clavier…",
+ "⌨ Afficher l'animation du clavier": "⌨ Afficher l'animation du clavier",
+ "Animation du clavier": "Animation du clavier",
+ "Animation à enregistrer dans le clavier": "Animation à enregistrer dans le clavier",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières",
+ "Enregistrement dans le clavier…": "Enregistrement dans le clavier…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Enregistré dans le clavier : {name} ({n} images)"
 }

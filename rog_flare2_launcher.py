@@ -272,6 +272,17 @@ class LauncherApp(tk.Tk):
             side="left", expand=True, fill="x", padx=(0, 4))
         ttk.Button(conv, text=_("Convertir un dossier…"), command=self.convert_folder).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
+
+        ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=10)
+        ttk.Label(tab, text=_("Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement"),
+                  wraplength=self.wrap, justify="center").pack()
+        mem = ttk.Frame(tab)
+        mem.pack(fill="x", pady=(4, 0))
+        ttk.Button(mem, text=_("💾 Enregistrer dans le clavier…"), command=self.save_to_keyboard).pack(
+            side="left", expand=True, fill="x", padx=(0, 4))
+        ttk.Button(mem, text=_("⌨ Afficher l'animation du clavier"),
+                   command=lambda: self._play({"type": "clavier"}, _("Animation du clavier"))).pack(
+            side="left", expand=True, fill="x", padx=(4, 0))
         return tab
 
     def _build_effect_tab(self, parent, title: str, names: list[str], default: str,
@@ -743,6 +754,47 @@ class LauncherApp(tk.Tk):
             path = filedialog.askdirectory(title=_("Dossier de GIF à convertir"))
         if path:
             self._convert([Path(path)])
+
+    def save_to_keyboard(self):
+        """Un GIF, une image ou un .bin enregistré dans la mémoire du clavier (rog_flare2_memoire)."""
+        from rog_flare2_memoire import MAX_FRAMES
+        title = _("Animation à enregistrer dans le clavier")
+        try:
+            result = subprocess.run(
+                ["zenity", "--file-selection", "--title=" + title,
+                 f"--file-filter={_('Images et GIF')} | *.gif *.png *.jpg *.jpeg *.bmp *.webp *.bin",
+                 f"--file-filter={_('Tous les fichiers')} | *"],
+                capture_output=True, text=True, timeout=300)
+            path = result.stdout.strip()
+        except (FileNotFoundError, subprocess.SubprocessError):
+            path = filedialog.askopenfilename(
+                title=title, filetypes=[(_("Images et GIF"), "*.gif *.png *.jpg *.jpeg *.bmp *.webp *.bin"),
+                                        (_("Tous les fichiers"), "*.*")])
+        if not path:
+            return
+        reduce = "couper"
+        try:
+            with Image.open(path) as im:
+                count = getattr(im, "n_frames", 1)
+        except (OSError, AttributeError):
+            count = 0
+        if count > MAX_FRAMES:
+            choice = messagebox.askyesnocancel(title, _(
+                "{n} images : le clavier en garde {max} au plus.\n\n"
+                "Oui : retirer une image sur deux (animation entière, moins fluide)\n"
+                "Non : garder les {max} premières").format(n=count, max=MAX_FRAMES))
+            if choice is None:
+                return
+            reduce = "alterner" if choice else "couper"
+        self.set_status(_("Enregistrement dans le clavier…"))
+
+        def job():
+            r = self._send("memoire", timeout=60, file=path, reduire=reduce, fidele=bool(self.faithful_var.get()))
+            if r is not None:
+                self.show = {"type": "clavier"}
+                self.set_status(_("Enregistré dans le clavier : {name} ({n} images)").format(
+                    name=Path(path).name, n=r["images"]))
+        threading.Thread(target=job, daemon=True).start()
 
     def _convert(self, chemins: list[Path]):
         """Conversion dans un fil ; sortie dans <dossier>/matrix/ ; propose ensuite de charger le résultat."""

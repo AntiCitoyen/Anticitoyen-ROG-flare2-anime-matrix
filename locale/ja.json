@@ -341,5 +341,13 @@
  "Stylisée": "装飾",
  "Désactivé": "オフ",
  "Quand il est coupé": "ミュート時",
- "Quand une application l'utilise": "アプリが使用中のとき"
+ "Quand une application l'utilise": "アプリが使用中のとき",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "キーボードのメモリ：接続するだけでソフトウェアなしでアニメーションを表示",
+ "💾 Enregistrer dans le clavier…": "💾 キーボードに保存…",
+ "⌨ Afficher l'animation du clavier": "⌨ キーボードのアニメーションを表示",
+ "Animation du clavier": "キーボードのアニメーション",
+ "Animation à enregistrer dans le clavier": "キーボードに保存するアニメーション",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} フレーム：キーボードに保存できるのは最大 {max} フレームです。\n\nはい：1 フレームおきに削除（全体を保持、滑らかさは低下）\nいいえ：最初の {max} フレームを保持",
+ "Enregistrement dans le clavier…": "キーボードに保存中…",
+ "Enregistré dans le clavier : {name} ({n} images)": "キーボードに保存しました：{name}（{n} フレーム）"
 }

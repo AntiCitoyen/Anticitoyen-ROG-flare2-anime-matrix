@@ -341,5 +341,13 @@
  "Stylisée": "스타일",
  "Désactivé": "끔",
  "Quand il est coupé": "음소거되었을 때",
- "Quand une application l'utilise": "앱이 사용 중일 때"
+ "Quand une application l'utilise": "앱이 사용 중일 때",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "키보드 메모리: 키보드를 연결하면 소프트웨어 없이 애니메이션이 재생됩니다",
+ "💾 Enregistrer dans le clavier…": "💾 키보드에 저장…",
+ "⌨ Afficher l'animation du clavier": "⌨ 키보드 애니메이션 표시",
+ "Animation du clavier": "키보드 애니메이션",
+ "Animation à enregistrer dans le clavier": "키보드에 저장할 애니메이션",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n}프레임: 키보드는 최대 {max}프레임까지 저장합니다.\n\n예: 한 프레임씩 건너뛰기(전체 애니메이션, 덜 부드러움)\n아니요: 처음 {max}프레임 유지",
+ "Enregistrement dans le clavier…": "키보드에 저장 중…",
+ "Enregistré dans le clavier : {name} ({n} images)": "키보드에 저장됨: {name} ({n}프레임)"
 }

@@ -341,5 +341,13 @@
  "Stylisée": "Estilizado",
  "Désactivé": "Desactivado",
  "Quand il est coupé": "Cuando está silenciado",
- "Quand une application l'utilise": "Cuando una aplicación la usa"
+ "Quand une application l'utilise": "Cuando una aplicación la usa",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Memoria del teclado: la animación se muestra sin software, nada más conectarlo",
+ "💾 Enregistrer dans le clavier…": "💾 Guardar en el teclado…",
+ "⌨ Afficher l'animation du clavier": "⌨ Mostrar la animación del teclado",
+ "Animation du clavier": "Animación del teclado",
+ "Animation à enregistrer dans le clavier": "Animación que guardar en el teclado",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} imágenes: el teclado guarda {max} como máximo.\n\nSí: quitar una imagen de cada dos (animación completa, menos fluida)\nNo: conservar las {max} primeras",
+ "Enregistrement dans le clavier…": "Guardando en el teclado…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Guardado en el teclado: {name} ({n} imágenes)"
 }

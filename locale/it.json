@@ -341,5 +341,13 @@
  "Stylisée": "Stilizzato",
  "Désactivé": "Disattivato",
  "Quand il est coupé": "Quando è muto",
- "Quand une application l'utilise": "Quando un'app lo usa"
+ "Quand une application l'utilise": "Quando un'app lo usa",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Memoria della tastiera: l'animazione si vede senza software, appena collegata",
+ "💾 Enregistrer dans le clavier…": "💾 Salva nella tastiera…",
+ "⌨ Afficher l'animation du clavier": "⌨ Mostra l'animazione della tastiera",
+ "Animation du clavier": "Animazione della tastiera",
+ "Animation à enregistrer dans le clavier": "Animazione da salvare nella tastiera",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} fotogrammi: la tastiera ne conserva al massimo {max}.\n\nSì: togli un fotogramma ogni due (animazione intera, meno fluida)\nNo: tieni i primi {max}",
+ "Enregistrement dans le clavier…": "Salvataggio nella tastiera…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Salvata nella tastiera: {name} ({n} fotogrammi)"
 }

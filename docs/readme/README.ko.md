@@ -61,6 +61,7 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 - **데스크톱 알림**: "앱 이름 : 제목"이 화면 위에 겹쳐 표시된 뒤 원래 재생으로 돌아갑니다(기본적으로 꺼져 있으며, 허용할 앱 목록 지정 가능).
 - 키보드로 **즐길 수 있는 게임**: 스네이크, 퐁(혼자 또는 둘이서), 테트리스, 벽돌 깨기, 인베이더, 플래피, 기록 저장.
 - **표시등**: 마이크가 음소거되었거나 사용 중일 때, 웹캠이 켜져 있을 때, OBS가 방송 또는 녹화 중일 때 켜지는 작은 빛 블록.
+- **키보드 메모리**: 키보드에 저장한 애니메이션(GIF, 이미지)은 연결하자마자 소프트웨어 없이 재생되며 다른 PC에서도 마찬가지입니다. 밝기 조절 가능(GIF 탭, `animematrix-ctl memoire`).
 
 **만들기**
 - 화면의 실제 기하 구조를 반영한 프레임 단위 **애니메이션 편집기**: 3단계, 필름스트립, 어니언 스킨, 이동, 복사-붙여넣기, 미리 보기, 키보드로 전송, GIF 내보내기.
@@ -125,7 +126,7 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | 항목 | 위치 |
 |---|---|
 | 프로그램 | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| 명령어 | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| 명령어 | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | 사용자 서비스 | `/usr/lib/systemd/user/animematrixd.service`(모든 세션에서 활성화됨) |
 | udev 규칙 | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | 메뉴 및 아이콘 | `animematrix.desktop`, 아이콘 `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # 재생 목록(이름 없이: 목록 표시)
 animematrix-ctl favori 2                           # 즐겨찾기 2번(번호 없이: 목록 표시)
 animematrix-ctl notifier "Café prêt" --duree 5     # 겹쳐 표시 후 복귀
+animematrix-ctl memoire anim.gif                   # 키보드에 저장(최대 196프레임)
+animematrix-ctl clavier                            # 저장된 애니메이션 표시
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

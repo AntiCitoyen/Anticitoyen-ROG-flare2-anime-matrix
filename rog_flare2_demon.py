@@ -16,6 +16,8 @@ JSON par ligne, une réponse JSON par ligne :
     {"cmd": "brightness", "value": 60}      {"cmd": "params", "params": {"speed": 250}}
     {"cmd": "speed", "value": 1.5}          {"cmd": "stop"}      {"cmd": "status"}
     {"cmd": "frame"}  (dernière trame, base64)   {"cmd": "release"} / {"cmd": "resume"}
+    {"cmd": "memoire", "file": "a.gif", "reduire": "couper" | "alterner", "fidele": false}
+        (enregistrée dans le clavier, puis affichée : lecture {"type": "clavier"})
 
 Deux couches : la lecture de base, et une surimpression temporaire
 (notification) qui masque la base puis la rend. Le clavier débranché est
@@ -54,11 +56,19 @@ KEEPALIVE = 1.0  # une trame identique est quand même renvoyée au bout d'une s
 class FakeTransport:
     """Clavier factice (ANIMEMATRIX_FAUX_CLAVIER=1) : tests, démonstrations, captures d'écran."""
 
+    def __init__(self, *a, **kw):
+        self.echo = b""
+
     def connect(self):
         return "factice"
 
     def write(self, frame):
+        self.echo = bytes(frame)
         return len(frame)
+
+    def read(self, size=FRAME_SIZE, timeout_ms=0):
+        echo, self.echo = self.echo, b""
+        return echo
 
     def close(self):
         pass
@@ -86,6 +96,8 @@ class Screen:
         self.sent_at = 0.0
         self.skipped = 0  # trames identiques non renvoyées (statistique)
         self.badges: list[int] = []  # LED des voyants allumés (rog_flare2_voyants), par-dessus la lecture
+        self.hardware = False  # animation enregistrée dans le clavier affichée : la base n'envoie rien
+        self.software_sent = False  # une trame 60 81 est passée depuis : le clavier a quitté l'animation enregistrée
 
     def _ensure(self) -> bool:
         if self.released:
@@ -101,7 +113,7 @@ class Screen:
 
     def write(self, frame: bytes, layer: str = "base") -> None:
         """Écrit une trame ; celles de la base sont gardées mais pas envoyées sous une surimpression."""
-        if layer == "base" and self.overlay_active:
+        if layer == "base" and (self.overlay_active or self.hardware):
             return
         if self.holds:
             return
@@ -123,6 +135,7 @@ class Screen:
             try:
                 self.transport.write(frame)
                 self.sent, self.sent_at = frame, now
+                self.software_sent = True
             except Exception:
                 self.connected = False
                 self.sent = None
@@ -143,10 +156,29 @@ class Screen:
                     try:
                         self.transport.write(BLANK)
                         self.sent, self.sent_at = BLANK, time.monotonic()
+                        self.software_sent = True
                     except Exception:
                         self.connected = False
                         self.sent = None
         (self.holds.add if on else self.holds.discard)(reason)
+
+    def raw(self, fn):
+        """fn(transport) sous le verrou, hors du flux de trames 60 81 (mémoire du clavier)."""
+        with self.lock:
+            if not self._ensure():
+                raise OSError("clavier indisponible")
+            if not hasattr(self.transport, "read"):
+                raise OSError("mémoire du clavier non prise en charge par ce matériel")
+            try:
+                result = fn(self.transport)
+            except OSError:
+                self.connected = False
+                self.transport.close()
+                raise
+            finally:
+                self.sent = None
+            self.software_sent = False
+            return result
 
     def release(self):
         with self.lock:
@@ -278,6 +310,8 @@ class Daemon:
         if kind == "ecran":
             from rog_flare2_video import play_screen
             return lambda stop: play_screen(layer, stop, self.brightness, show.get("mode", "ecran"))
+        if kind == "clavier":  # animation enregistrée dans le clavier (rog_flare2_memoire)
+            return self._hardware_job
         if kind == "liste":
             from rog_flare2_listes import DEFAULT_SECONDS, item_show, load_lists
             items = show.get("items") or load_lists().get(show.get("name", ""), [])
@@ -306,6 +340,36 @@ class Daemon:
                             worker.join(timeout=5)
             return job
         raise ValueError(f"lecture inconnue : {kind!r}")
+
+    def _hardware_job(self, stop):
+        """Affiche l'animation enregistrée ; la réaffiche après une notification ou un écran noir,
+        et suit la luminosité (octet de luminosité du clavier, sans renvoyer l'animation)."""
+        from rog_flare2_memoire import set_hardware_brightness
+        screen, level = self.screen, None
+        screen.hardware = True
+        try:
+            while not stop.is_set():
+                wanted = self.brightness()
+                if not screen.overlay_active and not screen.holds and (screen.software_sent or wanted != level):
+                    screen.raw(lambda t: set_hardware_brightness(t, wanted))
+                    level = wanted
+                stop.wait(0.3)
+        finally:
+            screen.hardware = False
+
+    def write_memory(self, req: dict) -> dict:
+        """Enregistre un GIF, une image ou un .bin dans la mémoire du clavier, puis l'affiche."""
+        from rog_flare2_memoire import block_frames, encode_bin, frames_from_file, write_memory
+        frames = frames_from_file(Path(req["file"]).expanduser(), bool(req.get("fidele")),
+                                  req.get("reduire", "couper"))
+        data = encode_bin(frames)
+        with self.lock:
+            self._stop_base()
+            self.show = None
+        attempts = self.screen.raw(lambda t: write_memory(t, data, self.brightness()))
+        self.play({"type": "clavier"})
+        return {"ok": True, "images": len(frames), "octets": len(data), "blocs": len(block_frames(data)),
+                "tentatives": attempts}
 
     def play(self, show: dict, manual: bool = True):
         job = self._job(show)
@@ -405,6 +469,11 @@ class Daemon:
         if cmd == "stop":
             self.stop()
             return {"ok": True}
+        if cmd == "memoire":
+            try:
+                return self.write_memory(req)
+            except (OSError, ValueError, RuntimeError) as exc:
+                return {"ok": False, "error": str(exc)}
         if cmd == "galerie":
             from rog_flare2_programme import show_for
             self.play(show_for("galerie"))

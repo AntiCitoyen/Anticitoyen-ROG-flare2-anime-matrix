@@ -61,6 +61,7 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 - **Notifications du bureau** : « APPLI : TITRE » s'affiche en surimpression puis la lecture reprend (désactivé par défaut, liste d'applications autorisées).
 - **Jeux jouables** au clavier : Snake, Pong (seul ou à deux), Tetris, casse-briques, Invaders, Flappy, avec records.
 - **Voyants** : petits blocs lumineux quand le micro est coupé ou utilisé, quand la webcam tourne, quand OBS diffuse ou enregistre.
+- **Mémoire du clavier** : une animation (GIF, image) enregistrée dans le clavier s'affiche sans aucun logiciel, dès le branchement, même sur un autre PC ; luminosité réglable (onglet GIF, `animematrix-ctl memoire`).
 
 **Créer**
 - **Éditeur d'animation** image par image, sur la vraie géométrie de l'écran : 3 niveaux, frise, calque fantôme, décalage, copier-coller, aperçu, envoi au clavier, export GIF.
@@ -125,7 +126,7 @@ Le paquet installe :
 | Élément | Emplacement |
 |---|---|
 | Programmes | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Commandes | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Commandes | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Service utilisateur | `/usr/lib/systemd/user/animematrixd.service` (activé pour toutes les sessions) |
 | Règle udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu et icône | `animematrix.desktop`, icône `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # liste de lecture (sans nom : les affiche)
 animematrix-ctl favori 2                           # favori n° 2 (sans numéro : les affiche)
 animematrix-ctl notifier "Café prêt" --duree 5     # surimpression puis retour
+animematrix-ctl memoire anim.gif                   # enregistrée dans le clavier (196 images au plus)
+animematrix-ctl clavier                            # affiche l'animation enregistrée
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

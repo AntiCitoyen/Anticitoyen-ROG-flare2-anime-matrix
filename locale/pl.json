@@ -341,5 +341,13 @@
  "Stylisée": "Stylizowany",
  "Désactivé": "Wyłączone",
  "Quand il est coupé": "Gdy wyciszony",
- "Quand une application l'utilise": "Gdy aplikacja go używa"
+ "Quand une application l'utilise": "Gdy aplikacja go używa",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Pamięć klawiatury: animacja wyświetla się bez oprogramowania, zaraz po podłączeniu",
+ "💾 Enregistrer dans le clavier…": "💾 Zapisz w klawiaturze…",
+ "⌨ Afficher l'animation du clavier": "⌨ Pokaż animację klawiatury",
+ "Animation du clavier": "Animacja klawiatury",
+ "Animation à enregistrer dans le clavier": "Animacja do zapisania w klawiaturze",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} klatek: klawiatura mieści najwyżej {max}.\n\nTak: usuń co drugą klatkę (cała animacja, mniej płynna)\nNie: zachowaj pierwsze {max}",
+ "Enregistrement dans le clavier…": "Zapisywanie w klawiaturze…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Zapisano w klawiaturze: {name} ({n} klatek)"
 }

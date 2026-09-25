@@ -10,6 +10,9 @@
     animematrix-ctl luminosite 60
     animematrix-ctl stop
     animematrix-ctl derniere                     (rejoue la dernière lecture)
+    animematrix-ctl memoire FICHIER [--reduire couper|alterner] [--fidele]
+                                                 (enregistre dans le clavier : affichée sans logiciel)
+    animematrix-ctl clavier                      (affiche l'animation enregistrée dans le clavier)
 """
 from __future__ import annotations
 
@@ -128,6 +131,12 @@ def main(argv=None):
     b.add_argument("valeur", type=int)
     sub.add_parser("stop")
     sub.add_parser("derniere")
+    m = sub.add_parser("memoire", help="enregistre un GIF, une image ou un .bin dans la mémoire du clavier")
+    m.add_argument("fichier")
+    m.add_argument("--reduire", choices=("couper", "alterner"), default="couper",
+                   help="au-delà de 196 images : garder le début, ou retirer une image sur deux")
+    m.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
+    sub.add_parser("clavier", help="affiche l'animation enregistrée dans le clavier")
     sub.add_parser("quitter")
     args = ap.parse_args(argv)
 
@@ -150,6 +159,13 @@ def main(argv=None):
                 "speed": args.cadence}
     elif args.cmd == "horloge":
         show = {"type": "horloge"}
+    elif args.cmd == "clavier":
+        show = {"type": "clavier"}
+    elif args.cmd == "memoire":
+        r = request("memoire", timeout=60, file=str(Path(args.fichier).expanduser().resolve()),
+                    reduire=args.reduire, fidele=args.fidele)
+        print(f"{r['images']} images, {r['blocs']} blocs, {r['tentatives']} tentative(s)")
+        return
     elif args.cmd in ("liste", "favori"):
         from rog_flare2_listes import load_favorites, load_lists
         if args.cmd == "liste":

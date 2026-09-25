@@ -61,6 +61,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 - **Bureaubladmeldingen**: « APP: TITEL » wordt in overlay getoond, waarna de weergave wordt hervat (standaard uitgeschakeld, lijst met toegestane toepassingen).
 - **Spellen** speelbaar met het toetsenbord: Snake, Pong (alleen of met z'n tweeën), Tetris, breakout, Invaders, Flappy, met records.
 - **Indicatoren**: kleine lichtblokjes wanneer de microfoon gedempt of in gebruik is, wanneer de webcam aan staat, wanneer OBS uitzendt of opneemt.
+- **Toetsenbordgeheugen**: een in het toetsenbord opgeslagen animatie (GIF, afbeelding) speelt zonder software, zodra het is aangesloten, ook op een andere pc; instelbare helderheid (tabblad GIF, `animematrix-ctl memoire`).
 
 **Maken**
 - **Animatie-editor** beeld voor beeld, op de echte geometrie van het scherm: 3 niveaus, filmstrook, spooklaag, verschuiving, kopiëren-plakken, voorvertoning, verzenden naar het toetsenbord, GIF-export.
@@ -125,7 +126,7 @@ Het pakket installeert:
 | Onderdeel | Locatie |
 |---|---|
 | Programma's | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Commando's | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Commando's | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Gebruikersservice | `/usr/lib/systemd/user/animematrixd.service` (ingeschakeld voor alle sessies) |
 | udev-regel | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu en pictogram | `animematrix.desktop`, pictogram `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # afspeellijst (zonder naam: toont ze)
 animematrix-ctl favori 2                           # favoriet nr. 2 (zonder nummer: toont ze)
 animematrix-ctl notifier "Café prêt" --duree 5     # overlay, daarna terug
+animematrix-ctl memoire anim.gif                   # opgeslagen in het toetsenbord (hoogstens 196 beelden)
+animematrix-ctl clavier                            # toont de opgeslagen animatie
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

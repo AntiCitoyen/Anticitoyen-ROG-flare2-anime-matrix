@@ -61,6 +61,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 - **Thông báo màn hình nền**: "ỨNG DỤNG : TIÊU ĐỀ" hiện chồng lên rồi việc phát tiếp tục (mặc định tắt, có danh sách ứng dụng được phép).
 - **Trò chơi** chơi được bằng bàn phím: Rắn, Pong (một hoặc hai người), Tetris, phá gạch, Invaders, Flappy, có lưu kỷ lục.
 - **Đèn báo**: các khối sáng nhỏ khi micro bị tắt hoặc đang được dùng, khi webcam đang bật, khi OBS đang phát trực tiếp hoặc ghi hình.
+- **Bộ nhớ bàn phím**: hoạt ảnh (GIF, hình ảnh) lưu trong bàn phím chạy không cần phần mềm nào, ngay khi cắm vào, kể cả trên máy tính khác; độ sáng điều chỉnh được (thẻ GIF, `animematrix-ctl memoire`).
 
 **Tạo**
 - **Trình chỉnh sửa hoạt ảnh** từng khung hình, trên đúng hình học của màn hình: 3 mức, dải khung hình, lớp mờ tham chiếu, dịch chuyển, sao chép-dán, xem trước, gửi tới bàn phím, xuất GIF.
@@ -125,7 +126,7 @@ Gói này cài đặt:
 | Thành phần | Vị trí |
 |---|---|
 | Chương trình | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Lệnh | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Lệnh | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Dịch vụ người dùng | `/usr/lib/systemd/user/animematrixd.service` (kích hoạt cho mọi phiên) |
 | Quy tắc udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu và biểu tượng | `animematrix.desktop`, biểu tượng `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # danh sách phát (không có tên: liệt kê)
 animematrix-ctl favori 2                           # mục yêu thích số 2 (không có số: liệt kê)
 animematrix-ctl notifier "Café prêt" --duree 5     # hiện chồng rồi quay lại
+animematrix-ctl memoire anim.gif                   # lưu vào bàn phím (tối đa 196 khung hình)
+animematrix-ctl clavier                            # hiện hoạt ảnh đã lưu
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

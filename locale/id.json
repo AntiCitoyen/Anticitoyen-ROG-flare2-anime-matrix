@@ -341,5 +341,13 @@
  "Stylisée": "Bergaya",
  "Désactivé": "Mati",
  "Quand il est coupé": "Saat dibisukan",
- "Quand une application l'utilise": "Saat dipakai aplikasi"
+ "Quand une application l'utilise": "Saat dipakai aplikasi",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Memori keyboard: animasi tampil tanpa perangkat lunak, begitu keyboard dicolokkan",
+ "💾 Enregistrer dans le clavier…": "💾 Simpan ke keyboard…",
+ "⌨ Afficher l'animation du clavier": "⌨ Tampilkan animasi keyboard",
+ "Animation du clavier": "Animasi keyboard",
+ "Animation à enregistrer dans le clavier": "Animasi yang akan disimpan ke keyboard",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} bingkai: keyboard menyimpan paling banyak {max}.\n\nYa: buang satu dari setiap dua bingkai (animasi utuh, kurang mulus)\nTidak: simpan {max} bingkai pertama",
+ "Enregistrement dans le clavier…": "Menyimpan ke keyboard…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Tersimpan di keyboard: {name} ({n} bingkai)"
 }

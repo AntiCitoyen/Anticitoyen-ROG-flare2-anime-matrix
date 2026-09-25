@@ -341,5 +341,13 @@
  "Stylisée": "स्टाइल्ड",
  "Désactivé": "बंद",
  "Quand il est coupé": "म्यूट होने पर",
- "Quand une application l'utilise": "जब कोई ऐप इसका उपयोग करे"
+ "Quand une application l'utilise": "जब कोई ऐप इसका उपयोग करे",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "कीबोर्ड मेमोरी: कीबोर्ड लगाते ही एनिमेशन बिना किसी सॉफ़्टवेयर के चलता है",
+ "💾 Enregistrer dans le clavier…": "💾 कीबोर्ड में सहेजें…",
+ "⌨ Afficher l'animation du clavier": "⌨ कीबोर्ड का एनिमेशन दिखाएँ",
+ "Animation du clavier": "कीबोर्ड एनिमेशन",
+ "Animation à enregistrer dans le clavier": "कीबोर्ड में सहेजने के लिए एनिमेशन",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} फ़्रेम: कीबोर्ड अधिकतम {max} रखता है।\n\nहाँ: हर दूसरा फ़्रेम हटाएँ (पूरा एनिमेशन, कम सहज)\nनहीं: पहले {max} रखें",
+ "Enregistrement dans le clavier…": "कीबोर्ड में सहेजा जा रहा है…",
+ "Enregistré dans le clavier : {name} ({n} images)": "कीबोर्ड में सहेजा गया: {name} ({n} फ़्रेम)"
 }

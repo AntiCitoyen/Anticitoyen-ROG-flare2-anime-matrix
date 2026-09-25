@@ -73,6 +73,8 @@ def show_for(content: str) -> dict | None:
         folder = gallery_dir()
         return {"type": "gif", "files": [str(f) for f in media_files(folder)] if folder.is_dir() else [],
                 "folder": str(folder), "loop": True, "converted": True}
+    if content == "clavier":  # animation enregistrée dans la mémoire du clavier
+        return {"type": "clavier"}
     if content == "moniteur":
         return {"type": "effet", "name": "System Monitor", "params": {}}
     if content == "morceau":

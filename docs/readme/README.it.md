@@ -61,6 +61,7 @@ ASUS fornisce lo schermo AniMe Matrix di questa tastiera solo su Windows (Armour
 - **Notifiche del desktop**: « APP: TITOLO » viene mostrato in sovrimpressione, poi la riproduzione riprende (disattivate per default, elenco di applicazioni autorizzate).
 - **Giochi** giocabili da tastiera: Snake, Pong (da soli o in due), Tetris, rompimattoncini, Invaders, Flappy, con record.
 - **Indicatori**: piccoli blocchi luminosi quando il microfono è disattivato o in uso, quando la webcam è attiva, quando OBS trasmette o registra.
+- **Memoria della tastiera**: un'animazione (GIF, immagine) salvata nella tastiera si vede senza alcun software, appena collegata, anche su un altro PC; luminosità regolabile (scheda GIF, `animematrix-ctl memoire`).
 
 **Creare**
 - **Editor di animazioni** fotogramma per fotogramma, sulla vera geometria dello schermo: 3 livelli, striscia dei fotogrammi, livello fantasma, spostamento, copia-incolla, anteprima, invio alla tastiera, esportazione GIF.
@@ -125,7 +126,7 @@ Il pacchetto installa:
 | Elemento | Posizione |
 |---|---|
 | Programmi | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Comandi | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Comandi | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Servizio utente | `/usr/lib/systemd/user/animematrixd.service` (attivato per tutte le sessioni) |
 | Regola udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu e icona | `animematrix.desktop`, icona `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # playlist (senza nome: le elenca)
 animematrix-ctl favori 2                           # preferito n° 2 (senza numero: li elenca)
 animematrix-ctl notifier "Café prêt" --duree 5     # sovrimpressione poi ritorno
+animematrix-ctl memoire anim.gif                   # salvata nella tastiera (al massimo 196 fotogrammi)
+animematrix-ctl clavier                            # mostra l'animazione salvata
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

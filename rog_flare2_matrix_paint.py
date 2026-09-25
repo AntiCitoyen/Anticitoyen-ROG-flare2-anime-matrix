@@ -148,6 +148,13 @@ class FlareTransport:
             raise OSError(f"hid.write failed: {err}")
         return n
 
+    def read(self, size: int = FRAME_SIZE, timeout_ms: int = 100) -> bytes:
+        """Report d'entrée (écho du clavier) ; b"" à l'échéance."""
+        if self.h is None:
+            self.connect()
+        # hidapi : timeout 0 = lecture bloquante, d'où 1 ms au moins
+        return bytes(self.h.read(size, max(1, int(timeout_ms))))
+
 
 class MatrixPaintApp(tk.Tk):
     def __init__(self):

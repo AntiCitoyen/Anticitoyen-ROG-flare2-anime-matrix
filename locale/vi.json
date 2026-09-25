@@ -341,5 +341,13 @@
  "Stylisée": "Cách điệu",
  "Désactivé": "Tắt",
  "Quand il est coupé": "Khi bị tắt tiếng",
- "Quand une application l'utilise": "Khi có ứng dụng sử dụng"
+ "Quand une application l'utilise": "Khi có ứng dụng sử dụng",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Bộ nhớ bàn phím: hoạt ảnh chạy không cần phần mềm, ngay khi cắm bàn phím",
+ "💾 Enregistrer dans le clavier…": "💾 Lưu vào bàn phím…",
+ "⌨ Afficher l'animation du clavier": "⌨ Hiện hoạt ảnh của bàn phím",
+ "Animation du clavier": "Hoạt ảnh bàn phím",
+ "Animation à enregistrer dans le clavier": "Hoạt ảnh cần lưu vào bàn phím",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} khung hình: bàn phím chỉ giữ tối đa {max}.\n\nCó: bỏ một khung hình trong mỗi hai (giữ trọn hoạt ảnh, kém mượt hơn)\nKhông: giữ {max} khung hình đầu",
+ "Enregistrement dans le clavier…": "Đang lưu vào bàn phím…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Đã lưu vào bàn phím: {name} ({n} khung hình)"
 }

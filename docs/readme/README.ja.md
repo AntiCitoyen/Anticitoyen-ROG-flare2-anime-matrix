@@ -61,6 +61,7 @@ ASUS はこのキーボードの AniMe Matrix ディスプレイを Windows(Armo
 - **デスクトップ通知**:「アプリ名:タイトル」がオーバーレイ表示され、その後再生に戻ります(デフォルトでは無効、許可するアプリのリストあり)。
 - **キーボードで遊べるゲーム**:スネーク、ポン(1 人または 2 人)、テトリス、ブロック崩し、インベーダー、Flappy、ハイスコア記録付き。
 - **インジケーター**:マイクのミュート中や使用中、Webカメラの使用中、OBS の配信中や録画中に、小さな光るブロックを表示。
+- **キーボードのメモリ**：キーボードに保存したアニメーション（GIF、画像）は、接続するだけでソフトウェアなしに再生され、別の PC でも同じです。明るさは調整可能（GIF タブ、`animematrix-ctl memoire`）。
 
 **作成**
 - **フレームごとのアニメーションエディター**、画面の実際の形状に基づく:3 階調、タイムライン、ゴーストレイヤー、オフセット、コピー&ペースト、プレビュー、キーボードへの送信、GIF エクスポート。
@@ -125,7 +126,7 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | 項目 | 場所 |
 |---|---|
 | プログラム | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| コマンド | `animematrix`、`animematrixd`、`animematrix-ctl`、`animematrix-bascule`、`animematrix-animation`、`animematrix-apercu`、`animematrix-convertir`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-dessin`、`animematrix-tray` |
+| コマンド | `animematrix`、`animematrixd`、`animematrix-ctl`、`animematrix-bascule`、`animematrix-animation`、`animematrix-apercu`、`animematrix-convertir`、`animematrix-effet`、`animematrix-galerie`、`animematrix-horloge`、`animematrix-dessin`、`animematrix-tray`, `animematrix-memoire` |
 | ユーザーサービス | `/usr/lib/systemd/user/animematrixd.service`(すべてのセッションで有効) |
 | udev ルール | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | メニューとアイコン | `animematrix.desktop`、アイコン `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # プレイリスト(名前なし:一覧を表示)
 animematrix-ctl favori 2                           # お気に入り 2 番(番号なし:一覧を表示)
 animematrix-ctl notifier "Café prêt" --duree 5     # オーバーレイ表示後に復帰
+animematrix-ctl memoire anim.gif                   # キーボードに保存（最大 196 フレーム）
+animematrix-ctl clavier                            # 保存したアニメーションを表示
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

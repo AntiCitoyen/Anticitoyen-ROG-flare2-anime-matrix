@@ -341,5 +341,13 @@
  "Stylisée": "Stylised",
  "Désactivé": "Off",
  "Quand il est coupé": "When muted",
- "Quand une application l'utilise": "When an app uses it"
+ "Quand une application l'utilise": "When an app uses it",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Keyboard memory: the animation plays without any software, as soon as the keyboard is plugged in",
+ "💾 Enregistrer dans le clavier…": "💾 Save to keyboard…",
+ "⌨ Afficher l'animation du clavier": "⌨ Show the keyboard's animation",
+ "Animation du clavier": "Keyboard animation",
+ "Animation à enregistrer dans le clavier": "Animation to save to the keyboard",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} frames: the keyboard holds {max} at most.\n\nYes: drop every other frame (whole animation, less smooth)\nNo: keep the first {max}",
+ "Enregistrement dans le clavier…": "Saving to keyboard…",
+ "Enregistré dans le clavier : {name} ({n} images)": "Saved to keyboard: {name} ({n} frames)"
 }

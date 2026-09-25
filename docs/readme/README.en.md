@@ -61,6 +61,7 @@ ASUS only provides this keyboard's AniMe Matrix display on Windows (Armoury Crat
 - **Desktop notifications**: "APP: TITLE" is shown as an overlay, then playback resumes (disabled by default, allow-list of applications).
 - **Playable games** on the keyboard: Snake, Pong (solo or two-player), Tetris, Breakout, Invaders, Flappy, with high scores.
 - **Indicators**: small light blocks when the mic is muted or in use, when the webcam is on, when OBS is streaming or recording.
+- **Keyboard memory**: an animation (GIF, image) saved in the keyboard plays without any software, as soon as it is plugged in, even on another PC; adjustable brightness (GIF tab, `animematrix-ctl memoire`).
 
 **Create**
 - **Animation editor**, frame by frame, on the screen's real geometry: 3 levels, filmstrip, ghost layer, offset, copy-paste, preview, send to keyboard, GIF export.
@@ -125,7 +126,7 @@ The package installs:
 | Item | Location |
 |---|---|
 | Programs | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Commands | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Commands | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | User service | `/usr/lib/systemd/user/animematrixd.service` (enabled for all sessions) |
 | udev rule | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu and icon | `animematrix.desktop`, `animematrix` icon |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # playlist (no name: lists them)
 animematrix-ctl favori 2                           # favourite no. 2 (no number: lists them)
 animematrix-ctl notifier "Café prêt" --duree 5     # overlay then back
+animematrix-ctl memoire anim.gif                   # saved in the keyboard (196 frames at most)
+animematrix-ctl clavier                            # shows the saved animation
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

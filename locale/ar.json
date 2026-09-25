@@ -341,5 +341,13 @@
  "Stylisée": "مُصمَّمة",
  "Désactivé": "معطّل",
  "Quand il est coupé": "عند كتمه",
- "Quand une application l'utilise": "عندما يستخدمه تطبيق"
+ "Quand une application l'utilise": "عندما يستخدمه تطبيق",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "ذاكرة لوحة المفاتيح: تُعرض الرسوم المتحركة دون أي برنامج فور توصيل لوحة المفاتيح",
+ "💾 Enregistrer dans le clavier…": "💾 حفظ في لوحة المفاتيح…",
+ "⌨ Afficher l'animation du clavier": "⌨ عرض الرسوم المتحركة للوحة المفاتيح",
+ "Animation du clavier": "الرسوم المتحركة للوحة المفاتيح",
+ "Animation à enregistrer dans le clavier": "الرسوم المتحركة المراد حفظها في لوحة المفاتيح",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} إطارًا: تحتفظ لوحة المفاتيح بـ {max} إطارًا على الأكثر.\n\nنعم: حذف إطار من كل إطارين (الرسوم كاملة، أقل سلاسة)\nلا: الاحتفاظ بأول {max} إطارًا",
+ "Enregistrement dans le clavier…": "جارٍ الحفظ في لوحة المفاتيح…",
+ "Enregistré dans le clavier : {name} ({n} images)": "تم الحفظ في لوحة المفاتيح: {name} ({n} إطارًا)"
 }

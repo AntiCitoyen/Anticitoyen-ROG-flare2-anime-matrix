@@ -341,5 +341,13 @@
  "Stylisée": "Stilisiert",
  "Désactivé": "Aus",
  "Quand il est coupé": "Wenn stumm",
- "Quand une application l'utilise": "Wenn eine Anwendung sie nutzt"
+ "Quand une application l'utilise": "Wenn eine Anwendung sie nutzt",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "Tastaturspeicher: Die Animation läuft ohne Software, sobald die Tastatur angeschlossen ist",
+ "💾 Enregistrer dans le clavier…": "💾 In der Tastatur speichern…",
+ "⌨ Afficher l'animation du clavier": "⌨ Animation der Tastatur anzeigen",
+ "Animation du clavier": "Tastatur-Animation",
+ "Animation à enregistrer dans le clavier": "In der Tastatur zu speichernde Animation",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "{n} Bilder: Die Tastatur speichert höchstens {max}.\n\nJa: jedes zweite Bild entfernen (ganze Animation, weniger flüssig)\nNein: die ersten {max} behalten",
+ "Enregistrement dans le clavier…": "Speichern in der Tastatur…",
+ "Enregistré dans le clavier : {name} ({n} images)": "In der Tastatur gespeichert: {name} ({n} Bilder)"
 }

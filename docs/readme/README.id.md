@@ -61,6 +61,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 - **Notifikasi desktop**: "APLIKASI : JUDUL" ditampilkan menimpa layar lalu tampilan sebelumnya kembali (dinonaktifkan secara default, dengan daftar aplikasi yang diizinkan).
 - **Permainan yang bisa dimainkan** dengan keyboard: Ular, Pong (sendiri atau berdua), Tetris, pemecah bata, Invaders, Flappy, dengan rekor tersimpan.
 - **Indikator**: blok cahaya kecil saat mikrofon dibisukan atau sedang digunakan, saat webcam aktif, saat OBS sedang siaran atau merekam.
+- **Memori keyboard**: animasi (GIF, gambar) yang disimpan di keyboard tampil tanpa perangkat lunak apa pun, begitu dicolokkan, bahkan di PC lain; kecerahan dapat diatur (tab GIF, `animematrix-ctl memoire`).
 
 **Membuat**
 - **Editor animasi** per bingkai, sesuai geometri asli layar: 3 tingkat, filmstrip, onion skin, geser, salin-tempel, pratinjau, kirim ke keyboard, ekspor GIF.
@@ -125,7 +126,7 @@ Paket ini menginstal:
 | Elemen | Lokasi |
 |---|---|
 | Program | `/usr/share/anticitoyen-rog-flare2-anime-matrix/` |
-| Perintah | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray` |
+| Perintah | `animematrix`, `animematrixd`, `animematrix-ctl`, `animematrix-bascule`, `animematrix-animation`, `animematrix-apercu`, `animematrix-convertir`, `animematrix-effet`, `animematrix-galerie`, `animematrix-horloge`, `animematrix-dessin`, `animematrix-tray`, `animematrix-memoire` |
 | Layanan pengguna | `/usr/lib/systemd/user/animematrixd.service` (diaktifkan untuk semua sesi) |
 | Aturan udev | `/usr/lib/udev/rules.d/72-rog-flare2-animate.rules` |
 | Menu dan ikon | `animematrix.desktop`, ikon `animematrix` |
@@ -175,6 +176,8 @@ animematrix-ctl effet "Text" --param message="Salut" --param direction=haut
 animematrix-ctl liste "Soirée"                     # daftar putar (tanpa nama: tampilkan daftarnya)
 animematrix-ctl favori 2                           # favorit no. 2 (tanpa nomor: tampilkan daftarnya)
 animematrix-ctl notifier "Café prêt" --duree 5     # tampil menimpa lalu kembali
+animematrix-ctl memoire anim.gif                   # disimpan di keyboard (paling banyak 196 bingkai)
+animematrix-ctl clavier                            # menampilkan animasi tersimpan
 animematrix-ctl luminosite 60
 animematrix-ctl stop
 ```

@@ -30,6 +30,7 @@ commande animematrix-effet     rog_flare2_effets.py
 commande animematrix-galerie   rog_flare2_folder_player.py
 commande animematrix-horloge   rog_flare2_clock_v3.py
 commande animematrix-convertir rog_flare2_convertir.py
+commande animematrix-memoire  rog_flare2_memoire.py
 commande animematrix-dessin    rog_flare2_matrix_paint.py
 commande animematrixd          rog_flare2_demon.py
 commande animematrix-ctl       rog_flare2_ctl.py

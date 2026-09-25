@@ -341,5 +341,13 @@
  "Stylisée": "lanceur (source française)",
  "Désactivé": "lanceur (source française)",
  "Quand il est coupé": "lanceur (source française)",
- "Quand une application l'utilise": "lanceur (source française)"
+ "Quand une application l'utilise": "lanceur (source française)",
+ "Mémoire du clavier : l'animation s'affiche sans logiciel, dès le branchement": "lanceur (source française)",
+ "💾 Enregistrer dans le clavier…": "lanceur (source française)",
+ "⌨ Afficher l'animation du clavier": "lanceur (source française)",
+ "Animation du clavier": "lanceur (source française)",
+ "Animation à enregistrer dans le clavier": "lanceur (source française)",
+ "{n} images : le clavier en garde {max} au plus.\n\nOui : retirer une image sur deux (animation entière, moins fluide)\nNon : garder les {max} premières": "lanceur (source française)",
+ "Enregistrement dans le clavier…": "lanceur (source française)",
+ "Enregistré dans le clavier : {name} ({n} images)": "lanceur (source française)"
 }
