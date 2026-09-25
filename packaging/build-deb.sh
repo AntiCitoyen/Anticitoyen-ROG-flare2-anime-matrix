@@ -24,7 +24,7 @@ install -m 755 "$DEPOT/rog_flare2_bascule.sh" "$ROOT$SHARE/rog_flare2_bascule.sh
 install -d "$ROOT$SHARE/locale"
 install -d "$ROOT$SHARE/examples/effets"
 install -m 644 "$DEPOT"/examples/effets/*.py "$ROOT$SHARE/examples/effets/"
-install -m 644 "$DEPOT"/locale/*.json "$ROOT$SHARE/locale/"
+install -m 644 "$DEPOT"/locale/[a-z]*.json "$ROOT$SHARE/locale/"
 install -m 644 "$DEPOT"/polywollywin/{effects.py,renderer.py,LICENSE,ORIGINE.md} "$ROOT$SHARE/polywollywin/"
 
 commande() {  # commande <nom> <script>

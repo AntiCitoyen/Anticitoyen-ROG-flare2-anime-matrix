@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import socket
 import subprocess
 import sys
@@ -54,8 +55,10 @@ def ensure_daemon(wait: float = 4.0) -> bool:
         return True
     except (OSError, DaemonError, ValueError):
         pass
-    if subprocess.run(["systemctl", "--user", "start", "animematrixd.service"],
-                      capture_output=True).returncode != 0:
+    # Service systemd seulement pour le socket standard (pas pour un environnement de test isolé)
+    standard = SOCKET_PATH.parent == Path(f"/run/user/{os.getuid()}")
+    if not standard or subprocess.run(["systemctl", "--user", "start", "animematrixd.service"],
+                                      capture_output=True).returncode != 0:
         subprocess.Popen([sys.executable, str(Path(__file__).with_name("rog_flare2_demon.py"))],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                          start_new_session=True)

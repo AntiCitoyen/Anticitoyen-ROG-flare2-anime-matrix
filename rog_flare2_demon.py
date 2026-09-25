@@ -47,6 +47,23 @@ STATE_FILE = CONFIG_DIR / "demon.json"  # luminosité mémorisée
 BLANK = bytes(PREFIX) + bytes(FRAME_SIZE - len(PREFIX))
 
 
+class FakeTransport:
+    """Clavier factice (ANIMEMATRIX_FAUX_CLAVIER=1) : tests, démonstrations, captures d'écran."""
+
+    def connect(self):
+        return "factice"
+
+    def write(self, frame):
+        return len(frame)
+
+    def close(self):
+        pass
+
+
+if os.environ.get("ANIMEMATRIX_FAUX_CLAVIER"):
+    FlareTransport = FakeTransport  # noqa: F811
+
+
 class Screen:
     """Accès au clavier partagé par les couches ; reconnexion quand il revient."""
 

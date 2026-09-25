@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 DEPOT = Path(__file__).resolve().parent.parent
-CATALOGS = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted((DEPOT / "locale").glob("*.json"))}
+CATALOGS = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted((DEPOT / "locale").glob("[a-z]*.json"))}
 
 
 def entry(key: str, source: str) -> list[str]:
