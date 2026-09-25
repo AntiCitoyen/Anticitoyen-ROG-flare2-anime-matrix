@@ -96,3 +96,43 @@ def test_schedule_window_saves():
     cfg = P.load_config()
     assert saved and cfg["verrouillage"] is True
     assert cfg["regles"] == [{"debut": "21:30", "fin": "12:00", "jours": [0, 1, 2, 3, 4, 5], "contenu": "horloge"}]
+
+
+def test_profile_has_priority_over_rule_then_restores():
+    played, ended = [], []
+    p = P.Programme(played.append, lambda: ended.append(1), lambda *_a: None)
+    p.cfg = {"regles": [{"debut": "00:00", "fin": "23:59", "contenu": "horloge"}],
+             "profils": [{"app": "steam_app", "contenu": "effet:Plasma"}]}
+    now = datetime.datetime(2026, 9, 25, 12, 0)
+    game = {"app": "steam_app_570", "title": "Dota 2", "fullscreen": True}
+    p.tick(now, game)
+    assert played[-1] == {"type": "effet", "name": "Plasma", "params": {}}
+    p.tick(now, game)
+    assert len(played) == 1  # rien de nouveau tant que la fenêtre ne change pas
+    p.tick(now, {"app": "firefox", "title": "x", "fullscreen": False})
+    assert played[-1] == {"type": "horloge"}  # retour à la plage horaire
+    p.cfg["regles"] = []
+    p.tick(now, None)
+    assert ended  # plus rien : lecture manuelle
+
+
+def test_match_profile_by_title():
+    assert P.match_profile([{"app": "Blender"}], {"app": "blender", "title": ""})
+    assert P.match_profile([{"app": "dota"}], {"app": "steam_app_570", "title": "Dota 2"})
+    assert P.match_profile([{"app": ""}], {"app": "x", "title": "y"}) is None
+
+
+def test_schedule_window_saves_profiles():
+    import tkinter as tk
+    from rog_flare2_ui_programme import ScheduleWindow
+    P.save_config({"profils": [{"app": "blender", "contenu": "effet:Plasma"}]})
+    root = tk.Tk()
+    w = ScheduleWindow(root, lambda: None)
+    assert w.profiles[0]["contenu"].get() == "Effet : Plasma"
+    w.add_profile()
+    w.profiles[1]["app"].set("steam_app")
+    w.profiles[1]["contenu"].set("Moniteur système")
+    w.save()
+    root.destroy()
+    assert P.load_config()["profils"] == [{"app": "blender", "contenu": "effet:Plasma"},
+                                          {"app": "steam_app", "contenu": "moniteur"}]

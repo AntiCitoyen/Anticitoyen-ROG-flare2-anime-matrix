@@ -40,7 +40,7 @@ from rog_flare2_core import (  # noqa: F401  (réexportés pour les autres modul
     VERSION, CONFIG_DIR, GALLERY_FILE, MEDIA_EXTENSIONS, STILL_SECONDS, Image, gallery_dir, image_to_frame,
     iter_gif_frames, media_files, pick_version, play_clock, play_file, save_gallery_dir,
 )
-from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, PLUGIN_DIR, PLUGIN_NAMES, effect_class
+from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, PLUGIN_DIR, effect_class, effect_label
 from rog_flare2_jeux import GAMES
 
 GAME_NAMES = {g.name for g in GAMES}
@@ -55,14 +55,6 @@ INTERFACE_FILE = CONFIG_DIR / "interface"
 INTERFACES = {"drawer": "Cadran + tiroir", "dial": "Cadran", "rounded": "Arrondie", "classic": "Classique"}
 # Anciens services (≤ 1.3) qui tenaient le HID eux-mêmes : arrêtés pour laisser la place au démon
 LEGACY_SERVICES = ("animematrix-galerie.service", "animematrix-horloge.service", "animematrix-lecture.service")
-
-
-def effect_label(name: str) -> str:
-    """Nom affiché d'un effet : traduction du catalogue, ou noms fournis par l'extension."""
-    names = PLUGIN_NAMES.get(name)
-    if names:
-        return names.get(LANG) or names.get("en") or name
-    return _(name)
 
 
 def interface_saved() -> str:

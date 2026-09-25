@@ -253,7 +253,6 @@ class Daemon:
             SHOW_FILE.write_text(json.dumps(show, ensure_ascii=False, indent=1), encoding="utf-8")
 
     def _play_rule(self, show: dict | None):
-        self.manual = self.show
         if show is None:
             self.stop(manual=False)
         else:

@@ -195,6 +195,15 @@ def param_value(spec: dict, raw):
     return float(raw) / float(spec.get("scale", 1.0))
 
 
+def effect_label(name: str) -> str:
+    """Nom affiché d'un effet : traduction du catalogue, ou noms fournis par l'extension."""
+    from rog_flare2_i18n import LANG, _
+    names = PLUGIN_NAMES.get(name)
+    if names:
+        return names.get(LANG) or names.get("en") or name
+    return _(name)
+
+
 def make_effect(name: str, raw_values: dict | None = None) -> pww.BaseEffect:
     cls = effect_class(name)
     effect = cls()

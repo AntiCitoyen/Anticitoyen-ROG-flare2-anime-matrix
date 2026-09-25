@@ -1,4 +1,4 @@
-"""Fenêtre « Programmation » du lanceur : plages horaires et déclencheurs (rog_flare2_programme)."""
+"""Fenêtre « Programmation » du lanceur : déclencheurs, profils par application et plages horaires."""
 from __future__ import annotations
 
 import re
@@ -13,6 +13,21 @@ CONTENT_LABELS = {  # contenu -> texte source déjà traduit ailleurs dans l'int
     "eteint": "Écran éteint",
 }
 HHMM = re.compile(r"^([01]?\d|2[0-3]):[0-5]\d$")
+
+
+def content_choices() -> dict[str, str]:
+    """Libellé affiché -> contenu : contenus de base, listes de lecture, puis chaque effet."""
+    from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_label
+    choices = {_(src): key for key, src in CONTENT_LABELS.items()}
+    try:
+        from rog_flare2_listes import load_lists
+        for name in load_lists():
+            choices[_("Liste : {nom}").format(nom=name)] = f"liste:{name}"
+    except ImportError:
+        pass
+    for name in [*EFFECTS, *AUDIO_EFFECTS]:
+        choices.setdefault(_("Effet : {nom}").format(nom=effect_label(name)), f"effet:{name}")
+    return choices
 
 
 class ScheduleWindow:
@@ -31,12 +46,23 @@ class ScheduleWindow:
             var = tk.BooleanVar(value=bool(cfg.get(key)))
             ttk.Checkbutton(body, text=_(text), variable=var).pack(anchor="w")
             self.triggers[key] = var
+        self.labels = content_choices()
+        self.keys = {v: k for k, v in self.labels.items()}
+        ttk.Separator(body).pack(fill="x", pady=10)
+        ttk.Label(body, text=_("Profils par application (prioritaires) :")).pack(anchor="w")
+        self.profiles_frame = ttk.Frame(body)
+        self.profiles_frame.pack(fill="x", pady=4)
+        self.profiles: list[dict] = []
+        for profile in cfg.get("profils", []):
+            self.add_profile(profile)
+        ttk.Button(body, text=_("+ Ajouter un profil"), command=self.add_profile).pack(anchor="w", pady=(2, 0))
+        ttk.Label(body, text=_("Texte contenu dans le nom ou le titre de la fenêtre ; « Détecter » lit la fenêtre "
+                               "active au bout de 3 secondes."), style="Muted.TLabel", wraplength=520).pack(anchor="w")
         ttk.Separator(body).pack(fill="x", pady=10)
         ttk.Label(body, text=_("Plages horaires :")).pack(anchor="w")
         self.rows_frame = ttk.Frame(body)
         self.rows_frame.pack(fill="x", pady=4)
         self.days = [d.strip() for d in _("Lu,Ma,Me,Je,Ve,Sa,Di").split(",")][:7]
-        self.labels = {_(src): key for key, src in CONTENT_LABELS.items()}
         self.rows: list[dict] = []
         for rule in cfg.get("regles", []):
             self.add_row(rule)
@@ -51,7 +77,7 @@ class ScheduleWindow:
         f.pack(fill="x", pady=2)
         row = {"frame": f, "debut": tk.StringVar(value=rule["debut"]), "fin": tk.StringVar(value=rule["fin"]),
                "jours": [tk.BooleanVar(value=d in rule.get("jours", range(7))) for d in range(7)],
-               "contenu": tk.StringVar(value=_(CONTENT_LABELS.get(rule.get("contenu"), "Horloge")))}
+               "contenu": tk.StringVar(value=self.keys.get(rule.get("contenu"), _("Horloge")))}
         ttk.Entry(f, textvariable=row["debut"], width=6).pack(side="left")
         ttk.Label(f, text="→").pack(side="left", padx=2)
         ttk.Entry(f, textvariable=row["fin"], width=6).pack(side="left")
@@ -61,6 +87,35 @@ class ScheduleWindow:
                      width=16).pack(side="left", padx=4)
         ttk.Button(f, text="✕", width=3, command=lambda: self.remove_row(row)).pack(side="left")
         self.rows.append(row)
+
+    def add_profile(self, profile: dict | None = None):
+        profile = profile or {"app": "", "contenu": "moniteur"}
+        f = ttk.Frame(self.profiles_frame)
+        f.pack(fill="x", pady=2)
+        row = {"frame": f, "app": tk.StringVar(value=profile.get("app", "")),
+               "contenu": tk.StringVar(value=self.keys.get(profile.get("contenu"), _("Horloge")))}
+        ttk.Entry(f, textvariable=row["app"], width=20).pack(side="left")
+        detect = ttk.Button(f, text=_("Détecter"))
+        detect.configure(command=lambda: self.detect(row, detect, 3))
+        detect.pack(side="left", padx=4)
+        ttk.Combobox(f, textvariable=row["contenu"], values=list(self.labels), state="readonly",
+                     width=24).pack(side="left", padx=4)
+        ttk.Button(f, text="✕", width=3, command=lambda: (f.destroy(), self.profiles.remove(row))).pack(side="left")
+        self.profiles.append(row)
+
+    def detect(self, row: dict, button, left: int):
+        """Compte à rebours, puis classe de la fenêtre active (le temps d'y cliquer)."""
+        if left > 0:
+            button.configure(text=str(left))
+            self.win.after(1000, lambda: self.detect(row, button, left - 1))
+            return
+        from rog_flare2_fenetre import active_window
+        w = active_window()
+        button.configure(text=_("Détecter"))
+        if w:
+            row["app"].set(w["app"])
+        else:
+            self.status.config(text=_("Fenêtre active introuvable dans cette session"))
 
     def remove_row(self, row: dict):
         row["frame"].destroy()
@@ -75,7 +130,9 @@ class ScheduleWindow:
                 return
             rules.append({"debut": debut, "fin": fin, "jours": [d for d, v in enumerate(row["jours"]) if v.get()],
                           "contenu": self.labels.get(row["contenu"].get(), "horloge")})
-        cfg = {"regles": rules, **{k: bool(v.get()) for k, v in self.triggers.items()}}
+        profiles = [{"app": r["app"].get().strip(), "contenu": self.labels.get(r["contenu"].get(), "horloge")}
+                    for r in self.profiles if r["app"].get().strip()]
+        cfg = {"regles": rules, "profils": profiles, **{k: bool(v.get()) for k, v in self.triggers.items()}}
         prog.save_config(cfg)
         self.on_saved()
         self.status.config(text=_("Programmation enregistrée"))
