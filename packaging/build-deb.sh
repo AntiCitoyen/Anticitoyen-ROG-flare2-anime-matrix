@@ -18,7 +18,7 @@ install -d "$ROOT/DEBIAN" "$ROOT/usr/bin" "$ROOT$SHARE/polywollywin" "$ROOT/usr/
 for f in rog_flare2_launcher.py rog_flare2_matrix_paint.py rog_flare2_clock_v3.py rog_flare2_convertir.py \
          rog_flare2_folder_player.py rog_flare2_effets.py rog_flare2_i18n.py rog_flare2_themes.py \
          rog_flare2_ui_ronde.py rog_flare2_maj.py rog_flare2_core.py rog_flare2_demon.py rog_flare2_ctl.py \
-         rog_flare2_infos.py rog_flare2_mpris.py rog_flare2_notifs.py rog_flare2_jeux.py; do
+         rog_flare2_infos.py rog_flare2_mpris.py rog_flare2_notifs.py rog_flare2_jeux.py rog_flare2_openrgb.py; do
     install -m 644 "$DEPOT/$f" "$ROOT$SHARE/$f"
 done
 install -m 755 "$DEPOT/rog_flare2_bascule.sh" "$ROOT$SHARE/rog_flare2_bascule.sh"

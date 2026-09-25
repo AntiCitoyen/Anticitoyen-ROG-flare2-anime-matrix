@@ -136,7 +136,9 @@ class Daemon:
         self.lock = threading.RLock()
         self.server = None  # serveur du socket (commande quit)
         from rog_flare2_notifs import NotificationWatcher
+        from rog_flare2_openrgb import KeyboardSync
         self.notifs = NotificationWatcher(lambda text: self.notify(text, 0))
+        self.rgb = KeyboardSync(self._screen_level, self._accent)
 
     # ---------- état ----------
     @staticmethod
@@ -149,6 +151,16 @@ class Daemon:
     def _save_state(self):
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         STATE_FILE.write_text(json.dumps(self.state))
+
+    def _screen_level(self) -> float:
+        """Luminosité moyenne de l'écran (0-1), pour la pulsation des touches."""
+        leds = self.screen.last[FB_OFFSET:FB_OFFSET + LED_COUNT]
+        return min(1.0, 3 * sum(leds) / (255 * LED_COUNT))  # ×3 : un écran « plein » n'allume qu'une partie des LED
+
+    @staticmethod
+    def _accent() -> str:
+        import rog_flare2_themes as themes
+        return themes.palette()["accent"]
 
     def brightness(self) -> int:
         return int(self.state.get("brightness", 60))
@@ -258,6 +270,7 @@ class Daemon:
             return {"ok": True, "version": VERSION}
         if cmd == "status":
             return {"ok": True, "version": VERSION, "show": self.show, "brightness": self.brightness(),
+                    "openrgb": self.rgb.status,
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
                     "overlay": self.screen.overlay_active}
         if cmd == "play":
@@ -294,6 +307,8 @@ class Daemon:
             return {"ok": True}
         if cmd == "config":  # réglages relus (notifications du bureau)
             from rog_flare2_notifs import load_config
+            from rog_flare2_openrgb import load_config as rgb_config
+            self.rgb.start(rgb_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
@@ -419,12 +434,15 @@ def main():
     signal.signal(signal.SIGINT, shutdown)
     daemon.start_mode()
     from rog_flare2_notifs import load_config
+    from rog_flare2_openrgb import load_config as rgb_config
     daemon.notifs.start(load_config())
+    daemon.rgb.start(rgb_config())
     try:
         server.serve_forever()
     finally:
         daemon.stop_event.set()
         daemon.notifs.stop()
+        daemon.rgb.stop()
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

@@ -193,5 +193,9 @@
  "Pong (game)": "jeux jouables (noms dans la liste des effets, aide sous la liste)",
  "Tetris (game)": "jeux jouables (noms dans la liste des effets, aide sous la liste)",
  "Breakout (game)": "jeux jouables (noms dans la liste des effets, aide sous la liste)",
- "Jeux : flèches et Espace, Entrée pour rejouer (fenêtre au premier plan)": "jeux jouables (noms dans la liste des effets, aide sous la liste)"
+ "Jeux : flèches et Espace, Entrée pour rejouer (fenêtre au premier plan)": "jeux jouables (noms dans la liste des effets, aide sous la liste)",
+ "Couleurs du clavier (OpenRGB) :": "Réglages : synchronisation des couleurs des touches via OpenRGB",
+ "Désactivées": "Réglages : synchronisation des couleurs des touches via OpenRGB",
+ "Couleur du thème": "Réglages : synchronisation des couleurs des touches via OpenRGB",
+ "Pulsation avec l'écran": "Réglages : synchronisation des couleurs des touches via OpenRGB"
 }
