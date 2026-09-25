@@ -1,0 +1,106 @@
+name: Release packages
+
+# When a release is published (with its .deb attached), build the other package
+# formats, attach them to the release and update the APT repository (gh-pages).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.4.0)"
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  TAG: ${{ github.event.release.tag_name || inputs.tag }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  rpm:
+    runs-on: ubuntu-24.04
+    container: fedora:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Build RPM
+        run: |
+          dnf install -y rpm-build python3 gh
+          V="${TAG#v}"
+          mkdir -p ~/rpmbuild/SOURCES ~/rpmbuild/SPECS
+          git config --global --add safe.directory "$PWD"
+          git archive --prefix="Anticitoyen-ROG-flare2-anime-matrix-$V/" -o ~/rpmbuild/SOURCES/Anticitoyen-ROG-flare2-anime-matrix-$V.tar.gz HEAD
+          sed "s/@VERSION@/$V/" packaging/rpm/anticitoyen-rog-flare2-anime-matrix.spec > ~/rpmbuild/SPECS/animematrix.spec
+          rpmbuild -bb ~/rpmbuild/SPECS/animematrix.spec
+          gh release upload "$TAG" ~/rpmbuild/RPMS/noarch/*.rpm --clobber --repo "$GITHUB_REPOSITORY"
+
+  arch:
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Build Arch package
+        run: |
+          pacman -Syu --noconfirm base-devel python github-cli git
+          V="${TAG#v}"
+          useradd -m builder
+          mkdir /home/builder/pkg
+          sed "s/@VERSION@/$V/" packaging/aur/PKGBUILD > /home/builder/pkg/PKGBUILD
+          cp packaging/aur/animematrix.install /home/builder/pkg/
+          chown -R builder /home/builder/pkg
+          su builder -c "cd /home/builder/pkg && makepkg --nodeps --noconfirm && makepkg --printsrcinfo > .SRCINFO"
+          gh release upload "$TAG" /home/builder/pkg/*.pkg.tar.zst --clobber --repo "$GITHUB_REPOSITORY"
+
+  flatpak:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Build Flatpak bundle
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y flathub org.gnome.Platform//47 org.gnome.Sdk//47
+          flatpak-builder --user --force-clean --repo=repo build packaging/flatpak/io.github.anticitoyen.AniMeMatrix.yml
+          flatpak build-bundle repo "AniMeMatrix-${TAG#v}.flatpak" io.github.anticitoyen.AniMeMatrix
+          gh release upload "$TAG" AniMeMatrix-*.flatpak --clobber --repo "$GITHUB_REPOSITORY"
+
+  apt:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Get the release .deb
+        run: gh release download "$TAG" --pattern '*_all.deb' --dir dist --repo "$GITHUB_REPOSITORY"
+      - name: Update the APT repository (gh-pages)
+        env:
+          APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+        run: |
+          git fetch origin gh-pages || true
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            git worktree add pages origin/gh-pages
+          else
+            git worktree add --detach pages && (cd pages && git checkout --orphan gh-pages && git rm -rfq .)
+          fi
+          KEY=""
+          if [ -n "$APT_GPG_PRIVATE_KEY" ]; then
+            echo "$APT_GPG_PRIVATE_KEY" | gpg --batch --import
+            KEY=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')
+          fi
+          packaging/apt/publier-depot.sh pages dist/*_all.deb $KEY
+          cp packaging/apt/index.html pages/index.html
+          touch pages/.nojekyll
+          cd pages
+          git config user.name "AntiCitoyen"
+          git config user.email "anticitoyen@users.noreply.gitlab.com"
+          git add -A
+          git commit -m "APT repository: $TAG" || exit 0
+          git push origin HEAD:gh-pages

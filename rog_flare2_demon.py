@@ -68,7 +68,9 @@ class Screen:
     """Accès au clavier partagé par les couches ; reconnexion quand il revient."""
 
     def __init__(self):
-        self.transport = FlareTransport()
+        from rog_flare2_portable import AsusctlTransport, hardware
+        # Clavier ROG Strix Flare II Animate, ou (expérimental) écran d'un portable ROG via asusctl
+        self.transport = AsusctlTransport(RUNTIME) if hardware() == "portable-asusctl" else FlareTransport()
         self.lock = threading.Lock()
         self.connected = False
         self.released = False  # rendu à un autre programme (éditeur de dessin)
