@@ -82,6 +82,17 @@ def _value(text: str):
             return text
 
 
+def end_message(code: int, seconds: int, command: str) -> str:
+    """« Terminé : make 2 min 05 » ou « Échec (2) : make … »."""
+    from rog_flare2_i18n import _
+    word = command.split()[0].rsplit("/", 1)[-1] if command.split() else "?"
+    m, s = divmod(max(0, seconds), 60)
+    h, m = divmod(m, 60)
+    took = f"{h} h {m:02d}" if h else f"{m} min {s:02d}" if m else f"{s} s"
+    head = _("Terminé") if code == 0 else _("Échec ({code})").format(code=code)
+    return f"{head} : {word} {took}"
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="animematrix-ctl", description="Commande le démon AniMe Matrix.")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -105,6 +116,10 @@ def main(argv=None):
     n = sub.add_parser("notifier")
     n.add_argument("message")
     n.add_argument("--duree", type=float, default=6)
+    f = sub.add_parser("fin", help="fin d'une commande longue (shell/animematrix-fin.sh)")
+    f.add_argument("code", type=int)
+    f.add_argument("secondes", type=int)
+    f.add_argument("commande", nargs="+")
     b = sub.add_parser("luminosite")
     b.add_argument("valeur", type=int)
     sub.add_parser("stop")
@@ -153,6 +168,9 @@ def main(argv=None):
         show = json.loads(SHOW_FILE.read_text(encoding="utf-8"))
     elif args.cmd == "notifier":
         request("notify", text=args.message, duration=args.duree)
+        return
+    elif args.cmd == "fin":
+        request("notify", text=end_message(args.code, args.secondes, " ".join(args.commande)), duration=0)
         return
     elif args.cmd == "quitter":
         request("quit")

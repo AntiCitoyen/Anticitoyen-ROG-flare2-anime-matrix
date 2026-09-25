@@ -345,6 +345,10 @@ class LauncherApp(tk.Tk):
         self.tray_var = tk.BooleanVar(value=tray.AUTOSTART.exists())
         ttk.Checkbutton(tab, text=_("Icône dans la barre système"), variable=self.tray_var,
                         command=self._toggle_tray).pack(anchor="w", pady=(4, 0))
+        import rog_flare2_fin as fin
+        self.fin_var = tk.BooleanVar(value=fin.enabled())
+        ttk.Checkbutton(tab, text=_("Afficher la fin des commandes longues (terminal)"), variable=self.fin_var,
+                        command=lambda: fin.set_enabled(self.fin_var.get())).pack(anchor="w", pady=(2, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
