@@ -300,7 +300,7 @@ packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-`packaging/install.sh`는 프로젝트를 임의의 디렉터리 구조에 설치하며, .deb, RPM(`packaging/rpm/`), Arch 패키지(`packaging/aur/`), Flatpak(`packaging/flatpak/`)에 공통으로 사용됩니다. 릴리스가 게시될 때마다 GitHub가 RPM, Arch 패키지, Flatpak을 빌드하고 서명된 APT 저장소를 업데이트합니다. 버전은 `rog_flare2_core.py`(`VERSION`)에서 읽어옵니다. 테스트: `python -m pytest tests`.
+`packaging/install.sh`는 프로젝트를 임의의 디렉터리 구조에 설치하며, .deb, RPM(`packaging/rpm/`), Arch 패키지(`packaging/aur/`), Flatpak(`packaging/flathub/`)에 공통으로 사용됩니다. 릴리스가 게시될 때마다 GitHub가 RPM, Arch 패키지, Flatpak을 빌드하고 서명된 APT 저장소를 업데이트합니다. 버전은 `rog_flare2_core.py`(`VERSION`)에서 읽어옵니다. 테스트: `python -m pytest tests`.
 
 <a id="credits"></a>
 

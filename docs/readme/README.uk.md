@@ -300,7 +300,7 @@ packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-`packaging/install.sh` встановлює проєкт у будь-яку структуру каталогів; він використовується для .deb, RPM (`packaging/rpm/`), пакета Arch (`packaging/aur/`) і Flatpak (`packaging/flatpak/`). При кожному опублікованому релізі GitHub збирає RPM, пакет Arch і Flatpak, а також оновлює підписаний репозиторій APT. Версія зчитується з `rog_flare2_core.py` (`VERSION`). Тести: `python -m pytest tests`.
+`packaging/install.sh` встановлює проєкт у будь-яку структуру каталогів; він використовується для .deb, RPM (`packaging/rpm/`), пакета Arch (`packaging/aur/`) і Flatpak (`packaging/flathub/`). При кожному опублікованому релізі GitHub збирає RPM, пакет Arch і Flatpak, а також оновлює підписаний репозиторій APT. Версія зчитується з `rog_flare2_core.py` (`VERSION`). Тести: `python -m pytest tests`.
 
 <a id="credits"></a>
 

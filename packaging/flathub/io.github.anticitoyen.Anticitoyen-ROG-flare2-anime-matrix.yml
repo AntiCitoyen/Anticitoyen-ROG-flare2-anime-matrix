@@ -1,5 +1,5 @@
 # Manifeste Flathub (construit sans réseau) ; python3-modules.json : généré par .github/workflows/flathub.yml
-id: io.github.anticitoyen.AniMeMatrix
+id: io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix
 runtime: org.gnome.Platform
 runtime-version: "51"
 sdk: org.gnome.Sdk
@@ -22,11 +22,11 @@ modules:
     buildsystem: simple
     build-commands:
       - packaging/install.sh / /app /usr/bin/python3
-      - install -Dm644 packaging/flathub/io.github.anticitoyen.AniMeMatrix.metainfo.xml
-        /app/share/metainfo/io.github.anticitoyen.AniMeMatrix.metainfo.xml
-      - mv /app/share/applications/animematrix.desktop /app/share/applications/io.github.anticitoyen.AniMeMatrix.desktop
-      - sed -i 's/^Icon=animematrix$/Icon=io.github.anticitoyen.AniMeMatrix/' /app/share/applications/io.github.anticitoyen.AniMeMatrix.desktop
-      - mv /app/share/icons/hicolor/scalable/apps/animematrix.svg /app/share/icons/hicolor/scalable/apps/io.github.anticitoyen.AniMeMatrix.svg
+      - install -Dm644 packaging/flathub/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.metainfo.xml
+        /app/share/metainfo/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.metainfo.xml
+      - mv /app/share/applications/animematrix.desktop /app/share/applications/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.desktop
+      - sed -i 's/^Icon=animematrix$/Icon=io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix/' /app/share/applications/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.desktop
+      - mv /app/share/icons/hicolor/scalable/apps/animematrix.svg /app/share/icons/hicolor/scalable/apps/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.svg
       - rm -rf /app/lib/systemd /app/lib/udev  # sans effet dans le bac à sable (règle udev : sur l'hôte)
     sources:
       - type: dir

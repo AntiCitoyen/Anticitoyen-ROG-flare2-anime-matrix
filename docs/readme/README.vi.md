@@ -300,7 +300,7 @@ packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-`packaging/install.sh` cài đặt dự án vào bất kỳ cấu trúc thư mục nào; nó được dùng cho .deb, RPM (`packaging/rpm/`), gói Arch (`packaging/aur/`) và Flatpak (`packaging/flatpak/`). Mỗi khi có bản phát hành mới, GitHub sẽ tự động xây dựng RPM, gói Arch và Flatpak, đồng thời cập nhật kho APT đã ký. Số phiên bản được đọc từ `rog_flare2_core.py` (`VERSION`). Kiểm thử: `python -m pytest tests`.
+`packaging/install.sh` cài đặt dự án vào bất kỳ cấu trúc thư mục nào; nó được dùng cho .deb, RPM (`packaging/rpm/`), gói Arch (`packaging/aur/`) và Flatpak (`packaging/flathub/`). Mỗi khi có bản phát hành mới, GitHub sẽ tự động xây dựng RPM, gói Arch và Flatpak, đồng thời cập nhật kho APT đã ký. Số phiên bản được đọc từ `rog_flare2_core.py` (`VERSION`). Kiểm thử: `python -m pytest tests`.
 
 <a id="credits"></a>
 

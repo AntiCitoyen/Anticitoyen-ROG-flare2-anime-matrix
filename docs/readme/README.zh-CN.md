@@ -300,7 +300,7 @@ packaging/build-deb.sh
 # → dist/anticitoyen-rog-flare2-anime-matrix_<version>_all.deb
 ```
 
-`packaging/install.sh` 可将本项目安装到任意目录树中；.deb、RPM（`packaging/rpm/`）、Arch 软件包（`packaging/aur/`）与 Flatpak（`packaging/flatpak/`）均使用该脚本。每次发布新 release 时，GitHub 都会自动构建 RPM、Arch 软件包与 Flatpak，并更新已签名的 APT 仓库。版本号读取自 `rog_flare2_core.py`（`VERSION`）。测试：`python -m pytest tests`。
+`packaging/install.sh` 可将本项目安装到任意目录树中；.deb、RPM（`packaging/rpm/`）、Arch 软件包（`packaging/aur/`）与 Flatpak（`packaging/flathub/`）均使用该脚本。每次发布新 release 时，GitHub 都会自动构建 RPM、Arch 软件包与 Flatpak，并更新已签名的 APT 仓库。版本号读取自 `rog_flare2_core.py`（`VERSION`）。测试：`python -m pytest tests`。
 
 <a id="credits"></a>
 

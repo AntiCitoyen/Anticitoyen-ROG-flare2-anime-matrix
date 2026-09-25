@@ -36,13 +36,13 @@ jobs:
         run: |
           # copie à la racine : en mode --sandbox, les sources doivent être dans le dossier du manifeste
           sed -e 's#path: \.\./\.\.#path: .#' -e 's#^  - python3-modules.json#  - packaging/flathub/python3-modules.json#' \
-            packaging/flathub/io.github.anticitoyen.AniMeMatrix.yml > io.github.anticitoyen.AniMeMatrix.yml
-          flatpak-builder --user --force-clean --sandbox --repo=repo build io.github.anticitoyen.AniMeMatrix.yml
-          flatpak build-bundle repo AniMeMatrix-flathub.flatpak io.github.anticitoyen.AniMeMatrix
+            packaging/flathub/io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.yml > io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.yml
+          flatpak-builder --user --force-clean --sandbox --repo=repo build io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.yml
+          flatpak build-bundle repo AniMeMatrix-flathub.flatpak io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix
       - name: Lint (manifest, metainfo, build)
         run: |
           flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest \
-            io.github.anticitoyen.AniMeMatrix.yml | tee lint-manifest.txt || true
+            io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix.yml | tee lint-manifest.txt || true
           flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo | tee lint-repo.txt || true
       - uses: actions/upload-artifact@v4
         with:
