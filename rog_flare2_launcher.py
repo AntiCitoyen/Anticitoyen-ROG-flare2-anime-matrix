@@ -37,7 +37,7 @@ from rog_flare2_core import (  # noqa: F401  (réexportés pour les autres modul
     VERSION, CONFIG_DIR, GALLERY_FILE, MEDIA_EXTENSIONS, STILL_SECONDS, Image, gallery_dir, image_to_frame,
     iter_gif_frames, media_files, pick_version, play_clock, play_file, save_gallery_dir,
 )
-from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, effect_class
+from rog_flare2_effets import AUDIO_EFFECTS, EFFECTS, PLUGIN_DIR, PLUGIN_NAMES, effect_class
 
 
 PROJECT_URL = "https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix"
@@ -49,6 +49,14 @@ INTERFACE_FILE = CONFIG_DIR / "interface"
 INTERFACES = {"drawer": "Cadran + tiroir", "dial": "Cadran", "rounded": "Arrondie", "classic": "Classique"}
 # Anciens services (≤ 1.3) qui tenaient le HID eux-mêmes : arrêtés pour laisser la place au démon
 LEGACY_SERVICES = ("animematrix-galerie.service", "animematrix-horloge.service", "animematrix-lecture.service")
+
+
+def effect_label(name: str) -> str:
+    """Nom affiché d'un effet : traduction du catalogue, ou noms fournis par l'extension."""
+    names = PLUGIN_NAMES.get(name)
+    if names:
+        return names.get(LANG) or names.get("en") or name
+    return _(name)
 
 
 def interface_saved() -> str:
@@ -197,8 +205,8 @@ class LauncherApp(tk.Tk):
         """Bloc d'effets PolyWollyWin : choix, réglages de l'effet (PARAMS), cadence, lancement."""
         tab = ttk.Frame(parent, padding=padding)
         # Noms internes (anglais, PolyWollyWin) <-> noms affichés (traduits)
-        panel = {"labels": {_(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
-        panel["name"] = tk.StringVar(value=_(default))
+        panel = {"labels": {effect_label(n): n for n in names}, "values": {}, "speed": tk.DoubleVar(value=1.0)}
+        panel["name"] = tk.StringVar(value=effect_label(default))
         panel["speed"].trace_add("write", lambda *_a: self._speed_changed(panel))
         cb = ttk.Combobox(tab, textvariable=panel["name"], values=list(panel["labels"]), state="readonly")
         cb.pack(fill="x", pady=(0, 8))
@@ -294,6 +302,8 @@ class LauncherApp(tk.Tk):
                   style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w")
         ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
                    command=self.open_paint_editor).pack(fill="x", pady=(12, 0))
+        ttk.Button(tab, text=_("Dossier des extensions (effets)"),
+                   command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
 
         ttk.Separator(tab, orient="horizontal").pack(fill="x", pady=12)
         ttk.Label(tab, text=_("AniMe Matrix pour Linux {version}").format(version=VERSION)).pack()
@@ -484,7 +494,7 @@ class LauncherApp(tk.Tk):
         show = {"type": "effet", "name": name, "params": {a: v.get() for a, v in panel["values"].items()},
                 "speed": float(panel["speed"].get())}
         self.show_panel = panel
-        self._play(show, _("Effet : {name}").format(name=_(name)))
+        self._play(show, _("Effet : {name}").format(name=effect_label(name)))
 
     def _speed_changed(self, panel: dict):
         if self.show and self.show.get("type") == "effet" and self.show_panel is panel:
@@ -592,6 +602,15 @@ class LauncherApp(tk.Tk):
             return
         save_language(code)
         self.restart()
+
+    def open_plugin_dir(self):
+        """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""
+        PLUGIN_DIR.mkdir(parents=True, exist_ok=True)
+        here = Path(__file__).parent
+        example = here / "examples" / "effets" / "battement_coeur.py"
+        if not any(PLUGIN_DIR.glob("*.py")) and example.exists():
+            (PLUGIN_DIR / "battement_coeur.py.exemple").write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
+        subprocess.Popen(["xdg-open", str(PLUGIN_DIR)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def open_paint_editor(self):
         self._send("release")  # l'éditeur écrit lui-même ; il rend la main au démon en fermant

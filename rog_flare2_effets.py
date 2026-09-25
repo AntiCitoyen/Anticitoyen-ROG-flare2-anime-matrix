@@ -18,6 +18,7 @@ sont remplacées ici :
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 import threading
@@ -107,6 +108,37 @@ pww._SHARED_AUDIO_CAPTURE = AUDIO  # lu en global par les effets audio à chaque
 
 EFFECTS: dict[str, type[pww.BaseEffect]] = {cls.name: cls for cls in pww.ALL_EFFECTS}
 AUDIO_EFFECTS: dict[str, type[pww.BaseEffect]] = dict(pww.AUDIO_VISUALIZERS)
+
+# Extensions : tout fichier .py de ce dossier peut définir des effets (sous-classes de BaseEffect
+# avec un attribut name). Voir docs/EXTENSIONS.md et examples/effets/.
+PLUGIN_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "rog-flare2" / "effets"
+PLUGIN_ERRORS: dict[str, str] = {}  # fichier -> erreur de chargement
+PLUGIN_NAMES: dict[str, dict[str, str]] = {}  # nom interne -> noms traduits fournis par l'extension
+
+
+def load_plugins(folder: Path = PLUGIN_DIR) -> list[str]:
+    """Charge les extensions ; renvoie les noms des effets ajoutés. Une extension en erreur est ignorée."""
+    import importlib.util
+    added = []
+    for path in sorted(folder.glob("*.py")) if folder.is_dir() else []:
+        try:
+            spec = importlib.util.spec_from_file_location(f"animematrix_ext_{path.stem}", path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+        except Exception as exc:  # code tiers : rien ne doit faire tomber le lanceur ni le démon
+            PLUGIN_ERRORS[path.name] = f"{type(exc).__name__}: {exc}"
+            continue
+        for obj in vars(module).values():
+            if (isinstance(obj, type) and issubclass(obj, pww.BaseEffect) and obj.__module__ == module.__name__
+                    and getattr(obj, "name", "")):
+                target = AUDIO_EFFECTS if issubclass(obj, pww.AudioVisualizer) else EFFECTS
+                target[obj.name] = obj
+                PLUGIN_NAMES[obj.name] = dict(getattr(obj, "noms", {}) or {})
+                added.append(obj.name)
+    return added
+
+
+load_plugins()
 
 
 def effect_class(name: str) -> type[pww.BaseEffect]:

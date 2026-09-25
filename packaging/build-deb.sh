@@ -22,6 +22,8 @@ for f in rog_flare2_launcher.py rog_flare2_matrix_paint.py rog_flare2_clock_v3.p
 done
 install -m 755 "$DEPOT/rog_flare2_bascule.sh" "$ROOT$SHARE/rog_flare2_bascule.sh"
 install -d "$ROOT$SHARE/locale"
+install -d "$ROOT$SHARE/examples/effets"
+install -m 644 "$DEPOT"/examples/effets/*.py "$ROOT$SHARE/examples/effets/"
 install -m 644 "$DEPOT"/locale/*.json "$ROOT$SHARE/locale/"
 install -m 644 "$DEPOT"/polywollywin/{effects.py,renderer.py,LICENSE,ORIGINE.md} "$ROOT$SHARE/polywollywin/"
 
@@ -45,7 +47,7 @@ install -m 644 "$DEPOT/packaging/72-rog-flare2-animate.rules" "$ROOT/usr/lib/ude
 install -m 644 "$DEPOT/packaging/animematrix.desktop" "$ROOT/usr/share/applications/"
 install -m 644 "$DEPOT/packaging/animematrix.svg" "$ROOT/usr/share/icons/hicolor/scalable/apps/"
 install -m 644 "$DEPOT/packaging/copyright" "$ROOT/usr/share/doc/$PKG/copyright"
-install -m 644 "$DEPOT/README.md" "$DEPOT/docs/GUIDE-GIF.md" "$DEPOT/docs/PROTOCOL.md" "$ROOT/usr/share/doc/$PKG/"
+install -m 644 "$DEPOT/README.md" "$DEPOT/docs/GUIDE-GIF.md" "$DEPOT/docs/PROTOCOL.md" "$DEPOT/docs/EXTENSIONS.md" "$ROOT/usr/share/doc/$PKG/"
 sed "s/@VERSION@/$VERSION/; s/@DATE@/$(date -R)/" "$DEPOT/packaging/changelog" | gzip -9n \
     > "$ROOT/usr/share/doc/$PKG/changelog.gz"
 
