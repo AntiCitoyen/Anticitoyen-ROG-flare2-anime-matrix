@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Two more software modes: *Screen image* (the keys mirror the screen, enlarged) and *Audio spectrum* (one bar per column). Each time slot and each application profile can also pick its key colours (*Schedule…*). *Key by key*: one colour per key, painted with the mouse on a keyboard map (AZERTY or QWERTY). *Typing glow*: each key you press lights up, then fades. The mic, webcam and OBS status lights can also light F1, F2 and F3, and each notification makes the keys flash.
 
+<p align="center"><img src="../captures/en/couleurs.png" alt="🌈" width="330"> <img src="../captures/en/touches.png" alt="⌨" width="620"></p>
+
 ### ROG laptops (experimental)
 
 Write `portable-asusctl` in `~/.config/rog-flare2/materiel` then restart the daemon: frames go through `asusctl anime image` (5 frames per second at most). Not tested on an actual laptop: feedback welcome in the issues.

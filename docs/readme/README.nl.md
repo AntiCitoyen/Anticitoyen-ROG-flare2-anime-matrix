@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*). *Toets voor toets*: één kleur per toets, met de muis geschilderd op een toetsenbordkaart (AZERTY of QWERTY). *Oplichtende aanslagen*: elke ingedrukte toets licht op en vervaagt daarna. De indicatoren voor microfoon, webcam en OBS kunnen ook F1, F2 en F3 laten oplichten, en elke melding laat de toetsen flitsen.
 
+<p align="center"><img src="../captures/nl/couleurs.png" alt="🌈" width="330"> <img src="../captures/nl/touches.png" alt="⌨" width="620"></p>
+
 ### ROG-laptops (experimenteel)
 
 Schrijf `portable-asusctl` in `~/.config/rog-flare2/materiel` en herstart daarna de daemon: de frames verlopen via `asusctl anime image` (maximaal 5 beelden per seconde). Niet getest op een echte laptop: feedback is welkom in de tickets.

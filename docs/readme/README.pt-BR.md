@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*). *Tecla por tecla*: uma cor por tecla, pintada com o mouse em um mapa do teclado (AZERTY ou QWERTY). *Digitação luminosa*: cada tecla pressionada acende e depois se apaga. Os indicadores de microfone, webcam e OBS também podem acender F1, F2 e F3, e cada notificação faz as teclas piscarem.
 
+<p align="center"><img src="../captures/pt-BR/couleurs.png" alt="🌈" width="330"> <img src="../captures/pt-BR/touches.png" alt="⌨" width="620"></p>
+
 ### Notebooks ROG (experimental)
 
 Escrever `portable-asusctl` em `~/.config/rog-flare2/materiel` e depois reiniciar o daemon: os quadros passam por `asusctl anime image` (no máximo 5 imagens por segundo). Não testado em um notebook real: retornos são bem-vindos nos tickets.

@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *설정* → *🌈 키보드 색상…*: 효과(무지개, 고정, 호흡, 색상 순환, 반응형, 물결, 별이 빛나는 밤, 유사, 전류, 비), 색상, 속도, 밝기, 방향. *시험*은 바로 적용하고, *키보드에 저장*은 분리한 뒤에도 유지합니다. *테마 색상*과 *화면과 함께 맥동*은 데몬이 키마다 보내며, 끄면 저장된 효과로 돌아갑니다. 명령줄: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. 소프트웨어 모드 두 가지 추가: *화면 이미지*(키가 화면을 확대해 보여 줌)와 *오디오 스펙트럼*(열마다 막대 하나). 각 시간대와 각 앱 프로필마다 키 색상도 고를 수 있습니다(*일정…*). *키별 설정*: 키마다 색 하나, 키보드 배치도 위에 마우스로 칠합니다(AZERTY 또는 QWERTY). *타이핑 발광*: 누른 키가 켜졌다가 서서히 꺼집니다. 마이크·웹캠·OBS 표시등으로 F1, F2, F3도 켤 수 있고, 알림마다 키가 번쩍입니다.
 
+<p align="center"><img src="../captures/ko/couleurs.png" alt="🌈" width="330"> <img src="../captures/ko/touches.png" alt="⌨" width="620"></p>
+
 ### ROG 노트북(실험적)
 
 `~/.config/rog-flare2/materiel`에 `portable-asusctl`을 입력한 뒤 데몬을 다시 시작하세요: 프레임은 `asusctl anime image`를 통해 전달됩니다(초당 최대 5프레임). 실제 노트북에서 테스트되지 않았습니다: 티켓으로 의견을 알려 주세요.

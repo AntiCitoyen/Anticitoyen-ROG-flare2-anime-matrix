@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Thêm hai chế độ phần mềm: *Hình màn hình* (phím phản chiếu màn hình, phóng to) và *Phổ âm thanh* (mỗi cột một thanh). Mỗi khung giờ và mỗi hồ sơ ứng dụng cũng có thể chọn màu phím riêng (*Lịch hẹn…*). *Từng phím*: mỗi phím một màu, tô bằng chuột trên sơ đồ bàn phím (AZERTY hoặc QWERTY). *Gõ phím phát sáng*: mỗi phím bạn nhấn sẽ sáng lên rồi mờ dần. Đèn báo micro, webcam và OBS cũng có thể làm sáng F1, F2 và F3, và mỗi thông báo làm các phím chớp sáng.
 
+<p align="center"><img src="../captures/vi/couleurs.png" alt="🌈" width="330"> <img src="../captures/vi/touches.png" alt="⌨" width="620"></p>
+
 ### Laptop ROG (thử nghiệm)
 
 Ghi `portable-asusctl` vào `~/.config/rog-flare2/materiel` rồi khởi động lại dịch vụ nền: các khung dữ liệu sẽ đi qua `asusctl anime image` (tối đa 5 khung hình mỗi giây). Chưa được thử nghiệm trên laptop thật: rất hoan nghênh phản hồi qua các ticket.

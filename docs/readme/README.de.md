@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*). *Taste für Taste*: eine Farbe pro Taste, mit der Maus auf einem Tastaturplan gemalt (AZERTY oder QWERTY). *Leuchtende Anschläge*: jede gedrückte Taste leuchtet auf und verblasst. Die Anzeigen für Mikrofon, Webcam und OBS können auch F1, F2 und F3 beleuchten, und jede Benachrichtigung lässt die Tasten aufblitzen.
 
+<p align="center"><img src="../captures/de/couleurs.png" alt="🌈" width="330"> <img src="../captures/de/touches.png" alt="⌨" width="620"></p>
+
 ### ROG-Laptops (experimentell)
 
 `portable-asusctl` in `~/.config/rog-flare2/materiel` eintragen und den Dienst neu starten: Die Frames laufen über `asusctl anime image` (höchstens 5 Bilder pro Sekunde). Nicht an einem echten Laptop getestet: Rückmeldungen in den Tickets sind willkommen.

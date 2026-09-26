@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Altre due modalità software: *Immagine dello schermo* (i tasti riproducono lo schermo, ingrandito) e *Spettro audio* (una barra per colonna). Ogni fascia oraria e ogni profilo di applicazione può anche scegliere i colori dei tasti (*Programmazione…*). *Tasto per tasto*: un colore per tasto, dipinto con il mouse su una mappa della tastiera (AZERTY o QWERTY). *Digitazione luminosa*: ogni tasto premuto si accende e poi sfuma. Gli indicatori di microfono, webcam e OBS possono anche accendere F1, F2 e F3, e ogni notifica fa lampeggiare i tasti.
 
+<p align="center"><img src="../captures/it/couleurs.png" alt="🌈" width="330"> <img src="../captures/it/touches.png" alt="⌨" width="620"></p>
+
 ### Portatili ROG (sperimentale)
 
 Scrivere `portable-asusctl` in `~/.config/rog-flare2/materiel` poi riavviare il demone: i frame passano tramite `asusctl anime image` (al massimo 5 immagini al secondo). Non testato su un portatile reale: riscontri benvenuti nei ticket.

@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Ustawienia* → *🌈 Kolory klawiatury…*: efekt (tęcza, statyczny, oddychanie, cykl kolorów, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz), kolory, szybkość, jasność, kierunek. *Wypróbuj* go stosuje, *Zapisz w klawiaturze* zachowuje po odłączeniu. *Kolor motywu* i *Pulsowanie z ekranem* demon wysyła klawisz po klawiszu; po ich wyłączeniu wraca zapisany efekt. W wierszu poleceń: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dwa dodatkowe tryby programowe: *Obraz ekranu* (klawisze powtarzają ekran w powiększeniu) i *Widmo dźwięku* (jeden słupek na kolumnę). Każdy przedział czasowy i każdy profil aplikacji może też wybrać kolory klawiszy (*Harmonogram…*). *Klawisz po klawiszu*: jeden kolor na klawisz, malowany myszą na planie klawiatury (AZERTY lub QWERTY). *Świecące pisanie*: każdy naciśnięty klawisz rozświetla się i gaśnie. Wskaźniki mikrofonu, kamery i OBS mogą też podświetlać F1, F2 i F3, a każde powiadomienie rozbłyska na klawiszach.
 
+<p align="center"><img src="../captures/pl/couleurs.png" alt="🌈" width="330"> <img src="../captures/pl/touches.png" alt="⌨" width="620"></p>
+
 ### Laptopy ROG (eksperymentalne)
 
 Wpisz `portable-asusctl` w `~/.config/rog-flare2/materiel`, a następnie zrestartuj demona: ramki przechodzą przez `asusctl anime image` (maksymalnie 5 klatek na sekundę). Nietestowane na prawdziwym laptopie: opinie mile widziane w zgłoszeniach.

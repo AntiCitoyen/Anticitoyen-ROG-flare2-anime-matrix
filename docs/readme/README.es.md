@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Ajustes* → *🌈 Colores del teclado…*: efecto (arcoíris, estático, respiración, ciclo de colores, reactivo, ondulación, noche estrellada, arenas movedizas, corriente, lluvia), colores, velocidad, brillo, dirección. *Probar* lo aplica, *Guardar en el teclado* lo conserva al desconectarlo. *Color del tema* y *Pulso con la pantalla* los envía el demonio tecla por tecla; al salir de ellos, vuelve el efecto guardado. En la línea de comandos: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dos modos de software más: *Imagen de la pantalla* (las teclas reproducen la pantalla, ampliada) y *Espectro de audio* (una barra por columna). Cada franja horaria y cada perfil de aplicación también puede elegir sus colores de teclas (*Programación…*). *Tecla por tecla*: un color por tecla, pintado con el ratón sobre el plano del teclado (AZERTY o QWERTY). *Pulsación luminosa*: cada tecla pulsada se ilumina y luego se apaga. Los indicadores de micro, webcam y OBS también pueden encender F1, F2 y F3, y cada notificación hace destellar las teclas.
 
+<p align="center"><img src="../captures/es/couleurs.png" alt="🌈" width="330"> <img src="../captures/es/touches.png" alt="⌨" width="620"></p>
+
 ### Portátiles ROG (experimental)
 
 Escribir `portable-asusctl` en `~/.config/rog-flare2/materiel` y reiniciar el demonio: las tramas pasan por `asusctl anime image` (5 imágenes por segundo como máximo). No probado en un portátil real: los comentarios son bienvenidos en los tickets.

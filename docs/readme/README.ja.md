@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *設定* → *🌈 キーボードの色…*：効果（レインボー、スタティック、ブリージング、カラーサイクル、リアクティブ、リップル、星空、流砂、カレント、レイン）、色、速度、明るさ、方向。*試す* で適用、*キーボードに保存* で取り外した後も保持します。*テーマの色* と *画面と連動して点滅* はデーモンがキーごとに送信し、終了すると保存した効果に戻ります。コマンドライン：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 さらに 2 つのソフトウェアモード：*画面の映像*（キーが画面を拡大して映す）と*オーディオスペクトラム*（列ごとに 1 本のバー）。各時間帯と各アプリのプロファイルでキーの色も選べます（*スケジュール…*）。 *キーごと*：キーごとに色を指定し、キーボードの配置図にマウスで塗ります（AZERTY または QWERTY）。 *タイピングで光る*：押したキーが光り、ゆっくり消えます。マイク・ウェブカメラ・OBS のインジケーターで F1・F2・F3 も光らせられ、通知のたびにキーが光ります。
 
+<p align="center"><img src="../captures/ja/couleurs.png" alt="🌈" width="330"> <img src="../captures/ja/touches.png" alt="⌨" width="620"></p>
+
 ### ROG ノート PC(実験的)
 
 `~/.config/rog-flare2/materiel` に `portable-asusctl` と記述し、デーモンを再起動します。フレームは `asusctl anime image` 経由で送られます(最大毎秒 5 フレーム)。実機での動作は未検証です。フィードバックはチケットまでお願いします。

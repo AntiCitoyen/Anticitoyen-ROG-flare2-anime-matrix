@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*). *Touche par touche* : une couleur par touche, peinte à la souris sur le plan du clavier (AZERTY ou QWERTY). *Frappe lumineuse* : chaque touche frappée s'allume puis s'estompe. Les voyants micro, webcam et OBS peuvent aussi allumer F1, F2 et F3, et chaque notification fait briller les touches.
 
+<p align="center"><img src="docs/captures/fr/couleurs.png" alt="🌈" width="330"> <img src="docs/captures/fr/touches.png" alt="⌨" width="620"></p>
+
 ### Portables ROG (expérimental)
 
 Écrire `portable-asusctl` dans `~/.config/rog-flare2/materiel` puis relancer le démon : les trames passent par `asusctl anime image` (5 images par seconde au plus). Non testé sur un vrai portable : retours bienvenus dans les tickets.

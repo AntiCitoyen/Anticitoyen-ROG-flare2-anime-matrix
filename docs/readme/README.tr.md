@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*). *Tuş tuş*: her tuşa bir renk, klavye planı üzerinde fareyle boyanır (AZERTY veya QWERTY). *Işıklı yazma*: basılan her tuş yanar, sonra söner. Mikrofon, web kamerası ve OBS göstergeleri F1, F2 ve F3'ü de yakabilir; her bildirim tuşları parlatır.
 
+<p align="center"><img src="../captures/tr/couleurs.png" alt="🌈" width="330"> <img src="../captures/tr/touches.png" alt="⌨" width="620"></p>
+
 ### ROG dizüstü bilgisayarlar (deneysel)
 
 `~/.config/rog-flare2/materiel` dosyasına `portable-asusctl` yazın, ardından arka plan servisini yeniden başlatın: kareler `asusctl anime image` üzerinden gönderilir (saniyede en fazla 5 kare). Gerçek bir dizüstü bilgisayarda test edilmedi: geri bildirimler ticketlerde memnuniyetle karşılanır.

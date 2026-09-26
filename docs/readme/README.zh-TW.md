@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *設定* → *🌈 鍵盤顏色…*：效果（彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴）、顏色、速度、亮度、方向。*試用* 立即套用，*儲存到鍵盤* 拔除後仍保留。*主題顏色* 與 *隨螢幕脈動* 由常駐程式逐鍵傳送；離開後恢復已儲存的效果。命令列：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 另有兩種軟體模式：*螢幕畫面*（按鍵放大映射螢幕內容）與*音訊頻譜*（每欄一條光柱）。每個時段與每個應用程式設定檔也可以選擇按鍵顏色（*排程…*）。 *逐鍵*：每個按鍵一種顏色，用滑鼠在鍵盤配置圖上繪製（AZERTY 或 QWERTY）。 *按鍵發光*：每按一個鍵，它就會亮起然後漸暗。麥克風、網路攝影機與 OBS 指示燈也可以點亮 F1、F2 與 F3，每則通知都會讓按鍵閃光。
 
+<p align="center"><img src="../captures/zh-TW/couleurs.png" alt="🌈" width="330"> <img src="../captures/zh-TW/touches.png" alt="⌨" width="620"></p>
+
 ### ROG 筆記型電腦(實驗性)
 
 在 `~/.config/rog-flare2/materiel` 中寫入 `portable-asusctl`,再重新啟動守護程式:資料訊框將透過 `asusctl anime image` 傳送(最多每秒 5 幀)。尚未在實機筆電上測試:歡迎在議題中回報。

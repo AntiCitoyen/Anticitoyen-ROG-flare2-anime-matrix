@@ -226,6 +226,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 *Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*). *Per tombol*: satu warna per tombol, diwarnai dengan mouse pada peta keyboard (AZERTY atau QWERTY). *Ketikan menyala*: setiap tombol yang ditekan menyala lalu meredup. Indikator mikrofon, webcam, dan OBS juga dapat menyalakan F1, F2, dan F3, dan setiap notifikasi membuat tombol berkilat.
 
+<p align="center"><img src="../captures/id/couleurs.png" alt="🌈" width="330"> <img src="../captures/id/touches.png" alt="⌨" width="620"></p>
+
 ### Laptop ROG (eksperimental)
 
 Tuliskan `portable-asusctl` di `~/.config/rog-flare2/materiel` lalu jalankan ulang daemon: data akan dikirim melalui `asusctl anime image` (maksimum 5 gambar per detik). Belum diuji pada laptop asli: masukan sangat diterima lewat tiket.
