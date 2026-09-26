@@ -220,3 +220,31 @@ Description: AniMe Matrix display tools for the ASUS ROG Strix Flare II Animate
   - udev rule giving the logged-in user access to the keyboard.
  Support the project: https://buymeacoffee.com/anticitoyen
 
+Package: anticitoyen-rog-flare2-anime-matrix
+Version: 1.9.0
+Architecture: all
+Maintainer: AntiCitoyen <anticitoyen@users.noreply.gitlab.com>
+Installed-Size: 1244
+Depends: python3 (>= 3.10), python3-hid, python3-pil, python3-pil.imagetk, python3-numpy, python3-tk
+Recommends: python3-xlib, pkexec, python3-gi, gir1.2-ayatanaappindicator3-0.1, imagemagick, pulseaudio-utils, zenity, python3-pynput, python3-evdev, x11-utils, python3-qrcode, ffmpeg, tkdnd, libnotify-bin, xdg-user-dirs
+Suggests: gstreamer1.0-pipewire, gir1.2-gstreamer-1.0
+Filename: pool/main/anticitoyen-rog-flare2-anime-matrix_1.9.0_all.deb
+Size: 224720
+MD5sum: 5031dbcd033c39938922cd4cd27674c7
+SHA1: 9e4aa9b62c138da94c13d1f1f901e35a7928bd19
+SHA256: 25012460f0ff4066d34fe81d63a3f87b2dbfd55c6bc035a6e9d685a79de83bc8
+Section: utils
+Priority: optional
+Homepage: https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix
+Description: AniMe Matrix display tools for the ASUS ROG Strix Flare II Animate
+ Linux tools for the 312-LED AniMe Matrix display of the ASUS ROG Strix
+ Flare II Animate keyboard (USB 0b05:19fc), without Armoury Crate:
+  - graphical launcher with 4 layouts (round dial + drawer, dial, rounded,
+    classic tabs), 11 themes, 19 languages: GIF/images, folder gallery,
+    clock, drawing editor;
+  - 19 animated effects and 7 audio visualizers (engine from PolyWollyWin);
+  - GIF conversion tuned for the LED matrix (ImageMagick);
+  - background gallery or clock as systemd user services, one-click toggle;
+  - udev rule giving the logged-in user access to the keyboard.
+ Support the project: https://buymeacoffee.com/anticitoyen
+
