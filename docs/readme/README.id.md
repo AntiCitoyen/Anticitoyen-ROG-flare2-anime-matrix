@@ -82,7 +82,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 
 **Kenyamanan**
 - **4 antarmuka** (*Dial + laci* bawaan, *Dial*, *Membulat*, *Klasik*) dengan **pratinjau langsung 312 LED**, **11 tema** (5 ROG, 5 merah muda, sistem) dan **19 bahasa**.
-- **X11 dan Wayland**: reaksi terhadap keyboard melalui evdev, jendela aktif dibaca dari Sway, Hyprland, KDE (kdotool), atau GNOME (ekstensi *Window Calls*).
+- **X11 dan Wayland**: reaksi terhadap keyboard melalui evdev, jendela aktif dibaca dari Sway, Hyprland, KDE (kdotool), atau GNOME (ekstensi *Window Calls*); cermin layar melalui portal desktop (layar atau jendela, pilihan diingat).
 - **Pembaruan bawaan**: peluncur mengunduh rilis terbaru, memverifikasi sidik jari SHA-256, lalu memasangnya (perlu kata sandi administrator); atau `apt upgrade` dengan repositori APT.
 
 <a id="materiel"></a>

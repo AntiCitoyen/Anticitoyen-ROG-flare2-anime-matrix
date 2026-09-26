@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Miroir d'écran sous Wayland : l'écran ou la fenêtre choisi est mémorisé
+    (plus de fenêtre de choix à chaque lancement) ; mode « fenêtre » par le
+    portail. Recherche sur les profils du clavier (docs/RECHERCHE-TOUCHES.md).
   * Frappe lumineuse sur les touches ; voyants sur F1-F3 ; éclair des touches
     à chaque notification ; toutes les touches reconnues (F1-F12, flèches,
     pavé numérique) ; sauvegarde et restauration des réglages.

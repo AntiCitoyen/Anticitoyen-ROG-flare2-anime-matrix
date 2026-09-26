@@ -82,7 +82,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 
 **Tiện lợi**
 - **4 giao diện** (*Mặt số + ngăn kéo* mặc định, *Mặt số*, *Bo tròn*, *Cổ điển*) với **xem trước trực tiếp 312 LED**, **11 giao diện màu** (5 kiểu ROG, 5 kiểu hồng, hệ thống) và **19 ngôn ngữ**.
-- **X11 và Wayland**: phản ứng theo bàn phím qua evdev, đọc cửa sổ đang hoạt động từ Sway, Hyprland, KDE (kdotool) hoặc GNOME (tiện ích mở rộng *Window Calls*).
+- **X11 và Wayland**: phản ứng theo bàn phím qua evdev, đọc cửa sổ đang hoạt động từ Sway, Hyprland, KDE (kdotool) hoặc GNOME (tiện ích mở rộng *Window Calls*); phản chiếu màn hình qua cổng màn hình nền (màn hình hoặc cửa sổ, lựa chọn được ghi nhớ).
 - **Cập nhật tích hợp**: trình khởi chạy tải bản phát hành mới nhất, kiểm tra vân tay SHA-256 rồi cài đặt (cần mật khẩu quản trị); hoặc `apt upgrade` với kho APT.
 
 <a id="materiel"></a>

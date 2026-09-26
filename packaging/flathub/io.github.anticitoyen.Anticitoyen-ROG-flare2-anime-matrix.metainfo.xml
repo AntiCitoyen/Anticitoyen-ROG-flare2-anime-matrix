@@ -43,6 +43,7 @@
   <supports><control>pointing</control><control>keyboard</control></supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.1.0" date="2026-09-26"><description><p>Screen mirror under Wayland: the chosen screen or window is remembered, and a window can be mirrored through the portal.</p></description></release>
     <release version="2.0.0" date="2026-09-26"><description><p>Typing glow on the keys, status lights on F1-F3, key flash on notifications, every key recognised (function keys, arrows, keypad), settings backup and restore.</p></description></release>
     <release version="1.9.0" date="2026-09-26"><description><p>Key-by-key colour editor, the six built-in keyboard animations, live preview of the stored animation, problems shown in the launcher and the web remote.</p></description></release>
     <release version="1.8.0" date="2026-09-26"><description><p>Keys follow the screen or the music; key colours per time slot and per application; the screen really switches off when locked or asleep.</p></description></release>

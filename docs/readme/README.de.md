@@ -82,7 +82,7 @@ ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury 
 
 **Komfort**
 - **4 Oberflächen** (*Drehrad + Schublade* standardmäßig, *Drehrad*, *Abgerundet*, *Klassisch*) mit **Live-Vorschau der 312 LEDs**, **11 Designs** (5 ROG, 5 in Rosa, System) und **19 Sprachen**.
-- **X11 und Wayland**: Tastaturreaktion über evdev, aktives Fenster von Sway, Hyprland, KDE (kdotool) oder GNOME (Erweiterung *Window Calls*) gelesen.
+- **X11 und Wayland**: Tastaturreaktion über evdev, aktives Fenster von Sway, Hyprland, KDE (kdotool) oder GNOME (Erweiterung *Window Calls*) gelesen; Bildschirmspiegelung über das Desktop-Portal (Bildschirm oder Fenster, Auswahl wird gespeichert).
 - **Integrierte Updates**: Der Starter lädt das neueste Release herunter, prüft seine SHA-256-Prüfsumme und installiert es (Administratorpasswort); oder `apt upgrade` mit dem APT-Repository.
 
 <a id="materiel"></a>

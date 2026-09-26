@@ -82,7 +82,7 @@ ASUS 仅在 Windows（通过 Armoury Crate）下为这款键盘提供 AniMe Matr
 
 **便捷**
 - **4 种界面**（默认为 *表盘 + 抽屉*，另有 *表盘*、*圆角*、*经典*），带 **312 颗 LED 实时预览**、**11 套主题**（5 套 ROG 风格、5 套粉色系、1 套跟随系统）与 **19 种语言**。
-- **X11 与 Wayland**：通过 evdev 响应键盘，活动窗口从 Sway、Hyprland、KDE（kdotool）或 GNOME（*Window Calls* 扩展）读取。
+- **X11 与 Wayland**：通过 evdev 响应键盘，活动窗口从 Sway、Hyprland、KDE（kdotool）或 GNOME（*Window Calls* 扩展）读取；通过桌面门户镜像屏幕（整个屏幕或窗口，选择会被记住）。
 - **内置更新**：启动器下载最新 release，校验其 SHA-256 指纹后安装（需要管理员密码）；或通过 APT 仓库执行 `apt upgrade`。
 
 <a id="materiel"></a>

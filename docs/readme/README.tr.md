@@ -82,7 +82,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 
 **Kullanım kolaylığı**
 - **4 arayüz** (varsayılan olarak *Kadran + çekmece*, *Kadran*, *Yuvarlatılmış*, *Klasik*) ile **312 LED'in canlı önizlemesi**, **11 tema** (5 ROG, 5 pembe, sistem) ve **19 dil**.
-- **X11 ve Wayland**: evdev ile klavye tepkisi, etkin pencere Sway, Hyprland, KDE (kdotool) veya GNOME (*Window Calls* uzantısı) üzerinden okunur.
+- **X11 ve Wayland**: evdev ile klavye tepkisi, etkin pencere Sway, Hyprland, KDE (kdotool) veya GNOME (*Window Calls* uzantısı) üzerinden okunur; masaüstü portalı üzerinden ekran yansıtma (ekran veya pencere, seçim hatırlanır).
 - **Yerleşik güncellemeler**: başlatıcı en son sürümü indirir, SHA-256 özetini doğrular ve kurar (yönetici parolası); ya da APT deposuyla `apt upgrade`.
 
 <a id="materiel"></a>

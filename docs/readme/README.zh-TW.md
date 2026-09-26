@@ -82,7 +82,7 @@ ASUS 僅在 Windows(透過 Armoury Crate)提供這款鍵盤 AniMe Matrix 螢幕�
 
 **便利性**
 - **4 種介面**(預設為 *錶盤 + 抽屜*,另有 *錶盤*、*圓角*、*經典*),具備 **312 顆 LED 即時預覽**、**11 套主題**(5 套 ROG 風格、5 套粉色系、1 套跟隨系統)與 **19 種語言**。
-- **X11 與 Wayland**:透過 evdev 回應鍵盤,作用中視窗從 Sway、Hyprland、KDE(kdotool)或 GNOME(*Window Calls* 擴充功能)讀取。
+- **X11 與 Wayland**:透過 evdev 回應鍵盤,作用中視窗從 Sway、Hyprland、KDE(kdotool)或 GNOME(*Window Calls* 擴充功能)讀取；透過桌面入口鏡像螢幕（整個螢幕或視窗，選擇會被記住）。
 - **內建更新**:啟動器下載最新 release,驗證其 SHA-256 指紋後安裝(需要管理員密碼);或透過 APT 儲存庫執行 `apt upgrade`。
 
 <a id="materiel"></a>

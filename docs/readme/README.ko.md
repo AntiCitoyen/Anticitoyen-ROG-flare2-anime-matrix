@@ -82,7 +82,7 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 
 **편의성**
 - 실시간 **312 LED 미리 보기**, **11가지 테마**(ROG 5종, 핑크 5종, 시스템), **19개 언어**를 갖춘 **4가지 인터페이스**(*다이얼 + 서랍* 기본, *다이얼*, *둥근 모서리*, *클래식*).
-- **X11과 Wayland**: evdev를 통한 키보드 반응, Sway, Hyprland, KDE(kdotool) 또는 GNOME(*Window Calls* 확장)에서 활성 창 정보 읽기.
+- **X11과 Wayland**: evdev를 통한 키보드 반응, Sway, Hyprland, KDE(kdotool) 또는 GNOME(*Window Calls* 확장)에서 활성 창 정보 읽기; 데스크톱 포털을 통한 화면 미러링(화면 또는 창, 선택 기억).
 - **내장 업데이트**: 런처가 최신 릴리스를 내려받아 SHA-256 지문을 확인한 뒤 설치(관리자 비밀번호 필요) ; 또는 APT 저장소로 `apt upgrade`.
 
 <a id="materiel"></a>

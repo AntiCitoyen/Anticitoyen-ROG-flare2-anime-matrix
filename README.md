@@ -82,7 +82,7 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 
 **Confort**
 - **4 interfaces** (*Cadran + tiroir* par défaut, *Cadran*, *Arrondie*, *Classique*) avec **aperçu en direct des 312 LED**, **11 thèmes** (5 ROG, 5 roses, système) et **19 langues**.
-- **X11 et Wayland** : réaction au clavier par evdev, fenêtre active lue auprès de Sway, Hyprland, KDE (kdotool) ou GNOME (extension *Window Calls*).
+- **X11 et Wayland** : réaction au clavier par evdev, fenêtre active lue auprès de Sway, Hyprland, KDE (kdotool) ou GNOME (extension *Window Calls*) ; miroir d'écran par le portail du bureau (écran ou fenêtre, choix mémorisé).
 - **Mises à jour intégrées** : le lanceur télécharge la dernière release, vérifie son empreinte SHA-256 et l'installe (mot de passe administrateur) ; ou `apt upgrade` avec le dépôt APT.
 
 <a id="materiel"></a>

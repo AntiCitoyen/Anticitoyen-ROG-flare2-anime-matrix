@@ -76,3 +76,17 @@ def test_shrink_keeps_center():
     img[:, 70:90] = 255  # bande verticale au centre
     out = np.frombuffer(V.shrink(img.tobytes(), 160, 90), dtype=np.uint8).reshape(V.H, V.W)
     assert out[:, 9].mean() > 100 and out[:, 0].mean() < 20
+
+
+def test_portail_options_et_jeton(tmp_path):
+    pytest.importorskip("gi")
+    opts = V.portal_select_options("fenetre", None)
+    assert opts["types"].unpack() == 2 and opts["persist_mode"].unpack() == 2 and "restore_token" not in opts
+    opts = V.portal_select_options("souris", "abc")
+    assert opts["types"].unpack() == 1 and opts["restore_token"].unpack() == "abc"
+    jeton = tmp_path / "rog-flare2" / "portail-ecran.jeton"
+    V.save_portal_token(jeton, None)
+    assert not jeton.exists()
+    V.save_portal_token(jeton, "xyz")
+    assert jeton.read_text() == "xyz" and (jeton.stat().st_mode & 0o777) == 0o600
+    assert V.portal_token_path("fenetre").name == "portail-fenetre.jeton"

@@ -82,7 +82,7 @@ ASUS only provides this keyboard's AniMe Matrix display on Windows (Armoury Crat
 
 **Comfort**
 - **4 interfaces** (*Dial + drawer* by default, *Dial*, *Rounded*, *Classic*) with **live preview of the 312 LEDs**, **11 themes** (5 ROG, 5 pink, system) and **19 languages**.
-- **X11 and Wayland**: keyboard reaction through evdev, active window read from Sway, Hyprland, KDE (kdotool) or GNOME (*Window Calls* extension).
+- **X11 and Wayland**: keyboard reaction through evdev, active window read from Sway, Hyprland, KDE (kdotool) or GNOME (*Window Calls* extension); screen mirror through the desktop portal (screen or window, choice remembered).
 - **Built-in updates**: the launcher downloads the latest release, verifies its SHA-256 checksum and installs it (administrator password); or `apt upgrade` with the APT repository.
 
 <a id="materiel"></a>

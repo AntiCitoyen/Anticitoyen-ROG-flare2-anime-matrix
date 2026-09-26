@@ -82,7 +82,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 
 **Wygoda**
 - **4 interfejsy** (*Tarcza + szuflada* domyślnie, *Tarcza*, *Zaokrąglony*, *Klasyczny*) z **podglądem 312 diod LED na żywo**, **11 motywami** (5 ROG, 5 różowych, systemowy) i **19 językami**.
-- **X11 i Wayland**: reakcja na klawiaturę przez evdev, aktywne okno odczytywane z Sway, Hyprland, KDE (kdotool) lub GNOME (rozszerzenie *Window Calls*).
+- **X11 i Wayland**: reakcja na klawiaturę przez evdev, aktywne okno odczytywane z Sway, Hyprland, KDE (kdotool) lub GNOME (rozszerzenie *Window Calls*); lustro ekranu przez portal pulpitu (ekran lub okno, wybór zapamiętany).
 - **Wbudowane aktualizacje**: launcher pobiera najnowsze wydanie, sprawdza jego odcisk SHA-256 i instaluje je (hasło administratora); albo `apt upgrade` z repozytorium APT.
 
 <a id="materiel"></a>

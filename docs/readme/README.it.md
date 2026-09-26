@@ -82,7 +82,7 @@ ASUS fornisce lo schermo AniMe Matrix di questa tastiera solo su Windows (Armour
 
 **Comodità**
 - **4 interfacce** (*Quadrante + cassetto* predefinita, *Quadrante*, *Arrotondata*, *Classica*) con **anteprima dal vivo dei 312 LED**, **11 temi** (5 ROG, 5 rosa, di sistema) e **19 lingue**.
-- **X11 e Wayland**: reazione alla tastiera tramite evdev, finestra attiva letta da Sway, Hyprland, KDE (kdotool) o GNOME (estensione *Window Calls*).
+- **X11 e Wayland**: reazione alla tastiera tramite evdev, finestra attiva letta da Sway, Hyprland, KDE (kdotool) o GNOME (estensione *Window Calls*); mirroring dello schermo tramite il portale del desktop (schermo o finestra, scelta memorizzata).
 - **Aggiornamenti integrati**: il lanciatore scarica l'ultima release, ne verifica l'impronta SHA-256 e la installa (password di amministratore); oppure `apt upgrade` con il repository APT.
 
 <a id="materiel"></a>

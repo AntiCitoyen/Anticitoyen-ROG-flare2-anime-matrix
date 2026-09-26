@@ -82,7 +82,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 
 **Comfort**
 - **4 interfaces** (*Draaiknop + lade* standaard, *Draaiknop*, *Afgerond*, *Klassiek*) met **live voorvertoning van de 312 leds**, **11 thema's** (5 ROG, 5 roze, systeem) en **19 talen**.
-- **X11 en Wayland**: reactie op het toetsenbord via evdev, actief venster opgevraagd bij Sway, Hyprland, KDE (kdotool) of GNOME (extensie *Window Calls*).
+- **X11 en Wayland**: reactie op het toetsenbord via evdev, actief venster opgevraagd bij Sway, Hyprland, KDE (kdotool) of GNOME (extensie *Window Calls*); schermspiegeling via het desktopportaal (scherm of venster, keuze onthouden).
 - **Ingebouwde updates**: de launcher haalt de nieuwste release op, controleert de SHA-256-controlesom en installeert deze (beheerderswachtwoord); of `apt upgrade` met de APT-repository.
 
 <a id="materiel"></a>

@@ -82,7 +82,7 @@ A ASUS só fornece a tela AniMe Matrix deste teclado no Windows (Armoury Crate).
 
 **Conforto**
 - **4 interfaces** (*Mostrador + gaveta* padrão, *Mostrador*, *Arredondada*, *Clássica*) com **prévia ao vivo dos 312 LEDs**, **11 temas** (5 ROG, 5 rosa, sistema) e **19 idiomas**.
-- **X11 e Wayland**: reação ao teclado via evdev, janela ativa lida no Sway, Hyprland, KDE (kdotool) ou GNOME (extensão *Window Calls*).
+- **X11 e Wayland**: reação ao teclado via evdev, janela ativa lida no Sway, Hyprland, KDE (kdotool) ou GNOME (extensão *Window Calls*); espelhamento de tela pelo portal da área de trabalho (tela ou janela, escolha lembrada).
 - **Atualizações integradas**: o lançador baixa a última release, verifica sua soma SHA-256 e a instala (senha de administrador); ou `apt upgrade` com o repositório APT.
 
 <a id="materiel"></a>

@@ -7,8 +7,8 @@ Toutes les sources passent par le même tuyau : images en niveaux de gris déjà
 - vidéos (.mp4, .webm, .mkv, .mov, .avi, .m4v) : dans la galerie comme les GIF ;
 - webcam : /dev/video0 (v4l2), en image ou en silhouette ;
 - miroir d'écran : X11 (ffmpeg x11grab) écran entier, zone qui suit la souris ou fenêtre
-  active ; Wayland (expérimental) : portail ScreenCast + PipeWire, l'écran est choisi
-  dans la fenêtre du système.
+  active ; Wayland : portail ScreenCast + PipeWire, écran ou fenêtre choisi une fois dans
+  la fenêtre du système, puis mémorisé (jeton de restauration).
 """
 from __future__ import annotations
 
@@ -146,7 +146,7 @@ def x11_input(mode: str, display: str) -> list[str]:
 def play_screen(transport, stop, brightness, mode: str = "ecran") -> None:
     wayland = bool(os.environ.get("WAYLAND_DISPLAY")) or os.environ.get("XDG_SESSION_TYPE") == "wayland"
     if wayland:
-        play_screen_portal(transport, stop, brightness)
+        play_screen_portal(transport, stop, brightness, mode)
     else:
         display = os.environ.get("DISPLAY")
         if not display:
@@ -154,7 +154,35 @@ def play_screen(transport, stop, brightness, mode: str = "ecran") -> None:
         _ffmpeg(x11_input(mode, display), transport, stop, brightness)
 
 
-def play_screen_portal(transport, stop, brightness) -> None:
+def portal_token_path(mode: str):
+    """Jeton du portail qui évite de redemander l'écran (ou la fenêtre) à chaque lancement."""
+    from rog_flare2_core import CONFIG_DIR
+    return CONFIG_DIR / f"portail-{'fenetre' if mode == 'fenetre' else 'ecran'}.jeton"
+
+
+def portal_select_options(mode: str, token: str | None) -> dict:
+    """Options de SelectSources : écran (1) ou fenêtre (2), pointeur incrusté, choix mémorisé
+    (persist_mode 2 : jusqu'à révocation ; ignoré par les portails antérieurs à la version 4).
+    Le mode « souris » n'existe pas sous Wayland (position du pointeur inaccessible) : écran entier."""
+    from gi.repository import GLib
+    options = {"types": GLib.Variant("u", 2 if mode == "fenetre" else 1),
+               "cursor_mode": GLib.Variant("u", 2),
+               "persist_mode": GLib.Variant("u", 2)}
+    if token:
+        options["restore_token"] = GLib.Variant("s", token)
+    return options
+
+
+def save_portal_token(path, token: str | None) -> None:
+    if not token:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as f:
+        f.write(token)
+
+
+def play_screen_portal(transport, stop, brightness, mode: str = "ecran") -> None:
     """Wayland : portail org.freedesktop.portal.ScreenCast, puis PipeWire lu par GStreamer (python3-gi)."""
     import secrets
 
@@ -193,9 +221,14 @@ def play_screen_portal(transport, stop, brightness) -> None:
         res = call("CreateSession", [{"session_handle_token": GLib.Variant("s", "amx" + secrets.token_hex(6))}],
                    "(a{sv})")
         session = res["session_handle"]
-        call("SelectSources", [session, {"types": GLib.Variant("u", 1), "cursor_mode": GLib.Variant("u", 2)}],
-             "(oa{sv})")
+        token_path = portal_token_path(mode)
+        try:
+            token = token_path.read_text().strip() or None
+        except OSError:
+            token = None
+        call("SelectSources", [session, portal_select_options(mode, token)], "(oa{sv})")
         res = call("Start", [session, "", {}], "(osa{sv})")
+        save_portal_token(token_path, res.get("restore_token"))  # chaque jeton ne sert qu'une fois
         node = res["streams"][0][0]
         reply, fds = bus.call_with_unix_fd_list_sync(
             "org.freedesktop.portal.Desktop", "/org/freedesktop/portal/desktop",
