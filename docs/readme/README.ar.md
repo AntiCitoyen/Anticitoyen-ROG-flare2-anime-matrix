@@ -122,6 +122,10 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | Fedora، openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch، Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | جميع التوزيعات (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (ثبّت أيضًا قاعدة udev أدناه؛ دون أدوات تصور صوتي) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD و‎.SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | RPM المصدري: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm`، أو رفعه إلى مشروع Copr |
+| Flathub | `flathub-<version>.tar.gz` | بيان مثبّت على هذا الإصدار و`python3-modules.json`: طلب إلى Flathub أو `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | ملفات الترجمة (`locale/*.json`، الأساس `_source.json`) لاستيرادها في Weblate |
 
 تثبّت الحزمة:
 

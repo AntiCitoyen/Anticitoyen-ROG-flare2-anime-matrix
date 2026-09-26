@@ -120,6 +120,10 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | Усі (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (також встановіть правило udev нижче; без аудіовізуалізаторів) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD і .SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | вихідний RPM: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm` або завантаження в проєкт Copr |
+| Flathub | `flathub-<version>.tar.gz` | маніфест, закріплений за цією версією, і `python3-modules.json`: заявка до Flathub або `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | файли перекладів (`locale/*.json`, основа `_source.json`) для імпорту у Weblate |
 
 Пакет встановлює:
 

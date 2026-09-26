@@ -120,6 +120,10 @@ Następnie **odłącz i podłącz ponownie klawiaturę** (reguła udev nadaje do
 | Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | Wszystkie (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (zainstaluj też regułę udev poniżej; bez wizualizatorów audio) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD i .SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | źródłowy RPM: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm` lub wysłanie do projektu Copr |
+| Flathub | `flathub-<version>.tar.gz` | manifest przypięty do tej wersji i `python3-modules.json`: zgłoszenie do Flathub lub `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | pliki tłumaczeń (`locale/*.json`, baza `_source.json`) do importu w Weblate |
 
 Pakiet instaluje:
 

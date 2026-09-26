@@ -120,6 +120,10 @@ Ardından **klavyeyi çıkarıp yeniden takın** (udev kuralı, oturum açmış 
 | Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | Hepsi (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (aşağıdaki udev kuralını da kurun; ses görselleştiricileri yok) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD ve .SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | kaynak RPM: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm` ya da bir Copr projesine yükleme |
+| Flathub | `flathub-<version>.tar.gz` | bu sürüme sabitlenmiş manifest ve `python3-modules.json`: Flathub başvurusu veya `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | Weblate'e aktarılacak çeviri dosyaları (`locale/*.json`, temel `_source.json`) |
 
 Paket şunları kurar:
 

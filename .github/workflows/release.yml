@@ -2,6 +2,8 @@ name: Release packages
 
 # When a release is published (with its .deb attached), build the other package
 # formats, attach them to the release and update the APT repository (gh-pages).
+# Also attached, ready for other channels: the AUR files, the source RPM (Copr),
+# the Flathub submission (manifest pinned to the tag) and the translations (Weblate).
 on:
   release:
     types: [published]
@@ -37,17 +39,10 @@ jobs:
           sed "s/@VERSION@/$V/" packaging/rpm/anticitoyen-rog-flare2-anime-matrix.spec > ~/rpmbuild/SPECS/animematrix.spec
           rpmbuild -bb ~/rpmbuild/SPECS/animematrix.spec
           gh release upload "$TAG" ~/rpmbuild/RPMS/noarch/*.rpm --clobber --repo "$GITHUB_REPOSITORY"
-      - name: Publish to Copr
-        continue-on-error: true
-        env:
-          COPR_CONFIG: ${{ secrets.COPR_CONFIG }}
+      - name: Source RPM (for Copr)
         run: |
-          if [ -z "$COPR_CONFIG" ]; then echo "COPR_CONFIG absent : publication Copr sautée"; exit 0; fi
-          dnf install -y copr-cli
-          mkdir -p ~/.config
-          printf '%s\n' "$COPR_CONFIG" > ~/.config/copr
           rpmbuild -bs ~/rpmbuild/SPECS/animematrix.spec
-          copr-cli build --nowait animematrix ~/rpmbuild/SRPMS/*.src.rpm
+          gh release upload "$TAG" ~/rpmbuild/SRPMS/*.src.rpm --clobber --repo "$GITHUB_REPOSITORY"
 
   arch:
     runs-on: ubuntu-24.04
@@ -71,26 +66,14 @@ jobs:
           sed -i "s/^sha256sums=('SKIP')/sha256sums=('$SUM')/" /home/builder/pkg/PKGBUILD
           su builder -c "cd /home/builder/pkg && makepkg --printsrcinfo > .SRCINFO"
           gh release upload "$TAG" /home/builder/pkg/*.pkg.tar.zst --clobber --repo "$GITHUB_REPOSITORY"
-      - name: Publish to the AUR
-        continue-on-error: true  # compte AUR pas encore créé : la release reste valable
-        env:
-          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+      - name: AUR files (PKGBUILD, .SRCINFO, install script)
         run: |
-          if [ -z "$AUR_SSH_PRIVATE_KEY" ]; then echo "AUR_SSH_PRIVATE_KEY absent : publication AUR sautée"; exit 0; fi
-          pacman -S --noconfirm --needed openssh
-          install -d -m 700 ~/.ssh
-          printf '%s\n' "$AUR_SSH_PRIVATE_KEY" > ~/.ssh/aur
-          chmod 600 ~/.ssh/aur
-          ssh-keyscan -t ed25519 aur.archlinux.org >> ~/.ssh/known_hosts 2>/dev/null
-          export GIT_SSH_COMMAND="ssh -i ~/.ssh/aur -o IdentitiesOnly=yes"
-          git clone ssh://aur@aur.archlinux.org/anticitoyen-rog-flare2-anime-matrix.git aur
-          cp /home/builder/pkg/PKGBUILD /home/builder/pkg/.SRCINFO /home/builder/pkg/animematrix.install aur/
-          cd aur
-          git config user.name "AntiCitoyen"
-          git config user.email "anticitoyen@users.noreply.gitlab.com"
-          git add PKGBUILD .SRCINFO animematrix.install
-          git commit -m "Update to ${TAG#v}" || exit 0
-          git push origin HEAD:master
+          V="${TAG#v}"
+          mkdir -p aur/anticitoyen-rog-flare2-anime-matrix
+          cp /home/builder/pkg/PKGBUILD /home/builder/pkg/.SRCINFO /home/builder/pkg/animematrix.install \
+            aur/anticitoyen-rog-flare2-anime-matrix/
+          tar -C aur -czf "aur-$V.tar.gz" anticitoyen-rog-flare2-anime-matrix
+          gh release upload "$TAG" "aur-$V.tar.gz" --clobber --repo "$GITHUB_REPOSITORY"
 
   flatpak:
     runs-on: ubuntu-24.04
@@ -110,6 +93,40 @@ jobs:
           flatpak-builder --user --force-clean --sandbox --repo=repo build $APP.yml
           flatpak build-bundle repo "AniMeMatrix-${TAG#v}.flatpak" $APP
           gh release upload "$TAG" AniMeMatrix-*.flatpak --clobber --repo "$GITHUB_REPOSITORY"
+      - name: Flathub submission (manifest pinned to this tag)
+        run: |
+          V="${TAG#v}"
+          APP=io.github.anticitoyen.Anticitoyen-ROG-flare2-anime-matrix
+          COMMIT=$(git rev-parse HEAD)
+          mkdir -p "flathub-$V"
+          python3 - "$APP" "$TAG" "$COMMIT" "flathub-$V" <<'PY'
+          import sys
+          from pathlib import Path
+          app, tag, commit, out = sys.argv[1:]
+          text = Path(f"packaging/flathub/{app}.yml").read_text()
+          old = "      - type: dir\n        path: ../.."
+          assert old in text
+          new = ("      - type: git\n"
+                 "        url: https://github.com/AntiCitoyen/Anticitoyen-ROG-flare2-anime-matrix.git\n"
+                 f"        tag: {tag}\n        commit: {commit}")
+          Path(out, f"{app}.yml").write_text(text.replace(old, new))
+          PY
+          cp packaging/flathub/python3-modules.json "flathub-$V/"
+          tar -czf "flathub-$V.tar.gz" "flathub-$V"
+          gh release upload "$TAG" "flathub-$V.tar.gz" --clobber --repo "$GITHUB_REPOSITORY"
+
+  translations:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - name: Translation files (Weblate)
+        run: |
+          V="${TAG#v}"
+          # locale/_source.json : fichier de base monolingue (français) ; locale/<code>.json : une langue
+          zip -q "translations-$V.zip" locale/*.json docs/TRADUIRE.md
+          gh release upload "$TAG" "translations-$V.zip" --clobber --repo "$GITHUB_REPOSITORY"
 
   apt:
     runs-on: ubuntu-24.04

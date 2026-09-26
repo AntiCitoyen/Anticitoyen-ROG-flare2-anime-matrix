@@ -120,6 +120,10 @@ sudo apt update && sudo apt install anticitoyen-rog-flare2-anime-matrix
 | Fedora、openSUSE 等 | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch、Manjaro 等 | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | 所有發行版(Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak`(還需安裝下方的 udev 規則;不支援音訊視覺化) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD 與 .SRCINFO：`tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | 原始碼 RPM：`rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm`，或上傳到 Copr 專案 |
+| Flathub | `flathub-<version>.tar.gz` | 固定到此版本的清單與 `python3-modules.json`：提交到 Flathub 或使用 `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | 翻譯檔案（`locale/*.json`，基準 `_source.json`），可匯入 Weblate |
 
 此套件會安裝:
 

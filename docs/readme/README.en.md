@@ -120,6 +120,10 @@ Then **unplug and replug the keyboard** (the udev rule grants access to the logg
 | Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | All (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (also install the udev rule below; no audio visualizers) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD and .SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | source RPM: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm`, or upload it to a Copr project |
+| Flathub | `flathub-<version>.tar.gz` | manifest pinned to this version and `python3-modules.json`: Flathub submission or `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | translation files (`locale/*.json`, base `_source.json`) to import into Weblate |
 
 The package installs:
 

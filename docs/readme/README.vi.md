@@ -120,6 +120,10 @@ Sau đó **rút phích cắm rồi cắm lại bàn phím** (quy tắc udev cấ
 | Fedora, openSUSE… | `anticitoyen-rog-flare2-anime-matrix-<version>-1.noarch.rpm` | `sudo dnf install ./anticitoyen-rog-flare2-anime-matrix-*.noarch.rpm` |
 | Arch, Manjaro… | `anticitoyen-rog-flare2-anime-matrix-<version>-1-any.pkg.tar.zst` | `sudo pacman -U anticitoyen-rog-flare2-anime-matrix-*.pkg.tar.zst` |
 | Mọi bản phân phối (Flatpak) | `AniMeMatrix-<version>.flatpak` | `flatpak install --user AniMeMatrix-*.flatpak` (cũng cần cài quy tắc udev bên dưới ; không có bộ hiển thị âm thanh) |
+| AUR | `aur-<version>.tar.gz` | PKGBUILD và .SRCINFO: `tar xf aur-*.tar.gz && cd anticitoyen-rog-flare2-anime-matrix && makepkg -si` |
+| Copr | `anticitoyen-rog-flare2-anime-matrix-<version>-1.<fc>.src.rpm` | RPM nguồn: `rpmbuild --rebuild anticitoyen-rog-flare2-anime-matrix-*.src.rpm`, hoặc tải lên một dự án Copr |
+| Flathub | `flathub-<version>.tar.gz` | manifest cố định theo phiên bản này và `python3-modules.json`: gửi lên Flathub hoặc `flatpak-builder` |
+| Weblate | `translations-<version>.zip` | tệp bản dịch (`locale/*.json`, gốc `_source.json`) để nhập vào Weblate |
 
 Gói này cài đặt:
 
