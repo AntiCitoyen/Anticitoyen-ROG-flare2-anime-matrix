@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "點選：上色；拖曳：多個按鍵；右鍵：關閉。底部條帶為底部燈光。",
  "Couleur…": "顏色…",
  "Tout remplir": "全部填滿",
- "Tout éteindre": "全部關閉"
+ "Tout éteindre": "全部關閉",
+ "Exporter les réglages": "匯出設定",
+ "Restaurer des réglages": "還原設定",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "已還原 {n} 項設定；重新啟動 AniMe Matrix 以套用主題與語言",
+ "⭳ Exporter les réglages…": "⭳ 匯出設定…",
+ "⭱ Restaurer des réglages…": "⭱ 還原設定…",
+ "Réglages exportés : {n} fichiers": "已匯出設定：{n} 個檔案",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "以 {date}（版本 {version}）的設定取代目前設定嗎？\n目前設定會先備份。",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "同時顯示在 F1（麥克風）、F2（網路攝影機）、F3（OBS）鍵上",
+ "Frappe lumineuse (logiciel)": "按鍵發光（軟體）",
+ "Éclair des touches à chaque notification": "每次通知時按鍵閃光"
 }

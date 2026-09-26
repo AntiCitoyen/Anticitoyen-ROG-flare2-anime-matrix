@@ -25,6 +25,27 @@ REPORT = 64
 COLUMNS, ROWS = 30, 7
 LEDS = [c * 8 + r for c in range(COLUMNS) for r in range(ROWS)]
 
+# Touches : nom de position physique (QWERTY) -> index ; disposition ISO du Flare II Animate
+# (contrôleur Aura TUF d'OpenRGB), plus la barre oblique ANSI. AZERTY : caractère gravé -> position.
+KEYS = {
+    "ESC": 0x00, "`": 0x01, "TAB": 0x02, "CAPS": 0x03, "LSHIFT": 0x04, "LCTRL": 0x05, "1": 0x11, "ISO\\": 0x0C,
+    "WIN": 0x15, "F1": 0x18, "2": 0x19, "Q": 0x12, "A": 0x13, "Z": 0x14, "LALT": 0x1D, "F2": 0x20, "3": 0x21,
+    "W": 0x1A, "S": 0x1B, "X": 0x1C, "F3": 0x28, "4": 0x29, "E": 0x22, "D": 0x23, "C": 0x24, "F4": 0x30,
+    "5": 0x31, "R": 0x2A, "F": 0x2B, "V": 0x2C, "6": 0x39, "T": 0x32, "G": 0x33, "B": 0x34, "SPACE": 0x35,
+    "F5": 0x40, "7": 0x41, "Y": 0x3A, "H": 0x3B, "N": 0x3C, "F6": 0x48, "8": 0x49, "U": 0x42, "J": 0x43,
+    "M": 0x44, "F7": 0x50, "9": 0x51, "I": 0x4A, "K": 0x4B, ",": 0x4C, "F8": 0x58, "0": 0x59, "O": 0x52,
+    "L": 0x53, ".": 0x54, "RALT": 0x4D, "F9": 0x60, "-": 0x61, "P": 0x5A, ";": 0x5B, "/": 0x5C, "FN": 0x5D,
+    "F10": 0x68, "=": 0x69, "[": 0x62, "'": 0x63, "MENU": 0x65, "F11": 0x70, "BKSP": 0x79, "]": 0x6A,
+    "#": 0x6B, "RSHIFT": 0x7C, "F12": 0x78, "ENTER": 0x7B, "ANSI\\": 0x7A, "RCTRL": 0x7D, "PRTSC": 0x80,
+    "INS": 0x81, "DEL": 0x82, "LEFT": 0x85, "SCRLK": 0x88, "HOME": 0x89, "END": 0x8A, "UP": 0x8C,
+    "DOWN": 0x8D, "PAUSE": 0x90, "PGUP": 0x91, "PGDN": 0x92, "RIGHT": 0x95, "NUM": 0x99, "P7": 0x9A,
+    "P4": 0x9B, "P1": 0x9C, "P0": 0x9D, "P/": 0xA1, "P8": 0xA2, "P5": 0xA3, "P2": 0xA4, "P*": 0xA9,
+    "P9": 0xAA, "P6": 0xAB, "P3": 0xAC, "P.": 0xAD, "P-": 0xB1, "P+": 0xB2, "PENTER": 0xB4,
+}
+AZERTY = {"`": "²", "1": "&", "2": "é", "3": '"', "4": "'", "5": "(", "6": "-", "7": "è", "8": "_", "9": "ç",
+          "0": "à", "-": ")", "=": "=", "Q": "A", "W": "Z", "[": "^", "]": "$", "A": "Q", ";": "M", "'": "ù",
+          "#": "*", "Z": "W", "M": ",", ",": ";", ".": ":", "/": "!"}
+
 
 class RGBTransport:
     """Accès à l'interface d'éclairage (hidapi, comme l'écran)."""
@@ -211,7 +232,10 @@ def effect_kwargs(cfg: dict) -> dict:
             "random": bool(cfg.get("aleatoire"))}
 
 
-SOFTWARE_MODES = ("theme", "pulsation", "ecran", "audio", "perso")  # couleurs envoyées touche par touche
+SOFTWARE_MODES = ("theme", "pulsation", "ecran", "audio", "perso", "frappe")  # couleurs envoyées touche par touche
+BADGE_KEYS = {"micro": ("F1", (255, 0, 0)), "webcam": ("F2", (255, 120, 0)), "obs": ("F3", (170, 0, 255))}
+FLASH_SECONDS = 0.8
+FPS = {"theme": 1.0, "perso": 1.0, "pulsation": 15, "ecran": 20, "audio": 25, "frappe": 25, "imitation": 20}
 KEY_ROWS = 6  # rangées de touches (la 7e, index 6, est le rétroéclairage)
 
 
@@ -288,6 +312,60 @@ class Spectrum:
         return self.levels
 
 
+def keyboard_is_azerty() -> bool:
+    """Disposition AZERTY (fr, be) : setxkbmap sous X11, sinon la langue."""
+    import subprocess
+    try:
+        out = subprocess.run(["setxkbmap", "-query"], capture_output=True, text=True, timeout=2).stdout
+        for line in out.splitlines():
+            if line.startswith("layout:"):
+                return line.split(":", 1)[1].strip().split(",")[0] in ("fr", "be")
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return (os.environ.get("LANG") or "").startswith(("fr", "be"))
+
+
+def key_index(name: str, chars: bool = False, azerty: bool = False) -> int | None:
+    """Nom transmis par rog_flare2_touches -> index. chars : caractères de la disposition (pynput, X11),
+    sinon positions physiques (evdev) ; AZERTY : le caractère gravé est ramené à sa position."""
+    special = {"space": "SPACE", "enter": "ENTER", "backspace": "BKSP", "shift": "LSHIFT", "caps_lock": "CAPS",
+               "iso\\": "ISO\\"}
+    if name in special:
+        return KEYS[special[name]]
+    if chars and azerty:
+        position = {label.lower(): pos for pos, label in AZERTY.items()}.get(name)
+        if position:
+            return KEYS.get(position)
+    return KEYS.get(name.upper())
+
+
+def rainbow_frame(t: float, speed: float = 1.0, brightness: float = 1.0) -> dict[int, tuple[int, int, int]]:
+    """Vague arc-en-ciel de droite à gauche (imitation de l'effet du clavier)."""
+    import colorsys
+    out = {}
+    for c in range(COLUMNS):
+        r, g, b = colorsys.hsv_to_rgb((c / COLUMNS + t * 0.25 * speed) % 1.0, 1.0, brightness)
+        rgb = (int(r * 255), int(g * 255), int(b * 255))
+        for row in range(ROWS):
+            out[c * 8 + row] = rgb
+    return out
+
+
+def imitation_frame(cfg: dict, t: float, accent: str) -> dict[int, tuple[int, int, int]]:
+    """Approximation logicielle de l'effet du clavier, le temps d'un voyant ou d'un éclair."""
+    import colorsys
+    effect = cfg.get("effet", "arc-en-ciel")
+    level = int(cfg.get("luminosite", 100)) / 100
+    speed = 0.3 + int(cfg.get("vitesse", 50)) / 50
+    if effect in ("arc-en-ciel", "ondulation"):
+        return rainbow_frame(t, speed, level)
+    if effect == "cycle":
+        r, g, b = colorsys.hsv_to_rgb((t * 0.08 * speed) % 1.0, 1.0, level)
+        return solid_frame((int(r * 255), int(g * 255), int(b * 255)))
+    colors = [hex_rgb(c) for c in cfg.get("couleurs") or []] or EFFECTS.get(effect, (0, [], False))[1]
+    return solid_frame(colors[0] if colors else hex_rgb(accent), level)
+
+
 class KeyboardLights:
     """Fil du démon : couleurs des touches selon le réglage (rgb.json), ou le préréglage d'une règle
     de programmation ou d'un profil d'application tant qu'il est actif (override)."""
@@ -304,6 +382,50 @@ class KeyboardLights:
         self.status = "off"
         self.base: dict = dict(DEFAULT_CONFIG)
         self.overridden: str | None = None
+        self.badges: dict[int, tuple[int, int, int]] = {}  # voyants sur les touches (F1-F3)
+        self.flash_until, self.flash_color = 0.0, (255, 255, 255)
+        self.hits: dict[int, float] = {}  # frappe : touche -> intensité qui s'estompe
+        self.wake = threading.Event()  # réveille le fil quand un voyant ou une touche change
+
+    # ---------- voyants, éclair ----------
+    def overlay_active(self) -> bool:
+        return bool(self.badges) or time.monotonic() < self.flash_until
+
+    def set_badges(self, states: dict):
+        """États des voyants (rog_flare2_voyants) -> touches F1 (micro), F2 (webcam), F3 (OBS)."""
+        badges = {KEYS[key]: color for name, (key, color) in BADGE_KEYS.items() if states.get(name)}
+        if badges != self.badges:
+            self.badges = badges
+            self._overlay_changed()
+
+    def flash(self, color: str | None = None):
+        """Éclair bref de toutes les touches (notification)."""
+        self.flash_color = hex_rgb(color or self.accent())
+        self.flash_until = time.monotonic() + FLASH_SECONDS
+        self._overlay_changed()
+
+    def _overlay_changed(self):
+        if self.thread is None and self.overlay_active() and self.current().get("mode", "clavier") == "clavier":
+            self._start_thread({**self.current(), "mode": "imitation"})
+        self.wake.set()
+
+    def _with_overlay(self, frame: dict) -> dict:
+        now = time.monotonic()
+        if now < self.flash_until:
+            k = (self.flash_until - now) / FLASH_SECONDS  # éclair qui s'éteint
+            frame = {i: tuple(int(c * (1 - k) + f * k) for c, f in zip(rgb, self.flash_color))
+                     for i, rgb in frame.items()}
+        if self.badges:
+            frame = {**frame, **self.badges}
+        return frame
+
+    def current(self) -> dict:
+        return preset_config(self.overridden) if self.overridden else self.base
+
+    def _start_thread(self, cfg: dict):
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self._run, args=(cfg, self.stop_event), daemon=True)
+        self.thread.start()
 
     def apply(self, cfg: dict, save: bool = True) -> None:
         """Effet du clavier (enregistré dans le clavier si save)."""
@@ -329,21 +451,32 @@ class KeyboardLights:
         self._activate(reapply=True)
 
     def _activate(self, reapply: bool):
-        cfg = preset_config(self.overridden) if self.overridden else self.base
+        cfg = self.current()
         was_direct = self._stop_thread()
         mode = cfg.get("mode", "clavier")
         self.status = mode if not self.overridden else f"{mode} ({self.overridden})"
         if mode in SOFTWARE_MODES:
-            self.stop_event = threading.Event()
-            self.thread = threading.Thread(target=self._run, args=(cfg, self.stop_event), daemon=True)
-            self.thread.start()
+            self._start_thread(cfg)
+        elif mode == "clavier" and self.overlay_active():  # voyant ou éclair en cours : imitation
+            self._start_thread({**cfg, "mode": "imitation"})
         elif mode == "clavier" and (reapply or was_direct):  # le clavier reprend (ou prend) son effet
             try:
                 self.apply(cfg, save=False)
             except (OSError, KeyError):
                 pass
 
-    def _frame(self, mode, accent, spectrum, cfg=None):
+    def _frame(self, mode, accent, spectrum, cfg=None, t=0.0):
+        if mode == "imitation":
+            return imitation_frame(cfg or {}, t, accent)
+        if mode == "frappe":
+            rgb = hex_rgb(accent)
+            frame = {i: (0, 0, 0) for i in LEDS}
+            for idx, level in list(self.hits.items()):
+                frame[idx] = tuple(int(v * level) for v in rgb)
+                self.hits[idx] = level * 0.88
+                if self.hits[idx] < 0.03:
+                    self.hits.pop(idx, None)
+            return frame
         if mode == "perso":
             colors = {i: (0, 0, 0) for i in LEDS}
             for key, color in (cfg or {}).get("perso", {}).items():
@@ -372,21 +505,51 @@ class KeyboardLights:
     def _run(self, cfg, stop):
         mode = cfg["mode"]
         spectrum = Spectrum() if mode == "audio" else None
+        listener = self._listen() if mode == "frappe" else None
         try:
             self._loop(mode, stop, spectrum, cfg)
         finally:
             if spectrum is not None:  # parec arrêté (un visualiseur de l'écran le relance s'il en a besoin)
                 from rog_flare2_effets import AUDIO
                 AUDIO.stop()
+            if listener is not None:
+                listener.stop()
+        if mode == "imitation" and not stop.is_set():  # voyants éteints : le clavier reprend son effet
+            with self.lock:
+                if self.thread is threading.current_thread():
+                    self.thread = None
+            try:
+                self.apply(cfg, save=False)
+                self.status = "clavier" if not self.overridden else f"clavier ({self.overridden})"
+            except (OSError, KeyError):
+                pass
+
+    def _listen(self):
+        """Touches pressées (rog_flare2_touches) -> self.hits ; None sans source de touches."""
+        from rog_flare2_touches import EvdevListener, listen
+        azerty = keyboard_is_azerty()
+        holder = {}
+
+        def press(name):
+            idx = key_index(name, chars=not isinstance(holder.get("l"), EvdevListener), azerty=azerty)
+            if idx is not None:
+                self.hits[idx] = 1.0
+                self.wake.set()
+        holder["l"] = listen(press)
+        if holder["l"] is None:
+            self.status = "frappe : touches illisibles (droits sur /dev/input ?)"
+        return holder["l"]
 
     def _loop(self, mode, stop, spectrum, cfg):
         last, accent, accent_at = None, self.accent(), time.monotonic()
-        fps = {"theme": 1.0, "perso": 1.0, "pulsation": 15, "ecran": 20, "audio": 25}[mode]
+        t0 = time.monotonic()
         while not stop.is_set():
+            if mode == "imitation" and not self.overlay_active():
+                return
             if time.monotonic() - accent_at > 1.0:  # thème relu une fois par seconde
                 accent, accent_at = self.accent(), time.monotonic()
             try:
-                frame = self._frame(mode, accent, spectrum, cfg)
+                frame = self._with_overlay(self._frame(mode, accent, spectrum, cfg, time.monotonic() - t0))
                 if frame != last or mode in ("theme", "perso"):  # renvoyé chaque seconde (rebranchement)
                     with self.lock:
                         send_direct(self.transport, frame)
@@ -397,11 +560,14 @@ class KeyboardLights:
                 self.transport.close()
                 last = None
                 stop.wait(3)
-            stop.wait(1 / fps)
+            busy = time.monotonic() < self.flash_until or bool(self.hits)
+            self.wake.wait(1 / max(FPS[mode], 20 if busy else 0))  # réveillé par un voyant ou une touche
+            self.wake.clear()
 
     def _stop_thread(self) -> bool:
         was_direct = self.thread is not None
         self.stop_event.set()
+        self.wake.set()
         if self.thread is not None:
             self.thread.join(timeout=3)
         self.thread = None

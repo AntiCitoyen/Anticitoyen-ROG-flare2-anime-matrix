@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Nhấp: tô; kéo: nhiều phím; nhấp phải: tắt. Dải dưới cùng là đèn gầm.",
  "Couleur…": "Màu…",
  "Tout remplir": "Tô tất cả",
- "Tout éteindre": "Tắt tất cả"
+ "Tout éteindre": "Tắt tất cả",
+ "Exporter les réglages": "Xuất cài đặt",
+ "Restaurer des réglages": "Khôi phục cài đặt",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "Đã khôi phục {n} cài đặt; khởi động lại AniMe Matrix để áp dụng giao diện và ngôn ngữ",
+ "⭳ Exporter les réglages…": "⭳ Xuất cài đặt…",
+ "⭱ Restaurer des réglages…": "⭱ Khôi phục cài đặt…",
+ "Réglages exportés : {n} fichiers": "Đã xuất cài đặt: {n} tệp",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Thay cài đặt hiện tại bằng cài đặt ngày {date} (phiên bản {version})?\nCài đặt hiện tại được lưu trước.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Cả trên các phím F1 (micro), F2 (webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Gõ phím phát sáng (phần mềm)",
+ "Éclair des touches à chaque notification": "Chớp sáng phím mỗi khi có thông báo"
 }

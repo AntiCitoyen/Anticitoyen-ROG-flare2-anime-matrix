@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | konvertiert GIFs für die Matrix (nach `dossier/matrix/`) |
 | `animematrix-effet --liste` | listet die Effekte und Visualizer auf |
 | `animematrix-dessin` | LED-für-LED-Editor (übergibt beim Schließen die Kontrolle zurück an den Dienst) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | exportiert oder stellt alle Einstellungen wieder her (auch unter *Einstellungen*); ohne Token und OBS-Passwort, außer mit `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Tastaturfarben
 
-*Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*). *Taste für Taste*: eine Farbe pro Taste, mit der Maus auf einem Tastaturplan gemalt (AZERTY oder QWERTY).
+*Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*). *Taste für Taste*: eine Farbe pro Taste, mit der Maus auf einem Tastaturplan gemalt (AZERTY oder QWERTY). *Leuchtende Anschläge*: jede gedrückte Taste leuchtet auf und verblasst. Die Anzeigen für Mikrofon, Webcam und OBS können auch F1, F2 und F3 beleuchten, und jede Benachrichtigung lässt die Tasten aufblitzen.
 
 ### ROG-Laptops (experimentell)
 

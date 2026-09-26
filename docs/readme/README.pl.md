@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir folder/ [--fidele] [--classique]` | konwertuje GIF-y pod matrycę (do `folder/matrix/`) |
 | `animematrix-effet --liste` | wyświetla listę efektów i wizualizatorów |
 | `animematrix-dessin` | edytor dioda po diodzie (oddaje kontrolę demonowi po zamknięciu) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | eksportuje lub przywraca wszystkie ustawienia (także w *Ustawieniach*); bez tokenu i hasła OBS, chyba że `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Kolory klawiatury
 
-*Ustawienia* → *🌈 Kolory klawiatury…*: efekt (tęcza, statyczny, oddychanie, cykl kolorów, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz), kolory, szybkość, jasność, kierunek. *Wypróbuj* go stosuje, *Zapisz w klawiaturze* zachowuje po odłączeniu. *Kolor motywu* i *Pulsowanie z ekranem* demon wysyła klawisz po klawiszu; po ich wyłączeniu wraca zapisany efekt. W wierszu poleceń: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dwa dodatkowe tryby programowe: *Obraz ekranu* (klawisze powtarzają ekran w powiększeniu) i *Widmo dźwięku* (jeden słupek na kolumnę). Każdy przedział czasowy i każdy profil aplikacji może też wybrać kolory klawiszy (*Harmonogram…*). *Klawisz po klawiszu*: jeden kolor na klawisz, malowany myszą na planie klawiatury (AZERTY lub QWERTY).
+*Ustawienia* → *🌈 Kolory klawiatury…*: efekt (tęcza, statyczny, oddychanie, cykl kolorów, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz), kolory, szybkość, jasność, kierunek. *Wypróbuj* go stosuje, *Zapisz w klawiaturze* zachowuje po odłączeniu. *Kolor motywu* i *Pulsowanie z ekranem* demon wysyła klawisz po klawiszu; po ich wyłączeniu wraca zapisany efekt. W wierszu poleceń: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dwa dodatkowe tryby programowe: *Obraz ekranu* (klawisze powtarzają ekran w powiększeniu) i *Widmo dźwięku* (jeden słupek na kolumnę). Każdy przedział czasowy i każdy profil aplikacji może też wybrać kolory klawiszy (*Harmonogram…*). *Klawisz po klawiszu*: jeden kolor na klawisz, malowany myszą na planie klawiatury (AZERTY lub QWERTY). *Świecące pisanie*: każdy naciśnięty klawisz rozświetla się i gaśnie. Wskaźniki mikrofonu, kamery i OBS mogą też podświetlać F1, F2 i F3, a każde powiadomienie rozbłyska na klawiszach.
 
 ### Laptopy ROG (eksperymentalne)
 

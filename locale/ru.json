@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Щелчок: закрасить; перетаскивание: несколько клавиш; правый щелчок: выключить. Нижняя полоса — подсветка корпуса.",
  "Couleur…": "Цвет…",
  "Tout remplir": "Залить всё",
- "Tout éteindre": "Выключить всё"
+ "Tout éteindre": "Выключить всё",
+ "Exporter les réglages": "Экспорт настроек",
+ "Restaurer des réglages": "Восстановить настройки",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "Восстановлено настроек: {n}; перезапустите AniMe Matrix для темы и языка",
+ "⭳ Exporter les réglages…": "⭳ Экспорт настроек…",
+ "⭱ Restaurer des réglages…": "⭱ Восстановить настройки…",
+ "Réglages exportés : {n} fichiers": "Настройки экспортированы: {n} файлов",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Заменить текущие настройки настройками от {date} (версия {version})?\nТекущие настройки будут сначала сохранены.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Также на клавишах F1 (микрофон), F2 (камера), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Светящийся набор (программно)",
+ "Éclair des touches à chaque notification": "Вспышка клавиш при каждом уведомлении"
 }

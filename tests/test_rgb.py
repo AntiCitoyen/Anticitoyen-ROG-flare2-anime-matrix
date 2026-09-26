@@ -106,3 +106,44 @@ def test_per_key_mode_and_layout(tmp_path, monkeypatch):
     first = [r for r in t.reports if r[:2] == b"\xc0\x81"]
     entries = {r[4 + 4 * k]: tuple(r[5 + 4 * k:8 + 4 * k]) for r in first[:14] for k in range(15)}
     assert entries[0x12] == (0, 255, 0) and entries[0x13] == (0, 0, 0)
+
+
+def test_typing_badges_and_flash(tmp_path, monkeypatch):
+    monkeypatch.setattr(R, "CONFIG_FILE", tmp_path / "rgb.json")
+    # touches : positions physiques (evdev) et caractères AZERTY (X11)
+    assert R.key_index("a") == R.KEYS["A"] and R.key_index("a", chars=True, azerty=True) == R.KEYS["Q"]
+    assert R.key_index("é", chars=True, azerty=True) == R.KEYS["2"] and R.key_index("space") == R.KEYS["SPACE"]
+    assert R.key_index("€") is None
+    t = R.FakeRGBTransport()
+    lights = R.KeyboardLights(lambda: 0, lambda: "#ff0000", transport=t)
+    lights.start(dict(R.DEFAULT_CONFIG))  # arc-en-ciel du clavier
+    lights.set_badges({"micro": True})  # voyant : imitation logicielle + F1 rouge
+    time.sleep(0.3)
+    last = {r[4 + 4 * k]: tuple(r[5 + 4 * k:8 + 4 * k]) for r in t.reports[-14:] if r[:2] == b"\xc0\x81"
+            for k in range(15)}
+    assert last[R.KEYS["F1"]] == (255, 0, 0) and lights.thread is not None
+    lights.set_badges({})  # plus de voyant : le clavier reprend son arc-en-ciel
+    time.sleep(0.3)
+    assert lights.thread is None and t.reports[-1][:3] == bytes([0x51, 0x2C, 4]) and lights.status == "clavier"
+    lights.flash("#ffffff")  # éclair, puis retour
+    time.sleep(0.2)
+    assert lights.thread is not None
+    time.sleep(R.FLASH_SECONDS + 0.3)
+    assert lights.thread is None
+    # frappe : une touche frappée s'allume puis s'estompe (sans écouter le vrai clavier)
+    monkeypatch.setattr(lights, "_listen", lambda: None)
+    lights.start({**R.DEFAULT_CONFIG, "mode": "frappe"})
+    lights.hits[R.KEYS["A"]] = 1.0
+    frame = lights._frame("frappe", "#00ff00", None)
+    assert frame[R.KEYS["A"]] == (0, 255, 0) and lights.hits[R.KEYS["A"]] < 1.0
+    lights.stop()
+
+
+def test_every_key_has_a_position():
+    import rog_flare2_touches as T
+    for code, name in T.SPECIAL.items():
+        assert R.key_index(name) is not None, (code, name)
+    assert R.key_index("f12") == R.KEYS["F12"] and R.key_index("p7") == R.KEYS["P7"]
+    assert R.key_index("del", chars=True, azerty=True) == R.KEYS["DEL"]
+    assert R.key_index(")", chars=True, azerty=True) == R.KEYS["-"]  # AZERTY : « ) » est à la place du « - »
+    assert T.evdev_name("KEY_F5") == "f5" and T.evdev_name("KEY_KPENTER") == "penter"

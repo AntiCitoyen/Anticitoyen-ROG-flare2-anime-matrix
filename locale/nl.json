@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: schilderen; slepen: meerdere toetsen; rechtsklik: uit. De onderste strook is de onderverlichting.",
  "Couleur…": "Kleur…",
  "Tout remplir": "Alles vullen",
- "Tout éteindre": "Alles uit"
+ "Tout éteindre": "Alles uit",
+ "Exporter les réglages": "Instellingen exporteren",
+ "Restaurer des réglages": "Instellingen herstellen",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} instellingen hersteld; start AniMe Matrix opnieuw voor thema en taal",
+ "⭳ Exporter les réglages…": "⭳ Instellingen exporteren…",
+ "⭱ Restaurer des réglages…": "⭱ Instellingen herstellen…",
+ "Réglages exportés : {n} fichiers": "Instellingen geëxporteerd: {n} bestanden",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "De huidige instellingen vervangen door die van {date} (versie {version})?\nDe huidige instellingen worden eerst bewaard.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Ook op de toetsen F1 (microfoon), F2 (webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Oplichtende aanslagen (software)",
+ "Éclair des touches à chaque notification": "Toetsen laten flitsen bij elke melding"
 }

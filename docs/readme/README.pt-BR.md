@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir pasta/ [--fidele] [--classique]` | converte GIFs para a matriz (em `pasta/matrix/`) |
 | `animematrix-effet --liste` | lista os efeitos e visualizadores |
 | `animematrix-dessin` | editor LED por LED (devolve o controle ao daemon ao fechar) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | exporta ou restaura todas as configurações (também em *Configurações*); sem o token nem a senha do OBS, exceto com `--secrets` |
 
 ### Áudio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Cores do teclado
 
-*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*). *Tecla por tecla*: uma cor por tecla, pintada com o mouse em um mapa do teclado (AZERTY ou QWERTY).
+*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*). *Tecla por tecla*: uma cor por tecla, pintada com o mouse em um mapa do teclado (AZERTY ou QWERTY). *Digitação luminosa*: cada tecla pressionada acende e depois se apaga. Os indicadores de microfone, webcam e OBS também podem acender F1, F2 e F3, e cada notificação faz as teclas piscarem.
 
 ### Notebooks ROG (experimental)
 

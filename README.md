@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | convertit des GIF pour la matrice (dans `dossier/matrix/`) |
 | `animematrix-effet --liste` | liste les effets et visualiseurs |
 | `animematrix-dessin` | éditeur LED par LED (rend la main au démon en fermant) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | exporte ou restaure tous les réglages (aussi dans *Réglages*) ; sans le jeton ni le mot de passe OBS, sauf `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Couleurs du clavier
 
-*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*). *Touche par touche* : une couleur par touche, peinte à la souris sur le plan du clavier (AZERTY ou QWERTY).
+*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*). *Touche par touche* : une couleur par touche, peinte à la souris sur le plan du clavier (AZERTY ou QWERTY). *Frappe lumineuse* : chaque touche frappée s'allume puis s'estompe. Les voyants micro, webcam et OBS peuvent aussi allumer F1, F2 et F3, et chaque notification fait briller les touches.
 
 ### Portables ROG (expérimental)
 

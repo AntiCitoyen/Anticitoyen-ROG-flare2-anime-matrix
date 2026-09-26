@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.",
  "Couleur…": "Couleur…",
  "Tout remplir": "Tout remplir",
- "Tout éteindre": "Tout éteindre"
+ "Tout éteindre": "Tout éteindre",
+ "Exporter les réglages": "Exporter les réglages",
+ "Restaurer des réglages": "Restaurer des réglages",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue",
+ "⭳ Exporter les réglages…": "⭳ Exporter les réglages…",
+ "⭱ Restaurer des réglages…": "⭱ Restaurer des réglages…",
+ "Réglages exportés : {n} fichiers": "Réglages exportés : {n} fichiers",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Frappe lumineuse (logiciel)",
+ "Éclair des touches à chaque notification": "Éclair des touches à chaque notification"
 }

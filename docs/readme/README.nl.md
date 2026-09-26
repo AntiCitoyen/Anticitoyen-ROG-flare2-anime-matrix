@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir map/ [--fidele] [--classique]` | converteert GIF's voor de matrix (in `map/matrix/`) |
 | `animematrix-effet --liste` | toont de lijst met effecten en visualisaties |
 | `animematrix-dessin` | LED-voor-LED-editor (geeft de controle terug aan de daemon bij het sluiten) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | exporteert of herstelt alle instellingen (ook in *Instellingen*); zonder token of OBS-wachtwoord, behalve met `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Toetsenbordkleuren
 
-*Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*). *Toets voor toets*: één kleur per toets, met de muis geschilderd op een toetsenbordkaart (AZERTY of QWERTY).
+*Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*). *Toets voor toets*: één kleur per toets, met de muis geschilderd op een toetsenbordkaart (AZERTY of QWERTY). *Oplichtende aanslagen*: elke ingedrukte toets licht op en vervaagt daarna. De indicatoren voor microfoon, webcam en OBS kunnen ook F1, F2 en F3 laten oplichten, en elke melding laat de toetsen flitsen.
 
 ### ROG-laptops (experimenteel)
 

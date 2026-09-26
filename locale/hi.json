@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "क्लिक: रंगें; खींचें: कई कुंजियाँ; दायाँ क्लिक: बंद। नीचे की पट्टी अंडरग्लो है।",
  "Couleur…": "रंग…",
  "Tout remplir": "सब भरें",
- "Tout éteindre": "सब बंद"
+ "Tout éteindre": "सब बंद",
+ "Exporter les réglages": "सेटिंग्स निर्यात करें",
+ "Restaurer des réglages": "सेटिंग्स पुनर्स्थापित करें",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} सेटिंग्स पुनर्स्थापित; थीम और भाषा के लिए AniMe Matrix फिर से शुरू करें",
+ "⭳ Exporter les réglages…": "⭳ सेटिंग्स निर्यात करें…",
+ "⭱ Restaurer des réglages…": "⭱ सेटिंग्स पुनर्स्थापित करें…",
+ "Réglages exportés : {n} fichiers": "सेटिंग्स निर्यात हुईं: {n} फ़ाइलें",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "मौजूदा सेटिंग्स को {date} (संस्करण {version}) की सेटिंग्स से बदलें?\nमौजूदा सेटिंग्स पहले सहेजी जाती हैं।",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "F1 (माइक), F2 (वेबकैम), F3 (OBS) कुंजियों पर भी",
+ "Frappe lumineuse (logiciel)": "चमकती टाइपिंग (सॉफ़्टवेयर)",
+ "Éclair des touches à chaque notification": "हर सूचना पर कुंजियों की चमक"
 }

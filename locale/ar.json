@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "نقرة: تلوين؛ سحب: عدة مفاتيح؛ نقرة يمنى: إطفاء. الشريط السفلي هو الإضاءة السفلية.",
  "Couleur…": "لون…",
  "Tout remplir": "ملء الكل",
- "Tout éteindre": "إطفاء الكل"
+ "Tout éteindre": "إطفاء الكل",
+ "Exporter les réglages": "تصدير الإعدادات",
+ "Restaurer des réglages": "استعادة الإعدادات",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "استُعيد {n} من الإعدادات؛ أعد تشغيل AniMe Matrix للسمة واللغة",
+ "⭳ Exporter les réglages…": "⭳ تصدير الإعدادات…",
+ "⭱ Restaurer des réglages…": "⭱ استعادة الإعدادات…",
+ "Réglages exportés : {n} fichiers": "صُدّرت الإعدادات: {n} ملفًا",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "استبدال الإعدادات الحالية بإعدادات {date} (الإصدار {version})؟\nتُحفظ الإعدادات الحالية أولًا.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "وأيضًا على المفاتيح F1 (الميكروفون) وF2 (الكاميرا) وF3 (OBS)",
+ "Frappe lumineuse (logiciel)": "كتابة مضيئة (برمجيًا)",
+ "Éclair des touches à chaque notification": "وميض المفاتيح عند كل إشعار"
 }

@@ -283,6 +283,7 @@ class Daemon:
     def _badges_changed(self, states: dict):
         from rog_flare2_voyants import BADGES
         self.screen.set_badges([i for name, on in states.items() if on for i in BADGES[name]], self.screen.base)
+        self.rgb.set_badges(states if self.voyants.cfg.get("touches") else {})  # aussi F1-F3
 
     def _announce(self, name: str):
         from rog_flare2_i18n import _
@@ -501,6 +502,9 @@ class Daemon:
     def notify(self, text: str, duration: float = 6.0):
         """Surimpression d'un texte défilant ; duration <= 0 : le temps d'un passage complet."""
         from rog_flare2_effets import make_effect, run_effect
+        from rog_flare2_rgb import load_config as rgb_config
+        if rgb_config().get("eclair"):
+            self.rgb.flash()  # éclair des touches
         if duration <= 0:
             from rog_flare2_texte import render
             duration = (37 + render(text).shape[1]) / 20.0 + 0.5  # 20 colonnes/s : un passage complet
@@ -608,6 +612,7 @@ class Daemon:
             self.programme.start(prog_config())
             from rog_flare2_voyants import load_config as badge_config
             self.voyants.start(badge_config())
+            self._badges_changed(self.voyants.states)  # « aussi sur les touches » pris en compte tout de suite
             from rog_flare2_telecommande import load_config as remote_config
             self.remote.start(remote_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}

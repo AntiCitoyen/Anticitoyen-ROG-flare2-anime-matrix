@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Frappe lumineuse sur les touches ; voyants sur F1-F3 ; éclair des touches
+    à chaque notification ; toutes les touches reconnues (F1-F12, flèches,
+    pavé numérique) ; sauvegarde et restauration des réglages.
   * Éditeur de couleurs touche par touche ; les 6 animations intégrées du
     clavier ; aperçu de l'animation enregistrée ; problèmes affichés dans le
     lanceur et la télécommande.

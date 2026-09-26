@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | 转换 GIF 以适配矩阵屏（输出至 `dossier/matrix/`） |
 | `animematrix-effet --liste` | 列出所有效果与可视化器 |
 | `animematrix-dessin` | 逐颗 LED 绘图编辑器（关闭时将控制权交还给守护进程） |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | 导出或恢复全部设置（也可在*设置*中操作）；除非使用 `--secrets`，否则不含令牌和 OBS 密码 |
 
 ### 音频
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### 键盘颜色
 
-*设置* → *🌈 键盘颜色…*：效果（彩虹、静态、呼吸、颜色循环、触发、涟漪、星空、流沙、电流、雨滴）、颜色、速度、亮度、方向。*试用* 立即应用，*保存到键盘* 拔下后仍保留。*主题颜色* 和 *随屏幕脉动* 由守护进程逐键发送；退出后恢复已保存的效果。命令行：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 另有两种软件模式：*屏幕画面*（按键放大映射屏幕内容）和*音频频谱*（每列一条光柱）。每个时间段和每个应用配置文件也可以选择按键颜色（*计划…*）。 *逐键*：每个按键一种颜色，用鼠标在键盘布局图上绘制（AZERTY 或 QWERTY）。
+*设置* → *🌈 键盘颜色…*：效果（彩虹、静态、呼吸、颜色循环、触发、涟漪、星空、流沙、电流、雨滴）、颜色、速度、亮度、方向。*试用* 立即应用，*保存到键盘* 拔下后仍保留。*主题颜色* 和 *随屏幕脉动* 由守护进程逐键发送；退出后恢复已保存的效果。命令行：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 另有两种软件模式：*屏幕画面*（按键放大映射屏幕内容）和*音频频谱*（每列一条光柱）。每个时间段和每个应用配置文件也可以选择按键颜色（*计划…*）。 *逐键*：每个按键一种颜色，用鼠标在键盘布局图上绘制（AZERTY 或 QWERTY）。 *按键发光*：每按一个键，它就会亮起然后渐暗。麦克风、摄像头和 OBS 指示灯也可以点亮 F1、F2 和 F3，每条通知都会让按键闪光。
 
 ### ROG 笔记本电脑（实验性）
 

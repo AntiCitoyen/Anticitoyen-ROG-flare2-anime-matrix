@@ -13,6 +13,7 @@
     animematrix-ctl memoire FICHIER [--reduire couper|alterner] [--fidele]
                                                  (enregistre dans le clavier : affichée sans logiciel)
     animematrix-ctl clavier [1-7]                (animation du clavier : 7 l'enregistrée, 1-6 les intégrées)
+    animematrix-ctl sauvegarde reglages.zip [--secrets] / restaurer reglages.zip
     animematrix-ctl rgb arc-en-ciel [--vitesse 50] [--luminosite 100] [--direction gauche]
     animematrix-ctl rgb statique --couleur "#ff0000"    (touches : effets du clavier, theme, pulsation)
 """
@@ -147,6 +148,11 @@ def main(argv=None):
     m.add_argument("--reduire", choices=("couper", "alterner"), default="couper",
                    help="au-delà de 196 images : garder le début, ou retirer une image sur deux")
     m.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
+    sv = sub.add_parser("sauvegarde", help="exporte tous les réglages dans un .zip")
+    sv.add_argument("fichier")
+    sv.add_argument("--secrets", action="store_true", help="inclure le jeton de la télécommande et le mot de passe OBS")
+    rs = sub.add_parser("restaurer", help="remplace les réglages par ceux d'un .zip (les actuels sont sauvegardés)")
+    rs.add_argument("fichier")
     k = sub.add_parser("clavier", help="animation du clavier : 7 l'enregistrée (défaut), 1-6 les intégrées")
     k.add_argument("effet", nargs="?", type=int, default=7, choices=range(1, 8))
     from rog_flare2_rgb import DIRECTIONS, EFFECTS, SOFTWARE_MODES
@@ -160,6 +166,18 @@ def main(argv=None):
     r.add_argument("--sans-enregistrer", action="store_true", help="perdu au débranchement")
     sub.add_parser("quitter")
     args = ap.parse_args(argv)
+    if args.cmd in ("sauvegarde", "restaurer"):  # sans le démon
+        import rog_flare2_sauvegarde as backup
+        if args.cmd == "sauvegarde":
+            print(f"{backup.export(Path(args.fichier), args.secrets)} fichiers → {args.fichier}")
+            return
+        n, before = backup.restore(Path(args.fichier))
+        print(f"{n} fichiers restaurés" + (f" (anciens réglages : {before})" if before else ""))
+        try:
+            request("config", timeout=2)
+        except (OSError, DaemonError, ValueError):
+            pass
+        return
 
     if not ensure_daemon():
         sys.exit("animematrixd injoignable")

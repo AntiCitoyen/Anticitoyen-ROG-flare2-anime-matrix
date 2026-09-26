@@ -438,6 +438,12 @@ class LauncherApp(tk.Tk):
                    command=self.open_paint_editor).pack(fill="x", pady=(12, 0))
         ttk.Button(tab, text=_("Dossier des extensions (effets)"),
                    command=self.open_plugin_dir).pack(fill="x", pady=(4, 0))
+        backup = ttk.Frame(tab)
+        backup.pack(fill="x", pady=(4, 0))
+        ttk.Button(backup, text=_("⭳ Exporter les réglages…"), command=self.export_settings).pack(
+            side="left", expand=True, fill="x", padx=(0, 4))
+        ttk.Button(backup, text=_("⭱ Restaurer des réglages…"), command=self.import_settings).pack(
+            side="left", expand=True, fill="x", padx=(4, 0))
         ttk.Button(tab, text=_("Programmation…"), command=self.open_schedule).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Voyants (micro, webcam, OBS)…"), command=self.open_badges).pack(fill="x", pady=(4, 0))
         ttk.Button(tab, text=_("Télécommande web…"), command=self.open_remote).pack(fill="x", pady=(4, 0))
@@ -923,6 +929,47 @@ class LauncherApp(tk.Tk):
     def open_animation(self):
         from rog_flare2_animation import AnimationEditor
         AnimationEditor(self)
+
+    def _pick_zip(self, title: str, save: bool) -> str:
+        args = ["zenity", "--file-selection", "--title=" + title, "--file-filter=*.zip"]
+        if save:
+            args += ["--save", "--confirm-overwrite", "--filename=animematrix-reglages.zip"]
+        try:
+            return subprocess.run(args, capture_output=True, text=True, timeout=300).stdout.strip()
+        except (FileNotFoundError, subprocess.SubprocessError):
+            ask = filedialog.asksaveasfilename if save else filedialog.askopenfilename
+            return ask(title=title, filetypes=[("zip", "*.zip")],
+                       **({"initialfile": "animematrix-reglages.zip"} if save else {})) or ""
+
+    def export_settings(self):
+        """Tous les réglages dans un .zip (sans le jeton de la télécommande ni le mot de passe OBS)."""
+        import rog_flare2_sauvegarde as backup
+        path = self._pick_zip(_("Exporter les réglages"), save=True)
+        if path:
+            try:
+                n = backup.export(Path(path))
+                self.set_status(_("Réglages exportés : {n} fichiers").format(n=n))
+            except OSError as exc:
+                self.set_status(_("Erreur : {err}").format(err=exc))
+
+    def import_settings(self):
+        """Réglages d'une archive ; les réglages en place sont d'abord sauvegardés."""
+        import rog_flare2_sauvegarde as backup
+        path = self._pick_zip(_("Restaurer des réglages"), save=False)
+        if not path:
+            return
+        try:
+            info = backup.summary(Path(path))
+            if not messagebox.askyesno(_("Restaurer des réglages"), _(
+                    "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\n"
+                    "Les réglages actuels sont d'abord sauvegardés.").format(**info)):
+                return
+            n, _before = backup.restore(Path(path))
+        except (OSError, ValueError, KeyError) as exc:
+            self.set_status(_("Erreur : {err}").format(err=exc))
+            return
+        self._send("config")
+        self.set_status(_("{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue").format(n=n))
 
     def open_plugin_dir(self):
         """Ouvre le dossier des extensions ; à la première ouverture, y dépose l'exemple et le guide."""

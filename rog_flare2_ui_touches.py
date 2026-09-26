@@ -11,31 +11,14 @@ import tkinter as tk
 from tkinter import colorchooser, ttk
 
 import rog_flare2_rgb as rgb
+from rog_flare2_rgb import AZERTY, KEYS
 from rog_flare2_i18n import LANG, _
 
-KEYS = {
-    "ESC": 0x00, "`": 0x01, "TAB": 0x02, "CAPS": 0x03, "LSHIFT": 0x04, "LCTRL": 0x05, "1": 0x11, "ISO\\": 0x0C,
-    "WIN": 0x15, "F1": 0x18, "2": 0x19, "Q": 0x12, "A": 0x13, "Z": 0x14, "LALT": 0x1D, "F2": 0x20, "3": 0x21,
-    "W": 0x1A, "S": 0x1B, "X": 0x1C, "F3": 0x28, "4": 0x29, "E": 0x22, "D": 0x23, "C": 0x24, "F4": 0x30,
-    "5": 0x31, "R": 0x2A, "F": 0x2B, "V": 0x2C, "6": 0x39, "T": 0x32, "G": 0x33, "B": 0x34, "SPACE": 0x35,
-    "F5": 0x40, "7": 0x41, "Y": 0x3A, "H": 0x3B, "N": 0x3C, "F6": 0x48, "8": 0x49, "U": 0x42, "J": 0x43,
-    "M": 0x44, "F7": 0x50, "9": 0x51, "I": 0x4A, "K": 0x4B, ",": 0x4C, "F8": 0x58, "0": 0x59, "O": 0x52,
-    "L": 0x53, ".": 0x54, "RALT": 0x4D, "F9": 0x60, "-": 0x61, "P": 0x5A, ";": 0x5B, "/": 0x5C, "FN": 0x5D,
-    "F10": 0x68, "=": 0x69, "[": 0x62, "'": 0x63, "MENU": 0x65, "F11": 0x70, "BKSP": 0x79, "]": 0x6A,
-    "#": 0x6B, "RSHIFT": 0x7C, "F12": 0x78, "ENTER": 0x7B, "ANSI\\": 0x7A, "RCTRL": 0x7D, "PRTSC": 0x80,
-    "INS": 0x81, "DEL": 0x82, "LEFT": 0x85, "SCRLK": 0x88, "HOME": 0x89, "END": 0x8A, "UP": 0x8C,
-    "DOWN": 0x8D, "PAUSE": 0x90, "PGUP": 0x91, "PGDN": 0x92, "RIGHT": 0x95, "NUM": 0x99, "P7": 0x9A,
-    "P4": 0x9B, "P1": 0x9C, "P0": 0x9D, "P/": 0xA1, "P8": 0xA2, "P5": 0xA3, "P2": 0xA4, "P*": 0xA9,
-    "P9": 0xAA, "P6": 0xAB, "P3": 0xAC, "P.": 0xAD, "P-": 0xB1, "P+": 0xB2, "PENTER": 0xB4,
-}
 LABELS = {"ESC": "Esc", "LSHIFT": "⇧", "RSHIFT": "⇧", "LCTRL": "Ctrl", "RCTRL": "Ctrl", "LALT": "Alt",
           "RALT": "AltGr", "WIN": "❖", "FN": "Fn", "MENU": "☰", "TAB": "↹", "CAPS": "⇪", "BKSP": "⌫",
           "ENTER": "↵", "PENTER": "↵", "SPACE": "", "LEFT": "←", "RIGHT": "→", "UP": "↑", "DOWN": "↓",
           "PRTSC": "Impr", "SCRLK": "Arrêt", "PAUSE": "Pause", "INS": "Ins", "DEL": "Suppr", "HOME": "⇱",
           "END": "⇲", "PGUP": "⇞", "PGDN": "⇟", "NUM": "Num", "ISO\\": "<", "ANSI\\": "\\"}
-AZERTY = {"`": "²", "1": "&", "2": "é", "3": '"', "4": "'", "5": "(", "6": "-", "7": "è", "8": "_", "9": "ç",
-          "0": "à", "-": ")", "=": "=", "Q": "A", "W": "Z", "[": "^", "]": "$", "A": "Q", ";": "M", "'": "ù",
-          "#": "*", "Z": "W", "M": ",", ",": ";", ".": ":", "/": "!"}
 CELL, PAD = 28, 2
 PALETTE = ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#8b00ff", "#ff00ff", "#ffffff"]
 

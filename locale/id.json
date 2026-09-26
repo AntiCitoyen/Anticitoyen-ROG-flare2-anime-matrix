@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: warnai; seret: beberapa tombol; klik kanan: matikan. Strip bawah adalah lampu bawah.",
  "Couleur…": "Warna…",
  "Tout remplir": "Isi semua",
- "Tout éteindre": "Matikan semua"
+ "Tout éteindre": "Matikan semua",
+ "Exporter les réglages": "Ekspor pengaturan",
+ "Restaurer des réglages": "Pulihkan pengaturan",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} pengaturan dipulihkan; mulai ulang AniMe Matrix untuk tema dan bahasa",
+ "⭳ Exporter les réglages…": "⭳ Ekspor pengaturan…",
+ "⭱ Restaurer des réglages…": "⭱ Pulihkan pengaturan…",
+ "Réglages exportés : {n} fichiers": "Pengaturan diekspor: {n} berkas",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Ganti pengaturan saat ini dengan pengaturan {date} (versi {version})?\nPengaturan saat ini disimpan terlebih dahulu.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Juga pada tombol F1 (mikrofon), F2 (webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Ketikan menyala (perangkat lunak)",
+ "Éclair des touches à chaque notification": "Kilatan tombol pada setiap notifikasi"
 }

@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Click: paint; drag: several keys; right click: off. The bottom strip is the underglow.",
  "Couleur…": "Colour…",
  "Tout remplir": "Fill all",
- "Tout éteindre": "All off"
+ "Tout éteindre": "All off",
+ "Exporter les réglages": "Export settings",
+ "Restaurer des réglages": "Restore settings",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} settings restored; restart AniMe Matrix for the theme and language",
+ "⭳ Exporter les réglages…": "⭳ Export settings…",
+ "⭱ Restaurer des réglages…": "⭱ Restore settings…",
+ "Réglages exportés : {n} fichiers": "Settings exported: {n} files",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Replace the current settings with those from {date} (version {version})?\nThe current settings are saved first.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Also on the F1 (mic), F2 (webcam), F3 (OBS) keys",
+ "Frappe lumineuse (logiciel)": "Typing glow (software)",
+ "Éclair des touches à chaque notification": "Flash the keys on each notification"
 }

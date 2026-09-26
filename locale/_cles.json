@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "lanceur (source française)",
  "Couleur…": "lanceur (source française)",
  "Tout remplir": "lanceur (source française)",
- "Tout éteindre": "lanceur (source française)"
+ "Tout éteindre": "lanceur (source française)",
+ "Exporter les réglages": "lanceur (source française)",
+ "Restaurer des réglages": "lanceur (source française)",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "lanceur (source française)",
+ "⭳ Exporter les réglages…": "lanceur (source française)",
+ "⭱ Restaurer des réglages…": "lanceur (source française)",
+ "Réglages exportés : {n} fichiers": "lanceur (source française)",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "lanceur (source française)",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "lanceur (source française)",
+ "Frappe lumineuse (logiciel)": "lanceur (source française)",
+ "Éclair des touches à chaque notification": "lanceur (source française)"
 }

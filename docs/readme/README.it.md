@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir cartella/ [--fidele] [--classique]` | converte le GIF per la matrice (in `cartella/matrix/`) |
 | `animematrix-effet --liste` | elenca gli effetti e i visualizzatori |
 | `animematrix-dessin` | editor LED per LED (restituisce il controllo al demone alla chiusura) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | esporta o ripristina tutte le impostazioni (anche in *Impostazioni*); senza token né password OBS, salvo `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Colori della tastiera
 
-*Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Altre due modalità software: *Immagine dello schermo* (i tasti riproducono lo schermo, ingrandito) e *Spettro audio* (una barra per colonna). Ogni fascia oraria e ogni profilo di applicazione può anche scegliere i colori dei tasti (*Programmazione…*). *Tasto per tasto*: un colore per tasto, dipinto con il mouse su una mappa della tastiera (AZERTY o QWERTY).
+*Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Altre due modalità software: *Immagine dello schermo* (i tasti riproducono lo schermo, ingrandito) e *Spettro audio* (una barra per colonna). Ogni fascia oraria e ogni profilo di applicazione può anche scegliere i colori dei tasti (*Programmazione…*). *Tasto per tasto*: un colore per tasto, dipinto con il mouse su una mappa della tastiera (AZERTY o QWERTY). *Digitazione luminosa*: ogni tasto premuto si accende e poi sfuma. Gli indicatori di microfono, webcam e OBS possono anche accendere F1, F2 e F3, e ogni notifica fa lampeggiare i tasti.
 
 ### Portatili ROG (sperimentale)
 

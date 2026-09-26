@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Clique: pintar; arrastar: várias teclas; clique direito: apagar. A faixa inferior é a iluminação inferior.",
  "Couleur…": "Cor…",
  "Tout remplir": "Preencher tudo",
- "Tout éteindre": "Apagar tudo"
+ "Tout éteindre": "Apagar tudo",
+ "Exporter les réglages": "Exportar configurações",
+ "Restaurer des réglages": "Restaurar configurações",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} configurações restauradas; reinicie o AniMe Matrix para o tema e o idioma",
+ "⭳ Exporter les réglages…": "⭳ Exportar configurações…",
+ "⭱ Restaurer des réglages…": "⭱ Restaurar configurações…",
+ "Réglages exportés : {n} fichiers": "Configurações exportadas: {n} arquivos",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Substituir as configurações atuais pelas de {date} (versão {version})?\nAs configurações atuais são salvas antes.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Também nas teclas F1 (microfone), F2 (webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Digitação luminosa (software)",
+ "Éclair des touches à chaque notification": "Clarão das teclas a cada notificação"
 }

@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: maluj; przeciągnij: kilka klawiszy; prawy klik: wyłącz. Dolny pasek to podświetlenie spodu.",
  "Couleur…": "Kolor…",
  "Tout remplir": "Wypełnij wszystko",
- "Tout éteindre": "Wyłącz wszystko"
+ "Tout éteindre": "Wyłącz wszystko",
+ "Exporter les réglages": "Eksportuj ustawienia",
+ "Restaurer des réglages": "Przywróć ustawienia",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "Przywrócono {n} ustawień; uruchom ponownie AniMe Matrix dla motywu i języka",
+ "⭳ Exporter les réglages…": "⭳ Eksportuj ustawienia…",
+ "⭱ Restaurer des réglages…": "⭱ Przywróć ustawienia…",
+ "Réglages exportés : {n} fichiers": "Wyeksportowano ustawienia: {n} plików",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Zastąpić bieżące ustawienia ustawieniami z {date} (wersja {version})?\nBieżące ustawienia zostaną najpierw zapisane.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Także na klawiszach F1 (mikrofon), F2 (kamera), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Świecące pisanie (programowo)",
+ "Éclair des touches à chaque notification": "Błysk klawiszy przy każdym powiadomieniu"
 }

@@ -198,6 +198,9 @@ class BadgesWindow:
         self.announce = tk.BooleanVar(value=bool(cfg.get("annoncer", True)))
         ttk.Checkbutton(body, text=_("Annoncer chaque changement par un texte défilant"),
                         variable=self.announce).pack(anchor="w", pady=(6, 2))
+        self.keys = tk.BooleanVar(value=bool(cfg.get("touches")))
+        ttk.Checkbutton(body, text=_("Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)"),
+                        variable=self.keys).pack(anchor="w", pady=(0, 2))
         self.status = ttk.Label(body, text="", style="Muted.TLabel")
         self.status.pack(anchor="w")
         ttk.Button(body, text=_("Enregistrer"), command=self.save).pack(fill="x", pady=(8, 0))
@@ -209,7 +212,8 @@ class BadgesWindow:
             port = 4455
         self.voyants.save_config({"micro": self.mic_labels.get(self.mic.get(), ""), "webcam": self.webcam.get(),
                                   "obs": self.obs.get(), "obs_port": port,
-                                  "obs_mot_de_passe": self.password.get(), "annoncer": self.announce.get()})
+                                  "obs_mot_de_passe": self.password.get(), "annoncer": self.announce.get(),
+                                  "touches": self.keys.get()})
         self.on_saved()
         self.status.config(text=_("Voyants enregistrés"))
 

@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "클릭: 칠하기, 드래그: 여러 키, 오른쪽 클릭: 끄기. 아래 띠는 하단 조명입니다.",
  "Couleur…": "색상…",
  "Tout remplir": "모두 채우기",
- "Tout éteindre": "모두 끄기"
+ "Tout éteindre": "모두 끄기",
+ "Exporter les réglages": "설정 내보내기",
+ "Restaurer des réglages": "설정 복원",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "설정 {n}개 복원됨. 테마와 언어는 AniMe Matrix를 다시 시작하면 적용됩니다",
+ "⭳ Exporter les réglages…": "⭳ 설정 내보내기…",
+ "⭱ Restaurer des réglages…": "⭱ 설정 복원…",
+ "Réglages exportés : {n} fichiers": "설정 내보냄: 파일 {n}개",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "현재 설정을 {date}(버전 {version})의 설정으로 바꿀까요?\n현재 설정은 먼저 저장됩니다.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "F1(마이크), F2(웹캠), F3(OBS) 키에도 표시",
+ "Frappe lumineuse (logiciel)": "타이핑 발광(소프트웨어)",
+ "Éclair des touches à chaque notification": "알림마다 키 번쩍임"
 }

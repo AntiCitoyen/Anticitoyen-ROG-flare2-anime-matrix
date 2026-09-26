@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Tıkla: boya; sürükle: birkaç tuş; sağ tık: kapat. Alttaki şerit alt aydınlatmadır.",
  "Couleur…": "Renk…",
  "Tout remplir": "Tümünü doldur",
- "Tout éteindre": "Tümünü kapat"
+ "Tout éteindre": "Tümünü kapat",
+ "Exporter les réglages": "Ayarları dışa aktar",
+ "Restaurer des réglages": "Ayarları geri yükle",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} ayar geri yüklendi; tema ve dil için AniMe Matrix'i yeniden başlatın",
+ "⭳ Exporter les réglages…": "⭳ Ayarları dışa aktar…",
+ "⭱ Restaurer des réglages…": "⭱ Ayarları geri yükle…",
+ "Réglages exportés : {n} fichiers": "Ayarlar dışa aktarıldı: {n} dosya",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Geçerli ayarlar {date} tarihli ayarlarla (sürüm {version}) değiştirilsin mi?\nGeçerli ayarlar önce kaydedilir.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Ayrıca F1 (mikrofon), F2 (web kamerası), F3 (OBS) tuşlarında",
+ "Frappe lumineuse (logiciel)": "Işıklı yazma (yazılım)",
+ "Éclair des touches à chaque notification": "Her bildirimde tuşları parlat"
 }

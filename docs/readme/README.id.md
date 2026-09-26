@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | mengonversi GIF untuk matriks (di `dossier/matrix/`) |
 | `animematrix-effet --liste` | menampilkan daftar efek dan visualizer |
 | `animematrix-dessin` | editor per LED (mengembalikan kendali ke daemon saat ditutup) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | mengekspor atau memulihkan semua pengaturan (juga di *Pengaturan*); tanpa token dan kata sandi OBS kecuali dengan `--secrets` |
 
 ### Audio
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Warna keyboard
 
-*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*). *Per tombol*: satu warna per tombol, diwarnai dengan mouse pada peta keyboard (AZERTY atau QWERTY).
+*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*). *Per tombol*: satu warna per tombol, diwarnai dengan mouse pada peta keyboard (AZERTY atau QWERTY). *Ketikan menyala*: setiap tombol yang ditekan menyala lalu meredup. Indikator mikrofon, webcam, dan OBS juga dapat menyalakan F1, F2, dan F3, dan setiap notifikasi membuat tombol berkilat.
 
 ### Laptop ROG (eksperimental)
 

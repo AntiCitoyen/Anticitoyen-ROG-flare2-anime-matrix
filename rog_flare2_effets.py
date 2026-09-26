@@ -124,9 +124,11 @@ class KeyboardReactEffect(pww.KeyboardReactEffect):
         self._demo = self._listener is None
 
     def _press(self, name: str):
-        if name in ("shift", "caps_lock"):
+        if name in ("shift", "rshift", "caps_lock"):
             self._caps = True
             return
+        if name == "penter":
+            name = "enter"
         bri, glow = (255, int(self.glow) + 2) if self._caps else (180, int(self.glow))
         if name == "space":
             self._flash_row(10, 28, bri, glow)
@@ -138,7 +140,7 @@ class KeyboardReactEffect(pww.KeyboardReactEffect):
             self._flash_point(*pww._KEY_POS[name], bri, glow)
 
     def _release(self, name: str):
-        if name in ("shift", "caps_lock"):
+        if name in ("shift", "rshift", "caps_lock"):
             self._caps = False
 
 

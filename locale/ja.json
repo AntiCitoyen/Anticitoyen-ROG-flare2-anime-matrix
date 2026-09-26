@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "クリック：塗る、ドラッグ：複数のキー、右クリック：消灯。下の帯はアンダーグローです。",
  "Couleur…": "色…",
  "Tout remplir": "すべて塗る",
- "Tout éteindre": "すべて消灯"
+ "Tout éteindre": "すべて消灯",
+ "Exporter les réglages": "設定をエクスポート",
+ "Restaurer des réglages": "設定を復元",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} 件の設定を復元しました。テーマと言語は AniMe Matrix の再起動後に反映されます",
+ "⭳ Exporter les réglages…": "⭳ 設定をエクスポート…",
+ "⭱ Restaurer des réglages…": "⭱ 設定を復元…",
+ "Réglages exportés : {n} fichiers": "設定をエクスポートしました：{n} ファイル",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "現在の設定を {date}（バージョン {version}）の設定で置き換えますか？\n現在の設定は先に保存されます。",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "F1（マイク）、F2（ウェブカメラ）、F3（OBS）キーにも表示",
+ "Frappe lumineuse (logiciel)": "タイピングで光る（ソフトウェア）",
+ "Éclair des touches à chaque notification": "通知ごとにキーを光らせる"
 }

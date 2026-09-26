@@ -11,8 +11,8 @@ import rog_flare2_touches as T
 
 def test_evdev_names():
     assert T.evdev_name("KEY_A") == "a" and T.evdev_name("KEY_7") == "7"
-    assert T.evdev_name("KEY_SPACE") == "space" and T.evdev_name("KEY_KPENTER") == "enter"
-    assert T.evdev_name("KEY_LEFTSHIFT") == "shift" and T.evdev_name("KEY_F1") is None
+    assert T.evdev_name("KEY_SPACE") == "space" and T.evdev_name("KEY_KPENTER") == "penter"
+    assert T.evdev_name("KEY_LEFTSHIFT") == "shift" and T.evdev_name("KEY_F1") == "f1" and T.evdev_name("KEY_POWER") is None
 
 
 class FakeDevice:
@@ -48,7 +48,7 @@ def test_listener_translates_evdev_events():
                                devices=[FakeDevice(events)])
     time.sleep(0.3)
     listener.stop()
-    assert got == [("+", "shift"), ("+", "a"), ("-", "a"), ("-", "shift"), ("+", "space")]
+    assert got == [("+", "shift"), ("+", "a"), ("-", "a"), ("-", "shift"), ("+", "space"), ("+", "f1")]
 
 
 def test_keyboard_react_lights_the_key(monkeypatch):

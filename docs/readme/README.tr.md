@@ -195,6 +195,7 @@ animematrix-ctl stop
 | `animematrix-convertir dossier/ [--fidele] [--classique]` | GIF'leri matris için dönüştürür (`dossier/matrix/` içine) |
 | `animematrix-effet --liste` | efektleri ve görselleştiricileri listeler |
 | `animematrix-dessin` | LED LED çizim düzenleyici (kapanınca kontrolü arka plan servisine bırakır) |
+| `animematrix-ctl sauvegarde reglages.zip`, `animematrix-ctl restaurer reglages.zip` | tüm ayarları dışa aktarır veya geri yükler (*Ayarlar*'da da); `--secrets` olmadan jeton ve OBS parolası hariç |
 
 ### Ses
 
@@ -223,7 +224,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Klavye renkleri
 
-*Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*). *Tuş tuş*: her tuşa bir renk, klavye planı üzerinde fareyle boyanır (AZERTY veya QWERTY).
+*Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*). *Tuş tuş*: her tuşa bir renk, klavye planı üzerinde fareyle boyanır (AZERTY veya QWERTY). *Işıklı yazma*: basılan her tuş yanar, sonra söner. Mikrofon, web kamerası ve OBS göstergeleri F1, F2 ve F3'ü de yakabilir; her bildirim tuşları parlatır.
 
 ### ROG dizüstü bilgisayarlar (deneysel)
 

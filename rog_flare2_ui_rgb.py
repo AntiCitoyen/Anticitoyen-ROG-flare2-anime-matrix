@@ -20,7 +20,7 @@ def effect_labels() -> dict[str, str]:
         _("Courant"): "courant", _("Pluie"): "pluie",
         _("Couleur du thème (logiciel)"): "theme", _("Pulsation avec l'écran (logiciel)"): "pulsation",
         _("Image de l'écran (logiciel)"): "ecran", _("Spectre audio (logiciel)"): "audio",
-        _("Touche par touche (logiciel)"): "perso"}
+        _("Touche par touche (logiciel)"): "perso", _("Frappe lumineuse (logiciel)"): "frappe"}
 
 
 def preset_labels() -> dict[str, str]:
@@ -79,6 +79,9 @@ class RGBWindow:
             side="left", expand=True, fill="x", padx=(0, 4))
         ttk.Button(buttons, text=_("💾 Enregistrer dans le clavier"), command=lambda: self.apply(True)).pack(
             side="left", expand=True, fill="x", padx=(4, 0))
+        self.flash = tk.BooleanVar(value=bool(cfg.get("eclair")))
+        ttk.Checkbutton(body, text=_("Éclair des touches à chaque notification"), variable=self.flash).pack(
+            anchor="w", pady=(8, 0))
         self.status = ttk.Label(body, text="", style="Muted.TLabel")
         self.status.pack(anchor="w", pady=(6, 0))
         self._effect_changed(keep_colors=True)
@@ -151,8 +154,8 @@ class RGBWindow:
     def config(self) -> dict:
         key = self._key()
         if key in rgb.SOFTWARE_MODES:
-            return {"mode": key}
-        return {"mode": "clavier", "effet": key, "couleurs": [rgb.rgb_hex(c) for c in self.colors],
+            return {"mode": key, "eclair": bool(self.flash.get())}
+        return {"mode": "clavier", "effet": key, "eclair": bool(self.flash.get()), "couleurs": [rgb.rgb_hex(c) for c in self.colors],
                 "vitesse": int(self.speed.get()), "luminosite": int(self.level.get()),
                 "direction": self.directions[self.direction.get()], "aleatoire": bool(self.random.get())}
 

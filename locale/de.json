@@ -400,5 +400,15 @@
  "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klick: malen; ziehen: mehrere Tasten; Rechtsklick: aus. Der untere Streifen ist die Unterbodenbeleuchtung.",
  "Couleur…": "Farbe…",
  "Tout remplir": "Alle füllen",
- "Tout éteindre": "Alle aus"
+ "Tout éteindre": "Alle aus",
+ "Exporter les réglages": "Einstellungen exportieren",
+ "Restaurer des réglages": "Einstellungen wiederherstellen",
+ "{n} réglages restaurés ; relancer AniMe Matrix pour le thème et la langue": "{n} Einstellungen wiederhergestellt; AniMe Matrix für Design und Sprache neu starten",
+ "⭳ Exporter les réglages…": "⭳ Einstellungen exportieren…",
+ "⭱ Restaurer des réglages…": "⭱ Einstellungen wiederherstellen…",
+ "Réglages exportés : {n} fichiers": "Einstellungen exportiert: {n} Dateien",
+ "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Aktuelle Einstellungen durch die vom {date} (Version {version}) ersetzen?\nDie aktuellen Einstellungen werden vorher gesichert.",
+ "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Auch auf den Tasten F1 (Mikrofon), F2 (Webcam), F3 (OBS)",
+ "Frappe lumineuse (logiciel)": "Leuchtende Anschläge (Software)",
+ "Éclair des touches à chaque notification": "Tasten bei jeder Benachrichtigung aufblitzen lassen"
 }
