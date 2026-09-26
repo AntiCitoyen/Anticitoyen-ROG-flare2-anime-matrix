@@ -5,10 +5,10 @@ Codename: stable
 Architectures: all amd64 arm64 i386
 Components: main
 Description: AniMe Matrix for Linux (ROG Strix Flare II Animate)
-Date: Sat, 26 Sep 2026 01:10:04 +0000
+Date: Sat, 26 Sep 2026 01:35:22 +0000
 MD5Sum:
- 2fb832327c3ffcc83e7ae9ca56235acc 14356 main/binary-all/Packages
- d48891168c6a1be6bedcb235e25223a6 1946 main/binary-all/Packages.gz
+ 2098abefecfd361c90b3b945a85aadaa 15976 main/binary-all/Packages
+ 20d76fdaea4b26e491609200e130f560 2064 main/binary-all/Packages.gz
 SHA256:
- 4529a6262184e79f5e3c17f6a150b9deb5ac370d282fa7205772deb64bcd59fe 14356 main/binary-all/Packages
- 4409b718525658220946f0be9086d1de1b2579e6b96a970b83261ed0e9ec781b 1946 main/binary-all/Packages.gz
+ 7c6a796b656f63578831075c240747ecf15963f681f0c2cd287a1c2ef765f876 15976 main/binary-all/Packages
+ df9e9004c99d457c154b3976f3ec1c17df500033af9d1e6f6c8ca0a99fa9badf 2064 main/binary-all/Packages.gz
