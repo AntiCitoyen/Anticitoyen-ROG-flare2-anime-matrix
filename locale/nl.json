@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Schermbeeld (software)",
  "Spectre audio (logiciel)": "Audiospectrum (software)",
  "Touches inchangées": "Toetsen ongewijzigd",
- "Touches éteintes": "Toetsen uit"
+ "Touches éteintes": "Toetsen uit",
+ "Animation enregistrée": "Opgeslagen animatie",
+ "Intégrée : KO": "Ingebouwd: KO",
+ "Intégrée : Météorite": "Ingebouwd: Meteoriet",
+ "Intégrée : Œil": "Ingebouwd: Oog",
+ "Intégrée : Love": "Ingebouwd: Love",
+ "Intégrée : Halloween": "Ingebouwd: Halloween",
+ "Intégrée : Démarrage": "Ingebouwd: Opstarten",
+ "démon injoignable": "daemon onbereikbaar",
+ "Problème résolu": "Probleem opgelost",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Toets voor toets (software)",
+ "⌨ Dessiner les touches…": "⌨ Toetsen schilderen…",
+ "Touche par touche": "Toets voor toets",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: schilderen; slepen: meerdere toetsen; rechtsklik: uit. De onderste strook is de onderverlichting.",
+ "Couleur…": "Kleur…",
+ "Tout remplir": "Alles vullen",
+ "Tout éteindre": "Alles uit"
 }

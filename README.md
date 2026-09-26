@@ -61,7 +61,7 @@ ASUS ne fournit l'écran AniMe Matrix de ce clavier que sous Windows (Armoury Cr
 - **Notifications du bureau** : « APPLI : TITRE » s'affiche en surimpression puis la lecture reprend (désactivé par défaut, liste d'applications autorisées).
 - **Jeux jouables** au clavier : Snake, Pong (seul ou à deux), Tetris, casse-briques, Invaders, Flappy, avec records.
 - **Voyants** : petits blocs lumineux quand le micro est coupé ou utilisé, quand la webcam tourne, quand OBS diffuse ou enregistre.
-- **Mémoire du clavier** : une animation (GIF, image) enregistrée dans le clavier s'affiche sans aucun logiciel, dès le branchement, même sur un autre PC ; luminosité réglable (onglet GIF, `animematrix-ctl memoire`).
+- **Mémoire du clavier** : une animation (GIF, image) enregistrée dans le clavier s'affiche sans aucun logiciel, dès le branchement, même sur un autre PC ; luminosité réglable (onglet GIF, `animematrix-ctl memoire`). Les 6 animations intégrées (KO, Météorite, Œil, Love, Halloween, Démarrage) se choisissent aussi : `animematrix-ctl clavier 1`…`6`.
 
 **Créer**
 - **Éditeur d'animation** image par image, sur la vraie géométrie de l'écran : 3 niveaux, frise, calque fantôme, décalage, copier-coller, aperçu, envoi au clavier, export GIF.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Couleurs du clavier
 
-*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*).
+*Réglages* → *🌈 Couleurs du clavier…* : effet (arc-en-ciel, statique, respiration, cycle des couleurs, réactif, ondulation, nuit étoilée, sable mouvant, courant, pluie), couleurs, vitesse, luminosité, direction. *Essayer* l'applique, *Enregistrer dans le clavier* le garde après débranchement. *Couleur du thème* et *Pulsation avec l'écran* sont envoyées touche par touche par le démon ; en les quittant, l'effet enregistré revient. En ligne de commande : `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Deux autres modes logiciels : *Image de l'écran* (les touches reprennent l'écran, agrandi) et *Spectre audio* (une barre par colonne). Chaque plage horaire et chaque profil d'application peut aussi choisir ses couleurs de touches (*Programmation…*). *Touche par touche* : une couleur par touche, peinte à la souris sur le plan du clavier (AZERTY ou QWERTY).
 
 ### Portables ROG (expérimental)
 

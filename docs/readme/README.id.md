@@ -61,7 +61,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 - **Notifikasi desktop**: "APLIKASI : JUDUL" ditampilkan menimpa layar lalu tampilan sebelumnya kembali (dinonaktifkan secara default, dengan daftar aplikasi yang diizinkan).
 - **Permainan yang bisa dimainkan** dengan keyboard: Ular, Pong (sendiri atau berdua), Tetris, pemecah bata, Invaders, Flappy, dengan rekor tersimpan.
 - **Indikator**: blok cahaya kecil saat mikrofon dibisukan atau sedang digunakan, saat webcam aktif, saat OBS sedang siaran atau merekam.
-- **Memori keyboard**: animasi (GIF, gambar) yang disimpan di keyboard tampil tanpa perangkat lunak apa pun, begitu dicolokkan, bahkan di PC lain; kecerahan dapat diatur (tab GIF, `animematrix-ctl memoire`).
+- **Memori keyboard**: animasi (GIF, gambar) yang disimpan di keyboard tampil tanpa perangkat lunak apa pun, begitu dicolokkan, bahkan di PC lain; kecerahan dapat diatur (tab GIF, `animematrix-ctl memoire`). 6 animasi bawaan (KO, Meteor, Mata, Love, Halloween, Mulai) juga bisa dipilih: `animematrix-ctl clavier 1`…`6`.
 
 **Membuat**
 - **Editor animasi** per bingkai, sesuai geometri asli layar: 3 tingkat, filmstrip, onion skin, geser, salin-tempel, pratinjau, kirim ke keyboard, ekspor GIF.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Warna keyboard
 
-*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*).
+*Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*). *Per tombol*: satu warna per tombol, diwarnai dengan mouse pada peta keyboard (AZERTY atau QWERTY).
 
 ### Laptop ROG (eksperimental)
 

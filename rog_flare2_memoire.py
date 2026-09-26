@@ -155,10 +155,18 @@ def write_memory(transport, data: bytes, brightness: int = 100, progress=None,
     raise WriteError(f"le clavier n'a pas confirmé l'écriture ({attempts} tentatives)")
 
 
-def set_hardware_brightness(transport, brightness: int, timeout_ms: int = ECHO_TIMEOUT_MS) -> bool:
-    """Luminosité (0 = éteint) de l'animation enregistrée, sans la renvoyer."""
+# Animations intégrées au clavier (noms d'Armoury Crate) ; 7 = animation enregistrée par l'utilisateur
+BUILTIN = {1: "KO", 2: "Meteorite", 3: "Eye", 4: "Love", 5: "Halloween", 6: "Boot Up"}
+
+
+def set_hardware_brightness(transport, brightness: int, timeout_ms: int = ECHO_TIMEOUT_MS,
+                            effect: int = CUSTOM_EFFECT) -> bool:
+    """Affiche une animation du clavier (intégrée 1-6, ou 7 l'enregistrée) à la luminosité voulue
+    (0 = éteint), sans rien renvoyer d'autre."""
+    if not 1 <= int(effect) <= CUSTOM_EFFECT:
+        raise ValueError(f"animation du clavier inconnue : {effect}")
     _drain(transport)
-    return _send(transport, show_frame(brightness), timeout_ms)
+    return _send(transport, show_frame(brightness, int(effect)), timeout_ms)
 
 
 def main(argv=None):

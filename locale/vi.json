@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Hình màn hình (phần mềm)",
  "Spectre audio (logiciel)": "Phổ âm thanh (phần mềm)",
  "Touches inchangées": "Giữ nguyên phím",
- "Touches éteintes": "Tắt đèn phím"
+ "Touches éteintes": "Tắt đèn phím",
+ "Animation enregistrée": "Hoạt ảnh đã lưu",
+ "Intégrée : KO": "Có sẵn: KO",
+ "Intégrée : Météorite": "Có sẵn: Thiên thạch",
+ "Intégrée : Œil": "Có sẵn: Mắt",
+ "Intégrée : Love": "Có sẵn: Love",
+ "Intégrée : Halloween": "Có sẵn: Halloween",
+ "Intégrée : Démarrage": "Có sẵn: Khởi động",
+ "démon injoignable": "không kết nối được dịch vụ",
+ "Problème résolu": "Đã khắc phục sự cố",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Từng phím (phần mềm)",
+ "⌨ Dessiner les touches…": "⌨ Tô màu phím…",
+ "Touche par touche": "Từng phím",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Nhấp: tô; kéo: nhiều phím; nhấp phải: tắt. Dải dưới cùng là đèn gầm.",
+ "Couleur…": "Màu…",
+ "Tout remplir": "Tô tất cả",
+ "Tout éteindre": "Tắt tất cả"
 }

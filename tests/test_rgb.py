@@ -88,3 +88,21 @@ def test_rule_preset_overrides_then_restores(tmp_path, monkeypatch):
     assert lights.thread is not None
     lights.override(None)  # fin de la règle : retour à l'arc-en-ciel enregistré
     assert lights.thread is None and t.reports[-1][:3] == bytes([0x51, 0x2C, 4]) and lights.status == "clavier"
+
+
+def test_per_key_mode_and_layout(tmp_path, monkeypatch):
+    import rog_flare2_ui_touches as K
+    assert len(K.KEYS) == len(set(K.KEYS.values())) == 106  # ISO : 105 touches (+ 30 zones dessous) + ANSI
+    assert all(i in R.LEDS for i in K.KEYS.values())
+    sp = K.spans()
+    assert sp["ESC"][:2] == (0, 0) and sp["SPACE"][2] >= 2  # la barre d'espace s'étend jusqu'à AltGr
+    assert K.label("Q", azerty=True) == "A" and K.label("Q", azerty=False) == "Q"
+    monkeypatch.setattr(R, "CONFIG_FILE", tmp_path / "rgb.json")
+    t = R.FakeRGBTransport()
+    lights = R.KeyboardLights(lambda: 0, lambda: "#000000", transport=t)
+    lights.start({**R.DEFAULT_CONFIG, "mode": "perso", "perso": {"18": "#00ff00", "x": "#fff"}})
+    time.sleep(0.3)
+    lights.stop()
+    first = [r for r in t.reports if r[:2] == b"\xc0\x81"]
+    entries = {r[4 + 4 * k]: tuple(r[5 + 4 * k:8 + 4 * k]) for r in first[:14] for k in range(15)}
+    assert entries[0x12] == (0, 255, 0) and entries[0x13] == (0, 0, 0)

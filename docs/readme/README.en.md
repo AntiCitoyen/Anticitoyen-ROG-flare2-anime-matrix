@@ -61,7 +61,7 @@ ASUS only provides this keyboard's AniMe Matrix display on Windows (Armoury Crat
 - **Desktop notifications**: "APP: TITLE" is shown as an overlay, then playback resumes (disabled by default, allow-list of applications).
 - **Playable games** on the keyboard: Snake, Pong (solo or two-player), Tetris, Breakout, Invaders, Flappy, with high scores.
 - **Indicators**: small light blocks when the mic is muted or in use, when the webcam is on, when OBS is streaming or recording.
-- **Keyboard memory**: an animation (GIF, image) saved in the keyboard plays without any software, as soon as it is plugged in, even on another PC; adjustable brightness (GIF tab, `animematrix-ctl memoire`).
+- **Keyboard memory**: an animation (GIF, image) saved in the keyboard plays without any software, as soon as it is plugged in, even on another PC; adjustable brightness (GIF tab, `animematrix-ctl memoire`). The 6 built-in animations (KO, Meteorite, Eye, Love, Halloween, Boot up) can be picked too: `animematrix-ctl clavier 1`…`6`.
 
 **Create**
 - **Animation editor**, frame by frame, on the screen's real geometry: 3 levels, filmstrip, ghost layer, offset, copy-paste, preview, send to keyboard, GIF export.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Keyboard colours
 
-*Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Two more software modes: *Screen image* (the keys mirror the screen, enlarged) and *Audio spectrum* (one bar per column). Each time slot and each application profile can also pick its key colours (*Schedule…*).
+*Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Two more software modes: *Screen image* (the keys mirror the screen, enlarged) and *Audio spectrum* (one bar per column). Each time slot and each application profile can also pick its key colours (*Schedule…*). *Key by key*: one colour per key, painted with the mouse on a keyboard map (AZERTY or QWERTY).
 
 ### ROG laptops (experimental)
 

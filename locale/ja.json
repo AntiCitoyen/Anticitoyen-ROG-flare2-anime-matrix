@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "画面の映像（ソフトウェア）",
  "Spectre audio (logiciel)": "オーディオスペクトラム（ソフトウェア）",
  "Touches inchangées": "キーは変更しない",
- "Touches éteintes": "キーを消灯"
+ "Touches éteintes": "キーを消灯",
+ "Animation enregistrée": "保存したアニメーション",
+ "Intégrée : KO": "内蔵：KO",
+ "Intégrée : Météorite": "内蔵：流星",
+ "Intégrée : Œil": "内蔵：目",
+ "Intégrée : Love": "内蔵：Love",
+ "Intégrée : Halloween": "内蔵：ハロウィン",
+ "Intégrée : Démarrage": "内蔵：起動",
+ "démon injoignable": "デーモンに接続できません",
+ "Problème résolu": "問題は解決しました",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "キーごと（ソフトウェア）",
+ "⌨ Dessiner les touches…": "⌨ キーを塗る…",
+ "Touche par touche": "キーごと",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "クリック：塗る、ドラッグ：複数のキー、右クリック：消灯。下の帯はアンダーグローです。",
+ "Couleur…": "色…",
+ "Tout remplir": "すべて塗る",
+ "Tout éteindre": "すべて消灯"
 }

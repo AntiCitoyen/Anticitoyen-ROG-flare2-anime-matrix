@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "화면 이미지(소프트웨어)",
  "Spectre audio (logiciel)": "오디오 스펙트럼(소프트웨어)",
  "Touches inchangées": "키 변경 없음",
- "Touches éteintes": "키 끄기"
+ "Touches éteintes": "키 끄기",
+ "Animation enregistrée": "저장된 애니메이션",
+ "Intégrée : KO": "내장: KO",
+ "Intégrée : Météorite": "내장: 유성",
+ "Intégrée : Œil": "내장: 눈",
+ "Intégrée : Love": "내장: Love",
+ "Intégrée : Halloween": "내장: 핼러윈",
+ "Intégrée : Démarrage": "내장: 부팅",
+ "démon injoignable": "데몬에 연결할 수 없음",
+ "Problème résolu": "문제 해결됨",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "키별 설정(소프트웨어)",
+ "⌨ Dessiner les touches…": "⌨ 키 칠하기…",
+ "Touche par touche": "키별 설정",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "클릭: 칠하기, 드래그: 여러 키, 오른쪽 클릭: 끄기. 아래 띠는 하단 조명입니다.",
+ "Couleur…": "색상…",
+ "Tout remplir": "모두 채우기",
+ "Tout éteindre": "모두 끄기"
 }

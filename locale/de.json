@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Bildschirmbild (Software)",
  "Spectre audio (logiciel)": "Audiospektrum (Software)",
  "Touches inchangées": "Tasten unverändert",
- "Touches éteintes": "Tasten aus"
+ "Touches éteintes": "Tasten aus",
+ "Animation enregistrée": "Gespeicherte Animation",
+ "Intégrée : KO": "Integriert: KO",
+ "Intégrée : Météorite": "Integriert: Meteorit",
+ "Intégrée : Œil": "Integriert: Auge",
+ "Intégrée : Love": "Integriert: Love",
+ "Intégrée : Halloween": "Integriert: Halloween",
+ "Intégrée : Démarrage": "Integriert: Start",
+ "démon injoignable": "Dienst nicht erreichbar",
+ "Problème résolu": "Problem behoben",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Taste für Taste (Software)",
+ "⌨ Dessiner les touches…": "⌨ Tasten bemalen…",
+ "Touche par touche": "Taste für Taste",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klick: malen; ziehen: mehrere Tasten; Rechtsklick: aus. Der untere Streifen ist die Unterbodenbeleuchtung.",
+ "Couleur…": "Farbe…",
+ "Tout remplir": "Alle füllen",
+ "Tout éteindre": "Alle aus"
 }

@@ -113,3 +113,41 @@ def test_demon(monkeypatch, tmp_path):
         assert d.handle({"cmd": "memoire", "file": str(tmp_path / "absent.gif")})["ok"] is False
     finally:
         d.stop()
+
+
+def test_preview_replays_the_stored_animation(monkeypatch, tmp_path):
+    monkeypatch.setattr(D, "FlareTransport", EchoTransport)
+    monkeypatch.setattr(D, "MEMORY_FILE", tmp_path / "memoire.bin")
+    d = D.Daemon()
+    try:
+        d.state["brightness"] = 100
+        gif = tmp_path / "c.gif"
+        imgs = [Image.new("L", (19, 24), v) for v in (255, 0)]
+        imgs[0].save(gif, save_all=True, append_images=imgs[1:], duration=[200, 200], loop=0)
+        assert d.handle({"cmd": "memoire", "file": str(gif)})["ok"] and (tmp_path / "memoire.bin").exists()
+        seen = set()
+        for _ in range(12):  # l'aperçu alterne entre l'image pleine et l'image noire
+            time.sleep(0.05)
+            seen.add(any(__import__("base64").b64decode(d.handle({"cmd": "frame"})["frame"])))
+            time.sleep(0.03)
+        assert seen == {True, False}
+    finally:
+        d.stop()
+
+
+def test_builtin_animations(monkeypatch):
+    monkeypatch.setattr(D, "FlareTransport", EchoTransport)
+    d = D.Daemon()
+    try:
+        d.state["brightness"] = 50
+        d.handle({"cmd": "play", "show": {"type": "clavier", "effet": 4}})
+        time.sleep(0.4)
+        assert d.screen.transport.frames[-1][:6] == bytes.fromhex("60a88432ff00")  # Love à 50 %
+        assert not any(__import__("base64").b64decode(d.handle({"cmd": "frame"})["frame"]))  # aperçu inconnu
+        import pytest
+        with pytest.raises(ValueError):
+            d.play({"type": "clavier", "effet": 9})
+        with pytest.raises(ValueError):
+            M.set_hardware_brightness(EchoTransport(), 50, effect=0)
+    finally:
+        d.stop()

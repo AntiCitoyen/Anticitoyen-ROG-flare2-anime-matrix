@@ -77,6 +77,8 @@ def show_for(content: str) -> dict | None:
                 "folder": str(folder), "loop": True, "converted": True}
     if content == "clavier":  # animation enregistrée dans la mémoire du clavier
         return {"type": "clavier"}
+    if content.startswith("clavier:") and content[8:].isdigit():  # animation intégrée 1-6
+        return {"type": "clavier", "effet": int(content[8:])}
     if content == "moniteur":
         return {"type": "effet", "name": "System Monitor", "params": {}}
     if content == "morceau":

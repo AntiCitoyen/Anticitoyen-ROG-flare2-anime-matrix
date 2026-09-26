@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Зображення екрана (програмно)",
  "Spectre audio (logiciel)": "Спектр звуку (програмно)",
  "Touches inchangées": "Клавіші без змін",
- "Touches éteintes": "Клавіші вимкнено"
+ "Touches éteintes": "Клавіші вимкнено",
+ "Animation enregistrée": "Записана анімація",
+ "Intégrée : KO": "Вбудована: KO",
+ "Intégrée : Météorite": "Вбудована: Метеорит",
+ "Intégrée : Œil": "Вбудована: Око",
+ "Intégrée : Love": "Вбудована: Love",
+ "Intégrée : Halloween": "Вбудована: Гелловін",
+ "Intégrée : Démarrage": "Вбудована: Запуск",
+ "démon injoignable": "демон недоступний",
+ "Problème résolu": "Проблему розв'язано",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "По клавішах (програмно)",
+ "⌨ Dessiner les touches…": "⌨ Розфарбувати клавіші…",
+ "Touche par touche": "По клавішах",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Клацання: зафарбувати; перетягування: кілька клавіш; правий клік: вимкнути. Нижня смуга — підсвітка корпусу.",
+ "Couleur…": "Колір…",
+ "Tout remplir": "Залити все",
+ "Tout éteindre": "Вимкнути все"
 }

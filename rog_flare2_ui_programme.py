@@ -25,6 +25,10 @@ def content_choices() -> dict[str, str]:
             choices[_("Liste : {nom}").format(nom=name)] = f"liste:{name}"
     except ImportError:
         pass
+    from rog_flare2_launcher import keyboard_animations
+    for label, effect in keyboard_animations().items():
+        if effect != 7:  # l'enregistrée : « Animation du clavier » ci-dessus
+            choices[label] = f"clavier:{effect}"
     for name in [*EFFECTS, *AUDIO_EFFECTS]:
         choices.setdefault(_("Effet : {nom}").format(nom=effect_label(name)), f"effet:{name}")
     return choices

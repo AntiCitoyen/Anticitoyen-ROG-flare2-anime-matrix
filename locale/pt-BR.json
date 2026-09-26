@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Imagem da tela (software)",
  "Spectre audio (logiciel)": "Espectro de áudio (software)",
  "Touches inchangées": "Teclas inalteradas",
- "Touches éteintes": "Teclas apagadas"
+ "Touches éteintes": "Teclas apagadas",
+ "Animation enregistrée": "Animação salva",
+ "Intégrée : KO": "Integrada: KO",
+ "Intégrée : Météorite": "Integrada: Meteorito",
+ "Intégrée : Œil": "Integrada: Olho",
+ "Intégrée : Love": "Integrada: Love",
+ "Intégrée : Halloween": "Integrada: Halloween",
+ "Intégrée : Démarrage": "Integrada: Inicialização",
+ "démon injoignable": "daemon inacessível",
+ "Problème résolu": "Problema resolvido",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Tecla por tecla (software)",
+ "⌨ Dessiner les touches…": "⌨ Pintar as teclas…",
+ "Touche par touche": "Tecla por tecla",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Clique: pintar; arrastar: várias teclas; clique direito: apagar. A faixa inferior é a iluminação inferior.",
+ "Couleur…": "Cor…",
+ "Tout remplir": "Preencher tudo",
+ "Tout éteindre": "Apagar tudo"
 }

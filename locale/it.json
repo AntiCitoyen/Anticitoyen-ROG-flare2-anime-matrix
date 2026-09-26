@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Immagine dello schermo (software)",
  "Spectre audio (logiciel)": "Spettro audio (software)",
  "Touches inchangées": "Tasti invariati",
- "Touches éteintes": "Tasti spenti"
+ "Touches éteintes": "Tasti spenti",
+ "Animation enregistrée": "Animazione salvata",
+ "Intégrée : KO": "Integrata: KO",
+ "Intégrée : Météorite": "Integrata: Meteorite",
+ "Intégrée : Œil": "Integrata: Occhio",
+ "Intégrée : Love": "Integrata: Love",
+ "Intégrée : Halloween": "Integrata: Halloween",
+ "Intégrée : Démarrage": "Integrata: Avvio",
+ "démon injoignable": "demone non raggiungibile",
+ "Problème résolu": "Problema risolto",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Tasto per tasto (software)",
+ "⌨ Dessiner les touches…": "⌨ Dipingi i tasti…",
+ "Touche par touche": "Tasto per tasto",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Clic: dipingi; trascina: più tasti; clic destro: spegni. La striscia in basso è la retroilluminazione.",
+ "Couleur…": "Colore…",
+ "Tout remplir": "Riempi tutto",
+ "Tout éteindre": "Spegni tutto"
 }

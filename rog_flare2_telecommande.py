@@ -222,7 +222,7 @@ function draw(b64){const c=$("screen"),w=c.clientWidth,h=Math.round(w*ratio*0.9)
 function label(show){if(!show)return T.nothing;if(show.type=="effet")return names[show.name]||show.name;
  if(show.type=="horloge")return T.clock;if(show.type=="liste")return show.name;if(show.type=="gif")return T.gallery;return show.type}
 async function poll(){try{const f=await api({cmd:"frame"});draw(f.frame);const s=await api({cmd:"status"});
- $("now").textContent=T.playing+" "+label(s.show);if(document.activeElement!==$("bright"))$("bright").value=s.brightness}catch(e){}
+ $("now").textContent=T.playing+" "+label(s.show)+(s.erreur?" — ⚠ "+s.erreur:"");if(document.activeElement!==$("bright"))$("bright").value=s.brightness}catch(e){}
  setTimeout(poll,700)}
 async function init(){for(const[k,id]of[["clock","clock"],["gallery","gallery"],["stop","stop"],["effect","effect"],["notify","notify"]])$(id).textContent=T[k];
  $("lb").textContent=T.brightness;$("lfav").textContent=T.favorites;$("llists").textContent=T.lists;$("msg").placeholder=T.message;

@@ -61,7 +61,7 @@ A ASUS só fornece a tela AniMe Matrix deste teclado no Windows (Armoury Crate).
 - **Notificações da área de trabalho**: « APP: TÍTULO » aparece em sobreposição e depois a reprodução retoma (desativado por padrão, lista de aplicativos autorizados).
 - **Jogos** jogáveis pelo teclado: Snake, Pong (sozinho ou a dois), Tetris, quebra-blocos, Invaders, Flappy, com recordes.
 - **Indicadores**: pequenos blocos luminosos quando o microfone está mudo ou em uso, quando a webcam está ligada, quando o OBS transmite ou grava.
-- **Memória do teclado**: uma animação (GIF, imagem) salva no teclado aparece sem nenhum software, assim que ele é conectado, até em outro PC; brilho ajustável (aba GIF, `animematrix-ctl memoire`).
+- **Memória do teclado**: uma animação (GIF, imagem) salva no teclado aparece sem nenhum software, assim que ele é conectado, até em outro PC; brilho ajustável (aba GIF, `animematrix-ctl memoire`). As 6 animações integradas (KO, Meteorito, Olho, Love, Halloween, Inicialização) também podem ser escolhidas: `animematrix-ctl clavier 1`…`6`.
 
 **Criar**
 - **Editor de animação** quadro a quadro, na geometria real da tela: 3 níveis, tira de quadros, camada fantasma, deslocamento, copiar e colar, prévia, envio ao teclado, exportação em GIF.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Cores do teclado
 
-*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*).
+*Configurações* → *🌈 Cores do teclado…*: efeito (arco-íris, estático, respiração, ciclo de cores, reativo, ondulação, noite estrelada, areia movediça, corrente, chuva), cores, velocidade, brilho, direção. *Testar* aplica, *Salvar no teclado* mantém após desconectar. *Cor do tema* e *Pulsar com a tela* são enviados tecla por tecla pelo daemon; ao sair deles, o efeito salvo volta. Na linha de comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Mais dois modos de software: *Imagem da tela* (as teclas reproduzem a tela, ampliada) e *Espectro de áudio* (uma barra por coluna). Cada faixa horária e cada perfil de aplicativo também pode escolher as cores das teclas (*Programação…*). *Tecla por tecla*: uma cor por tecla, pintada com o mouse em um mapa do teclado (AZERTY ou QWERTY).
 
 ### Notebooks ROG (experimental)
 

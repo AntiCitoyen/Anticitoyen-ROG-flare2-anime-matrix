@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "屏幕画面（软件）",
  "Spectre audio (logiciel)": "音频频谱（软件）",
  "Touches inchangées": "按键不变",
- "Touches éteintes": "按键关闭"
+ "Touches éteintes": "按键关闭",
+ "Animation enregistrée": "已保存的动画",
+ "Intégrée : KO": "内置：KO",
+ "Intégrée : Météorite": "内置：流星",
+ "Intégrée : Œil": "内置：眼睛",
+ "Intégrée : Love": "内置：Love",
+ "Intégrée : Halloween": "内置：万圣节",
+ "Intégrée : Démarrage": "内置：开机",
+ "démon injoignable": "无法连接守护进程",
+ "Problème résolu": "问题已解决",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "逐键（软件）",
+ "⌨ Dessiner les touches…": "⌨ 绘制按键…",
+ "Touche par touche": "逐键设置",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "单击：上色；拖动：多个按键；右键：关闭。底部条带为底部灯光。",
+ "Couleur…": "颜色…",
+ "Tout remplir": "全部填充",
+ "Tout éteindre": "全部关闭"
 }

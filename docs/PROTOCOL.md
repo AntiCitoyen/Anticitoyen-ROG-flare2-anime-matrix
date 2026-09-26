@@ -25,9 +25,7 @@ Working:
 - On-board memory: store an animation in the keyboard, shown without any software
   (see [On-board memory](#on-board-memory)).
 
-Not implemented yet:
-
-- Selecting the built-in effects 1-6 (`60 A8 8n …` assumed, not captured).
+- Built-in animations 1-6 selected from Linux (checked on the keyboard).
 
 ---
 
@@ -257,6 +255,9 @@ every frame unchanged on the IN endpoint, and each frame waits for its echo.
 - `.bin` layout: frame count `F` (u16 LE), `F` durations in milliseconds (u16 LE), then `F` × 312
   grey levels in the `60 81` framebuffer order. Armoury Crate stops at 196 frames (61 blocks).
 - The stored animation survives unplugging and is shown by the keyboard alone.
+- `60 A8 8n L FF 00` with `n` = 1…6 shows a built-in animation instead (names from Armoury Crate:
+  1 KO, 2 Meteorite, 3 Eye, 4 Love, 5 Halloween, 6 Boot Up); checked on the keyboard, the stored
+  animation (7) stays in memory.
 
 ---
 

@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Éditeur de couleurs touche par touche ; les 6 animations intégrées du
+    clavier ; aperçu de l'animation enregistrée ; problèmes affichés dans le
+    lanceur et la télécommande.
   * Touches : image de l'écran et spectre audio ; couleurs par plage horaire
     et par profil d'application.
   * Écran réellement éteint pendant le verrouillage, la veille et le plein écran.

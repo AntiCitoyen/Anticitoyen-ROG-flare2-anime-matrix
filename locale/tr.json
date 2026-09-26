@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Ekran görüntüsü (yazılım)",
  "Spectre audio (logiciel)": "Ses spektrumu (yazılım)",
  "Touches inchangées": "Tuşlar değişmez",
- "Touches éteintes": "Tuşlar kapalı"
+ "Touches éteintes": "Tuşlar kapalı",
+ "Animation enregistrée": "Kayıtlı animasyon",
+ "Intégrée : KO": "Yerleşik: KO",
+ "Intégrée : Météorite": "Yerleşik: Meteor",
+ "Intégrée : Œil": "Yerleşik: Göz",
+ "Intégrée : Love": "Yerleşik: Love",
+ "Intégrée : Halloween": "Yerleşik: Cadılar Bayramı",
+ "Intégrée : Démarrage": "Yerleşik: Açılış",
+ "démon injoignable": "hizmete ulaşılamıyor",
+ "Problème résolu": "Sorun çözüldü",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Tuş tuş (yazılım)",
+ "⌨ Dessiner les touches…": "⌨ Tuşları boya…",
+ "Touche par touche": "Tuş tuş",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Tıkla: boya; sürükle: birkaç tuş; sağ tık: kapat. Alttaki şerit alt aydınlatmadır.",
+ "Couleur…": "Renk…",
+ "Tout remplir": "Tümünü doldur",
+ "Tout éteindre": "Tümünü kapat"
 }

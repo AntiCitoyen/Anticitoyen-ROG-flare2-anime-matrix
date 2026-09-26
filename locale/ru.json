@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Изображение экрана (программно)",
  "Spectre audio (logiciel)": "Спектр звука (программно)",
  "Touches inchangées": "Клавиши без изменений",
- "Touches éteintes": "Клавиши выключены"
+ "Touches éteintes": "Клавиши выключены",
+ "Animation enregistrée": "Записанная анимация",
+ "Intégrée : KO": "Встроенная: KO",
+ "Intégrée : Météorite": "Встроенная: Метеорит",
+ "Intégrée : Œil": "Встроенная: Глаз",
+ "Intégrée : Love": "Встроенная: Love",
+ "Intégrée : Halloween": "Встроенная: Хеллоуин",
+ "Intégrée : Démarrage": "Встроенная: Запуск",
+ "démon injoignable": "демон недоступен",
+ "Problème résolu": "Проблема решена",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "По клавишам (программно)",
+ "⌨ Dessiner les touches…": "⌨ Раскрасить клавиши…",
+ "Touche par touche": "По клавишам",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Щелчок: закрасить; перетаскивание: несколько клавиш; правый щелчок: выключить. Нижняя полоса — подсветка корпуса.",
+ "Couleur…": "Цвет…",
+ "Tout remplir": "Залить всё",
+ "Tout éteindre": "Выключить всё"
 }

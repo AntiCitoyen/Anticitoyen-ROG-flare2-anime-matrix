@@ -61,7 +61,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 - **Bureaubladmeldingen**: « APP: TITEL » wordt in overlay getoond, waarna de weergave wordt hervat (standaard uitgeschakeld, lijst met toegestane toepassingen).
 - **Spellen** speelbaar met het toetsenbord: Snake, Pong (alleen of met z'n tweeën), Tetris, breakout, Invaders, Flappy, met records.
 - **Indicatoren**: kleine lichtblokjes wanneer de microfoon gedempt of in gebruik is, wanneer de webcam aan staat, wanneer OBS uitzendt of opneemt.
-- **Toetsenbordgeheugen**: een in het toetsenbord opgeslagen animatie (GIF, afbeelding) speelt zonder software, zodra het is aangesloten, ook op een andere pc; instelbare helderheid (tabblad GIF, `animematrix-ctl memoire`).
+- **Toetsenbordgeheugen**: een in het toetsenbord opgeslagen animatie (GIF, afbeelding) speelt zonder software, zodra het is aangesloten, ook op een andere pc; instelbare helderheid (tabblad GIF, `animematrix-ctl memoire`). Ook de 6 ingebouwde animaties (KO, Meteoriet, Oog, Love, Halloween, Opstarten) zijn te kiezen: `animematrix-ctl clavier 1`…`6`.
 
 **Maken**
 - **Animatie-editor** beeld voor beeld, op de echte geometrie van het scherm: 3 niveaus, filmstrook, spooklaag, verschuiving, kopiëren-plakken, voorvertoning, verzenden naar het toetsenbord, GIF-export.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Toetsenbordkleuren
 
-*Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*).
+*Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*). *Toets voor toets*: één kleur per toets, met de muis geschilderd op een toetsenbordkaart (AZERTY of QWERTY).
 
 ### ROG-laptops (experimenteel)
 

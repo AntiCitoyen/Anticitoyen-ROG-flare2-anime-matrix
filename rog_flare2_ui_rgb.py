@@ -19,7 +19,8 @@ def effect_labels() -> dict[str, str]:
         _("Ondulation"): "ondulation", _("Nuit étoilée"): "nuit-etoilee", _("Sable mouvant"): "sable",
         _("Courant"): "courant", _("Pluie"): "pluie",
         _("Couleur du thème (logiciel)"): "theme", _("Pulsation avec l'écran (logiciel)"): "pulsation",
-        _("Image de l'écran (logiciel)"): "ecran", _("Spectre audio (logiciel)"): "audio"}
+        _("Image de l'écran (logiciel)"): "ecran", _("Spectre audio (logiciel)"): "audio",
+        _("Touche par touche (logiciel)"): "perso"}
 
 
 def preset_labels() -> dict[str, str]:
@@ -70,8 +71,10 @@ class RGBWindow:
                                     state="readonly", width=18)
         self.random_box = ttk.Checkbutton(self.options, text=_("Couleurs aléatoires"), variable=self.random)
 
+        self.keys_button = ttk.Button(body, text=_("⌨ Dessiner les touches…"), command=self._open_keys)
         buttons = ttk.Frame(body)
         buttons.pack(fill="x", pady=(12, 0))
+        self.buttons_frame = buttons
         ttk.Button(buttons, text=_("Essayer"), command=lambda: self.apply(False)).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
         ttk.Button(buttons, text=_("💾 Enregistrer dans le clavier"), command=lambda: self.apply(True)).pack(
@@ -79,6 +82,10 @@ class RGBWindow:
         self.status = ttk.Label(body, text="", style="Muted.TLabel")
         self.status.pack(anchor="w", pady=(6, 0))
         self._effect_changed(keep_colors=True)
+
+    def _open_keys(self):
+        from rog_flare2_ui_touches import KeysWindow
+        KeysWindow(self.win, self.send)
 
     # ---------- couleurs ----------
     def _key(self) -> str:
@@ -106,6 +113,10 @@ class RGBWindow:
         for w in self.options.winfo_children():
             if isinstance(w, ttk.Scale):
                 w.state(["disabled" if software else "!disabled"])
+        if key == "perso":
+            self.keys_button.pack(fill="x", pady=(10, 0), before=self.buttons_frame)
+        else:
+            self.keys_button.pack_forget()
 
     def _draw_colors(self):
         for w in self.colors_frame.winfo_children():

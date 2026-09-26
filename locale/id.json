@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Gambar layar (perangkat lunak)",
  "Spectre audio (logiciel)": "Spektrum audio (perangkat lunak)",
  "Touches inchangées": "Tombol tidak berubah",
- "Touches éteintes": "Tombol mati"
+ "Touches éteintes": "Tombol mati",
+ "Animation enregistrée": "Animasi tersimpan",
+ "Intégrée : KO": "Bawaan: KO",
+ "Intégrée : Météorite": "Bawaan: Meteor",
+ "Intégrée : Œil": "Bawaan: Mata",
+ "Intégrée : Love": "Bawaan: Love",
+ "Intégrée : Halloween": "Bawaan: Halloween",
+ "Intégrée : Démarrage": "Bawaan: Mulai",
+ "démon injoignable": "daemon tidak terjangkau",
+ "Problème résolu": "Masalah teratasi",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Per tombol (perangkat lunak)",
+ "⌨ Dessiner les touches…": "⌨ Warnai tombol…",
+ "Touche par touche": "Per tombol",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: warnai; seret: beberapa tombol; klik kanan: matikan. Strip bawah adalah lampu bawah.",
+ "Couleur…": "Warna…",
+ "Tout remplir": "Isi semua",
+ "Tout éteindre": "Matikan semua"
 }

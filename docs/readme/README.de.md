@@ -61,7 +61,7 @@ ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury 
 - **Desktop-Benachrichtigungen**: „APP: TITEL" wird als Einblendung angezeigt, danach läuft die Wiedergabe weiter (standardmäßig deaktiviert, Liste erlaubter Anwendungen).
 - **Spielbare Spiele** auf der Tastatur: Snake, Pong (allein oder zu zweit), Tetris, Breakout, Invaders, Flappy, mit Highscores.
 - **Anzeigen**: kleine Leuchtblöcke, wenn das Mikro stummgeschaltet oder in Benutzung ist, wenn die Webcam läuft, wenn OBS streamt oder aufnimmt.
-- **Tastaturspeicher**: eine in der Tastatur gespeicherte Animation (GIF, Bild) läuft ohne Software, sobald die Tastatur angeschlossen ist, auch an einem anderen PC; Helligkeit einstellbar (Reiter GIF, `animematrix-ctl memoire`).
+- **Tastaturspeicher**: eine in der Tastatur gespeicherte Animation (GIF, Bild) läuft ohne Software, sobald die Tastatur angeschlossen ist, auch an einem anderen PC; Helligkeit einstellbar (Reiter GIF, `animematrix-ctl memoire`). Auch die 6 integrierten Animationen (KO, Meteorit, Auge, Love, Halloween, Start) lassen sich wählen: `animematrix-ctl clavier 1`…`6`.
 
 **Erstellen**
 - **Animationseditor** Bild für Bild, auf der echten Geometrie des Displays: 3 Stufen, Filmstreifen, Geisterebene, Versatz, Kopieren/Einfügen, Vorschau, Senden an die Tastatur, GIF-Export.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Tastaturfarben
 
-*Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*).
+*Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*). *Taste für Taste*: eine Farbe pro Taste, mit der Maus auf einem Tastaturplan gemalt (AZERTY oder QWERTY).
 
 ### ROG-Laptops (experimentell)
 

@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Screen image (software)",
  "Spectre audio (logiciel)": "Audio spectrum (software)",
  "Touches inchangées": "Keys unchanged",
- "Touches éteintes": "Keys off"
+ "Touches éteintes": "Keys off",
+ "Animation enregistrée": "Saved animation",
+ "Intégrée : KO": "Built-in: KO",
+ "Intégrée : Météorite": "Built-in: Meteorite",
+ "Intégrée : Œil": "Built-in: Eye",
+ "Intégrée : Love": "Built-in: Love",
+ "Intégrée : Halloween": "Built-in: Halloween",
+ "Intégrée : Démarrage": "Built-in: Boot up",
+ "démon injoignable": "daemon unreachable",
+ "Problème résolu": "Problem solved",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Key by key (software)",
+ "⌨ Dessiner les touches…": "⌨ Paint the keys…",
+ "Touche par touche": "Key by key",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Click: paint; drag: several keys; right click: off. The bottom strip is the underglow.",
+ "Couleur…": "Colour…",
+ "Tout remplir": "Fill all",
+ "Tout éteindre": "All off"
 }

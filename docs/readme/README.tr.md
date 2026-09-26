@@ -61,7 +61,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 - **Masaüstü bildirimleri**: « UYGULAMA: BAŞLIK » ekranın üzerinde belirir, ardından oynatma kaldığı yerden devam eder (varsayılan olarak kapalı, izin verilen uygulamalar listesiyle).
 - Klavyeyle **oynanabilir oyunlar**: Snake, Pong (tek başına veya iki kişi), Tetris, kırma oyunu, Invaders, Flappy, en yüksek skorlarla.
 - **Göstergeler**: mikrofon kapatıldığında veya kullanıldığında, web kamerası çalıştığında, OBS yayın yaptığında veya kayıt aldığında yanan küçük ışıklı bloklar.
-- **Klavye belleği**: klavyeye kaydedilen bir animasyon (GIF, görüntü), takılır takılmaz hiçbir yazılım olmadan, başka bir bilgisayarda bile oynar; ayarlanabilir parlaklık (GIF sekmesi, `animematrix-ctl memoire`).
+- **Klavye belleği**: klavyeye kaydedilen bir animasyon (GIF, görüntü), takılır takılmaz hiçbir yazılım olmadan, başka bir bilgisayarda bile oynar; ayarlanabilir parlaklık (GIF sekmesi, `animematrix-ctl memoire`). 6 yerleşik animasyon da (KO, Meteor, Göz, Love, Cadılar Bayramı, Açılış) seçilebilir: `animematrix-ctl clavier 1`…`6`.
 
 **Oluşturma**
 - Ekranın gerçek geometrisi üzerinde kare kare çalışan **animasyon düzenleyici**: 3 seviye, zaman çizelgesi, hayalet katman, kaydırma, kopyala-yapıştır, önizleme, klavyeye gönderme, GIF olarak dışa aktarma.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Klavye renkleri
 
-*Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*).
+*Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*). *Tuş tuş*: her tuşa bir renk, klavye planı üzerinde fareyle boyanır (AZERTY veya QWERTY).
 
 ### ROG dizüstü bilgisayarlar (deneysel)
 

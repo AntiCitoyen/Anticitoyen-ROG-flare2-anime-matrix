@@ -12,7 +12,7 @@
     animematrix-ctl derniere                     (rejoue la dernière lecture)
     animematrix-ctl memoire FICHIER [--reduire couper|alterner] [--fidele]
                                                  (enregistre dans le clavier : affichée sans logiciel)
-    animematrix-ctl clavier                      (affiche l'animation enregistrée dans le clavier)
+    animematrix-ctl clavier [1-7]                (animation du clavier : 7 l'enregistrée, 1-6 les intégrées)
     animematrix-ctl rgb arc-en-ciel [--vitesse 50] [--luminosite 100] [--direction gauche]
     animematrix-ctl rgb statique --couleur "#ff0000"    (touches : effets du clavier, theme, pulsation)
 """
@@ -147,7 +147,8 @@ def main(argv=None):
     m.add_argument("--reduire", choices=("couper", "alterner"), default="couper",
                    help="au-delà de 196 images : garder le début, ou retirer une image sur deux")
     m.add_argument("--fidele", action="store_true", help="géométrie fidèle (proportions gardées)")
-    sub.add_parser("clavier", help="affiche l'animation enregistrée dans le clavier")
+    k = sub.add_parser("clavier", help="animation du clavier : 7 l'enregistrée (défaut), 1-6 les intégrées")
+    k.add_argument("effet", nargs="?", type=int, default=7, choices=range(1, 8))
     from rog_flare2_rgb import DIRECTIONS, EFFECTS, SOFTWARE_MODES
     r = sub.add_parser("rgb", help="couleurs des touches : effet du clavier, ou theme / pulsation / ecran / audio")
     r.add_argument("effet", choices=[*EFFECTS, *SOFTWARE_MODES, "off"])
@@ -180,7 +181,7 @@ def main(argv=None):
     elif args.cmd == "horloge":
         show = {"type": "horloge"}
     elif args.cmd == "clavier":
-        show = {"type": "clavier"}
+        show = {"type": "clavier", "effet": args.effet}
     elif args.cmd == "rgb":
         if args.effet in (*SOFTWARE_MODES, "off"):
             config = {"mode": args.effet}

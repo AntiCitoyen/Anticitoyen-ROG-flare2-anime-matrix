@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "Obraz ekranu (programowo)",
  "Spectre audio (logiciel)": "Widmo dźwięku (programowo)",
  "Touches inchangées": "Klawisze bez zmian",
- "Touches éteintes": "Klawisze wyłączone"
+ "Touches éteintes": "Klawisze wyłączone",
+ "Animation enregistrée": "Zapisana animacja",
+ "Intégrée : KO": "Wbudowana: KO",
+ "Intégrée : Météorite": "Wbudowana: Meteoryt",
+ "Intégrée : Œil": "Wbudowana: Oko",
+ "Intégrée : Love": "Wbudowana: Love",
+ "Intégrée : Halloween": "Wbudowana: Halloween",
+ "Intégrée : Démarrage": "Wbudowana: Uruchamianie",
+ "démon injoignable": "demon nieosiągalny",
+ "Problème résolu": "Problem rozwiązany",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "Klawisz po klawiszu (programowo)",
+ "⌨ Dessiner les touches…": "⌨ Maluj klawisze…",
+ "Touche par touche": "Klawisz po klawiszu",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "Klik: maluj; przeciągnij: kilka klawiszy; prawy klik: wyłącz. Dolny pasek to podświetlenie spodu.",
+ "Couleur…": "Kolor…",
+ "Tout remplir": "Wypełnij wszystko",
+ "Tout éteindre": "Wyłącz wszystko"
 }

@@ -61,7 +61,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 - **Thông báo màn hình nền**: "ỨNG DỤNG : TIÊU ĐỀ" hiện chồng lên rồi việc phát tiếp tục (mặc định tắt, có danh sách ứng dụng được phép).
 - **Trò chơi** chơi được bằng bàn phím: Rắn, Pong (một hoặc hai người), Tetris, phá gạch, Invaders, Flappy, có lưu kỷ lục.
 - **Đèn báo**: các khối sáng nhỏ khi micro bị tắt hoặc đang được dùng, khi webcam đang bật, khi OBS đang phát trực tiếp hoặc ghi hình.
-- **Bộ nhớ bàn phím**: hoạt ảnh (GIF, hình ảnh) lưu trong bàn phím chạy không cần phần mềm nào, ngay khi cắm vào, kể cả trên máy tính khác; độ sáng điều chỉnh được (thẻ GIF, `animematrix-ctl memoire`).
+- **Bộ nhớ bàn phím**: hoạt ảnh (GIF, hình ảnh) lưu trong bàn phím chạy không cần phần mềm nào, ngay khi cắm vào, kể cả trên máy tính khác; độ sáng điều chỉnh được (thẻ GIF, `animematrix-ctl memoire`). Cũng có thể chọn 6 hoạt ảnh có sẵn (KO, Thiên thạch, Mắt, Love, Halloween, Khởi động): `animematrix-ctl clavier 1`…`6`.
 
 **Tạo**
 - **Trình chỉnh sửa hoạt ảnh** từng khung hình, trên đúng hình học của màn hình: 3 mức, dải khung hình, lớp mờ tham chiếu, dịch chuyển, sao chép-dán, xem trước, gửi tới bàn phím, xuất GIF.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Màu bàn phím
 
-*Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Thêm hai chế độ phần mềm: *Hình màn hình* (phím phản chiếu màn hình, phóng to) và *Phổ âm thanh* (mỗi cột một thanh). Mỗi khung giờ và mỗi hồ sơ ứng dụng cũng có thể chọn màu phím riêng (*Lịch hẹn…*).
+*Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Thêm hai chế độ phần mềm: *Hình màn hình* (phím phản chiếu màn hình, phóng to) và *Phổ âm thanh* (mỗi cột một thanh). Mỗi khung giờ và mỗi hồ sơ ứng dụng cũng có thể chọn màu phím riêng (*Lịch hẹn…*). *Từng phím*: mỗi phím một màu, tô bằng chuột trên sơ đồ bàn phím (AZERTY hoặc QWERTY).
 
 ### Laptop ROG (thử nghiệm)
 

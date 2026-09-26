@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "螢幕畫面（軟體）",
  "Spectre audio (logiciel)": "音訊頻譜（軟體）",
  "Touches inchangées": "按鍵不變",
- "Touches éteintes": "按鍵關閉"
+ "Touches éteintes": "按鍵關閉",
+ "Animation enregistrée": "已儲存的動畫",
+ "Intégrée : KO": "內建：KO",
+ "Intégrée : Météorite": "內建：流星",
+ "Intégrée : Œil": "內建：眼睛",
+ "Intégrée : Love": "內建：Love",
+ "Intégrée : Halloween": "內建：萬聖節",
+ "Intégrée : Démarrage": "內建：開機",
+ "démon injoignable": "無法連線常駐程式",
+ "Problème résolu": "問題已解決",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "逐鍵（軟體）",
+ "⌨ Dessiner les touches…": "⌨ 繪製按鍵…",
+ "Touche par touche": "逐鍵設定",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "點選：上色；拖曳：多個按鍵；右鍵：關閉。底部條帶為底部燈光。",
+ "Couleur…": "顏色…",
+ "Tout remplir": "全部填滿",
+ "Tout éteindre": "全部關閉"
 }

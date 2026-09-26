@@ -211,12 +211,14 @@ def effect_kwargs(cfg: dict) -> dict:
             "random": bool(cfg.get("aleatoire"))}
 
 
-SOFTWARE_MODES = ("theme", "pulsation", "ecran", "audio")  # couleurs envoyées touche par touche par le démon
+SOFTWARE_MODES = ("theme", "pulsation", "ecran", "audio", "perso")  # couleurs envoyées touche par touche
 KEY_ROWS = 6  # rangées de touches (la 7e, index 6, est le rétroéclairage)
 
 
 def preset_config(preset: str) -> dict:
     """Préréglage d'une règle de programmation ou d'un profil (« touches ») -> réglage complet."""
+    if preset == "perso":  # dessin touche par touche enregistré dans rgb.json
+        return {**DEFAULT_CONFIG, "mode": "perso", "perso": load_config().get("perso", {})}
     if preset in SOFTWARE_MODES:
         return {**DEFAULT_CONFIG, "mode": preset}
     if preset == "eteint":
@@ -341,7 +343,16 @@ class KeyboardLights:
             except (OSError, KeyError):
                 pass
 
-    def _frame(self, mode, accent, spectrum):
+    def _frame(self, mode, accent, spectrum, cfg=None):
+        if mode == "perso":
+            colors = {i: (0, 0, 0) for i in LEDS}
+            for key, color in (cfg or {}).get("perso", {}).items():
+                try:
+                    if int(key) in colors:
+                        colors[int(key)] = hex_rgb(color)
+                except (ValueError, TypeError):
+                    pass
+            return colors
         rgb = hex_rgb(accent)
         if mode == "pulsation":
             return solid_frame(rgb, 0.15 + 0.85 * self.screen_level())
@@ -362,21 +373,21 @@ class KeyboardLights:
         mode = cfg["mode"]
         spectrum = Spectrum() if mode == "audio" else None
         try:
-            self._loop(mode, stop, spectrum)
+            self._loop(mode, stop, spectrum, cfg)
         finally:
             if spectrum is not None:  # parec arrêté (un visualiseur de l'écran le relance s'il en a besoin)
                 from rog_flare2_effets import AUDIO
                 AUDIO.stop()
 
-    def _loop(self, mode, stop, spectrum):
+    def _loop(self, mode, stop, spectrum, cfg):
         last, accent, accent_at = None, self.accent(), time.monotonic()
-        fps = {"theme": 1.0, "pulsation": 15, "ecran": 20, "audio": 25}[mode]
+        fps = {"theme": 1.0, "perso": 1.0, "pulsation": 15, "ecran": 20, "audio": 25}[mode]
         while not stop.is_set():
             if time.monotonic() - accent_at > 1.0:  # thème relu une fois par seconde
                 accent, accent_at = self.accent(), time.monotonic()
             try:
-                frame = self._frame(mode, accent, spectrum)
-                if frame != last or mode == "theme":  # thème : renvoyé chaque seconde (rebranchement)
+                frame = self._frame(mode, accent, spectrum, cfg)
+                if frame != last or mode in ("theme", "perso"):  # renvoyé chaque seconde (rebranchement)
                     with self.lock:
                         send_direct(self.transport, frame)
                     last = frame

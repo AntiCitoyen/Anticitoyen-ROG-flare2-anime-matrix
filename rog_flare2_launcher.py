@@ -118,6 +118,13 @@ class ScrollArea(ttk.Frame):
             self.canvas.yview_scroll(3 if down else -3, "units")
 
 
+def keyboard_animations() -> dict[str, int]:
+    """Animations du clavier : l'enregistrée (7), puis les intégrées (noms d'Armoury Crate)."""
+    return {_("Animation enregistrée"): 7, _("Intégrée : KO"): 1, _("Intégrée : Météorite"): 2,
+            _("Intégrée : Œil"): 3, _("Intégrée : Love"): 4, _("Intégrée : Halloween"): 5,
+            _("Intégrée : Démarrage"): 6}
+
+
 class LauncherApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -163,6 +170,8 @@ class LauncherApp(tk.Tk):
         from rog_flare2_vignettes import enable_drop
         enable_drop(self, self._dropped)  # fichiers ou dossier glissés sur la fenêtre (tkdnd)
         self._poll_status()
+        self._shown_error = None
+        self.after(2500, self._poll_error)
         if getattr(self, "round_ui", None) is not None:
             self._poll_frame()
         if not self.daemon_ok:
@@ -280,8 +289,13 @@ class LauncherApp(tk.Tk):
         ttk.Button(mem, text=_("💾 Enregistrer dans le clavier…"), command=self.save_to_keyboard).pack(
             side="left", expand=True, fill="x", padx=(0, 4))
         ttk.Button(mem, text=_("⌨ Afficher l'animation du clavier"),
-                   command=lambda: self._play({"type": "clavier"}, _("Animation du clavier"))).pack(
-            side="left", expand=True, fill="x", padx=(4, 0))
+                   command=lambda: self._play({"type": "clavier", "effet": self.builtin_names[self.builtin.get()]},
+                                              self.builtin.get())).pack(side="left", expand=True, fill="x",
+                                                                        padx=(4, 0))
+        self.builtin_names = keyboard_animations()
+        self.builtin = tk.StringVar(value=next(iter(self.builtin_names)))
+        ttk.Combobox(tab, textvariable=self.builtin, values=list(self.builtin_names), state="readonly").pack(
+            fill="x", pady=(4, 0))
         return tab
 
     def _build_effect_tab(self, parent, title: str, names: list[str], default: str,
@@ -602,6 +616,20 @@ class LauncherApp(tk.Tk):
     def _send_brightness(self):
         self._brightness_job = None
         self._send("brightness", value=int(self.brightness.get()))
+
+    def _poll_error(self):
+        """Problème signalé par le démon (clavier débranché, webcam absente…) : affiché, puis effacé."""
+        def job():
+            try:
+                self._daemon_error = ctl.request("status", timeout=1).get("erreur")
+            except (OSError, ValueError, ctl.DaemonError):
+                self._daemon_error = _("démon injoignable")
+        err = getattr(self, "_daemon_error", None)
+        if err != getattr(self, "_shown_error", None):
+            self._shown_error = err
+            self.set_status(_("⚠ {err}").format(err=err) if err else _("Problème résolu"))
+        threading.Thread(target=job, daemon=True).start()
+        self.after(2000, self._poll_error)
 
     def _poll_frame(self):
         """Aperçu : dernière trame envoyée par le démon."""

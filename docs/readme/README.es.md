@@ -61,7 +61,7 @@ ASUS solo ofrece la pantalla AniMe Matrix de este teclado en Windows (Armoury Cr
 - **Notificaciones del escritorio**: «APP: TÍTULO» se muestra en superposición y luego la reproducción continúa (desactivado por defecto, lista de aplicaciones permitidas).
 - **Juegos jugables** con el teclado: Snake, Pong (solo o a dos), Tetris, rompecabezas, Invaders, Flappy, con récords.
 - **Indicadores**: pequeños bloques luminosos cuando el micro está silenciado o en uso, cuando la webcam está activa, cuando OBS emite o graba.
-- **Memoria del teclado**: una animación (GIF, imagen) guardada en el teclado se muestra sin ningún software, nada más conectarlo, incluso en otro PC; brillo ajustable (pestaña GIF, `animematrix-ctl memoire`).
+- **Memoria del teclado**: una animación (GIF, imagen) guardada en el teclado se muestra sin ningún software, nada más conectarlo, incluso en otro PC; brillo ajustable (pestaña GIF, `animematrix-ctl memoire`). También se pueden elegir las 6 animaciones integradas (KO, Meteorito, Ojo, Love, Halloween, Arranque): `animematrix-ctl clavier 1`…`6`.
 
 **Crear**
 - **Editor de animación** fotograma a fotograma, sobre la geometría real de la pantalla: 3 niveles, tira de fotogramas, capa fantasma, desplazamiento, copiar y pegar, vista previa, envío al teclado, exportación a GIF.
@@ -219,7 +219,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ### Colores del teclado
 
-*Ajustes* → *🌈 Colores del teclado…*: efecto (arcoíris, estático, respiración, ciclo de colores, reactivo, ondulación, noche estrellada, arenas movedizas, corriente, lluvia), colores, velocidad, brillo, dirección. *Probar* lo aplica, *Guardar en el teclado* lo conserva al desconectarlo. *Color del tema* y *Pulso con la pantalla* los envía el demonio tecla por tecla; al salir de ellos, vuelve el efecto guardado. En la línea de comandos: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dos modos de software más: *Imagen de la pantalla* (las teclas reproducen la pantalla, ampliada) y *Espectro de audio* (una barra por columna). Cada franja horaria y cada perfil de aplicación también puede elegir sus colores de teclas (*Programación…*).
+*Ajustes* → *🌈 Colores del teclado…*: efecto (arcoíris, estático, respiración, ciclo de colores, reactivo, ondulación, noche estrellada, arenas movedizas, corriente, lluvia), colores, velocidad, brillo, dirección. *Probar* lo aplica, *Guardar en el teclado* lo conserva al desconectarlo. *Color del tema* y *Pulso con la pantalla* los envía el demonio tecla por tecla; al salir de ellos, vuelve el efecto guardado. En la línea de comandos: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dos modos de software más: *Imagen de la pantalla* (las teclas reproducen la pantalla, ampliada) y *Espectro de audio* (una barra por columna). Cada franja horaria y cada perfil de aplicación también puede elegir sus colores de teclas (*Programación…*). *Tecla por tecla*: un color por tecla, pintado con el ratón sobre el plano del teclado (AZERTY o QWERTY).
 
 ### Portátiles ROG (experimental)
 

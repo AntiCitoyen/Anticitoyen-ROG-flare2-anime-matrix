@@ -223,3 +223,25 @@ def test_hold_really_switches_the_panel_off(monkeypatch):
         assert sent[-2][:6] == bytes.fromhex("60a88764ff00") and sent[-1][D.FB_OFFSET] == 9  # rallumé, image rendue
     finally:
         d.stop()
+
+
+def test_errors_are_reported_in_status(monkeypatch):
+    class Unplugged(FakeTransport):
+        def connect(self):
+            raise OSError("interface 4 introuvable")
+    monkeypatch.setattr(D, "FlareTransport", Unplugged)
+    d = D.Daemon()
+    try:
+        d.handle({"cmd": "play", "show": {"type": "horloge"}})
+        time.sleep(0.8)
+        assert "introuvable" in d.handle({"cmd": "status"})["erreur"]
+    finally:
+        d.stop()
+
+
+def test_playback_error_is_reported_then_cleared(daemon, tmp_path):
+    daemon.play({"type": "gif", "files": [str(tmp_path / "absent.gif")], "loop": False})
+    daemon.error = "échec simulé"
+    assert daemon.handle({"cmd": "status"})["erreur"] == "échec simulé"
+    daemon.play({"type": "horloge"})
+    assert daemon.handle({"cmd": "status"})["erreur"] is None

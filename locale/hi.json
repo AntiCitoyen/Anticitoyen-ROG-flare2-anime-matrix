@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "स्क्रीन की छवि (सॉफ़्टवेयर)",
  "Spectre audio (logiciel)": "ऑडियो स्पेक्ट्रम (सॉफ़्टवेयर)",
  "Touches inchangées": "कुंजियाँ अपरिवर्तित",
- "Touches éteintes": "कुंजियाँ बंद"
+ "Touches éteintes": "कुंजियाँ बंद",
+ "Animation enregistrée": "सहेजा गया एनिमेशन",
+ "Intégrée : KO": "अंतर्निहित: KO",
+ "Intégrée : Météorite": "अंतर्निहित: उल्का",
+ "Intégrée : Œil": "अंतर्निहित: आँख",
+ "Intégrée : Love": "अंतर्निहित: Love",
+ "Intégrée : Halloween": "अंतर्निहित: हैलोवीन",
+ "Intégrée : Démarrage": "अंतर्निहित: बूट",
+ "démon injoignable": "डेमन तक पहुँच नहीं",
+ "Problème résolu": "समस्या हल हुई",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "कुंजी-दर-कुंजी (सॉफ़्टवेयर)",
+ "⌨ Dessiner les touches…": "⌨ कुंजियाँ रंगें…",
+ "Touche par touche": "कुंजी-दर-कुंजी",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "क्लिक: रंगें; खींचें: कई कुंजियाँ; दायाँ क्लिक: बंद। नीचे की पट्टी अंडरग्लो है।",
+ "Couleur…": "रंग…",
+ "Tout remplir": "सब भरें",
+ "Tout éteindre": "सब बंद"
 }

@@ -51,6 +51,7 @@ SOCKET_PATH = RUNTIME / "animematrix.sock"
 SHOW_FILE = CONFIG_DIR / "lecture.json"  # dernière lecture (rejouée au démarrage si « derniere »)
 START_FILE = CONFIG_DIR / "demarrage"
 STATE_FILE = CONFIG_DIR / "demon.json"  # luminosité mémorisée
+MEMORY_FILE = CONFIG_DIR / "memoire.bin"  # copie de l'animation écrite dans le clavier (aperçu)
 BLANK = bytes(PREFIX) + bytes(FRAME_SIZE - len(PREFIX))
 KEEPALIVE = 1.0  # une trame identique est quand même renvoyée au bout d'une seconde
 
@@ -98,6 +99,7 @@ class Screen:
         self.sent_at = 0.0
         self.skipped = 0  # trames identiques non renvoyées (statistique)
         self.badges: list[int] = []  # LED des voyants allumés (rog_flare2_voyants), par-dessus la lecture
+        self.error: str | None = None  # clavier introuvable ou refusé (affiché par le lanceur et la télécommande)
         self.hardware = False  # animation enregistrée dans le clavier affichée : la base n'envoie rien
         self.software_sent = False  # une trame 60 81 est passée depuis : le clavier a quitté l'animation enregistrée
 
@@ -109,7 +111,9 @@ class Screen:
                 self.transport.connect()
                 self.connected = True
                 self.sent = None
-            except Exception:
+                self.error = None
+            except Exception as exc:
+                self.error = f"clavier : {exc}"
                 return False
         return True
 
@@ -229,6 +233,7 @@ class Daemon:
         self.screen = Screen()
         self.state = self._load_state()
         self.show: dict | None = None
+        self.error: str | None = None  # dernière erreur de la lecture en cours
         self.effect = None  # effet en cours (réglages en direct)
         self.speed = 1.0
         self.stop_event = threading.Event()
@@ -332,8 +337,11 @@ class Daemon:
         if kind == "ecran":
             from rog_flare2_video import play_screen
             return lambda stop: play_screen(layer, stop, self.brightness, show.get("mode", "ecran"))
-        if kind == "clavier":  # animation enregistrée dans le clavier (rog_flare2_memoire)
-            return self._hardware_job
+        if kind == "clavier":  # animation du clavier : intégrée (effet 1-6) ou enregistrée (7, défaut)
+            effect = int(show.get("effet", 7))
+            if not 1 <= effect <= 7:
+                raise ValueError(f"animation du clavier inconnue : {effect}")
+            return lambda stop: self._hardware_job(stop, effect)
         if kind == "liste":
             from rog_flare2_listes import DEFAULT_SECONDS, item_show, load_lists
             items = show.get("items") or load_lists().get(show.get("name", ""), [])
@@ -363,19 +371,35 @@ class Daemon:
             return job
         raise ValueError(f"lecture inconnue : {kind!r}")
 
-    def _hardware_job(self, stop):
+    def _hardware_job(self, stop, effect: int = 7):
         """Affiche l'animation enregistrée ; la réaffiche après une notification ou un écran noir,
         et suit la luminosité (octet de luminosité du clavier, sans renvoyer l'animation)."""
-        from rog_flare2_memoire import set_hardware_brightness
+        from rog_flare2_memoire import decode_bin, set_hardware_brightness
         screen, level = self.screen, None
+        try:  # aperçu : l'animation que ce démon a écrite (inconnue si elle vient d'Armoury Crate)
+            frames = decode_bin(MEMORY_FILE.read_bytes()) if effect == 7 else []
+        except (OSError, ValueError):
+            frames = []
+        total = sum(ms for _l, ms in frames) / 1000
+        t0 = time.monotonic()
+        if not frames:
+            screen.last = screen.base = BLANK  # contenu inconnu : pas d'aperçu plutôt qu'une image figée
         screen.hardware = True
         try:
             while not stop.is_set():
                 wanted = self.brightness()
                 if not screen.overlay_active and not screen.holds and (screen.software_sent or wanted != level):
-                    screen.raw(lambda t: set_hardware_brightness(t, wanted))
+                    screen.raw(lambda t: set_hardware_brightness(t, wanted, effect=effect))
                     level = wanted
-                stop.wait(0.3)
+                if frames and not screen.overlay_active and not screen.holds:
+                    t = (time.monotonic() - t0) % total
+                    for leds, ms in frames:
+                        t -= ms / 1000
+                        if t < 0:
+                            break
+                    dim = bytes(v * wanted // 100 for v in leds)
+                    screen.last = screen.base = BLANK[:FB_OFFSET] + dim + BLANK[FB_OFFSET + LED_COUNT:]
+                stop.wait(0.05)
         finally:
             screen.hardware = False
 
@@ -400,6 +424,8 @@ class Daemon:
             self._stop_base()
             self.show = None
         attempts = self.screen.raw(lambda t: write_memory(t, data, self.brightness()))
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        MEMORY_FILE.write_bytes(data)
         self.play({"type": "clavier"})
         return {"ok": True, "images": len(frames), "octets": len(data), "blocs": len(block_frames(data)),
                 "tentatives": attempts}
@@ -411,6 +437,7 @@ class Daemon:
         with self.lock:
             self._stop_base()
             self.show = show
+            self.error = None
             self.stop_event = threading.Event()
             stop = self.stop_event
             self.thread = threading.Thread(target=self._run, args=(job, stop), daemon=True)
@@ -424,6 +451,15 @@ class Daemon:
             self.stop(manual=False)
         else:
             self.play(show, manual=False)
+
+    def current_error(self) -> str | None:
+        """Ce qui empêche l'affichage : clavier absent, lecture en échec, touches injoignables."""
+        if self.screen.error and not self.screen.released:
+            return self.screen.error
+        if self.error:
+            return self.error
+        status = str(self.rgb.status)
+        return status if status.startswith("clavier indisponible") else None
 
     def _rule_keys(self, preset: str | None):
         try:
@@ -444,6 +480,7 @@ class Daemon:
                 return
             except Exception as exc:  # clavier débranché, fichier illisible… : on réessaie
                 print(f"lecture interrompue : {exc}", file=sys.stderr, flush=True)
+                self.error = str(exc).strip().splitlines()[-1][:200] if str(exc).strip() else type(exc).__name__
                 stop.wait(3)
 
     def _stop_base(self):
@@ -501,7 +538,7 @@ class Daemon:
                     "speed": self.speed, "connected": self.screen.connected, "released": self.screen.released,
                     "overlay": self.screen.overlay_active, "skipped": self.screen.skipped,
                     "voyants": [k for k, v in self.voyants.states.items() if v],
-                    "telecommande": self.remote.httpd is not None}
+                    "telecommande": self.remote.httpd is not None, "erreur": self.current_error()}
         if cmd == "play":
             self.play(req["show"])
             return {"ok": True}

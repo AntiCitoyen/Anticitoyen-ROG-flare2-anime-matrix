@@ -383,5 +383,22 @@
  "Image de l'écran (logiciel)": "صورة الشاشة (برمجيًا)",
  "Spectre audio (logiciel)": "طيف الصوت (برمجيًا)",
  "Touches inchangées": "المفاتيح دون تغيير",
- "Touches éteintes": "المفاتيح مطفأة"
+ "Touches éteintes": "المفاتيح مطفأة",
+ "Animation enregistrée": "الرسوم المحفوظة",
+ "Intégrée : KO": "مدمجة: KO",
+ "Intégrée : Météorite": "مدمجة: نيزك",
+ "Intégrée : Œil": "مدمجة: عين",
+ "Intégrée : Love": "مدمجة: Love",
+ "Intégrée : Halloween": "مدمجة: هالوين",
+ "Intégrée : Démarrage": "مدمجة: الإقلاع",
+ "démon injoignable": "البرنامج الخادم غير متاح",
+ "Problème résolu": "حُلّت المشكلة",
+ "⚠ {err}": "⚠ {err}",
+ "Touche par touche (logiciel)": "مفتاحًا مفتاحًا (برمجيًا)",
+ "⌨ Dessiner les touches…": "⌨ تلوين المفاتيح…",
+ "Touche par touche": "مفتاحًا مفتاحًا",
+ "Clic : peindre ; glisser : plusieurs touches ; clic droit : éteindre. La bande du bas est le rétroéclairage.": "نقرة: تلوين؛ سحب: عدة مفاتيح؛ نقرة يمنى: إطفاء. الشريط السفلي هو الإضاءة السفلية.",
+ "Couleur…": "لون…",
+ "Tout remplir": "ملء الكل",
+ "Tout éteindre": "إطفاء الكل"
 }
