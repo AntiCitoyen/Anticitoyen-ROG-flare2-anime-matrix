@@ -992,5 +992,15 @@ class LauncherApp(tk.Tk):
 
 
 if __name__ == "__main__":
+    import faulthandler
+    try:  # pile Python de tous les fils si Tk/Tcl abandonne (SIGABRT, SIGSEGV)
+        _crash_log = Path.home() / ".cache" / "animematrix" / "plantages.log"
+        _crash_log.parent.mkdir(parents=True, exist_ok=True)
+        _crash_file = open(_crash_log, "a")
+        _crash_file.write(f"--- {time.strftime('%Y-%m-%d %H:%M:%S')} lanceur {VERSION} pid {os.getpid()}\n")
+        _crash_file.flush()
+        faulthandler.enable(_crash_file, all_threads=True)
+    except OSError:
+        pass
     app = LauncherApp()
     app.mainloop()

@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import math
 import tkinter as tk
-from tkinter import font as tkfont
 from tkinter import ttk
 
 from PIL import Image, ImageDraw, ImageTk
@@ -91,9 +90,11 @@ class Shaper:
         self.d.flush()
 
 
-def fit_size(text: str, width: float, size: int, smallest: int = 5) -> int:
+def fit_size(widget, text: str, width: float, size: int, smallest: int = 5) -> int:
     """Plus grande taille de police (≤ size) pour que text tienne dans width pixels (libellés traduits)."""
-    while size > smallest and tkfont.Font(family="Sans", size=size).measure(text) > width:
+    # mesure sur la description, sans police nommée : créer/supprimer des polices nommées Tk à la chaîne
+    # est le suspect des plantages « alloc: invalid block » dans Tk_FreeFont à la fermeture
+    while size > smallest and int(widget.tk.call("font", "measure", ("Sans", size), text)) > width:
         size -= 1
     return size
 
@@ -118,7 +119,7 @@ class RoundButton:
         dy = -r * 0.2 if label and label_inside else 0
         self.icon_id = c.create_text(cx, cy + dy, text=icon, font=("Sans", max(9, int(r * 0.5))), tags=(self.tag,))
         ly = cy + r * 0.45 if label_inside else cy + r + 12
-        self.label_id = c.create_text(cx, ly, text=label, font=("Sans", fit_size(label, 1.4 * r, max(7, int(r * 0.22)))),
+        self.label_id = c.create_text(cx, ly, text=label, font=("Sans", fit_size(c, label, 1.4 * r, max(7, int(r * 0.22)))),
                                       tags=(self.tag,))
         c.tag_bind(self.tag, "<Enter>", lambda _e: self._set(hover=True))
         c.tag_bind(self.tag, "<Leave>", lambda _e: self._set(hover=False))
@@ -376,7 +377,7 @@ class RoundUI:
         for i, title in enumerate(self.section_titles):
             x = 28 + i * (pw + 8)
             img_id = c.create_image(x, 284, anchor="nw")
-            txt = c.create_text(x + pw / 2, 300, text=title, font=("Sans", fit_size(title, pw - 14, 9)))
+            txt = c.create_text(x + pw / 2, 300, text=title, font=("Sans", fit_size(c, title, pw - 14, 9)))
             for item in (img_id, txt):
                 c.tag_bind(item, "<Button-1>", lambda _e, i=i: self.toggle_section(i, keep_open=True))
             self.pills.append((img_id, txt, pw))

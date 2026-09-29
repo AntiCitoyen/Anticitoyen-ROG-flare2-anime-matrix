@@ -1,5 +1,9 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Lanceur : plantage possible à la fermeture de la fenêtre (Tk, « alloc:
+    invalid block ») : les libellés sont mesurés sans créer de police nommée.
+    Pile Python enregistrée dans ~/.cache/animematrix/plantages.log si le
+    lanceur plante.
   * Miroir d'écran sous Wayland : l'écran ou la fenêtre choisi est mémorisé
     (plus de fenêtre de choix à chaque lancement) ; mode « fenêtre » par le
     portail. Recherche sur les profils du clavier (docs/RECHERCHE-TOUCHES.md).
