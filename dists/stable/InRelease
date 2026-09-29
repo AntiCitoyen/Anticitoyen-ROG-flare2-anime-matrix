@@ -8,17 +8,17 @@ Codename: stable
 Architectures: all amd64 arm64 i386
 Components: main
 Description: AniMe Matrix for Linux (ROG Strix Flare II Animate)
-Date: Tue, 29 Sep 2026 15:09:56 +0000
+Date: Tue, 29 Sep 2026 15:36:56 +0000
 MD5Sum:
- 5b7c50e00cb259b64fa3330ffd0dce7f 19216 main/binary-all/Packages
- c449fa88568b3021f4c63b91d12f2052 2296 main/binary-all/Packages.gz
+ 0817a085efc72e9b935f063d824f7d5c 20836 main/binary-all/Packages
+ cc93224ffed5612aa90228e0365cb687 2409 main/binary-all/Packages.gz
 SHA256:
- 5c18601f40830325e043c974e93df631332f1f74f095d0d92b13f0fc63e0ee21 19216 main/binary-all/Packages
- b882d6b3c26ccecbd465532be1e51e3373e06ec345b3f938fc4f8d11db956738 2296 main/binary-all/Packages.gz
+ ec22a5dabcaa822a1d46b0f1f92ec6ae321370502b5ba223e0e76a65015df9bb 20836 main/binary-all/Packages
+ 20ea517164894d048627c83430d18080924348ae01082c04d644e076a8ebbc92 2409 main/binary-all/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQR7ENds4dZBwXLvOOueg9LSanBIbQUCarvUxAAKCRCeg9LSanBI
-bQKpAQD01TssFASc5SMu8A4JWWOeXFMGwvxee6DICp8Eb2nHfwD9GLgAsInSiCAx
-/Vh8dcyVUM6Ex1CaE1m4sJpMZvsLDAY=
-=m7tx
+iHUEARYKAB0WIQR7ENds4dZBwXLvOOueg9LSanBIbQUCarvbGAAKCRCeg9LSanBI
+bauSAQDKRVX7sK4IlfzVFDqaCKEtBIY0ovsVOG8A41EL8rQ5WAD/RNtZkGYTdnmp
+ikwYn8h75MMPoGgvmFTe/zaK4sI34gc=
+=JsGx
 -----END PGP SIGNATURE-----
