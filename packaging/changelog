@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Lanceur : plantage à la fermeture par le bouton ✕ des interfaces rondes
+    (Tk, « alloc: invalid block ») corrigé : la fenêtre est détruite après
+    le clic, plus pendant.
   * Lanceur : plantage possible à la fermeture de la fenêtre (Tk, « alloc:
     invalid block ») : les libellés sont mesurés sans créer de police nommée.
     Pile Python enregistrée dans ~/.cache/animematrix/plantages.log si le

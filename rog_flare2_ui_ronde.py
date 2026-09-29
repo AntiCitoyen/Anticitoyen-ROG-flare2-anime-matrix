@@ -92,8 +92,7 @@ class Shaper:
 
 def fit_size(widget, text: str, width: float, size: int, smallest: int = 5) -> int:
     """Plus grande taille de police (≤ size) pour que text tienne dans width pixels (libellés traduits)."""
-    # mesure sur la description, sans police nommée : créer/supprimer des polices nommées Tk à la chaîne
-    # est le suspect des plantages « alloc: invalid block » dans Tk_FreeFont à la fermeture
+    # mesure sur la description : pas de police nommée Tk créée puis supprimée à chaque taille essayée
     while size > smallest and int(widget.tk.call("font", "measure", ("Sans", size), text)) > width:
         size -= 1
     return size

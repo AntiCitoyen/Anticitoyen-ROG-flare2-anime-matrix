@@ -984,11 +984,13 @@ class LauncherApp(tk.Tk):
         # l'éditeur écrit lui-même : il demande la main au démon et la rend en fermant (ou en mourant)
         script = Path(__file__).parent / "rog_flare2_matrix_paint.py"
         subprocess.Popen([sys.executable, str(script)])
-        self.destroy()
+        self.on_close()
 
     def on_close(self):
         """Ce qui est affiché continue après la fermeture : le démon garde la main."""
-        self.destroy()
+        # hors du clic : détruite pendant une liaison du canevas (✕ des interfaces rondes), la fenêtre libère
+        # le cache des polices Tk avant le canevas, dont la destruction est différée → Tcl_Panic « alloc: invalid block »
+        self.after_idle(self.destroy)
 
 
 if __name__ == "__main__":

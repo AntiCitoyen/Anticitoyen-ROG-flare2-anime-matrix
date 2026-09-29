@@ -158,3 +158,15 @@ def test_settings_scroll_with_the_wheel(launcher):
     steps = [("ouvre", lambda: ui.toggle_section(3, keep_open=True), lambda: area.bar.winfo_ismapped()),
              ("molette", wheel, lambda: area.canvas.yview()[0] > 0)]
     assert run_steps(app, steps, delay=700) == []
+
+
+@pytest.mark.parametrize("interface", ["drawer", "dial", "rounded"])
+def test_close_by_the_round_cross(launcher, interface):
+    """✕ dessiné sur le canevas : fermer pendant la liaison du canevas faisait abandonner Tcl (alloc: invalid block)."""
+    app = launcher(interface)
+    cross = next(b for b in app.round_ui.all_buttons if b.command == app.on_close)
+    app.after(1000, lambda: click(app.winfo_rootx() + cross.cx, app.winfo_rooty() + cross.cy))
+    missed = []
+    app.after(8000, lambda: (missed.append(True), app.destroy()))
+    app.mainloop()
+    assert not missed, "le ✕ n'a pas fermé la fenêtre"
