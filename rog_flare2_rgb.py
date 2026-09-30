@@ -185,6 +185,20 @@ def firmware(t) -> str:
     return f"{r[6]:02X}.{r[5]:02X}.{r[4]:02X}" if len(r) > 6 and r[:2] == b"\x12\x00" else "?"
 
 
+# codes de disposition d'OpenRGB (AsusAuraTUFKeyboardLayouts.h) : centaines 1 = ANSI, 2 = ISO
+LAYOUTS = ["", "CA", "AR", "DE", "UK", "FR", "CN", "HU", "IT", "TH", "UA", "NO", "PT", "HE", "RU", "ES",
+           "TW", "US", "TR", "CZ", "BE", "JP", "KR", "IS", "WB", "CH"]
+
+
+def layout(t) -> str:
+    """Disposition du clavier (requête 12 12), ex. « FR (ISO) »."""
+    r = _exchange(t, bytes([0x12, 0x12]), 100)
+    if len(r) <= 5 or r[:2] != b"\x12\x12":
+        return "?"
+    name = LAYOUTS[r[5]] if 0 < r[5] < len(LAYOUTS) else f"{r[5]}"
+    return f"{name} ({ {1: 'ANSI', 2: 'ISO'}.get(r[4], r[4]) })"
+
+
 # ---------- couleurs envoyées par le logiciel (mode direct) ----------
 
 def solid_frame(rgb: tuple[int, int, int], level: float = 1.0) -> dict[int, tuple[int, int, int]]:

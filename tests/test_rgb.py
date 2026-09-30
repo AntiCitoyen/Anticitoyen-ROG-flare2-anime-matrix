@@ -147,3 +147,22 @@ def test_every_key_has_a_position():
     assert R.key_index("del", chars=True, azerty=True) == R.KEYS["DEL"]
     assert R.key_index(")", chars=True, azerty=True) == R.KEYS["-"]  # AZERTY : « ) » est à la place du « - »
     assert T.evdev_name("KEY_F5") == "f5" and T.evdev_name("KEY_KPENTER") == "penter"
+
+
+def test_infos_micrologiciel_et_disposition():
+    # réponses relevées sur le clavier (micrologiciel 03.00.14, AZERTY ISO)
+    reponses = {0x00: "12 00 00 00 14 00 03 00", 0x12: "12 12 00 00 02 05 00 00"}
+
+    class Clavier(R.FakeRGBTransport):
+        def write(self, report):
+            self.pending = bytes.fromhex(reponses[report[1]])
+            return super().write(report)
+
+        def read(self, timeout_ms=0):
+            r, self.pending = getattr(self, "pending", b""), b""
+            return r
+
+    t = Clavier()
+    assert R.firmware(t) == "03.00.14"
+    assert R.layout(t) == "FR (ISO)"
+    assert R.layout(R.FakeRGBTransport()) == "?"

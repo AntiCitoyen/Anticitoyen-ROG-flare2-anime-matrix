@@ -16,6 +16,7 @@
     animematrix-ctl sauvegarde reglages.zip [--secrets] / restaurer reglages.zip
     animematrix-ctl rgb arc-en-ciel [--vitesse 50] [--luminosite 100] [--direction gauche]
     animematrix-ctl rgb statique --couleur "#ff0000"    (touches : effets du clavier, theme, pulsation)
+    animematrix-ctl infos                        (micrologiciel et disposition du clavier)
 """
 from __future__ import annotations
 
@@ -165,7 +166,16 @@ def main(argv=None):
     r.add_argument("--aleatoire", action="store_true", help="couleurs aléatoires")
     r.add_argument("--sans-enregistrer", action="store_true", help="perdu au débranchement")
     sub.add_parser("quitter")
+    sub.add_parser("infos", help="micrologiciel et disposition du clavier (lecture seule)")
     args = ap.parse_args(argv)
+    if args.cmd == "infos":  # sans le démon : requêtes de lecture sur l'interface d'éclairage
+        import rog_flare2_rgb as rgb
+        t = rgb.FakeRGBTransport() if os.environ.get("ANIMEMATRIX_FAUX_CLAVIER") else rgb.RGBTransport()
+        try:
+            print(f"micrologiciel : {rgb.firmware(t)}\ndisposition : {rgb.layout(t)}")
+        finally:
+            t.close()
+        return
     if args.cmd in ("sauvegarde", "restaurer"):  # sans le démon
         import rog_flare2_sauvegarde as backup
         if args.cmd == "sauvegarde":
