@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Replace the current settings with those from {date} (version {version})?\nThe current settings are saved first.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Also on the F1 (mic), F2 (webcam), F3 (OBS) keys",
  "Frappe lumineuse (logiciel)": "Typing glow (software)",
- "Éclair des touches à chaque notification": "Flash the keys on each notification"
+ "Éclair des touches à chaque notification": "Flash the keys on each notification",
+ "🌀 Ventilateurs du PC…": "🌀 PC fans…",
+ "Automatique": "Automatic",
+ "Vitesse fixe": "Fixed speed",
+ "Courbe de température": "Temperature curve",
+ "Ventilateurs": "Fans",
+ "Nom": "Name",
+ "Mode": "Mode",
+ "Fixe (%)": "Fixed (%)",
+ "Sonde": "Sensor",
+ "Courbe": "Curve",
+ "Aucun ventilateur pilotable trouvé.": "No controllable fan found.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Curve sensor: cpu, gpu0, gpu1…, alim (PSU). Points: temperature:percent.",
+ "Appliquer": "Apply",
+ "{n} tr/min": "{n} rpm",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Read-only: {names} (udev or sudo rule missing, see the README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Malformed curve: temperature:percent, comma-separated."
 }

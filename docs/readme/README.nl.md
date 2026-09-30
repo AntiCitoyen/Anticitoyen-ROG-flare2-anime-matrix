@@ -78,6 +78,7 @@ ASUS levert het AniMe Matrix-scherm van dit toetsenbord alleen onder Windows (Ar
 - **Webafstandsbediening**: een pagina om het scherm te bedienen vanaf een telefoon in het lokale netwerk (QR-code, token).
 - **Einde van lange opdrachten**: in de terminal verschijnt « Klaar : make 2 min 05 » wanneer een lange opdracht klaar is.
 - **Toetskleuren en -effecten**, zonder OpenRGB: regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen — uitgevoerd door het toetsenbord en behouden na loskoppelen; of de themakleur, pulseren met het scherm.
+- **Pc-ventilatoren**: moederbord (Nuvoton nct67xx), NVIDIA-kaarten, Corsair HXi / RMi-voedingen; automatisch, vaste snelheid of temperatuurcurve, met beveiligingen (minimum, 100 % bij oververhitting, terug naar de firmware).
 - **Pictogram in het systeemvak**: snelmenu (modi, helderheid).
 
 **Comfort**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Instellingen* → *🌈 Toetsenbordkleuren…*: effect (regenboog, statisch, ademen, kleurcyclus, reactief, rimpeling, sterrennacht, drijfzand, stroming, regen), kleuren, snelheid, helderheid, richting. *Proberen* past het toe, *Opslaan in het toetsenbord* bewaart het na loskoppelen. *Themakleur* en *Pulseren met het scherm* stuurt de daemon toets per toets; verlaat je ze, dan komt het opgeslagen effect terug. Op de opdrachtregel: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Nog twee softwaremodi: *Schermbeeld* (de toetsen tonen het scherm, vergroot) en *Audiospectrum* (één balk per kolom). Elk tijdvak en elk toepassingsprofiel kan ook eigen toetskleuren kiezen (*Planning…*). *Toets voor toets*: één kleur per toets, met de muis geschilderd op een toetsenbordkaart (AZERTY of QWERTY). *Oplichtende aanslagen*: elke ingedrukte toets licht op en vervaagt daarna. De indicatoren voor microfoon, webcam en OBS kunnen ook F1, F2 en F3 laten oplichten, en elke melding laat de toetsen flitsen.
 
 <p align="center"><img src="../captures/nl/couleurs.png" alt="🌈" width="330"> <img src="../captures/nl/touches.png" alt="⌨" width="620"></p>
+
+### Pc-ventilatoren
+
+*Instellingen* → *🌀 Pc-ventilatoren…*: per ventilator *Automatisch* (de firmware beslist), *Vaste snelheid* of *Temperatuurcurve* (punten `temperatuur:procent`, sensor `cpu`, `gpu0`, `gpu1`… / `alim` voor de voeding). Boven 90 °C (CPU), 85 °C (videokaart) of 70 °C (voeding) draait de ventilator op 100 %; een onleesbare sensor, het stoppen van de daemon of een crash geven hem in zijn oorspronkelijke toestand terug aan de firmware. Opdrachtregel: `animematrix-ctl ventilateurs` (status), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kanaal | Hardware | Eenmalig te verlenen toegang |
+|---|---|---|
+| `cm:<n>` | moederbord met Nuvoton nct67xx-controller (driver `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, daarna `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA-videokaarten (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (root-hulpprogramma `/usr/libexec/animematrix-ventilateurs-gpu`, dat verder niets doet) |
+| `alim` | Corsair HXi / RMi-voedingen (USB) | dezelfde udev-regel, daarna de USB-kabel van de voeding los- en weer aankoppelen of herstarten |
+
+De udev-regel en de sudo-regel geven de groep `plugdev` toegang. Laadt `nct6775` niet (ACPI-resourceconflict in `journalctl -k`), dan staat het moederbord niet in de ASUS-lijst van de kernel: voeg `acpi_enforce_resources=lax` toe aan de opstartopties. Een watergekoelde kaart kan ventilatoren melden die niets aandrijven.
 
 ### ROG-laptops (experimenteel)
 

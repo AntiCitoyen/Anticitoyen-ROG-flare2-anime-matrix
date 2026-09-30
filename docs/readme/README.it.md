@@ -78,6 +78,7 @@ ASUS fornisce lo schermo AniMe Matrix di questa tastiera solo su Windows (Armour
 - **Telecomando web**: una pagina per controllare lo schermo da un telefono della rete locale (codice QR, token).
 - **Fine dei comandi lunghi**: nel terminale, « Completato : make 2 min 05 » viene mostrato quando un comando lungo termina.
 - **Colori ed effetti dei tasti**, senza OpenRGB: arcobaleno, statico, respiro, ciclo, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia — eseguiti dalla tastiera e conservati dopo averla scollegata; oppure il colore del tema, pulsazione con lo schermo.
+- **Ventole del PC**: scheda madre (Nuvoton nct67xx), schede NVIDIA, alimentatori Corsair HXi / RMi; automatico, velocità fissa o curva di temperatura, con protezioni (minimo, 100 % in caso di surriscaldamento, ritorno al firmware).
 - **Icona nella barra di sistema**: menu rapido (modalità, luminosità).
 
 **Comodità**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Impostazioni* → *🌈 Colori della tastiera…*: effetto (arcobaleno, statico, respiro, ciclo dei colori, reattivo, increspatura, notte stellata, sabbie mobili, corrente, pioggia), colori, velocità, luminosità, direzione. *Prova* lo applica, *Salva nella tastiera* lo conserva dopo averla scollegata. *Colore del tema* e *Pulsazione con lo schermo* li invia il demone tasto per tasto; uscendone, torna l'effetto salvato. Da riga di comando: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Altre due modalità software: *Immagine dello schermo* (i tasti riproducono lo schermo, ingrandito) e *Spettro audio* (una barra per colonna). Ogni fascia oraria e ogni profilo di applicazione può anche scegliere i colori dei tasti (*Programmazione…*). *Tasto per tasto*: un colore per tasto, dipinto con il mouse su una mappa della tastiera (AZERTY o QWERTY). *Digitazione luminosa*: ogni tasto premuto si accende e poi sfuma. Gli indicatori di microfono, webcam e OBS possono anche accendere F1, F2 e F3, e ogni notifica fa lampeggiare i tasti.
 
 <p align="center"><img src="../captures/it/couleurs.png" alt="🌈" width="330"> <img src="../captures/it/touches.png" alt="⌨" width="620"></p>
+
+### Ventole del PC
+
+*Impostazioni* → *🌀 Ventole del PC…*: per ogni ventola, *Automatico* (decide il firmware), *Velocità fissa* o *Curva di temperatura* (punti `temperatura:percentuale`, sensore `cpu`, `gpu0`, `gpu1`… / `alim` per l'alimentatore). Oltre 90 °C (CPU), 85 °C (scheda video) o 70 °C (alimentatore) la ventola va al 100 %; un sensore illeggibile, l'arresto del demone o un crash la restituiscono al firmware, nel suo stato originale. Riga di comando: `animematrix-ctl ventilateurs` (stato), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Canale | Hardware | Accesso da concedere una volta |
+|---|---|---|
+| `cm:<n>` | scheda madre con controller Nuvoton nct67xx (driver `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, poi `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | schede video NVIDIA (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (assistente root `/usr/libexec/animematrix-ventilateurs-gpu`, che non fa altro) |
+| `alim` | alimentatori Corsair HXi / RMi (USB) | la stessa regola udev, poi scollegare / ricollegare il cavo USB dell'alimentatore o riavviare |
+
+La regola udev e la regola sudo danno accesso al gruppo `plugdev`. Se `nct6775` non si carica (conflitto di risorse ACPI in `journalctl -k`), la scheda madre non è nell'elenco ASUS del kernel: aggiungere `acpi_enforce_resources=lax` alle opzioni di avvio. Una scheda a liquido può dichiarare ventole che non muovono nulla.
 
 ### Portatili ROG (sperimentale)
 

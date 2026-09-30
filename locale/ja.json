@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "現在の設定を {date}（バージョン {version}）の設定で置き換えますか？\n現在の設定は先に保存されます。",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "F1（マイク）、F2（ウェブカメラ）、F3（OBS）キーにも表示",
  "Frappe lumineuse (logiciel)": "タイピングで光る（ソフトウェア）",
- "Éclair des touches à chaque notification": "通知ごとにキーを光らせる"
+ "Éclair des touches à chaque notification": "通知ごとにキーを光らせる",
+ "🌀 Ventilateurs du PC…": "🌀 PC のファン…",
+ "Automatique": "自動",
+ "Vitesse fixe": "固定速度",
+ "Courbe de température": "温度カーブ",
+ "Ventilateurs": "ファン",
+ "Nom": "名前",
+ "Mode": "モード",
+ "Fixe (%)": "固定 (%)",
+ "Sonde": "センサー",
+ "Courbe": "カーブ",
+ "Aucun ventilateur pilotable trouvé.": "制御できるファンが見つかりません。",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "カーブのセンサー：cpu、gpu0、gpu1…、alim（電源）。点：温度:パーセント。",
+ "Appliquer": "適用",
+ "{n} tr/min": "{n} rpm",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "読み取り専用：{names}（udev または sudo のルールがありません。README を参照）。",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "カーブの形式が不正です：温度:パーセントをカンマ区切りで。"
 }

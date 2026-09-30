@@ -6,6 +6,8 @@ After=graphical-session.target
 ExecStart=/usr/bin/animematrixd
 Restart=on-failure
 RestartSec=5
+# ventilateurs rendus au micrologiciel même après un plantage
+ExecStopPost=-/usr/bin/animematrix-ctl ventilateurs --auto
 
 [Install]
 WantedBy=default.target

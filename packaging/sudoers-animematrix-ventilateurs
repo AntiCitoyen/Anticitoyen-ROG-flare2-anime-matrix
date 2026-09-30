@@ -1,0 +1,3 @@
+# Facultatif : ventilateurs des cartes NVIDIA commandés par AniMe Matrix (NVML exige root).
+# À installer avec : sudo install -m 440 <ce fichier> /etc/sudoers.d/animematrix-ventilateurs
+%plugdev ALL=(root) NOPASSWD: /usr/libexec/animematrix-ventilateurs-gpu

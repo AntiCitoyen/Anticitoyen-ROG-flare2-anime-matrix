@@ -1,0 +1,5 @@
+# Facultatif : ventilateurs commandés par AniMe Matrix (groupe plugdev). À copier dans /etc/udev/rules.d/.
+# Carte mère : pwm des contrôleurs Nuvoton nct67xx (pilote nct6775).
+ACTION=="add", SUBSYSTEM=="hwmon", ATTR{name}=="nct67*", RUN+="/bin/sh -c 'chgrp plugdev /sys%p/pwm[1-9] /sys%p/pwm[1-9]_enable; chmod g+w /sys%p/pwm[1-9] /sys%p/pwm[1-9]_enable'"
+# Alimentations Corsair HXi / RMi.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1b1c", ATTRS{idProduct}=="1c05|1c06|1c07|1c08|1c0a|1c0b|1c0c|1c0d|1c1e|1c1f|1c23|1c27", MODE="0660", GROUP="plugdev", TAG+="uaccess"

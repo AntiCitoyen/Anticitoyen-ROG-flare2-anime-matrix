@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "De huidige instellingen vervangen door die van {date} (versie {version})?\nDe huidige instellingen worden eerst bewaard.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Ook op de toetsen F1 (microfoon), F2 (webcam), F3 (OBS)",
  "Frappe lumineuse (logiciel)": "Oplichtende aanslagen (software)",
- "Éclair des touches à chaque notification": "Toetsen laten flitsen bij elke melding"
+ "Éclair des touches à chaque notification": "Toetsen laten flitsen bij elke melding",
+ "🌀 Ventilateurs du PC…": "🌀 Pc-ventilatoren…",
+ "Automatique": "Automatisch",
+ "Vitesse fixe": "Vaste snelheid",
+ "Courbe de température": "Temperatuurcurve",
+ "Ventilateurs": "Ventilatoren",
+ "Nom": "Naam",
+ "Mode": "Modus",
+ "Fixe (%)": "Vast (%)",
+ "Sonde": "Sensor",
+ "Courbe": "Curve",
+ "Aucun ventilateur pilotable trouvé.": "Geen regelbare ventilator gevonden.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Sensor van de curve: cpu, gpu0, gpu1…, alim (voeding). Punten: temperatuur:procent.",
+ "Appliquer": "Toepassen",
+ "{n} tr/min": "{n} tpm",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Alleen-lezen: {names} (udev- of sudo-regel ontbreekt, zie de README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Ongeldige curve: temperatuur:procent, gescheiden door komma's."
 }

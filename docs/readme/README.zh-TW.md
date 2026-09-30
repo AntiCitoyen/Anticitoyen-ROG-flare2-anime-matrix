@@ -78,6 +78,7 @@ ASUS 僅在 Windows(透過 Armoury Crate)提供這款鍵盤 AniMe Matrix 螢幕�
 - **網頁遙控**:透過一個網頁,用區域網路內的手機控制螢幕(QR 碼、權杖)。
 - **長時間指令的結束**:在終端機中,長時間執行的指令結束時會顯示「完成：make 2 min 05」。
 - **按鍵顏色與效果**，無需 OpenRGB：彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴——由鍵盤本身執行，拔除後仍保留；或主題顏色、隨螢幕脈動。
+- **電腦風扇**：主機板（Nuvoton nct67xx）、NVIDIA 顯示卡、Corsair HXi / RMi 電源供應器；自動、固定轉速或溫度曲線，並有保護措施（最低轉速、過熱時 100 %、交還韌體）。
 - **系統匣圖示**:快速選單(模式、亮度)。
 
 **便利性**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *設定* → *🌈 鍵盤顏色…*：效果（彩虹、靜態、呼吸、顏色循環、觸發、漣漪、星空、流沙、電流、雨滴）、顏色、速度、亮度、方向。*試用* 立即套用，*儲存到鍵盤* 拔除後仍保留。*主題顏色* 與 *隨螢幕脈動* 由常駐程式逐鍵傳送；離開後恢復已儲存的效果。命令列：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 另有兩種軟體模式：*螢幕畫面*（按鍵放大映射螢幕內容）與*音訊頻譜*（每欄一條光柱）。每個時段與每個應用程式設定檔也可以選擇按鍵顏色（*排程…*）。 *逐鍵*：每個按鍵一種顏色，用滑鼠在鍵盤配置圖上繪製（AZERTY 或 QWERTY）。 *按鍵發光*：每按一個鍵，它就會亮起然後漸暗。麥克風、網路攝影機與 OBS 指示燈也可以點亮 F1、F2 與 F3，每則通知都會讓按鍵閃光。
 
 <p align="center"><img src="../captures/zh-TW/couleurs.png" alt="🌈" width="330"> <img src="../captures/zh-TW/touches.png" alt="⌨" width="620"></p>
+
+### 電腦風扇
+
+*設定* → *🌀 電腦風扇…*：每個風扇可選 *自動*（由韌體決定）、*固定轉速* 或 *溫度曲線*（點 `溫度:百分比`，感測器 `cpu`, `gpu0`, `gpu1`… / `alim` 代表電源供應器）. 超過 90 °C（處理器）、85 °C（顯示卡）或 70 °C（電源供應器）時風扇升至 100 %；感測器無法讀取、常駐程式停止或當機時，風扇以原始狀態交還韌體。命令列：`animematrix-ctl ventilateurs` (狀態)、`animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`、`animematrix-ctl ventilateurs gpu:1 55`、`animematrix-ctl ventilateurs alim auto`.
+
+| 通道 | 硬體 | 一次性授予的權限 |
+|---|---|---|
+| `cm:<n>` | 搭載 Nuvoton nct67xx 控制器的主機板（驅動程式 `nct6775`） | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, 然後 `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA 顯示卡（NVML） | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (root 輔助程式 `/usr/libexec/animematrix-ventilateurs-gpu`，不做其他任何事) |
+| `alim` | Corsair HXi / RMi 電源供應器（USB） | 同一條 udev 規則，然後拔插電源供應器的 USB 線或重新開機 |
+
+udev 規則與 sudo 規則讓 `plugdev` 群組取得權限。若 `nct6775` 無法載入（`journalctl -k` 出現 ACPI 資源衝突），代表主機板不在核心的 ASUS 清單中：在開機參數加入 `acpi_enforce_resources=lax`。水冷顯示卡可能回報並未帶動任何東西的風扇。
 
 ### ROG 筆記型電腦(實驗性)
 

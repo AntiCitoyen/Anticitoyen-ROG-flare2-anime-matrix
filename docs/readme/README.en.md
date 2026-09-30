@@ -78,6 +78,7 @@ ASUS only provides this keyboard's AniMe Matrix display on Windows (Armoury Crat
 - **Web remote**: a page to control the display from a phone on the local network (QR code, token).
 - **Long commands finishing**: in the terminal, "Done: make 2 min 05" is shown when a long command finishes.
 - **Key colours and effects**, without OpenRGB: rainbow, static, breathing, cycle, reactive, ripple, starry night, quicksand, current, rain — run by the keyboard and kept after unplugging; or the theme colour, pulse with the screen.
+- **PC fans**: motherboard (Nuvoton nct67xx), NVIDIA cards, Corsair HXi / RMi power supplies; automatic, fixed speed or temperature curve, with safeguards (minimum speed, 100 % on overheating, back to the firmware).
 - **System tray icon**: quick menu (modes, brightness).
 
 **Comfort**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Settings* → *🌈 Keyboard colors…*: effect (rainbow, static, breathing, color cycle, reactive, ripple, starry night, quicksand, current, rain), colours, speed, brightness, direction. *Try* applies it, *Save to keyboard* keeps it after unplugging. *Theme color* and *Pulse with the screen* are sent key by key by the daemon; when you leave them, the saved effect comes back. From the command line: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Two more software modes: *Screen image* (the keys mirror the screen, enlarged) and *Audio spectrum* (one bar per column). Each time slot and each application profile can also pick its key colours (*Schedule…*). *Key by key*: one colour per key, painted with the mouse on a keyboard map (AZERTY or QWERTY). *Typing glow*: each key you press lights up, then fades. The mic, webcam and OBS status lights can also light F1, F2 and F3, and each notification makes the keys flash.
 
 <p align="center"><img src="../captures/en/couleurs.png" alt="🌈" width="330"> <img src="../captures/en/touches.png" alt="⌨" width="620"></p>
+
+### PC fans
+
+*Settings* → *🌀 PC fans…*: for each fan, *Automatic* (the firmware decides), *Fixed speed* or *Temperature curve* (`temperature:percent` points, sensor `cpu`, `gpu0`, `gpu1`… / `alim` for the power supply). Above 90 °C (CPU), 85 °C (graphics card) or 70 °C (power supply) the fan goes to 100 %; an unreadable sensor, stopping the daemon or a crash hand it back to the firmware, in its original state. Command line: `animematrix-ctl ventilateurs` (state), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Channel | Hardware | Access to grant once |
+|---|---|---|
+| `cm:<n>` | motherboard with a Nuvoton nct67xx controller (`nct6775` driver) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, then `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA graphics cards (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (root helper `/usr/libexec/animematrix-ventilateurs-gpu`, which does nothing else) |
+| `alim` | Corsair HXi / RMi power supplies (USB) | the same udev rule, then unplug / replug the power supply's USB cable or reboot |
+
+The udev rule and the sudo rule grant access to the `plugdev` group. If `nct6775` refuses to load (ACPI resource conflict in `journalctl -k`), the motherboard is not in the kernel's ASUS list: add `acpi_enforce_resources=lax` to the boot options. A water-cooled card may report fans that turn nothing.
 
 ### ROG laptops (experimental)
 

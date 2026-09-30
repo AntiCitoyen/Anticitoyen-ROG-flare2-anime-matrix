@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "استبدال الإعدادات الحالية بإعدادات {date} (الإصدار {version})؟\nتُحفظ الإعدادات الحالية أولًا.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "وأيضًا على المفاتيح F1 (الميكروفون) وF2 (الكاميرا) وF3 (OBS)",
  "Frappe lumineuse (logiciel)": "كتابة مضيئة (برمجيًا)",
- "Éclair des touches à chaque notification": "وميض المفاتيح عند كل إشعار"
+ "Éclair des touches à chaque notification": "وميض المفاتيح عند كل إشعار",
+ "🌀 Ventilateurs du PC…": "🌀 مراوح الحاسوب…",
+ "Automatique": "تلقائي",
+ "Vitesse fixe": "سرعة ثابتة",
+ "Courbe de température": "منحنى الحرارة",
+ "Ventilateurs": "المراوح",
+ "Nom": "الاسم",
+ "Mode": "الوضع",
+ "Fixe (%)": "ثابت (%)",
+ "Sonde": "المستشعر",
+ "Courbe": "المنحنى",
+ "Aucun ventilateur pilotable trouvé.": "لم يُعثر على مروحة قابلة للتحكم.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "مستشعر المنحنى: cpu، gpu0، gpu1…، alim (مزود الطاقة). النقاط: الحرارة:النسبة.",
+ "Appliquer": "تطبيق",
+ "{n} tr/min": "{n} دورة/دقيقة",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "قراءة فقط: {names} (قاعدة udev أو sudo مفقودة، راجع README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "منحنى غير صالح: الحرارة:النسبة، مفصولة بفواصل."
 }

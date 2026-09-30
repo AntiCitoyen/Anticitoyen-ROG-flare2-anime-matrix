@@ -78,6 +78,7 @@ ASUS はこのキーボードの AniMe Matrix ディスプレイを Windows(Armo
 - **Webリモコン**:ローカルネットワーク上のスマートフォンから画面を操作できるページ(QR コード、トークン)。
 - **長いコマンドの終了**:ターミナルで長いコマンドが終わると「完了：make 2 min 05」と表示。
 - **キーの色と効果**（OpenRGB 不要）：レインボー、スタティック、ブリージング、カラーサイクル、リアクティブ、リップル、星空、流砂、カレント、レイン。キーボード自身が実行し、取り外した後も残ります。テーマの色や画面と連動した点滅も可能です。
+- **PC のファン**：マザーボード（Nuvoton nct67xx）、NVIDIA カード、Corsair HXi / RMi 電源。自動・固定速度・温度カーブに対応し、安全装置付き（最低速度、過熱時 100 %、ファームウェアへの返却）。
 - **システムトレイアイコン**:クイックメニュー(モード、輝度)。
 
 **快適性**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *設定* → *🌈 キーボードの色…*：効果（レインボー、スタティック、ブリージング、カラーサイクル、リアクティブ、リップル、星空、流砂、カレント、レイン）、色、速度、明るさ、方向。*試す* で適用、*キーボードに保存* で取り外した後も保持します。*テーマの色* と *画面と連動して点滅* はデーモンがキーごとに送信し、終了すると保存した効果に戻ります。コマンドライン：`animematrix-ctl rgb arc-en-ciel --vitesse 70`、`animematrix-ctl rgb statique --couleur "#ff0000"`。 さらに 2 つのソフトウェアモード：*画面の映像*（キーが画面を拡大して映す）と*オーディオスペクトラム*（列ごとに 1 本のバー）。各時間帯と各アプリのプロファイルでキーの色も選べます（*スケジュール…*）。 *キーごと*：キーごとに色を指定し、キーボードの配置図にマウスで塗ります（AZERTY または QWERTY）。 *タイピングで光る*：押したキーが光り、ゆっくり消えます。マイク・ウェブカメラ・OBS のインジケーターで F1・F2・F3 も光らせられ、通知のたびにキーが光ります。
 
 <p align="center"><img src="../captures/ja/couleurs.png" alt="🌈" width="330"> <img src="../captures/ja/touches.png" alt="⌨" width="620"></p>
+
+### PC のファン
+
+*設定* → *🌀 PC のファン…*：ファンごとに *自動*（ファームウェアが決定）、*固定速度*、*温度カーブ*（点 `温度:パーセント`、センサー `cpu`, `gpu0`, `gpu1`… / `alim` は電源）. 90 °C（CPU）、85 °C（グラフィックカード）、70 °C（電源）を超えるとファンは 100 % になります。センサーが読めないとき、デーモンの停止時やクラッシュ時は、元の状態でファームウェアに戻します。コマンドライン：`animematrix-ctl ventilateurs` (状態)、`animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`、`animematrix-ctl ventilateurs gpu:1 55`、`animematrix-ctl ventilateurs alim auto`.
+
+| チャンネル | ハードウェア | 一度だけ与えるアクセス |
+|---|---|---|
+| `cm:<n>` | Nuvoton nct67xx コントローラー搭載のマザーボード（ドライバー `nct6775`） | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, その後 `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA グラフィックカード（NVML） | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (他に何もしない root ヘルパー `/usr/libexec/animematrix-ventilateurs-gpu`) |
+| `alim` | Corsair HXi / RMi 電源（USB） | 同じ udev ルール。その後、電源の USB ケーブルを抜き差しするか再起動 |
+
+udev ルールと sudo ルールは `plugdev` グループにアクセスを与えます。`nct6775` が読み込めない場合（`journalctl -k` に ACPI リソース競合）、マザーボードはカーネルの ASUS リストにありません：起動オプションに `acpi_enforce_resources=lax` を追加してください。水冷のカードは何も回さないファンを報告することがあります。
 
 ### ROG ノート PC(実験的)
 

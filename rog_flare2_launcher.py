@@ -432,6 +432,7 @@ class LauncherApp(tk.Tk):
         entry.bind("<Return>", lambda _e: self._save_notifications())
         entry.bind("<FocusOut>", lambda _e: self._save_notifications())
         ttk.Button(tab, text=_("🌈 Couleurs du clavier…"), command=self.open_rgb).pack(fill="x", pady=4)
+        ttk.Button(tab, text=_("🌀 Ventilateurs du PC…"), command=self.open_fans).pack(fill="x", pady=(0, 4))
         ttk.Label(tab, text=_("La galerie de fond lit le dernier dossier choisi dans l'onglet GIF."),
                   style="Muted.TLabel", wraplength=self.wrap).pack(anchor="w")
         ttk.Button(tab, text=_("✎ Dessiner mon propre motif (éditeur)"),
@@ -917,6 +918,10 @@ class LauncherApp(tk.Tk):
     def open_rgb(self):
         from rog_flare2_ui_rgb import RGBWindow
         RGBWindow(self, ctl.request)
+
+    def open_fans(self):
+        from rog_flare2_ui_ventilateurs import FansWindow
+        FansWindow(self, ctl.request)
 
     def open_lists(self):
         from rog_flare2_listes import ListsWindow

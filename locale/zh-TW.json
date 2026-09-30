@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "以 {date}（版本 {version}）的設定取代目前設定嗎？\n目前設定會先備份。",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "同時顯示在 F1（麥克風）、F2（網路攝影機）、F3（OBS）鍵上",
  "Frappe lumineuse (logiciel)": "按鍵發光（軟體）",
- "Éclair des touches à chaque notification": "每次通知時按鍵閃光"
+ "Éclair des touches à chaque notification": "每次通知時按鍵閃光",
+ "🌀 Ventilateurs du PC…": "🌀 電腦風扇…",
+ "Automatique": "自動",
+ "Vitesse fixe": "固定轉速",
+ "Courbe de température": "溫度曲線",
+ "Ventilateurs": "風扇",
+ "Nom": "名稱",
+ "Mode": "模式",
+ "Fixe (%)": "固定 (%)",
+ "Sonde": "感測器",
+ "Courbe": "曲線",
+ "Aucun ventilateur pilotable trouvé.": "找不到可控制的風扇。",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "曲線感測器：cpu、gpu0、gpu1…、alim（電源供應器）。點：溫度:百分比。",
+ "Appliquer": "套用",
+ "{n} tr/min": "{n} 轉/分",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "唯讀：{names}（缺少 udev 或 sudo 規則，見 README）。",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "曲線格式錯誤：溫度:百分比，以逗號分隔。"
 }

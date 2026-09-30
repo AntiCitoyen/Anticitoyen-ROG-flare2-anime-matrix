@@ -17,6 +17,8 @@
     animematrix-ctl rgb arc-en-ciel [--vitesse 50] [--luminosite 100] [--direction gauche]
     animematrix-ctl rgb statique --couleur "#ff0000"    (touches : effets du clavier, theme, pulsation)
     animematrix-ctl infos                        (micrologiciel et disposition du clavier)
+    animematrix-ctl ventilateurs [cm:2 courbe --source cpu --points 40:30,70:60,85:100 | gpu:1 55 | alim auto]
+    animematrix-ctl ventilateurs --auto          (tout rendre au micrologiciel, sans le démon)
 """
 from __future__ import annotations
 
@@ -167,6 +169,13 @@ def main(argv=None):
     r.add_argument("--sans-enregistrer", action="store_true", help="perdu au débranchement")
     sub.add_parser("quitter")
     sub.add_parser("infos", help="micrologiciel et disposition du clavier (lecture seule)")
+    v = sub.add_parser("ventilateurs", help="ventilateurs du PC (sans argument : état)")
+    v.add_argument("canal", nargs="?", help="cm:<n>, gpu:<i> ou alim")
+    v.add_argument("reglage", nargs="?", help="auto, courbe ou un pourcentage")
+    v.add_argument("--source", help="sonde de la courbe : cpu, gpu0, gpu1…, alim")
+    v.add_argument("--points", help="température:pourcentage, séparés par des virgules")
+    v.add_argument("--nom", help="nom affiché du canal")
+    v.add_argument("--auto", action="store_true", help="tout rendre au micrologiciel, sans le démon")
     args = ap.parse_args(argv)
     if args.cmd == "infos":  # sans le démon : requêtes de lecture sur l'interface d'éclairage
         import rog_flare2_rgb as rgb
@@ -175,6 +184,11 @@ def main(argv=None):
             print(f"micrologiciel : {rgb.firmware(t)}\ndisposition : {rgb.layout(t)}")
         finally:
             t.close()
+        return
+    if args.cmd == "ventilateurs" and args.auto:  # sans le démon (ExecStopPost du service)
+        from rog_flare2_ventilateurs import restore_all
+        for err in restore_all():
+            print(err, file=sys.stderr)
         return
     if args.cmd in ("sauvegarde", "restaurer"):  # sans le démon
         import rog_flare2_sauvegarde as backup
@@ -191,6 +205,28 @@ def main(argv=None):
 
     if not ensure_daemon():
         sys.exit("animematrixd injoignable")
+    if args.cmd == "ventilateurs":
+        kw = {}
+        if args.canal:
+            from rog_flare2_ventilateurs import load_config
+            cfg = load_config()
+            c = cfg["canaux"].setdefault(args.canal, {})
+            if args.reglage in ("auto", "courbe"):
+                c["mode"] = args.reglage
+            elif args.reglage:
+                c.update(mode="fixe", valeur=int(args.reglage))
+            if args.source:
+                c["source"] = args.source
+            if args.points:
+                c["courbe"] = [[int(x) for x in pt.split(":")] for pt in args.points.split(",")]
+            if args.nom is not None:
+                c["nom"] = args.nom
+            kw["config"] = cfg
+        for ch in request("ventilateurs", timeout=15, **kw)["canaux"]:
+            speed = f"{ch['rpm']} tr/min" if ch["rpm"] is not None else f"{ch['pourcent']} %"
+            print(f"{ch['id']:7} {ch['nom']:14} {speed:>12}  {ch['mode']}"
+                  + ("" if ch["ecriture"] else "  (lecture seule)") + (f"  ⚠ {ch['erreur']}" if ch["erreur"] else ""))
+        return
     if args.cmd == "etat":
         print(json.dumps(request("status"), ensure_ascii=False, indent=1))
         return

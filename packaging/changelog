@@ -1,5 +1,12 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Ventilateurs du PC (Réglages → Ventilateurs du PC…, animematrix-ctl
+    ventilateurs) : carte mère Nuvoton nct67xx, cartes NVIDIA, alimentations
+    Corsair HXi / RMi ; automatique, vitesse fixe ou courbe de température ;
+    plancher, 100 % en surchauffe, retour au micrologiciel dans l'état
+    d'origine (sonde illisible, arrêt, plantage). Accès facultatifs : règle
+    udev 74, règle sudo de l'assistant animematrix-ventilateurs-gpu.
+  * animematrix-ctl infos : micrologiciel et disposition du clavier.
   * Lanceur : plantage à la fermeture par le bouton ✕ des interfaces rondes
     (Tk, « alloc: invalid block ») corrigé : la fenêtre est détruite après
     le clic, plus pendant.

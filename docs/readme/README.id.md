@@ -78,6 +78,7 @@ ASUS hanya menyediakan layar AniMe Matrix pada keyboard ini untuk Windows (Armou
 - **Remote web**: halaman untuk mengendalikan layar dari ponsel di jaringan lokal (kode QR, token).
 - **Akhir perintah panjang**: di terminal, "Selesai: make 2 min 05" ditampilkan saat perintah yang lama selesai.
 - **Warna dan efek tombol**, tanpa OpenRGB: pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan — dijalankan oleh keyboard sendiri dan tetap ada setelah dicabut; atau warna tema, berdenyut dengan layar.
+- **Kipas PC**: motherboard (Nuvoton nct67xx), kartu NVIDIA, PSU Corsair HXi / RMi; otomatis, kecepatan tetap atau kurva suhu, dengan pengaman (kecepatan minimum, 100 % saat terlalu panas, kembali ke firmware).
 - **Ikon baki sistem**: menu cepat (mode, kecerahan).
 
 **Kenyamanan**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Pengaturan* → *🌈 Warna keyboard…*: efek (pelangi, statis, bernapas, siklus warna, reaktif, riak, malam berbintang, pasir hisap, arus, hujan), warna, kecepatan, kecerahan, arah. *Coba* menerapkannya, *Simpan ke keyboard* menyimpannya setelah dicabut. *Warna tema* dan *Berdenyut dengan layar* dikirim tombol demi tombol oleh daemon; saat ditinggalkan, efek tersimpan kembali. Dari baris perintah: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dua mode perangkat lunak lagi: *Gambar layar* (tombol mencerminkan layar, diperbesar) dan *Spektrum audio* (satu batang per kolom). Setiap rentang waktu dan setiap profil aplikasi juga dapat memilih warna tombolnya (*Jadwal…*). *Per tombol*: satu warna per tombol, diwarnai dengan mouse pada peta keyboard (AZERTY atau QWERTY). *Ketikan menyala*: setiap tombol yang ditekan menyala lalu meredup. Indikator mikrofon, webcam, dan OBS juga dapat menyalakan F1, F2, dan F3, dan setiap notifikasi membuat tombol berkilat.
 
 <p align="center"><img src="../captures/id/couleurs.png" alt="🌈" width="330"> <img src="../captures/id/touches.png" alt="⌨" width="620"></p>
+
+### Kipas PC
+
+*Pengaturan* → *🌀 Kipas PC…*: untuk tiap kipas: *Otomatis* (firmware yang memutuskan), *Kecepatan tetap* atau *Kurva suhu* (titik `suhu:persen`, sensor `cpu`, `gpu0`, `gpu1`… / `alim` untuk PSU). Di atas 90 °C (CPU), 85 °C (kartu grafis) atau 70 °C (PSU) kipas berputar 100 %; sensor yang tak terbaca, daemon yang berhenti atau crash mengembalikannya ke firmware dalam keadaan semula. Baris perintah: `animematrix-ctl ventilateurs` (status), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kanal | Perangkat keras | Akses yang diberikan sekali |
+|---|---|---|
+| `cm:<n>` | motherboard dengan pengendali Nuvoton nct67xx (driver `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, lalu `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | kartu grafis NVIDIA (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (pembantu root `/usr/libexec/animematrix-ventilateurs-gpu`, yang tidak melakukan hal lain) |
+| `alim` | PSU Corsair HXi / RMi (USB) | aturan udev yang sama, lalu cabut / pasang lagi kabel USB PSU atau mulai ulang |
+
+Aturan udev dan aturan sudo memberi akses ke grup `plugdev`. Jika `nct6775` gagal dimuat (konflik sumber daya ACPI di `journalctl -k`), motherboard tidak ada di daftar ASUS kernel: tambahkan `acpi_enforce_resources=lax` ke opsi boot. Kartu berpendingin cair dapat melaporkan kipas yang tidak memutar apa pun.
 
 ### Laptop ROG (eksperimental)
 

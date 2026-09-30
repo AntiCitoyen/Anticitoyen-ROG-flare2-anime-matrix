@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Aktuelle Einstellungen durch die vom {date} (Version {version}) ersetzen?\nDie aktuellen Einstellungen werden vorher gesichert.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Auch auf den Tasten F1 (Mikrofon), F2 (Webcam), F3 (OBS)",
  "Frappe lumineuse (logiciel)": "Leuchtende Anschläge (Software)",
- "Éclair des touches à chaque notification": "Tasten bei jeder Benachrichtigung aufblitzen lassen"
+ "Éclair des touches à chaque notification": "Tasten bei jeder Benachrichtigung aufblitzen lassen",
+ "🌀 Ventilateurs du PC…": "🌀 PC-Lüfter…",
+ "Automatique": "Automatisch",
+ "Vitesse fixe": "Feste Drehzahl",
+ "Courbe de température": "Temperaturkurve",
+ "Ventilateurs": "Lüfter",
+ "Nom": "Name",
+ "Mode": "Modus",
+ "Fixe (%)": "Fest (%)",
+ "Sonde": "Sensor",
+ "Courbe": "Kurve",
+ "Aucun ventilateur pilotable trouvé.": "Kein steuerbarer Lüfter gefunden.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Sensor der Kurve: cpu, gpu0, gpu1…, alim (Netzteil). Punkte: Temperatur:Prozent.",
+ "Appliquer": "Anwenden",
+ "{n} tr/min": "{n} U/min",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Nur lesen: {names} (udev- oder sudo-Regel fehlt, siehe README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Fehlerhafte Kurve: Temperatur:Prozent, durch Kommas getrennt."
 }

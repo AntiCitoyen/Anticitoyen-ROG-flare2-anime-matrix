@@ -78,6 +78,7 @@ ASUS bietet das AniMe-Matrix-Display dieser Tastatur nur unter Windows (Armoury 
 - **Web-Fernbedienung**: eine Seite, um das Display von einem Telefon im lokalen Netzwerk zu steuern (QR-Code, Token).
 - **Ende langer Befehle**: im Terminal wird „Fertig: make 2 min 05" angezeigt, wenn ein langer Befehl endet.
 - **Tastenfarben und -effekte**, ohne OpenRGB: Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen — von der Tastatur ausgeführt und nach dem Abstecken behalten; oder die Themenfarbe, Pulsieren mit dem Bildschirm.
+- **PC-Lüfter**: Mainboard (Nuvoton nct67xx), NVIDIA-Karten, Corsair-Netzteile HXi / RMi; automatisch, feste Drehzahl oder Temperaturkurve, mit Schutz (Mindestdrehzahl, 100 % bei Überhitzung, Rückgabe an die Firmware).
 - **Symbol in der Systemleiste**: Schnellmenü (Modi, Helligkeit).
 
 **Komfort**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Einstellungen* → *🌈 Tastaturfarben…*: Effekt (Regenbogen, statisch, Atmen, Farbwechsel, reaktiv, Wellen, Sternennacht, Treibsand, Strömung, Regen), Farben, Geschwindigkeit, Helligkeit, Richtung. *Ausprobieren* wendet ihn an, *In der Tastatur speichern* behält ihn nach dem Abstecken. *Themenfarbe* und *Pulsieren mit dem Bildschirm* sendet der Dienst Taste für Taste; beim Verlassen kehrt der gespeicherte Effekt zurück. Auf der Kommandozeile: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Zwei weitere Software-Modi: *Bildschirmbild* (die Tasten zeigen den Bildschirm vergrößert) und *Audiospektrum* (ein Balken pro Spalte). Jedes Zeitfenster und jedes Anwendungsprofil kann auch eigene Tastenfarben wählen (*Zeitplan…*). *Taste für Taste*: eine Farbe pro Taste, mit der Maus auf einem Tastaturplan gemalt (AZERTY oder QWERTY). *Leuchtende Anschläge*: jede gedrückte Taste leuchtet auf und verblasst. Die Anzeigen für Mikrofon, Webcam und OBS können auch F1, F2 und F3 beleuchten, und jede Benachrichtigung lässt die Tasten aufblitzen.
 
 <p align="center"><img src="../captures/de/couleurs.png" alt="🌈" width="330"> <img src="../captures/de/touches.png" alt="⌨" width="620"></p>
+
+### PC-Lüfter
+
+*Einstellungen* → *🌀 PC-Lüfter…*: für jeden Lüfter *Automatisch* (die Firmware entscheidet), *Feste Drehzahl* oder *Temperaturkurve* (Punkte `Temperatur:Prozent`, Sensor `cpu`, `gpu0`, `gpu1`… / `alim` für das Netzteil). Über 90 °C (CPU), 85 °C (Grafikkarte) oder 70 °C (Netzteil) läuft der Lüfter mit 100 %; ein unlesbarer Sensor, das Beenden des Daemons oder ein Absturz geben ihn im ursprünglichen Zustand an die Firmware zurück. Befehlszeile: `animematrix-ctl ventilateurs` (Status), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kanal | Hardware | Einmalig zu gewährender Zugriff |
+|---|---|---|
+| `cm:<n>` | Mainboard mit Nuvoton-nct67xx-Controller (Treiber `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, danach `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA-Grafikkarten (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (Root-Helfer `/usr/libexec/animematrix-ventilateurs-gpu`, der sonst nichts tut) |
+| `alim` | Corsair-Netzteile HXi / RMi (USB) | dieselbe udev-Regel, danach das USB-Kabel des Netzteils ab- und wieder anstecken oder neu starten |
+
+Die udev-Regel und die sudo-Regel geben der Gruppe `plugdev` Zugriff. Lädt `nct6775` nicht (ACPI-Ressourcenkonflikt in `journalctl -k`), fehlt das Mainboard in der ASUS-Liste des Kernels: `acpi_enforce_resources=lax` zu den Startoptionen hinzufügen. Eine wassergekühlte Karte kann Lüfter melden, die nichts drehen.
 
 ### ROG-Laptops (experimentell)
 

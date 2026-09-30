@@ -43,6 +43,7 @@
   <supports><control>pointing</control><control>keyboard</control></supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.2.0" date="2026-09-30"><description><p>PC fan control: motherboard (Nuvoton nct67xx), NVIDIA cards and Corsair HXi / RMi power supplies, automatic, fixed speed or temperature curve, with safeguards. New command: animematrix-ctl infos (keyboard firmware and layout).</p></description></release>
     <release version="2.1.2" date="2026-09-29"><description><p>Launcher: fixes the crash when closing the round interfaces with their ✕ button.</p></description></release>
     <release version="2.1.1" date="2026-09-29"><description><p>Launcher: fixes a possible crash when closing the window (Tk font cache); crash traces are saved to ~/.cache/animematrix/plantages.log.</p></description></release>
     <release version="2.1.0" date="2026-09-26"><description><p>Screen mirror under Wayland: the chosen screen or window is remembered, and a window can be mirrored through the portal.</p></description></release>

@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Заменить текущие настройки настройками от {date} (версия {version})?\nТекущие настройки будут сначала сохранены.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Также на клавишах F1 (микрофон), F2 (камера), F3 (OBS)",
  "Frappe lumineuse (logiciel)": "Светящийся набор (программно)",
- "Éclair des touches à chaque notification": "Вспышка клавиш при каждом уведомлении"
+ "Éclair des touches à chaque notification": "Вспышка клавиш при каждом уведомлении",
+ "🌀 Ventilateurs du PC…": "🌀 Вентиляторы ПК…",
+ "Automatique": "Автоматически",
+ "Vitesse fixe": "Фиксированная скорость",
+ "Courbe de température": "Температурная кривая",
+ "Ventilateurs": "Вентиляторы",
+ "Nom": "Имя",
+ "Mode": "Режим",
+ "Fixe (%)": "Фикс. (%)",
+ "Sonde": "Датчик",
+ "Courbe": "Кривая",
+ "Aucun ventilateur pilotable trouvé.": "Управляемые вентиляторы не найдены.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Датчик кривой: cpu, gpu0, gpu1…, alim (БП). Точки: температура:процент.",
+ "Appliquer": "Применить",
+ "{n} tr/min": "{n} об/мин",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Только чтение: {names} (нет правила udev или sudo, см. README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Неверная кривая: температура:процент через запятую."
 }

@@ -254,6 +254,8 @@ class Daemon:
         self.voyants = Watcher(self._badges_changed, self._announce)
         from rog_flare2_telecommande import RemoteServer
         self.remote = RemoteServer(self.handle)
+        from rog_flare2_ventilateurs import FanControl
+        self.fans = FanControl()
 
     # ---------- état ----------
     @staticmethod
@@ -563,6 +565,17 @@ class Daemon:
                 except OSError as exc:
                     return {"ok": False, "error": str(exc)}
             return {"ok": True, "rgb": cfg}
+        if cmd == "ventilateurs":  # sans « config » : état seul
+            import rog_flare2_ventilateurs as fans
+            if "config" in req:
+                cfg = {"canaux": {}, **req["config"]}
+                problem = fans.check_config(cfg)
+                if problem:
+                    return {"ok": False, "error": problem}
+                fans.save_config(cfg)
+                self.fans.start(cfg)
+                self.fans.tick()  # consigne appliquée tout de suite, erreurs visibles dans la réponse
+            return {"ok": True, "canaux": self.fans.status(), "config": self.fans.cfg}
         if cmd == "memoire":
             try:
                 return self.write_memory(req)
@@ -615,6 +628,8 @@ class Daemon:
             self._badges_changed(self.voyants.states)  # « aussi sur les touches » pris en compte tout de suite
             from rog_flare2_telecommande import load_config as remote_config
             self.remote.start(remote_config())
+            from rog_flare2_ventilateurs import load_config as fan_config
+            self.fans.start(fan_config())
             return {"ok": True, "notifications": self.notifs.start(load_config())}
         if cmd == "notify":
             self.notify(str(req.get("text", "")), float(req.get("duration", 6)))
@@ -785,6 +800,8 @@ def main():
     daemon.voyants.start(badge_config())
     from rog_flare2_telecommande import load_config as remote_config
     daemon.remote.start(remote_config())
+    from rog_flare2_ventilateurs import load_config as fan_config
+    daemon.fans.start(fan_config())
     try:
         server.serve_forever()
     finally:
@@ -794,6 +811,7 @@ def main():
         daemon.programme.stop()
         daemon.voyants.stop()
         daemon.remote.stop()
+        daemon.fans.stop()  # rendus au micrologiciel
         SOCKET_PATH.unlink(missing_ok=True)
         time.sleep(0.2)
         daemon.screen.transport.close()

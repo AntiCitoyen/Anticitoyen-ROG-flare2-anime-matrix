@@ -78,6 +78,7 @@ ASUS는 이 키보드의 AniMe Matrix 화면을 Windows(Armoury Crate)에서만 
 - **웹 리모컨**: 로컬 네트워크의 휴대폰에서 화면을 제어하는 페이지(QR 코드, 토큰).
 - **긴 명령 완료 알림**: 터미널에서 긴 명령이 끝나면 "완료: make 2 min 05"가 표시됩니다.
 - **키 색상과 효과**, OpenRGB 없이: 무지개, 고정, 호흡, 색상 순환, 반응형, 물결, 별이 빛나는 밤, 유사, 전류, 비 — 키보드가 직접 실행하며 분리한 뒤에도 유지됩니다. 또는 테마 색상, 화면과 함께 맥동.
+- **PC 팬**: 메인보드(Nuvoton nct67xx), NVIDIA 카드, Corsair HXi / RMi 파워; 자동, 고정 속도 또는 온도 곡선, 안전장치 포함(최저 속도, 과열 시 100 %, 펌웨어로 반환).
 - **시스템 트레이 아이콘**: 빠른 메뉴(모드, 밝기).
 
 **편의성**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *설정* → *🌈 키보드 색상…*: 효과(무지개, 고정, 호흡, 색상 순환, 반응형, 물결, 별이 빛나는 밤, 유사, 전류, 비), 색상, 속도, 밝기, 방향. *시험*은 바로 적용하고, *키보드에 저장*은 분리한 뒤에도 유지합니다. *테마 색상*과 *화면과 함께 맥동*은 데몬이 키마다 보내며, 끄면 저장된 효과로 돌아갑니다. 명령줄: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. 소프트웨어 모드 두 가지 추가: *화면 이미지*(키가 화면을 확대해 보여 줌)와 *오디오 스펙트럼*(열마다 막대 하나). 각 시간대와 각 앱 프로필마다 키 색상도 고를 수 있습니다(*일정…*). *키별 설정*: 키마다 색 하나, 키보드 배치도 위에 마우스로 칠합니다(AZERTY 또는 QWERTY). *타이핑 발광*: 누른 키가 켜졌다가 서서히 꺼집니다. 마이크·웹캠·OBS 표시등으로 F1, F2, F3도 켤 수 있고, 알림마다 키가 번쩍입니다.
 
 <p align="center"><img src="../captures/ko/couleurs.png" alt="🌈" width="330"> <img src="../captures/ko/touches.png" alt="⌨" width="620"></p>
+
+### PC 팬
+
+*설정* → *🌀 PC 팬…*: 팬마다 *자동*(펌웨어가 결정), *고정 속도*, *온도 곡선*(점 `온도:백분율`, 센서 `cpu`, `gpu0`, `gpu1`… / `alim`는 파워). 90 °C(CPU), 85 °C(그래픽 카드), 70 °C(파워)를 넘으면 팬이 100 %로 돕니다. 센서를 읽을 수 없거나 데몬이 멈추거나 충돌하면 원래 상태로 펌웨어에 돌려줍니다. 명령줄: `animematrix-ctl ventilateurs` (상태), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| 채널 | 하드웨어 | 한 번 부여할 권한 |
+|---|---|---|
+| `cm:<n>` | Nuvoton nct67xx 컨트롤러 메인보드(드라이버 `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, 그다음 `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA 그래픽 카드(NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (다른 일은 하지 않는 root 도우미 `/usr/libexec/animematrix-ventilateurs-gpu`) |
+| `alim` | Corsair HXi / RMi 파워(USB) | 같은 udev 규칙, 그다음 파워의 USB 케이블을 뽑았다 꽂거나 재부팅 |
+
+udev 규칙과 sudo 규칙은 `plugdev` 그룹에 권한을 줍니다. `nct6775`가 로드되지 않으면(`journalctl -k`의 ACPI 자원 충돌) 메인보드가 커널의 ASUS 목록에 없는 것입니다: 부팅 옵션에 `acpi_enforce_resources=lax`를 추가하세요. 수랭 그래픽 카드는 아무것도 돌리지 않는 팬을 보고할 수 있습니다.
 
 ### ROG 노트북(실험적)
 

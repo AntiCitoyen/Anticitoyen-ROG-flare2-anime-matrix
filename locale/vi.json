@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Thay cài đặt hiện tại bằng cài đặt ngày {date} (phiên bản {version})?\nCài đặt hiện tại được lưu trước.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Cả trên các phím F1 (micro), F2 (webcam), F3 (OBS)",
  "Frappe lumineuse (logiciel)": "Gõ phím phát sáng (phần mềm)",
- "Éclair des touches à chaque notification": "Chớp sáng phím mỗi khi có thông báo"
+ "Éclair des touches à chaque notification": "Chớp sáng phím mỗi khi có thông báo",
+ "🌀 Ventilateurs du PC…": "🌀 Quạt của PC…",
+ "Automatique": "Tự động",
+ "Vitesse fixe": "Tốc độ cố định",
+ "Courbe de température": "Đường cong nhiệt độ",
+ "Ventilateurs": "Quạt",
+ "Nom": "Tên",
+ "Mode": "Chế độ",
+ "Fixe (%)": "Cố định (%)",
+ "Sonde": "Cảm biến",
+ "Courbe": "Đường cong",
+ "Aucun ventilateur pilotable trouvé.": "Không tìm thấy quạt điều khiển được.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Cảm biến của đường cong: cpu, gpu0, gpu1…, alim (nguồn). Điểm: nhiệt độ:phần trăm.",
+ "Appliquer": "Áp dụng",
+ "{n} tr/min": "{n} vòng/phút",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Chỉ đọc: {names} (thiếu quy tắc udev hoặc sudo, xem README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Đường cong sai định dạng: nhiệt độ:phần trăm, cách nhau bằng dấu phẩy."
 }

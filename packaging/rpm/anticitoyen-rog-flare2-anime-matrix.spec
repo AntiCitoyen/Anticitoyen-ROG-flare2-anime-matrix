@@ -32,6 +32,7 @@ packaging/install.sh %{buildroot} %{_prefix} %{__python3}
 %{_datadir}/%{name}/
 %{_prefix}/lib/systemd/user/animematrixd.service
 %{_prefix}/lib/udev/rules.d/72-rog-flare2-animate.rules
+%{_libexecdir}/animematrix-ventilateurs-gpu
 %{_datadir}/applications/animematrix.desktop
 %{_datadir}/icons/hicolor/scalable/apps/animematrix.svg
 %doc %{_datadir}/doc/%{name}/

@@ -78,6 +78,7 @@ ASUS chỉ cung cấp màn hình AniMe Matrix của bàn phím này trên Window
 - **Điều khiển từ xa qua web**: một trang để điều khiển màn hình từ điện thoại trong mạng nội bộ (mã QR, mã truy cập).
 - **Báo khi lệnh dài kết thúc**: trong terminal, "Xong: make 2 min 05" hiện ra khi một lệnh chạy lâu kết thúc.
 - **Màu và hiệu ứng phím**, không cần OpenRGB: cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa — do chính bàn phím chạy và vẫn giữ sau khi rút ra; hoặc màu chủ đề, nhịp theo màn hình.
+- **Quạt của PC**: bo mạch chủ (Nuvoton nct67xx), card NVIDIA, nguồn Corsair HXi / RMi; tự động, tốc độ cố định hoặc đường cong nhiệt độ, có cơ chế an toàn (tốc độ tối thiểu, 100 % khi quá nóng, trả lại firmware).
 - **Biểu tượng khay hệ thống**: menu nhanh (chế độ, độ sáng).
 
 **Tiện lợi**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Cài đặt* → *🌈 Màu bàn phím…*: hiệu ứng (cầu vồng, tĩnh, nhịp thở, chu kỳ màu, phản ứng, gợn sóng, đêm đầy sao, cát lún, dòng chảy, mưa), màu, tốc độ, độ sáng, hướng. *Thử* áp dụng ngay, *Lưu vào bàn phím* giữ lại sau khi rút ra. *Màu chủ đề* và *Nhịp theo màn hình* do dịch vụ gửi từng phím; khi thoát, hiệu ứng đã lưu trở lại. Dòng lệnh: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Thêm hai chế độ phần mềm: *Hình màn hình* (phím phản chiếu màn hình, phóng to) và *Phổ âm thanh* (mỗi cột một thanh). Mỗi khung giờ và mỗi hồ sơ ứng dụng cũng có thể chọn màu phím riêng (*Lịch hẹn…*). *Từng phím*: mỗi phím một màu, tô bằng chuột trên sơ đồ bàn phím (AZERTY hoặc QWERTY). *Gõ phím phát sáng*: mỗi phím bạn nhấn sẽ sáng lên rồi mờ dần. Đèn báo micro, webcam và OBS cũng có thể làm sáng F1, F2 và F3, và mỗi thông báo làm các phím chớp sáng.
 
 <p align="center"><img src="../captures/vi/couleurs.png" alt="🌈" width="330"> <img src="../captures/vi/touches.png" alt="⌨" width="620"></p>
+
+### Quạt của PC
+
+*Cài đặt* → *🌀 Quạt của PC…*: với mỗi quạt: *Tự động* (firmware quyết định), *Tốc độ cố định* hoặc *Đường cong nhiệt độ* (điểm `nhiệt độ:phần trăm`, cảm biến `cpu`, `gpu0`, `gpu1`… / `alim` cho nguồn). Trên 90 °C (CPU), 85 °C (card đồ họa) hoặc 70 °C (nguồn), quạt chạy 100 %; cảm biến không đọc được, dừng daemon hoặc sự cố sẽ trả quạt về firmware ở trạng thái ban đầu. Dòng lệnh: `animematrix-ctl ventilateurs` (trạng thái), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kênh | Phần cứng | Quyền cấp một lần |
+|---|---|---|
+| `cm:<n>` | bo mạch chủ có bộ điều khiển Nuvoton nct67xx (driver `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, rồi `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | card đồ họa NVIDIA (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (trình trợ giúp root `/usr/libexec/animematrix-ventilateurs-gpu`, không làm gì khác) |
+| `alim` | nguồn Corsair HXi / RMi (USB) | cùng quy tắc udev, rồi rút / cắm lại cáp USB của nguồn hoặc khởi động lại |
+
+Quy tắc udev và quy tắc sudo cấp quyền cho nhóm `plugdev`. Nếu `nct6775` không nạp được (xung đột tài nguyên ACPI trong `journalctl -k`), bo mạch không có trong danh sách ASUS của kernel: thêm `acpi_enforce_resources=lax` vào tùy chọn khởi động. Card tản nhiệt nước có thể báo các quạt không quay gì cả.
 
 ### Laptop ROG (thử nghiệm)
 

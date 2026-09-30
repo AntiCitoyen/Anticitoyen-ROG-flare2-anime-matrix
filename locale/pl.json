@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "Zastąpić bieżące ustawienia ustawieniami z {date} (wersja {version})?\nBieżące ustawienia zostaną najpierw zapisane.",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "Także na klawiszach F1 (mikrofon), F2 (kamera), F3 (OBS)",
  "Frappe lumineuse (logiciel)": "Świecące pisanie (programowo)",
- "Éclair des touches à chaque notification": "Błysk klawiszy przy każdym powiadomieniu"
+ "Éclair des touches à chaque notification": "Błysk klawiszy przy każdym powiadomieniu",
+ "🌀 Ventilateurs du PC…": "🌀 Wentylatory komputera…",
+ "Automatique": "Automatycznie",
+ "Vitesse fixe": "Stała prędkość",
+ "Courbe de température": "Krzywa temperatury",
+ "Ventilateurs": "Wentylatory",
+ "Nom": "Nazwa",
+ "Mode": "Tryb",
+ "Fixe (%)": "Stała (%)",
+ "Sonde": "Czujnik",
+ "Courbe": "Krzywa",
+ "Aucun ventilateur pilotable trouvé.": "Nie znaleziono sterowalnego wentylatora.",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "Czujnik krzywej: cpu, gpu0, gpu1…, alim (zasilacz). Punkty: temperatura:procent.",
+ "Appliquer": "Zastosuj",
+ "{n} tr/min": "{n} obr./min",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "Tylko odczyt: {names} (brak reguły udev lub sudo, zob. README).",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "Błędna krzywa: temperatura:procent, oddzielone przecinkami."
 }

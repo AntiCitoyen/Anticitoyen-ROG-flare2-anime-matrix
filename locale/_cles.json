@@ -410,5 +410,21 @@
  "Remplacer les réglages actuels par ceux du {date} (version {version}) ?\nLes réglages actuels sont d'abord sauvegardés.": "lanceur (source française)",
  "Aussi sur les touches F1 (micro), F2 (webcam), F3 (OBS)": "lanceur (source française)",
  "Frappe lumineuse (logiciel)": "lanceur (source française)",
- "Éclair des touches à chaque notification": "lanceur (source française)"
+ "Éclair des touches à chaque notification": "lanceur (source française)",
+ "🌀 Ventilateurs du PC…": "lanceur (source française)",
+ "Automatique": "fenêtre Ventilateurs (source française)",
+ "Vitesse fixe": "fenêtre Ventilateurs (source française)",
+ "Courbe de température": "fenêtre Ventilateurs (source française)",
+ "Ventilateurs": "fenêtre Ventilateurs (source française)",
+ "Nom": "fenêtre Ventilateurs (source française)",
+ "Mode": "fenêtre Ventilateurs (source française)",
+ "Fixe (%)": "fenêtre Ventilateurs (source française)",
+ "Sonde": "fenêtre Ventilateurs (source française)",
+ "Courbe": "fenêtre Ventilateurs (source française)",
+ "Aucun ventilateur pilotable trouvé.": "fenêtre Ventilateurs (source française)",
+ "Sonde de la courbe : cpu, gpu0, gpu1…, alim. Points : température:pourcentage.": "fenêtre Ventilateurs (source française)",
+ "Appliquer": "fenêtre Ventilateurs (source française)",
+ "{n} tr/min": "fenêtre Ventilateurs (source française)",
+ "Lecture seule : {names} (règle udev ou sudo manquante, voir le README).": "fenêtre Ventilateurs (source française)",
+ "Courbe mal formée : température:pourcentage, séparés par des virgules.": "fenêtre Ventilateurs (source française)"
 }

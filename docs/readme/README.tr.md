@@ -78,6 +78,7 @@ ASUS, bu klavyenin AniMe Matrix ekranını yalnızca Windows (Armoury Crate) alt
 - **Web kumandası**: yerel ağdaki bir telefondan ekranı yönetmek için bir sayfa (QR kod, belirteç).
 - **Uzun komutların bitişi**: terminalde uzun bir komut bittiğinde « Tamamlandı: make 2 min 05 » gösterilir.
 - **Tuş renkleri ve efektleri**, OpenRGB olmadan: gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur — klavyenin kendisi çalıştırır ve çıkarıldıktan sonra da kalır; ya da tema rengi, ekranla nabız.
+- **PC fanları**: anakart (Nuvoton nct67xx), NVIDIA kartları, Corsair HXi / RMi güç kaynakları; otomatik, sabit hız veya sıcaklık eğrisi, korumalarla (en düşük hız, aşırı ısınmada %100, bellenime geri dönüş).
 - **Sistem tepsisi simgesi**: hızlı menü (modlar, parlaklık).
 
 **Kullanım kolaylığı**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Ayarlar* → *🌈 Klavye renkleri…*: efekt (gökkuşağı, sabit, nefes, renk döngüsü, tepkili, dalgalanma, yıldızlı gece, bataklık kumu, akıntı, yağmur), renkler, hız, parlaklık, yön. *Dene* uygular, *Klavyeye kaydet* çıkarıldıktan sonra da korur. *Tema rengi* ve *Ekranla nabız* hizmet tarafından tuş tuş gönderilir; bunlardan çıkınca kayıtlı efekt geri gelir. Komut satırından: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. İki yazılım modu daha: *Ekran görüntüsü* (tuşlar ekranı büyütülmüş olarak yansıtır) ve *Ses spektrumu* (sütun başına bir çubuk). Her zaman aralığı ve her uygulama profili kendi tuş renklerini de seçebilir (*Zamanlama…*). *Tuş tuş*: her tuşa bir renk, klavye planı üzerinde fareyle boyanır (AZERTY veya QWERTY). *Işıklı yazma*: basılan her tuş yanar, sonra söner. Mikrofon, web kamerası ve OBS göstergeleri F1, F2 ve F3'ü de yakabilir; her bildirim tuşları parlatır.
 
 <p align="center"><img src="../captures/tr/couleurs.png" alt="🌈" width="330"> <img src="../captures/tr/touches.png" alt="⌨" width="620"></p>
+
+### PC fanları
+
+*Ayarlar* → *🌀 PC fanları…*: her fan için *Otomatik* (bellenim karar verir), *Sabit hız* veya *Sıcaklık eğrisi* (`sıcaklık:yüzde` noktaları, güç kaynağı için sensör `cpu`, `gpu0`, `gpu1`… / `alim`). 90 °C (işlemci), 85 °C (ekran kartı) veya 70 °C (güç kaynağı) üzerinde fan %100'e çıkar; okunamayan bir sensör, arka plan sürecinin durması veya çökmesi fanı özgün durumuyla bellenime geri verir. Komut satırı: `animematrix-ctl ventilateurs` (durum), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kanal | Donanım | Bir kez verilecek erişim |
+|---|---|---|
+| `cm:<n>` | Nuvoton nct67xx denetleyicili anakart (`nct6775` sürücüsü) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, ardından `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | NVIDIA ekran kartları (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (başka hiçbir şey yapmayan root yardımcısı `/usr/libexec/animematrix-ventilateurs-gpu`) |
+| `alim` | Corsair HXi / RMi güç kaynakları (USB) | aynı udev kuralı, ardından güç kaynağının USB kablosunu çıkarıp takın veya yeniden başlatın |
+
+udev kuralı ve sudo kuralı `plugdev` grubuna erişim verir. `nct6775` yüklenmezse (`journalctl -k` içinde ACPI kaynak çakışması), anakart çekirdeğin ASUS listesinde değildir: önyükleme seçeneklerine `acpi_enforce_resources=lax` ekleyin. Sıvı soğutmalı bir kart hiçbir şey döndürmeyen fanlar bildirebilir.
 
 ### ROG dizüstü bilgisayarlar (deneysel)
 

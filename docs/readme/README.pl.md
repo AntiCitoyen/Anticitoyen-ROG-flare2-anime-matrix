@@ -78,6 +78,7 @@ ASUS udostępnia ekran AniMe Matrix tej klawiatury wyłącznie pod Windows (Armo
 - **Pilot przez przeglądarkę**: strona do sterowania ekranem z telefonu w sieci lokalnej (kod QR, token).
 - **Zakończenie długich poleceń**: w terminalu wyświetla się „Gotowe: make 2 min 05”, gdy długie polecenie się kończy.
 - **Kolory i efekty klawiszy**, bez OpenRGB: tęcza, statyczny, oddychanie, cykl, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz — wykonywane przez klawiaturę i zachowane po odłączeniu; albo kolor motywu, pulsowanie z ekranem.
+- **Wentylatory komputera**: płyta główna (Nuvoton nct67xx), karty NVIDIA, zasilacze Corsair HXi / RMi; automatycznie, stała prędkość lub krzywa temperatury, z zabezpieczeniami (minimum, 100 % przy przegrzaniu, powrót do firmware'u).
 - **Ikona na pasku systemowym**: szybkie menu (tryby, jasność).
 
 **Wygoda**
@@ -227,6 +228,18 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 *Ustawienia* → *🌈 Kolory klawiatury…*: efekt (tęcza, statyczny, oddychanie, cykl kolorów, reaktywny, fale, gwiaździsta noc, ruchome piaski, prąd, deszcz), kolory, szybkość, jasność, kierunek. *Wypróbuj* go stosuje, *Zapisz w klawiaturze* zachowuje po odłączeniu. *Kolor motywu* i *Pulsowanie z ekranem* demon wysyła klawisz po klawiszu; po ich wyłączeniu wraca zapisany efekt. W wierszu poleceń: `animematrix-ctl rgb arc-en-ciel --vitesse 70`, `animematrix-ctl rgb statique --couleur "#ff0000"`. Dwa dodatkowe tryby programowe: *Obraz ekranu* (klawisze powtarzają ekran w powiększeniu) i *Widmo dźwięku* (jeden słupek na kolumnę). Każdy przedział czasowy i każdy profil aplikacji może też wybrać kolory klawiszy (*Harmonogram…*). *Klawisz po klawiszu*: jeden kolor na klawisz, malowany myszą na planie klawiatury (AZERTY lub QWERTY). *Świecące pisanie*: każdy naciśnięty klawisz rozświetla się i gaśnie. Wskaźniki mikrofonu, kamery i OBS mogą też podświetlać F1, F2 i F3, a każde powiadomienie rozbłyska na klawiszach.
 
 <p align="center"><img src="../captures/pl/couleurs.png" alt="🌈" width="330"> <img src="../captures/pl/touches.png" alt="⌨" width="620"></p>
+
+### Wentylatory komputera
+
+*Ustawienia* → *🌀 Wentylatory komputera…*: dla każdego wentylatora *Automatycznie* (decyduje firmware), *Stała prędkość* lub *Krzywa temperatury* (punkty `temperatura:procent`, czujnik `cpu`, `gpu0`, `gpu1`… / `alim` dla zasilacza). Powyżej 90 °C (CPU), 85 °C (karta graficzna) lub 70 °C (zasilacz) wentylator pracuje na 100 %; nieczytelny czujnik, zatrzymanie demona lub awaria oddają go firmware'owi w pierwotnym stanie. Wiersz poleceń: `animematrix-ctl ventilateurs` (stan), `animematrix-ctl ventilateurs cm:2 courbe --source cpu --points 40:30,70:60,85:100`, `animematrix-ctl ventilateurs gpu:1 55`, `animematrix-ctl ventilateurs alim auto`.
+
+| Kanał | Sprzęt | Dostęp do nadania raz |
+|---|---|---|
+| `cm:<n>` | płyta główna z kontrolerem Nuvoton nct67xx (sterownik `nct6775`) | `sudo cp /usr/share/anticitoyen-rog-flare2-anime-matrix/udev/74-animematrix-ventilateurs.rules /etc/udev/rules.d/`, następnie `sudo udevadm control --reload && sudo modprobe -r nct6775; sudo modprobe nct6775` |
+| `gpu:<i>` | karty graficzne NVIDIA (NVML) | `sudo install -m 440 /usr/share/anticitoyen-rog-flare2-anime-matrix/sudoers/animematrix-ventilateurs /etc/sudoers.d/` (pomocnik root `/usr/libexec/animematrix-ventilateurs-gpu`, który nie robi nic więcej) |
+| `alim` | zasilacze Corsair HXi / RMi (USB) | ta sama reguła udev, potem odłączyć / podłączyć kabel USB zasilacza lub uruchomić ponownie |
+
+Reguła udev i reguła sudo dają dostęp grupie `plugdev`. Jeśli `nct6775` się nie ładuje (konflikt zasobów ACPI w `journalctl -k`), płyty nie ma na liście ASUS jądra: dodaj `acpi_enforce_resources=lax` do opcji rozruchu. Karta chłodzona cieczą może zgłaszać wentylatory, które niczego nie obracają.
 
 ### Laptopy ROG (eksperymentalne)
 
