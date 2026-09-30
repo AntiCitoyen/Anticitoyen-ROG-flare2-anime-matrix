@@ -1,6 +1,7 @@
 """Démon animematrixd : commandes, surimpression, socket et CLI, sans clavier (transport factice)."""
 import base64
 import json
+import os
 import threading
 import time
 
@@ -245,3 +246,17 @@ def test_playback_error_is_reported_then_cleared(daemon, tmp_path):
     assert daemon.handle({"cmd": "status"})["erreur"] == "échec simulé"
     daemon.play({"type": "horloge"})
     assert daemon.handle({"cmd": "status"})["erreur"] is None
+
+
+def test_stale_unit_reloaded_before_start(tmp_path, monkeypatch):
+    """Après une mise à jour du paquet, systemd garde l'ancienne unité du démon tant qu'on ne la recharge pas."""
+    import rog_flare2_ctl as ctl
+    log = tmp_path / "log"
+    for answer, reloaded in (("yes", True), ("no", False)):
+        (tmp_path / "systemctl").write_text(f'#!/bin/sh\necho "$@" >> {log}\n'
+                                            f'case "$*" in *NeedDaemonReload*) echo {answer};; esac\n')
+        (tmp_path / "systemctl").chmod(0o755)
+        monkeypatch.setenv("PATH", f"{tmp_path}:{os.environ['PATH']}")
+        log.write_text("")
+        assert ctl.reload_unit_if_stale() is reloaded
+        assert ("--user daemon-reload" in log.read_text()) is reloaded

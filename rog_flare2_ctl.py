@@ -57,6 +57,16 @@ def request(cmd: str, timeout: float = 5, **kw) -> dict:
     return resp
 
 
+def reload_unit_if_stale() -> bool:
+    """Unité du démon remplacée par une mise à jour du paquet (ExecStopPost…) : systemd garde l'ancienne tant
+    qu'on ne l'a pas rechargée. Rechargée seulement dans ce cas (daemon-reload relit toutes les unités)."""
+    stale = subprocess.run(["systemctl", "--user", "show", "animematrixd.service", "-p", "NeedDaemonReload",
+                            "--value"], capture_output=True, text=True).stdout.strip() == "yes"
+    if stale:
+        subprocess.run(["systemctl", "--user", "daemon-reload"], capture_output=True)
+    return stale
+
+
 def ensure_daemon(wait: float = 4.0) -> bool:
     """Démon joignable et de la même version ; sinon le (re)démarre (service systemd --user, sinon
     processus détaché). Après une mise à jour du paquet, l'ancien démon tourne encore l'ancien code."""
@@ -76,6 +86,8 @@ def ensure_daemon(wait: float = 4.0) -> bool:
     # Service systemd seulement pour le socket standard (pas pour un environnement de test isolé)
     standard = SOCKET_PATH.parent == Path(f"/run/user/{os.getuid()}") and not os.environ.get("FLATPAK_ID")
     try:
+        if standard:
+            reload_unit_if_stale()
         started = standard and subprocess.run(["systemctl", "--user", "start", "animematrixd.service"],
                                               capture_output=True).returncode == 0
     except OSError:  # pas de systemctl (Flatpak, conteneur)

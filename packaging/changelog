@@ -1,5 +1,8 @@
 anticitoyen-rog-flare2-anime-matrix (@VERSION@) stable; urgency=medium
 
+  * Démon : après une mise à jour du paquet, le lanceur et animematrix-ctl
+    rechargent l'unité systemd du démon (daemon-reload) si elle a changé,
+    avant de le redémarrer ; sans cela systemd gardait l'ancienne unité.
   * Ventilateurs du PC (Réglages → Ventilateurs du PC…, animematrix-ctl
     ventilateurs) : carte mère Nuvoton nct67xx, cartes NVIDIA, alimentations
     Corsair HXi / RMi ; automatique, vitesse fixe ou courbe de température ;
